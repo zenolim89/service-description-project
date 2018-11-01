@@ -21,3 +21,7 @@ OS Version:     4.15.0-38-generic
 Architecture:   amd64  
 JVM Version:    1.8.0_181-8u181-b13-1ubuntu0.18.04.1-b13  
 JVM Vendor:     Oracle Corporation  
+
+## [Referenced Libaries]
+gson-2.8.2-javadoc.jar : https://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.2/  
+w3c-dom.jar : http://www.java2s.com/Code/Jar/w/Downloadw3cdomjar.htm  

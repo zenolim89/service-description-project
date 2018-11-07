@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/<add your restful service class name here>")
+@RequestMapping("/b2b")
 public class RequestFrom {
 
 	// Logger instance

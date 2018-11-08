@@ -1,5 +1,9 @@
 package com.kt.B2B.SCVInfo;
 
+import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class SCVInfo {
 	
 	private static int TOUCH = 1;
@@ -9,18 +13,18 @@ public class SCVInfo {
 	// (jdlee) setting SCV
 	private int InterfaceType;
 	private String SCVCode;
-	private String IntentID;
+	private VoiceIntents Intent;
 	
-	private String RefAPI;
+	private ArrayList<String> RefAPI;
 	private String SCVDescription;
 	private String SCVFunctionName;
 	
 	// (jdlee) java objclass to json 
 	private String TargetURL;
-	private String MethodType;
-	private String DataType;
-	private String Dataformat;
-	private String DataBody;
+	private ArrayList<String> MethodType;
+	private ArrayList<String> DataType;
+	private ArrayList<String> Dataformat;
+	private JSONObject DataBody;
 	
 	
 	// (jdlee) get/set method
@@ -51,80 +55,80 @@ public class SCVInfo {
 	public String getSCVCode() {
 		return SCVCode;
 	}
-	
+
 	public void setSCVCode(String sCVCode) {
 		SCVCode = sCVCode;
 	}
-	
-	public String getActionID() {
-		return ActionID;
+
+	public VoiceIntents getIntent() {
+		return Intent;
 	}
-	
-	public void setActionID(String actionID) {
-		ActionID = actionID;
+
+	public void setIntent(VoiceIntents intent) {
+		Intent = intent;
 	}
-	
-	public String getRefAPI() {
+
+	public ArrayList<String> getRefAPI() {
 		return RefAPI;
 	}
-	
-	public void setRefAPI(String refAPI) {
+
+	public void setRefAPI(ArrayList<String> refAPI) {
 		RefAPI = refAPI;
 	}
-	
+
 	public String getSCVDescription() {
 		return SCVDescription;
 	}
-	
+
 	public void setSCVDescription(String sCVDescription) {
 		SCVDescription = sCVDescription;
 	}
-	
+
 	public String getSCVFunctionName() {
 		return SCVFunctionName;
 	}
-	
+
 	public void setSCVFunctionName(String sCVFunctionName) {
 		SCVFunctionName = sCVFunctionName;
 	}
-	
+
 	public String getTargetURL() {
 		return TargetURL;
 	}
-	
+
 	public void setTargetURL(String targetURL) {
 		TargetURL = targetURL;
 	}
-	
-	public String getMethodType() {
+
+	public ArrayList<String> getMethodType() {
 		return MethodType;
 	}
-	
-	public void setMethodType(String methodType) {
+
+	public void setMethodType(ArrayList<String> methodType) {
 		MethodType = methodType;
 	}
-	
-	public String getDataType() {
+
+	public ArrayList<String> getDataType() {
 		return DataType;
 	}
-	
-	public void setDataType(String dataType) {
+
+	public void setDataType(ArrayList<String> dataType) {
 		DataType = dataType;
 	}
-	
-	public String getDataformat() {
+
+	public ArrayList<String> getDataformat() {
 		return Dataformat;
 	}
-	
-	public void setDataformat(String dataformat) {
+
+	public void setDataformat(ArrayList<String> dataformat) {
 		Dataformat = dataformat;
 	}
-	
-	public String getDataBody() {
+
+	public JSONObject getDataBody() {
 		return DataBody;
 	}
-	
-	public void setDataBody(String dataBody) {
+
+	public void setDataBody(JSONObject dataBody) {
 		DataBody = dataBody;
 	}
 	

@@ -20,17 +20,15 @@ public class JSONSerializerTo {
 		String matchingPw = list.get("id");
 		
 		if (matchingPw == null) {
-			//resutMag
+			//make json object for fail
+			resMsg.put("resCode", "401");
+			resMsg.put("numSVC", "0");
 			//
 		} else if (matchingPw.equals(pw)) {
 			
-			ArrayList<OwnServiceList> ownList = OwnServiceList.getInstance().getOwnList();
-			
-			resMsg.put("resCode", "sucess");
-			resMsg.put("numSVC", ownList.size());
-			resMsg.put("resultMsg","총" + ownList.size() + "개의 서비스가 등록되어 있습니다.");
-			
-			
+			resMsg.put("resCode",  "200");
+			resMsg.put("numSVC",  "0");
+			resMsg.put("resMsg", "Authotification is completed");
 			
 		} else {
 			//resultMSG

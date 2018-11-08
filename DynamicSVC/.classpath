@@ -13,5 +13,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/user1/Desktop/B2B_DynamicSVC lib/gson-2.8.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user1/Desktop/B2B_DynamicSVC lib/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

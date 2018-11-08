@@ -9,7 +9,7 @@ public class SCVInfo {
 	// (jdlee) setting SCV
 	private int InterfaceType;
 	private String SCVCode;
-	private String ActionID;
+	private String IntentID;
 	
 	private String RefAPI;
 	private String SCVDescription;

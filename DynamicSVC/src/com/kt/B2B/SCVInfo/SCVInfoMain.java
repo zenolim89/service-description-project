@@ -11,7 +11,9 @@ public class SCVInfoMain {
 		SCVInfo scvinfo = new SCVInfo();
 		scvinfo.setInterfaceType("voice");
 		scvinfo.setSCVCode("RV010001");
-		scvinfo.setActionID("15001");	
+		
+		VoiceIntents Intents = new VoiceIntents();
+		scvinfo.setIntent(Intents);
 		
 		Gson gson = new Gson();
 		String json = gson.toJson(scvinfo);

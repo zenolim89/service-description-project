@@ -1,11 +1,18 @@
 package com.kt.inBoundInterface;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
 @RequestMapping("/b2b")
@@ -47,28 +54,28 @@ public class RequestFrom {
 		return response;
 	}
 
-	@RequestMapping(value = "/<add method name here>", method = RequestMethod.POST)
-	public String postSomething(@RequestParam(value = "request") String request,@RequestParam(value = "version", required = false, defaultValue = "1") int version) {
+	//setAuth
+	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+	public JSONObject reqAuth(InputStream body){
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Start postSomething");
-			logger.debug("data: '" + request + "'");
-		}
-
-		String response = null;
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String bf = null;
+		String response = "";
+		JSONObject res = null;
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 
 		try {
-			switch (version) {
-			case 1:
-				if (logger.isDebugEnabled())
-					logger.debug("in version 1");
-				// TODO: add your business logic here
-				response = "Response from Spring RESTful Webservice : "+ request;
-
-				break;
-			default:
-				throw new Exception("Unsupported version: " + version);
+			
+			while ((bf = in.readLine()) != null) {
+				response += bf;
 			}
+			
+			//send auth information to parser
+			
+			res = parsingFrom.setAuth(response);
+			
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
@@ -77,7 +84,7 @@ public class RequestFrom {
 			logger.debug("result: '" + response + "'");
 			logger.debug("End postSomething");
 		}
-		return response;
+		return res;
 	}
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.PUT)

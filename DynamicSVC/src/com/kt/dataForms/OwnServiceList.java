@@ -9,6 +9,7 @@ public class OwnServiceList {
 	
 	String authId;
 	String serviceCode;
+	String serviceDesc;
 	Hashtable<String, String> dataformat = new Hashtable<String, String>();
 	Hashtable<String, String> refDialog = new Hashtable<String, String>();
 	
@@ -25,6 +26,14 @@ public class OwnServiceList {
 		}
 		
 		return ownServiceList;
+	}
+	
+	public void setServiceDesc (String desc) {
+		this.serviceDesc = desc;
+	}
+	
+	public String getServiceDesc () {
+		return this.serviceDesc;
 	}
 	
 	public void setAuthId (String id) {

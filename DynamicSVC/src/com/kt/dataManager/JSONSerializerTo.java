@@ -3,6 +3,7 @@ package com.kt.dataManager;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.kt.dataForms.Account;
@@ -14,8 +15,10 @@ public class JSONSerializerTo {
 	public JSONObject resultMsgforAuth(String id, String pw) {
 		
 		JSONObject resMsg = new JSONObject();
-		
+		JSONArray serviceDesc = new JSONArray();
 		Hashtable<String, String> list = Account.getInstance().getAccountListTable();
+		
+		
 		
 		String matchingPw = list.get("id");
 		
@@ -29,6 +32,8 @@ public class JSONSerializerTo {
 			resMsg.put("resCode",  "200");
 			resMsg.put("numSVC",  "0");
 			resMsg.put("resMsg", "Authotification is completed");
+			
+			
 			
 		} else {
 			//resultMSG

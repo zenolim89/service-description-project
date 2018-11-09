@@ -26,7 +26,29 @@ public class SCVInfo {
 	private ArrayList<String> Dataformat;
 	private JSONObject DataBody; 
 	
+		
+	public SCVInfo() {
+		super();
+		
+	}
 	
+	public SCVInfo(int interfaceType, String sCVCode, VoiceIntents intent, ArrayList<String> refAPI,
+			String sCVDescription, String sCVFunctionName, String targetURL, ArrayList<String> methodType,
+			ArrayList<String> dataType, ArrayList<String> dataformat, JSONObject dataBody) {
+		super();
+		InterfaceType = interfaceType;
+		SCVCode = sCVCode;
+		Intent = intent;
+		RefAPI = refAPI;
+		SCVDescription = sCVDescription;
+		SCVFunctionName = sCVFunctionName;
+		TargetURL = targetURL;
+		MethodType = methodType;
+		DataType = dataType;
+		Dataformat = dataformat;
+		DataBody = dataBody;
+	}
+
 	// (jdlee) get/set method
 	public int getInterfaceType() {
 		return InterfaceType;

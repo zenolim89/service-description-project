@@ -8,7 +8,6 @@ public class SCVInfoMain {
 
 	public static void main(String[] args) {
 
-		// (jdlee) java SCVInfo class to Json (use Gson developed by Google)
 		// (jdlee) example
 		SCVInfo scvinfo = new SCVInfo();
 		scvinfo.setInterfaceType("voice");
@@ -36,7 +35,7 @@ public class SCVInfoMain {
 		RefAPI.add(API2);
 		scvinfo.setRefAPI(RefAPI);
 		
-	
+		// (jdlee) java SCVInfo class to Json (use Gson developed by Google)	
 		Gson gson = new Gson();
 		String json = gson.toJson(scvinfo);
 		

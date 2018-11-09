@@ -1,6 +1,6 @@
 package com.kt.B2B.SCVInfo.utilities;
 
-// (jdlee) POI lib 3.15v
+// (jdlee) POI lib ver.3.15
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,7 +18,7 @@ public class ExcelRead {
 			
 			FileInputStream excelFile = new FileInputStream(new File(ExcelfileName));
 		
-			//(jdlee) 
+			//(jdlee) xlsx | xls 
 			Workbook workbook = null;
 			if(ExcelfileName.toLowerCase().endsWith("xlsx")){
 				workbook = new XSSFWorkbook(excelFile);

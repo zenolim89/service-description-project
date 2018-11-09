@@ -21,9 +21,9 @@ public class SCVInfo {
 	
 	// (jdlee) java objclass to json format for creating full json 
 	private String TargetURL;
-	private ArrayList<String> MethodType;
-	private ArrayList<String> DataType;
-	private ArrayList<String> Dataformat;
+	private String MethodType;
+	private String DataType;
+	private String Dataformat;
 	private JSONObject DataBody; 
 	
 		
@@ -33,8 +33,8 @@ public class SCVInfo {
 	}
 	
 	public SCVInfo(int interfaceType, String sCVCode, VoiceIntents intent, ArrayList<String> refAPI,
-			String sCVDescription, String sCVFunctionName, String targetURL, ArrayList<String> methodType,
-			ArrayList<String> dataType, ArrayList<String> dataformat, JSONObject dataBody) {
+			String sCVDescription, String sCVFunctionName, String targetURL, String methodType,
+			String dataType, String dataformat, JSONObject dataBody) {
 		super();
 		InterfaceType = interfaceType;
 		SCVCode = sCVCode;
@@ -122,27 +122,27 @@ public class SCVInfo {
 		TargetURL = targetURL;
 	}
 
-	public ArrayList<String> getMethodType() {
+	public String getMethodType() {
 		return MethodType;
 	}
 
-	public void setMethodType(ArrayList<String> methodType) {
+	public void setMethodType(String methodType) {
 		MethodType = methodType;
 	}
 
-	public ArrayList<String> getDataType() {
+	public String getDataType() {
 		return DataType;
 	}
 
-	public void setDataType(ArrayList<String> dataType) {
+	public void setDataType(String dataType) {
 		DataType = dataType;
 	}
 
-	public ArrayList<String> getDataformat() {
+	public String getDataformat() {
 		return Dataformat;
 	}
 
-	public void setDataformat(ArrayList<String> dataformat) {
+	public void setDataformat(String dataformat) {
 		Dataformat = dataformat;
 	}
 

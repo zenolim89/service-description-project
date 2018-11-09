@@ -35,6 +35,14 @@ public class SCVInfoMain {
 		RefAPI.add(API2);
 		scvinfo.setRefAPI(RefAPI);
 		
+		scvinfo.setSCVDescription("리조트 부대시설 발화기능");
+		scvinfo.setSCVFunctionName("CallResortInfo");
+		
+		scvinfo.setTargetURL("https://api.yanolja.io/ui/zsdsdfGsfg");
+		scvinfo.setMethodType("POST");
+		scvinfo.setDataformat("KT STD");
+		
+		
 		// (jdlee) java SCVInfo class to Json (use Gson developed by Google)	
 		Gson gson = new Gson();
 		String json = gson.toJson(scvinfo);

@@ -10,7 +10,7 @@ public class SCVInfo {
 	private static int VOICE = 2;
 	private static int REMOCON = 3;
 	
-	// (jdlee) setting SCVInfo
+	// (jdlee) setting SCVInfo 
 	private int InterfaceType;
 	private String SCVCode;
 	private VoiceIntents Intent;

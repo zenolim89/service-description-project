@@ -5,9 +5,8 @@ import com.google.gson.Gson;
 public class SCVInfoMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-		// java SCVInfo class to Json (use Gson developed by Google)
+		// (jdlee) java SCVInfo class to Json (use Gson developed by Google)
 		SCVInfo scvinfo = new SCVInfo();
 		scvinfo.setInterfaceType("voice");
 		scvinfo.setSCVCode("RV010001");

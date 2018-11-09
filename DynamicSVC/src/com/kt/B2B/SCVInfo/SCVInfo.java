@@ -19,7 +19,7 @@ public class SCVInfo {
 	private String SCVDescription;
 	private String SCVFunctionName;
 	
-	// (jdlee) java objclass to json 
+	// (jdlee) java objclass to json format for creating full json 
 	private String TargetURL;
 	private ArrayList<String> MethodType;
 	private ArrayList<String> DataType;

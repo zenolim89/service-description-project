@@ -2,6 +2,7 @@ package com.kt.B2B.SCVInfo;
 
 import java.util.ArrayList;
 
+// (jdlee)
 public class VoiceIntents {
 	
 	private ArrayList<ArrayList<String>> Intents = new ArrayList<ArrayList<String>>();

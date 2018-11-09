@@ -16,10 +16,10 @@ import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
 @RequestMapping("/b2b")
-public class RequestFrom {
+public class InBoundInterface {
 
 	// Logger instance
-	private static final Logger logger = Logger.getLogger(RequestFrom.class);
+	private static final Logger logger = Logger.getLogger(InBoundInterface.class);
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
 	public String getSomething(@RequestParam(value = "request") String request,	@RequestParam(value = "version", required = false, defaultValue = "1") int version) {

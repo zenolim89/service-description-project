@@ -23,7 +23,7 @@ public class JSONSerializerTo {
 		JSONArray serviceList = new JSONArray();
 		Hashtable<String, String> list = Account.getInstance().getAccountListTable();
 		
-		String authPw = list.get("id");
+		String authPw = list.get(id);
 
 //		API format
 //		{
@@ -68,7 +68,18 @@ public class JSONSerializerTo {
 			
 			serviceList.add(serviceDesc);
 			
-			resMsg.put("SVCDesc", serviceList);	
+			if (serviceDesc.size() == 0) {
+				
+				resMsg.put("SVCDesc", null);
+				
+			} else {
+				
+				resMsg.put("SVCDesc", serviceList);
+				
+			}
+			
+			
+				
 		}
 		
 		return resMsg;

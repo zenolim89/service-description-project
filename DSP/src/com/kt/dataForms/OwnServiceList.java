@@ -10,6 +10,10 @@ public class OwnServiceList {
 	String authId;
 	String serviceCode;
 	String serviceDesc;
+	String connUrl;
+	String method;
+	String contentType;
+	//dataformat에서 JSON 오브젝트로 값을 정의 하고 key는 서비스코드로...
 	Hashtable<String, String> dataformat = new Hashtable<String, String>();
 	Hashtable<String, String> refDialog = new Hashtable<String, String>();
 	
@@ -27,6 +31,31 @@ public class OwnServiceList {
 		
 		return ownServiceList;
 	}
+	
+	public void setContentType (String type) {
+		this.contentType = type;
+	}
+	
+	public String getContentType () {
+		return this.contentType;
+	}
+	
+	public void setConnUrl (String url) {
+		this.connUrl = url;
+	}
+	
+	public String getConnUrl () {
+		return this.connUrl;
+	}
+	
+	public void setMethod (String method) {
+		this.method = method;
+	}
+	
+	public String getMethod () {
+		return this.method;
+	}
+	
 	
 	public void setServiceDesc (String desc) {
 		this.serviceDesc = desc;

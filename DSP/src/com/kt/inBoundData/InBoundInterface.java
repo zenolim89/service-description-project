@@ -91,10 +91,13 @@ public class InBoundInterface {
 			response = e.getMessage().toString();
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("result: '" + response + "'");
-			logger.debug("End postSomething");
-		}
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("result: '" + response + "'");
+//			logger.debug("End postSomething");
+//		}
+		
+		System.out.print("[RESPONSE]: " + res);
+		
 		return res;
 	}
 

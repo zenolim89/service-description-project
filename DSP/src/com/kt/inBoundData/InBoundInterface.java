@@ -100,6 +100,42 @@ public class InBoundInterface {
 		
 		return res;
 	}
+	
+	//service registration
+		@RequestMapping(value = "/registration", method = RequestMethod.POST)
+		public JSONObject reqRegiForService(InputStream body){
+
+			JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
+			String bf = null;
+			String response = "";
+			JSONObject res = null;
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(body));
+
+			try {
+
+				while ((bf = in.readLine()) != null) {
+					response += bf;
+				}
+
+				//send registration to parser
+
+				res = parsingFrom.regiService(response);
+
+			} catch (Exception e) {
+				response = e.getMessage().toString();
+			}
+
+//			if (logger.isDebugEnabled()) {
+//				logger.debug("result: '" + response + "'");
+//				logger.debug("End postSomething");
+//			}
+			
+			System.out.print("[RESPONSE]: " + res);
+			
+			return res;
+		}
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.PUT)
 	public String putSomething(@RequestBody String request,@RequestParam(value = "version", required = false, defaultValue = "1") int version) {

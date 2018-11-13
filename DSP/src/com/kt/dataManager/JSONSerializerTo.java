@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import com.kt.dataForms.Account;
 import com.kt.dataForms.ErrorCodeList;
+import com.kt.dataForms.OwnServiceForm;
 import com.kt.dataForms.OwnServiceList;
 
 public class JSONSerializerTo {
@@ -48,22 +49,24 @@ public class JSONSerializerTo {
 			
 		} else if (authPw.equals(pw)) {
 			
-			ArrayList<OwnServiceList> ownlist = OwnServiceList.getInstance().getOwnList();
-			ArrayList<OwnServiceList> authList = new ArrayList<OwnServiceList>();
+			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
+			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
 			
-			for (int i=0; i < ownlist.size(); i++) {
-				if (ownlist.get(i).getAuthId().equals(id)) {
-					authList.add(ownlist.get(i));
+			
+			
+			for (int i=0; i < ownList.size(); i++) {
+				if (ownList.get(i).getUserAuth().equals(id)) {
+					userList.add(userList.get(i));
 				}
 			}
 			
 			resMsg.put("resCode", errorList.getErrorCodeList().get("ok").toString());
-			resMsg.put("numSVC", authList.size());
-			resMsg.put("resultMsg","총" + authList.size() + "개의 서비스가 등록되어 있습니다.");
+			resMsg.put("numSVC", userList.size());
+			resMsg.put("resultMsg","총" + userList.size() + "개의 서비스가 등록되어 있습니다.");
 			
-			for (int j=0; j < authList.size(); j++) {
+			for (int j=0; j < userList.size(); j++) {
 				
-				serviceDesc.put(authList.get(j).getServiceCode(), authList.get(j).getServiceDesc());
+				serviceDesc.put(userList.get(j).getServiceCode(), userList.get(j).getServiceDesc());
 			}
 			
 			serviceList.add(serviceDesc);

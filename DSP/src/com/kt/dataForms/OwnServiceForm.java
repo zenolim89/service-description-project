@@ -16,8 +16,8 @@ public class OwnServiceForm {
 	String dataType;
 	String dataDefinition;
 	
-	Hashtable<String, String> dataformat = new Hashtable<String, String>();
-	ArrayList<String> refDialog = new ArrayList<String>();
+	ArrayList<ReqDataForm> dataformat = new ArrayList<ReqDataForm>();
+	Hashtable<String, String> refDialog = new Hashtable<String, String>();
 	
 	public String getUserAuth() {
 		return userAuth;
@@ -102,11 +102,11 @@ public class OwnServiceForm {
 	
 	// dialog, dataformat, class list
 
-	public Hashtable<String, String> getDataFormat() {
+	public ArrayList<ReqDataForm> getDataFormat() {
 		return this.dataformat;
 	}
 
-	public ArrayList<String> getRefDialog() {
+	public Hashtable<String, String> getRefDialog() {
 		return this.refDialog;
 	}
 

@@ -132,7 +132,7 @@ public class InBoundInterface {
 //				logger.debug("End postSomething");
 //			}
 			
-			System.out.print("[RESPONSE]: " + res);
+//			System.out.print("[RESPONSE]: " + res);
 			
 			return res;
 		}

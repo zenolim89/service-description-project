@@ -25,6 +25,16 @@ public class OwnServiceList {
 	
 
 	public ArrayList<OwnServiceForm> getOwnList() {
+		System.out.println("반환된 서비스의 개수: " + ownList.size());
+		
 		return this.ownList;
+		
+	}
+	
+	public void setOwnList(OwnServiceForm form) {
+		
+		this.ownList.add(form);
+		
+		System.out.println("서비스 개수: " + ownList.size());
 	}
 }

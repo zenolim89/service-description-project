@@ -52,11 +52,12 @@ public class JSONSerializerTo {
 			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
 			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
 			
-			
-			
 			for (int i=0; i < ownList.size(); i++) {
+				
+				System.out.println(ownList.get(i).getUserAuth());
+				
 				if (ownList.get(i).getUserAuth().equals(id)) {
-					userList.add(userList.get(i));
+					userList.add(ownList.get(i));
 				}
 			}
 			

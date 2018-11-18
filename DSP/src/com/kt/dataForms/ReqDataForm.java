@@ -3,20 +3,9 @@ package com.kt.dataForms;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
+
 public class ReqDataForm {
-	
-//	{
-//	"keyName":"userToken", "valueName":"token", "superVar":"false", "type":"JSONArray", "userDefine":"false", "subArrType":"false"
-//	"subArr": "false"
-//	 },
-//	
-//	"keyName":"serviceValue", "valueNAme":"NE", "superVar":"userToke", "type":"JSONObject", "userDefine":"true", "subArrType":"object",
-//	"subArr": [{"key1":"value1", "key2":"value"}]
-//	},
-//	{
-//	"keyName":"serviceValue", "valueNAme":"NE", "superVar":"userToke", "type":"JSONObject", "userDefine":"true", "subArrType":"string",
-//	"subArr": ["key1", "key2"]
-//	}
 	
 	String keyName;
 	String valueName;
@@ -26,7 +15,9 @@ public class ReqDataForm {
 	String isUserDefine;
 	String subArrType;
 	Hashtable<String, String> subArrObjectType = new Hashtable<String, String>();
+	ArrayList<KeyValueFormatForJSON> subArrObjectTaype = new ArrayList<KeyValueFormatForJSON>();
 	ArrayList<String> subArrStringType = new ArrayList<String>();
+	ArrayList<SubValueArrKeyValeTypeFormat> subValueArrObjType = new ArrayList<SubValueArrKeyValeTypeFormat>();
 	
 	public String getJsonType() {
 		return jsonType;
@@ -72,15 +63,20 @@ public class ReqDataForm {
 	public void setSubArrType(String subArrType) {
 		this.subArrType = subArrType;
 	}
-	public Hashtable<String, String> getSubArrObjectType() {
-		return subArrObjectType;
+//	public Hashtable<String, String> getSubArrObjectType() {
+//		return subArrObjectType;
+//	}
+	
+	public ArrayList<KeyValueFormatForJSON> getSubArrObjectType() {
+		return subArrObjectTaype;
 	}
+	
 	public ArrayList<String> getSubArrStringType() {
 		return subArrStringType;
 	}
 	
-	
-	
-
-	
+	public ArrayList<SubValueArrKeyValeTypeFormat> getSubValueArrObjType() {
+		return this.subValueArrObjType;
+	}
+		
 }

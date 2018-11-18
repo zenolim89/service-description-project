@@ -109,5 +109,9 @@ public class OwnServiceForm {
 	public Hashtable<String, String> getRefDialog() {
 		return this.refDialog;
 	}
+	
+	public void setRefDialog(Hashtable<String, String> list) {
+		this.refDialog = list;
+	}
 
 }

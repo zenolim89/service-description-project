@@ -52,7 +52,7 @@ public class DicCreator {
 		proc.add("짱구");
 		proc.add("오징어땅콩");
 		
-		form.getDictionaryList().put("상품명", proc);
+		form.getDictionaryList().put("상품정보", proc);
 		DictionaryList.getInstance().getDicList().add(form);
 	}
 	

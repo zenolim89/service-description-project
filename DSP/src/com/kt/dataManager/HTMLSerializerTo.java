@@ -58,7 +58,7 @@ public class HTMLSerializerTo {
 			// TODO: handle exception
 		}
 		
-		System.out.println("[DEBUG 동적 HTML코드 생성 결과]: \n" + responseHTML + "\n");
+		System.out.println("[DEBUG 동적 HTML코드 (도메인 사전) 생성 결과]: \n" + responseHTML + "\n");
 		return responseHTML;
 		
 	}

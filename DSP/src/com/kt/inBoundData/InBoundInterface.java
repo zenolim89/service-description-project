@@ -3,6 +3,10 @@ package com.kt.inBoundData;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kt.dataCreator_temp.DicCreator;
+import com.kt.dataDao.DictionaryList;
+import com.kt.dataForms.DictionaryForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
@@ -35,6 +41,27 @@ public class InBoundInterface {
 		creator.createResortDic();
 		creator.createShopDic();
 		creator.creatHospitalDic();
+
+		DictionaryList.getInstance();
+
+		for (int i=0; i < DictionaryList.getInstance().getDicList().size(); i++) {
+
+			Hashtable<String, ArrayList<String>> temp = new Hashtable<String, ArrayList<String>>();
+			DictionaryForm form = DictionaryList.getInstance().getDicList().get(i);
+
+			String domName = form.getDomainName();
+
+			temp = form.getDictionaryList();
+
+			Set<String> keys = temp.keySet();
+
+			Iterator<String> iter = keys.iterator();
+
+			while (iter.hasNext()) {
+				String keyName = iter.next();
+				System.out.println("[DEBUG 현재 등록된 도메인 사전]: 도메인명: " + domName + ", 사전명: " + keyName + ", 단어: " + temp.get(keyName) );
+			}
+		}
 		//여기까지 
 
 		return mv;
@@ -92,7 +119,7 @@ public class InBoundInterface {
 				response += bf;
 			}
 
-			
+
 			res = parsingFrom.getDicDictionaryList(response);
 
 		} catch (Exception e) {

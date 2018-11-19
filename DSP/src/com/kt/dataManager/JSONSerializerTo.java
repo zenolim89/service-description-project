@@ -157,7 +157,7 @@ public class JSONSerializerTo {
 			
 			tempList.put(curKeyName, arrVar);
 			
-			System.out.println("[DEBUG: 등록된 단어사전] 사전명: " + curKeyName + ", 단어: " + arrVar.toString());
+			System.out.println("[DEBUG: 등록된 사용자 단어사전] 사전명: " + curKeyName + ", 단어: " + arrVar.toString());
 		}
 
 		return tempList;

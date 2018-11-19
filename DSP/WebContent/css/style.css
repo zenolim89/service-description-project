@@ -1,0 +1,123 @@
+body {
+	font: 16px/1.8 Arial, Helvetica, sans-serif;
+}
+
+table.mainType {
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	border-top: 1px solid #ccc;
+	border-left: 3px solid #369;
+	margin: 20px 10px;
+}
+
+table.mainType th {
+	width: 147px;
+	padding: 10px;
+	font-weight: bold;
+	vertical-align: top;
+	color: #153d73;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+table.mainType td {
+	width: 349px;
+	padding: 10px;
+	vertical-align: top;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+table.subType {
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	margin: 5px 5px;
+}
+
+table.subType th {
+	width: 150px;
+	padding: 2px;
+	font-weight: bold;
+	vertical-align: top;
+	border: 1px solid #eee;
+}
+
+table.subType td {
+	width: 350px;
+	padding: 2px;
+	vertical-align: top;
+	border: 1px solid #eee;
+}
+
+.frame {
+	width: 1600px;
+	margin: 0 auto;
+	border: 1px solid #aaa;
+}
+
+.header {
+	padding: 20px 15px;
+	background: #2980b9;
+	margin-bottom: 0px;
+}
+
+.logo {
+	font-size: 2em;
+	font-weight: bold;
+	background: #2980b9;
+	color: #fff;
+	padding: 0 10px;
+}
+
+.login {
+	font-weight: bold;
+	padding: 10dx 10px;
+}
+
+.nav {
+	float: left;
+	width: 300px;
+	background: #0062cc;
+	background: #333;
+	color: #fff;
+	margin-right: 20px;
+}
+
+.nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 10px 0;
+}
+
+.nav-item {
+	margin: 4px 0;
+}
+
+.nav-link {
+	display: block;
+	text-decoration: none;
+	padding: 10px 10px;
+	color: #fff;
+}
+
+.nav-link:hover {
+	background: #5457de;
+}
+
+.container {
+	overflow: hidden;
+}
+
+.content {
+	float: left;
+	width: 1200px;
+}
+
+.footer {
+	text-align: center;
+	border-top: 1px solid #aaa;
+	margin: 20px 20px 0;
+	font-size: 12px;
+}

@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
-
 @RequestMapping("")
 public class InBoundInterface {
 
@@ -29,7 +27,10 @@ public class InBoundInterface {
 	@RequestMapping("/")
 	public ModelAndView index() {
  
-		return new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("index");
+		
+		return mv;
+//		return new ModelAndView("index");
 	}
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
@@ -90,13 +91,8 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-
-//		if (logger.isDebugEnabled()) {
-//			logger.debug("result: '" + response + "'");
-//			logger.debug("End postSomething");
-//		}
 		
-		System.out.print("[RESPONSE]: " + res);
+		System.out.print("[DEBUG]: " + res);
 		
 		return res;
 	}
@@ -127,13 +123,6 @@ public class InBoundInterface {
 				response = e.getMessage().toString();
 			}
 
-//			if (logger.isDebugEnabled()) {
-//				logger.debug("result: '" + response + "'");
-//				logger.debug("End postSomething");
-//			}
-			
-//			System.out.print("[RESPONSE]: " + res);
-			
 			return res;
 		}
 

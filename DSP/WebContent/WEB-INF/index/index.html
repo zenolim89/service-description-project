@@ -1,0 +1,251 @@
+<!-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%> -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<script src="./js/mainscript.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+	<div class="frame">
+		<div class="header">
+			<div class="logo">KT SVC Platform</div>
+			<div class="login">
+				<input class="acc-input" type="text" id="id" size="20"
+					placeholder="계정"> <input class="acc-input" type="password"
+					id="pw" size="20" placeholder="암호">
+				<button class="btn btn-primary" type="button"
+					onclick="authReqFunction();" class="btn">로그인</button>
+			</div>
+		</div>
+		<!-- //header -->
+		<div class="container">
+			<div class="nav">
+				<ul class="nav-list">
+					<li class="nav-item"><a href="" class="nav-link">Service-1</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-2</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-3</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-4</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-5</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-6</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-7</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-8</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-9</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-10</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-11</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-12</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-13</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-14</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-15</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-16</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-17</a></li>
+					<li class="nav-item"><a href="" class="nav-link">Service-18</a></li>
+				</ul>
+			</div>
+			<!-- //nav -->
+			<div class="content">
+				<h1>서비스 등록</h1>
+				<form>
+					<table class="mainType">
+						<thead>
+						</thead>
+
+						<tbody>
+
+							<tr>
+								<th>사용자 계정</th>
+								<td><input class="text-input" type="text" value="V000001"
+									name="userAuth" readonly></td>
+							</tr>
+
+							<!-- 아이디 -->
+							<tr>
+								<th>인터페이스 타입</th>
+								<td>
+									<div class="form-check">
+										<label><input class="custom-radio" type="radio"
+											name="interfaceType" value="touch"><span
+											class="label-text">터치</span></label> <label><input
+											class="custom-radio" type="radio" name="interfaceType"
+											value="voice" checked="checked"><span
+											class="label-text">음성</span></label> <label><input
+											class="custom-radio" type="radio" name="interfaceType"
+											value="remocon"><span class="label-text">리모컨</span></label>
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<th>서비스 코드</th>
+								<td><select class="form-control" name="serviceCode">
+										<option value="" disabled>서비스 코드 선택</option>
+										<option value="RESVC001">RESVC001</option>
+										<option value="RESVC002">RESVC002</option>
+										<option value="RESVC003">RESVC003</option>
+										<option value="RESVC004">RESVC004</option>
+										<option value="RESVC005">RESVC005</option>
+										<option value="RESVC006">RESVC006</option>
+								</select></td>
+							</tr>
+							<tr>
+								<th>참조 API</th>
+								<td><input class="text-input" type="text" name="refAPI"></td>
+							</tr>
+
+							<tr>
+								<th>인텐트 명</th>
+								<td><select class="form-control" name="intentName">
+										<option value="" disabled>인텐트 명 선택</option>
+										<option value="ViewINFRM">ViewINFRM</option>
+										<option value="Concierge">concierge</option>
+										<option value="Amenity">Amenity</option>
+										<option value="Order">Order</option>
+										<option value="CheckOut">CheckOut</option>
+								</select></td>
+							</tr>
+							<tr>
+								<th>서비스 개요</th>
+								<td><textarea class="textarea-input" rows="5" cols="30"
+										name="serviceDesc"></textarea></td>
+							</tr>
+							<tr>
+								<th>타깃 URL</th>
+								<td><input class="text-input" type="text" name="targetURL"
+									value="http://"></td>
+							</tr>
+							<tr>
+								<th>부대시설 항목</th>
+								<td>
+									<div class="form-check">
+										<label> <input class="option-input checkbox"
+											type="checkbox" name="facilitiesItems" value="food">
+											<span class="label-text">식음업장</span>
+										</label> <label> <input class="option-input checkbox"
+											type="checkbox" name="facilitiesItems" value="sports">
+											<span class="label-text">레저/스포츠</span>
+										</label> <label> <input class="custom-checkbox"
+											type="checkbox" name="facilitiesItems" value="shopping">
+											<span class="label-text">쇼핑/편의</span>
+										</label> <label> <input class="custom-checkbox"
+											type="checkbox" name="facilitiesItems" value="cultural">
+											<span class="label-text">문화시설</span>
+										</label> <label> <input class="custom-checkbox"
+											type="checkbox" name="facilitiesItems" value="dispensary">
+											<span class="label-text">의무실</span>
+										</label> <label> <input class="custom-checkbox"
+											type="checkbox" name="facilitiesItems" value="church"><span
+											class="label-text">교회/성당</span>
+										</label> <label> <input class="custom-checkbox"
+											type="checkbox" name="facilitiesItems" value="affiliate"><span
+											class="label-text">제휴업장</span>
+										</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>실시간 웹캠 항목</th>
+								<td>
+									<div class="form-check">
+										<label><input type="checkbox" name="liveWebcamsItems"
+											value="a_slopes"><span class="label-text">A슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="b_slopes"><span class="label-text">B슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="h_slopes"><span class="label-text">H슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="i_slopes"><span class="label-text">I슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="g_slopes"><span class="label-text">G슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="mountain_view"><span class="label-text">스키장
+												전경</span></label><label><input type="checkbox"
+											name="liveWebcamsItems" value="mountain_summit"><span
+											class="label-text">마운틴정상</span> </label>
+									</div>
+								</td>
+
+							</tr>
+							<tr>
+								<th>리조트 소개 항목</th>
+								<td>
+									<div class="form-check">
+										<label><input type="checkbox" name="resortItems"
+											value="rateGuide"><span class="label-text">리조트소개</span>
+										</label><label><input type="checkbox" name="resortItems"
+											value="rateGuide"><span class="label-text">요금안내</span>
+										</label><label><input type="checkbox" name="resortItems"
+											value="roomInfo"><span class="label-text">객실안내</span>
+										</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>전송 메소드</th>
+								<td><select class="form-control" name="method">
+										<option value="" disabled>인텐트 명 선택</option>
+										<option value="POST">POST</option>
+										<option value="GET">GET</option>
+								</select></td>
+							</tr>
+							<tr>
+								<th>데이터 타입</th>
+								<td><select class="form-control" name="dataType">
+										<option value="" disabled>데이터 타입 선택</option>
+										<option value="json">JSON</option>
+										<option value="xml">XML</option>
+								</select></td>
+							</tr>
+
+							<tr>
+								<th>데이터 정의</th>
+								<td><select class="form-control" name="dataDefinition">
+										<option value="" disabled>데이터 정의 선택</option>
+										<option value="ktown">ktown</option>
+										<option value="3rdpaty">3rd party</option>
+										<option value="3rdpaty">3rd party</option>
+										<option value="3rdpaty">3rd party</option>
+								</select></td>
+							</tr>
+							<tr>
+								<th>데이터 포맷</th>
+								<td>
+									<table class="subType" id="DFtable">
+										<tr>
+											<td><input type="button" size="20" value="추가"
+												onClick="addRow('DFtable');"></td>
+										</tr>
+									</table>
+							</td>
+							</tr>
+						</tbody>
+
+						<!-- 버텀부 -->
+						<tfoot>
+							<tr>
+								<td colspan="2"><input class="btn btn-primary"
+									type="button" onClick="svcReqFunction();" value="등록" /> <input
+									class="btn btn-primary" type="button" value="파일업로드" /> <input
+									class="btn btn-primary" type="reset" value="취소" /></td>
+							</tr>
+						</tfoot>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!-- //container -->
+		<div class="footer">
+			<p class="copyright">&copy;copy</p>
+		</div>
+	</div>
+	<!-- //frame -->
+</body>
+
+
+</html>

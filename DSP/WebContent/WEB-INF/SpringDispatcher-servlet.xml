@@ -15,12 +15,15 @@
 	<mvc:default-servlet-handler />
 
 
+	<!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+
 	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/index/" />
-		<property name="suffix" value=".jsp" />
+		<property name="suffix" value=".html" />
 	</bean>
 
 

@@ -25,20 +25,6 @@ public class JSONSerializerTo {
 		Hashtable<String, String> list = Account.getInstance().getAccountListTable();
 		
 		String authPw = list.get(id);
-
-//		API format
-//		{
-//		 "resCode": "success"
-//		 "numSVC" "4"
-//		 "resultMsg" : "mg"
-//		 "SVCDesc" : 
-//		   {
-//		     "svcName1": "name"
-//		    "svcName2": "name"
-//		    "svcName3": "name"
-//		    "svcName4": "name"
-//		     }
-//		}
 		
 		if (authPw == null) {
 			
@@ -53,8 +39,6 @@ public class JSONSerializerTo {
 			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
 			
 			for (int i=0; i < ownList.size(); i++) {
-				
-				System.out.println(ownList.get(i).getUserAuth());
 				
 				if (ownList.get(i).getUserAuth().equals(id)) {
 					userList.add(ownList.get(i));

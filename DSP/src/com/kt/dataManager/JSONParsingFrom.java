@@ -103,19 +103,17 @@ public class JSONParsingFrom {
 			}
 			
 			list.setOwnList(form);
-					
+			
+			// 3rd party 데이터 전송 규격 (포멧) 생성 (등록된 서비스 기준), 등록 시 웹 사이트에 제
 			ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
 			
 			for(int k=0;  k < list.getInstance().getOwnList().size(); k++) {
 				
 				res = creator.createDataformatForJOSN(list.getInstance().getOwnList().get(k).getDataFormat());
 				
-				
-//				res = creator.reqDataCreatorForJSON(list.getInstance().getOwnList().get(k).getDataFormat(), form.getUserAuth(), form.getServiceCode());
-				
 			}
 				
-			System.out.println("REQUEST FORMAT: " + res);	
+			System.out.println("[RESULT]: " + form.getUserAuth() + " 사용자의 등록된 " + form.getServiceCode() + " 서비스의 전송 포멧: "  + res);	
 
 		} catch (ParseException e) {
 			// TODO: handle exception

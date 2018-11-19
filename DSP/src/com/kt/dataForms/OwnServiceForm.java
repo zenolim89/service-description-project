@@ -17,7 +17,7 @@ public class OwnServiceForm {
 	String dataDefinition;
 	
 	ArrayList<ReqDataForm> dataformat = new ArrayList<ReqDataForm>();
-	Hashtable<String, String> refDialog = new Hashtable<String, String>();
+	Hashtable<String, ArrayList<String>> refDialog = new Hashtable<String, ArrayList<String>>();
 	
 	public String getUserAuth() {
 		return userAuth;
@@ -106,11 +106,11 @@ public class OwnServiceForm {
 		return this.dataformat;
 	}
 
-	public Hashtable<String, String> getRefDialog() {
+	public Hashtable<String, ArrayList<String>> getRefDialog() {
 		return this.refDialog;
 	}
 	
-	public void setRefDialog(Hashtable<String, String> list) {
+	public void setRefDialog(Hashtable<String, ArrayList<String>> list) {
 		this.refDialog = list;
 	}
 

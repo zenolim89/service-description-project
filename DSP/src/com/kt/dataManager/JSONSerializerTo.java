@@ -9,11 +9,11 @@ import org.apache.log4j.spi.ErrorCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.kt.dataForms.Account;
-import com.kt.dataForms.ErrorCodeList;
+import com.kt.dataDao.Account;
+import com.kt.dataDao.ErrorCodeList;
+import com.kt.dataDao.OwnServiceList;
 import com.kt.dataForms.KeyValueFormatForJSON;
 import com.kt.dataForms.OwnServiceForm;
-import com.kt.dataForms.OwnServiceList;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
@@ -58,6 +58,7 @@ public class JSONSerializerTo {
 				for (int i=0; i < ownList.size(); i++) {
 
 					JSONArray regiListInfo = new JSONArray();
+					JSONArray regiDialgoList = new JSONArray();
 					JSONObject regiData = new JSONObject();
 
 					if (ownList.get(i).getUserAuth().equals(id)) {
@@ -82,7 +83,8 @@ public class JSONSerializerTo {
 
 							data = creator.createDataformatForJOSN(userList.get(j).getDataFormat());
 							regiData.put("dataFormat", data);
-							//dialog 추가 필요
+							//dialog 
+							regiData.put("refDialog", this.getDialog(userList.get(j), userList.get(j).getUserAuth()));
 							regiListInfo.add(regiData);
 						}
 					}
@@ -97,11 +99,46 @@ public class JSONSerializerTo {
 
 		return resMsg;
 	}
+	
+	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
+		
+		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
+		JSONArray tempArr = new JSONArray();
+		JSONArray resArr = new JSONArray();
+		
+		
+		
+		tempList = form.getRefDialog();
+		
+		Set <String> keys = tempList.keySet();
+		
+		Iterator<String> iter = keys.iterator();
+		
+		while (iter.hasNext()) {
+			
+			JSONObject tempObj = new JSONObject();
+			
+			String keyName = iter.next();
+			ArrayList<String> tempValueList = tempList.get(keyName);
+			
+			for (int i=0; i < tempValueList.size(); i++) {
+				tempArr.add(tempValueList.get(i));
+			}
+			tempObj.put("dicName",  keyName);
+			tempObj.put("word", tempArr);
+			resArr.add(tempObj);
+			
+			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
+			
+		}
+		
+		return resArr;
+	}
 
-	// 사전 정보 처리 
-	public Hashtable<String, String> regiDialog (JSONObject obj) {
+	// 등록 시 사전 처리 
+	public Hashtable<String, ArrayList<String>> regiDialog (JSONObject obj) {
 
-		Hashtable<String, String> tempList = new Hashtable<String, String>();
+		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
 
 		Set<String> listKeys = obj.keySet();
 
@@ -111,9 +148,16 @@ public class JSONSerializerTo {
 			String curKeyName = iter.next();
 			JSONArray arr = (JSONArray) obj.get(curKeyName);
 
+			ArrayList<String> arrVar = new ArrayList<String>();
+			
 			for (int i=0; i < arr.size(); i++) {
-				tempList.put(curKeyName, arr.get(i).toString());
+				
+				arrVar.add(arr.get(i).toString());
 			}
+			
+			tempList.put(curKeyName, arrVar);
+			
+			System.out.println("[DEBUG: 등록된 단어사전] 사전명: " + curKeyName + ", 단어: " + arrVar.toString());
 		}
 
 		return tempList;

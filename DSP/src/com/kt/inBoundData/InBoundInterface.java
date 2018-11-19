@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kt.dataForms.ErrorCodeList;
+import com.kt.dataCreator_temp.DicCreator;
 import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
@@ -27,11 +27,18 @@ public class InBoundInterface {
 	//see also SpringDispatcher-servlet.xml
 	@RequestMapping("/")
 	public ModelAndView index() {
- 
+
 		ModelAndView mv = new ModelAndView("index");
-		
+
+		//테스트 소스: POC 이후 삭제 필요
+		DicCreator creator = new DicCreator();
+		creator.createResortDic();
+		creator.createShopDic();
+		creator.creatHospitalDic();
+		//여기까지 
+
 		return mv;
-//		return new ModelAndView("index");
+		//		return new ModelAndView("index");
 	}
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
@@ -67,6 +74,35 @@ public class InBoundInterface {
 		return response;
 	}
 
+	//getDicInfo
+	@RequestMapping(value = "/dictionary", method = RequestMethod.POST)
+	public String getDic(InputStream body){
+
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
+		String bf = null;
+		String response = "";
+		String res = null;
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+
+		try {
+
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+
+			
+			res = parsingFrom.getDicDictionaryList(response);
+
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+		}
+
+		return res;
+	}
+
+
 	//setAuth
 	@RequestMapping(value = "/auth", method = RequestMethod.POST)
 	public JSONObject reqAuth(InputStream body){
@@ -92,41 +128,41 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-		
-		System.out.print("[DEBUG]: " + res);
-		
+
+		System.out.print("[DEBUG: 인증처리 후 결과]: " + res + "\n");
+
 		return res;
 	}
-	
+
 	//service registration
-		@RequestMapping(value = "/registration", method = RequestMethod.POST)
-		public JSONObject reqRegiForService(InputStream body){
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public JSONObject reqRegiForService(InputStream body){
 
-			JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 
-			String bf = null;
-			String response = "";
-			JSONObject res = null;
+		String bf = null;
+		String response = "";
+		JSONObject res = null;
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 
-			try {
+		try {
 
-				while ((bf = in.readLine()) != null) {
-					response += bf;
-				}
-
-				//send registration to parser
-
-				res = parsingFrom.regiService(response);
-
-			} catch (Exception e) {
-				response = e.getMessage().toString();
-				//에러 정의 필요..보통 JSON 파일에 parm이 없을 경우 발생함...
+			while ((bf = in.readLine()) != null) {
+				response += bf;
 			}
 
-			return res;
+			//send registration to parser
+
+			res = parsingFrom.regiService(response);
+
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+			//에러 정의 필요..보통 JSON 파일에 parm이 없을 경우 발생함...
 		}
+
+		return res;
+	}
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.PUT)
 	public String putSomething(@RequestBody String request,@RequestParam(value = "version", required = false, defaultValue = "1") int version) {

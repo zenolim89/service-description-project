@@ -1,7 +1,9 @@
-package com.kt.dataForms;
+package com.kt.dataDao;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+
+import com.kt.dataForms.OwnServiceForm;
 
 public class OwnServiceList {
 

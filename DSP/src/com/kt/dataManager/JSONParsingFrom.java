@@ -9,8 +9,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.kt.dataDao.OwnServiceList;
 import com.kt.dataForms.OwnServiceForm;
-import com.kt.dataForms.OwnServiceList;
 import com.kt.dataForms.ReqDataForm;
 
 
@@ -18,7 +18,31 @@ public class JSONParsingFrom {
 
 	JSONParser parser = new JSONParser();
 	JSONSerializerTo serializer = new JSONSerializerTo();
+	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
+	
+	public String getDicDictionaryList (String response) {
+		
+		String res = null;
+		
+		try {
+			
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			String doName = obj.get("domainName").toString();
+			
+			res = htmlSerializer.createHTMLForDic(doName);
+			
+		} catch (ParseException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return res;
+		
+		
+	}
+	
 	public JSONObject setAuth (String response) {
 
 		JSONObject res = null;
@@ -112,8 +136,8 @@ public class JSONParsingFrom {
 				res = creator.createDataformatForJOSN(list.getInstance().getOwnList().get(k).getDataFormat());
 				
 			}
-				
-			System.out.println("[RESULT]: " + form.getUserAuth() + " 사용자의 등록된 " + form.getServiceCode() + " 서비스의 전송 포멧: "  + res);	
+			
+			System.out.println("[DEBUG: 만들어진 전송규격]: 사용자 ID: " + form.getUserAuth() + ", 서비스 코드: " + form.getServiceCode() + ", 전송 포멧: "  + res +"\n");	
 
 		} catch (ParseException e) {
 			// TODO: handle exception

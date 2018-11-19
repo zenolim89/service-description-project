@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<body>
+<h2>text 파일 읽기</h2>
+<input type="file"	id="txt"><br>
+<h2>파일 출력</h2>
+<textarea id="txtout" rows="10" cols="50"></textarea>
+<h2><br/> JSON 변환 결과</h2>
+<textarea id="txtout2" rows="10" cols="50"></textarea>
+
+<script type="text/javascript">
+window.onload = function(){
+	document.getElementById("txt").onchange = function(){
+		readTextFile('txt', 'txtout', 'txtout2', 'UTF-8');
+	}
+}
+
+function readTextFile(inputId, outputId1, outputId2, encoding){
+	var file = document.getElementById(inputId).files[0];
+	var reader = new FileReader();
+	
+	if(encoding){
+		encoding='UTF-8';
+	}
+	reader.readAsText(file,encoding);
+	
+	reader.onload = function(){
+		var output = document.getElementById(outputId1);
+		output.innerHTML = reader.result;
+		var lines = reader.result.split("\n");
+		var conclusion = [];
+		var headers = lines[0].split(",");
+		for(var i=1; i<lines.length; i++){
+			var obj = {};
+			var currentline=lines[i].split(",");
+			for(var j=0;j<headers.length;j++){
+				  obj[headers[j]] = currentline[j];
+			}
+			conclusion.push(obj);
+		}
+		  
+		  //JSON transformed
+		  var JSONobject = JSON.stringify(conclusion);
+		  var output2 = document.getElementById(outputId2);
+		  output2.innerHTML = JSONobject;		
+	} 
+	
+	reader.onerror = function(e){
+		alert("읽기 오류:" + e.target.error.code);
+		return;
+	}
+}
+</script>
+
+</body>
+</html>

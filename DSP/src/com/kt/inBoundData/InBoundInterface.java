@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kt.dataForms.ErrorCodeList;
 import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
@@ -121,6 +122,7 @@ public class InBoundInterface {
 
 			} catch (Exception e) {
 				response = e.getMessage().toString();
+				//에러 정의 필요..보통 JSON 파일에 parm이 없을 경우 발생함...
 			}
 
 			return res;

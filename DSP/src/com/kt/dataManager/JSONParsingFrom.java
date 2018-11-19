@@ -49,7 +49,7 @@ public class JSONParsingFrom {
 		
 		OwnServiceForm form = new OwnServiceForm();
 		OwnServiceList list = OwnServiceList.getInstance();
-		JSONDataCreatorForRegi regi = new JSONDataCreatorForRegi();
+		JSONSerializerTo regi = new JSONSerializerTo();
 		
 		try {
 			

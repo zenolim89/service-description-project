@@ -66,7 +66,7 @@
 
 							<tr>
 								<th>서비스 코드</th>
-								<td><select class="form-control" name="serviceCode" >
+								<td><select class="form-control" name="serviceCode">
 										<option value="" selected disabled>서비스 코드 선택</option>
 										<option value="REOAKSVC001">REOAKSVC001</option>
 										<option value="REOAKSVC002">REOAKSVC002</option>
@@ -83,7 +83,8 @@
 
 							<tr>
 								<th>인텐트 명</th>
-								<td><select class="form-control" name="intentName" id="intentName" onchange="chageIntentSelect()" >
+								<td><select class="form-control" name="intentName"
+									id="intentName" onchange="chageIntentSelect()">
 										<option value="" selected disabled>인텐트 명 선택</option>
 										<option value="ViewINFRM">ViewINFRM</option>
 										<option value="Concierge">Concierge</option>
@@ -102,6 +103,7 @@
 								<td><input class="form-control" type="text"
 									name="targetURL" value="http://"></td>
 							</tr>
+							<div id="inner"></div>
 							<!-- <tr>
 								<th>부대시설 항목</th>
 								<td>

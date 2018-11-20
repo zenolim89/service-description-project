@@ -1,3 +1,7 @@
+/*
+ * Created by zenolim on 2018
+ */
+
 var authRequest;
 var authJsonInfo;
 var svcRegRequest;
@@ -79,26 +83,6 @@ function RegSVCList(loginResult) {
 	}
 }
 
-/*
- * { "userAuth": "V000001", "interfaceType": "Voice", "serviceCode": "RSVC001",
- * "refAPI": "pageMoveAPI", "intentName": "ViewIFRM", "serviceDesc": "리조트 정보
- * 화면으로 전환", "refDialog": { "facilitiesItems": [ "food", "sports", "shopping",
- * "cultural", "dispensary", "church", "affiliate" ], "liveWebcamsItems": [
- * "a_slopes", "b_slopes", "h_slopes", "i_slopes", "g_slopes", "mountain_view",
- * "mountain_summit" ], "resortItems": [ "rateGuide", "roomInfo" ] },
- * "targetURL": "http://", "method": "POST", "dataType": "JSON",
- * "dataDefinition": "OWN", "dataFormat": [ { "keyName": "propertyId",
- * "valueName": "htshcles", "superVar": "false", "type": "JSONObject",
- * "userDefine": "true", "subArrType": "false", "subArr": "false" }, {
- * "keyName": "roomNo", "valueName": "1101", "superVar": "false", "type":
- * "JSONObject", "userDefine": "true", "subArrType": "false", "subArr": "false" }, {
- * "keyName": "reqData", "valueName": "false", "superVar": "false", "type":
- * "JSONArray", "userDefine": "true", "subArrType": "object", "subArr": [ {
- * "svcType": "st00001101" }, { "svcevtPrprtys": [ { "svcevtPrprtyCd":
- * "pp00001101", "svcevtPrprtyVal": "G0001" }, { "svcevPrprtyCd": "pp00001102",
- * "svcevtPrprtyVal": "1" } ] } ] } ] }
- */
-
 // 데이터포맷 테이블 행 추가
 function addRow(id) {
 	var tbody = document.getElementById(id);
@@ -140,9 +124,9 @@ function addRow(id) {
 	tbody.appendChild(row);
 }
 
+// 데이터포맷 테이블 행 삭제
 function deleteLine(obj) {
 	var tr = $(obj).parent().parent();
-	// 라인 삭제
 	tr.remove();
 }
 
@@ -251,23 +235,22 @@ function svcReqFunction() {
 function svcRespProcess() {
 	if (svcRegRequest.readyState == 4 && svcRegRequest.status == 200) {
 		alert(svcRegRequest.responseText);
-		console.log("[등록 성공] \n" + "Detail : "+svcRegRequest.responseText);
+		console.log("[등록 성공] \n" + "Detail : " + svcRegRequest.responseText);
 	}
 }
 
-
 // Ajax 인텐트 어휘사전 UI 변경
-function chageIntentSelect(){
-    var langSelect = document.getElementById("intentName");
-    // select element에서 선택된 option의 value가 저장된다.
-    selectValue = langSelect.options[langSelect.selectedIndex].value;
-    // select element에서 선택된 option의 text가 저장된다.
-    var selectText = langSelect.options[langSelect.selectedIndex].text;
-    console.log("선택 = "+selectText+":"+selectValue);
-    var IntentInfo = new Object();
-    IntentInfo.domainName = selectValue;
-    NEJsonInfo = JSON.stringify(IntentInfo);
-    NEReqFunction();
+function chageIntentSelect() {
+	var langSelect = document.getElementById("intentName");
+	// select element에서 선택된 option의 value가 저장된다.
+	selectValue = langSelect.options[langSelect.selectedIndex].value;
+	// select element에서 선택된 option의 text가 저장된다.
+	var selectText = langSelect.options[langSelect.selectedIndex].text;
+	console.log("선택 = " + selectText + ":" + selectValue);
+	var IntentInfo = new Object();
+	IntentInfo.domainName = selectValue;
+	NEJsonInfo = JSON.stringify(IntentInfo);
+	NEReqFunction();
 }
 
 // Ajax 어휘사전 요청 초기화
@@ -294,37 +277,56 @@ function NERespProcess() {
 		console.log(NERequest.responseText);
 		NEListInfo = NERequest.responseText;
 		var table = document.getElementById("mainTable");
-		table.innerHTML="";
-		table.innerHTML = 		
-			"<tbody><tr><th>사용자 계정</th><td><input class='form-control' type='text' value='V000001'name='userAuth' readonly></td></tr>" +
-			"<tr><th>인터페이스 타입</th><td><div class='form-check'>" +
-			"<label><input type='radio' name='interfaceType' value='touch'><span class='label-text'>터치</span></label>" +
-			"<label><input type='radio' name='interfaceType' value='voice' checked='checked'><span class='label-text'>음성</span></label>" +
-			"<label><input type='radio' name='interfaceType' value='remocon'><span class='label-text'>리모컨</span></label></div></td></tr>" +
-			"<tr><th>서비스 코드</th><td><select class='form-control' name='serviceCode'><option value='' selected disabled>서비스 코드 선택</option>" +
-			"<option value='REOAKSVC001'>REOAKSVC001</option><option value='REOAKSVC002'>REOAKSVC002</option><option value='REOAKSVC003'>REOAKSVC003</option>" +
-			"<option value='REOAKSVC004'>REOAKSVC004</option><option value='REOAKSVC005'>REOAKSVC005</option><option value='REOAKSVC006'>REOAKSVC006</option>" +
-			"</select></td></tr><tr><th>참조 API</th><td><input class='form-control' type='text' name='refAPI'></td></tr>" +
-			"<tr><th>인텐트 명</th><td><select class='form-control' name='intentName' id='intentName' onchange='chageIntentSelect()'>" + 
-			"<option value='' disabled>인텐트 명 선택</option><option value='ViewINFRM'>ViewINFRM</option><option value='Concierge'>Concierge</option>" +
-			"<option value='Amenity'>Amenity</option><option value='Order'>Order</option><option value='CheckOut'>CheckOut</option></select></td></tr>" + NEListInfo +
-			"<tr><th>서비스 개요</th><td><textarea class='form-control' rows='5' cols='30' name='serviceDesc'></textarea></td></tr>" +
-			"<tr><th>타깃 URL</th><td><input class='form-control' type='text' name='targetURL' value='http://'></td></tr>" +
-			"<tr><th>전송 메소드</th><td><select class='form-control' name='method'><option value='' selected disabled>전송 방식 선택</option><option value='POST'>POST</option>" +
-			"<option value='GET'>GET</option></select></td></tr>" +
-			"<tr><th>데이터 타입</th><td><select class='form-control' name='dataType'><option value='' selected disabled>데이터 타입 선택</option><option value='json'>JSON</option>" +
-			"<option value='xml'>XML</option></select></td></tr>" +
-			"<tr><th>데이터 정의</th><td><select class='form-control' name='dataDefinition'><option value='' selected disabled>데이터 정의 선택</option><option value='ktown'>ktown</option>" +
-			"<option value='3rdparty'>3rd party</option><option value='3rdpaty'>3rd party</option><option value='3rdpaty'>3rd party</option></select></td></tr>" +
-			"<tr><th>데이터 포맷</th><td><table class='subType' id='DFtable'><tr><td colspan='8'>" +
-			"<input class='btn btn-primary' type='button' size='20' value='추가' onClick=\"addRow('DFtable');\"></td></tr></table>	</td></tr></tbody>" + 
-			"<tfoot><tr><td colspan='5'>" +
-			"<input class='btn btn-warning' type='button' onClick='svcReqFunction();' value='등록' />" +
-			"<input class='btn btn-warning' type='button' value='파일업로드' />" +
-			"<input class='btn btn-warning' type='reset' value='취소' />" +
-			"</td></tr></tfoot>";
-		
+		table.innerHTML = "";
+		table.innerHTML = "<tbody>"
+				+ "<tr><th>사용자 계정</th>"
+				+ "<td><input class='form-control' type='text' value='V000001'name='userAuth' readonly></td></tr>"
+				+ "<tr><th>인터페이스 타입</th><td><div class='form-check'>"
+				+ "<label><input type='radio' name='interfaceType' value='touch'><span class='label-text'>터치</span></label>"
+				+ "<label><input type='radio' name='interfaceType' value='voice' checked='checked'><span class='label-text'>음성</span></label>"
+				+ "<label><input type='radio' name='interfaceType' value='remocon'><span class='label-text'>리모컨</span></label></div></td></tr>"
+				+ "<tr><th>서비스 코드</th><td><select class='form-control' name='serviceCode'>"
+				+ "<option value='' selected disabled>서비스 코드 선택</option>"
+				+ "<option value='REOAKSVC001'>REOAKSVC001</option>"
+				+ "<option value='REOAKSVC002'>REOAKSVC002</option>"
+				+ "<option value='REOAKSVC003'>REOAKSVC003</option>"
+				+ "<option value='REOAKSVC004'>REOAKSVC004</option>"
+				+ "<option value='REOAKSVC005'>REOAKSVC005</option>"
+				+ "<option value='REOAKSVC006'>REOAKSVC006</option>"
+				+ "</select></td></tr>"
+				+ "<tr><th>참조 API</th><td><input class='form-control' type='text' name='refAPI'></td></tr>"
+				+ "<tr><th>인텐트 명</th><td><select class='form-control' name='intentName' id='intentName' onchange='chageIntentSelect()'>"
+				+ "<option value='' disabled>인텐트 명 선택</option>"
+				+ "<option value='ViewINFRM'>ViewINFRM</option>"
+				+ "<option value='Concierge'>Concierge</option>"
+				+ "<option value='Amenity'>Amenity</option>"
+				+ "<option value='Order'>Order</option>"
+				+ "<option value='CheckOut'>CheckOut</option></select></td></tr>"
+				+ NEListInfo
+				+ "<tr><th>서비스 개요</th><td><textarea class='form-control' rows='5' cols='30' name='serviceDesc'></textarea></td></tr>"
+				+ "<tr><th>타깃 URL</th><td><input class='form-control' type='text' name='targetURL' value='http://'></td></tr>"
+				+ "<tr><th>전송 메소드</th><td><select class='form-control' name='method'>"
+				+ "<option value='' selected disabled>전송 방식 선택</option>"
+				+ "<option value='POST'>POST</option>"
+				+ "<option value='GET'>GET</option></select></td></tr>"
+				+ "<tr><th>데이터 타입</th><td><select class='form-control' name='dataType'>"
+				+ "<option value='' selected disabled>데이터 타입 선택</option>"
+				+ "<option value='json'>JSON</option>"
+				+ "<option value='xml'>XML</option></select></td></tr>"
+				+ "<tr><th>데이터 정의</th><td><select class='form-control' name='dataDefinition'>"
+				+ "<option value='' selected disabled>데이터 정의 선택</option>"
+				+ "<option value='ktown'>ktown</option>"
+				+ "<option value='3rdparty'>3rd party</option>"
+				+ "<option value='3rdpaty'>3rd party</option>"
+				+ "<option value='3rdpaty'>3rd party</option></select></td></tr>"
+				+ "<tr><th>데이터 포맷</th><td><table class='subType' id='DFtable'><tr><td colspan='8'>"
+				+ "<input class='btn btn-primary' type='button' size='20' value='추가' onClick=\"addRow('DFtable');\"></td></tr></table></td></tr></tbody>"
+				+ "<tfoot><tr><td colspan='2'>"
+				+ "<input class='btn btn-warning' type='button' onClick='svcReqFunction();' value='등록' />"
+				+ "<input class='btn btn-warning' type='button' value='파일업로드' />"
+				+ "<input class='btn btn-warning' type='reset' value='취소' />"
+				+ "</td></tr></tfoot>";
+
 		$("#intentName").val(selectValue).prop("selected", true);
 	}
 }
-

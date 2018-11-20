@@ -10,7 +10,7 @@ public class DicCreator {
 	public void createResortDic() {
 		DictionaryForm form = new DictionaryForm();
 
-		form.setDomainName("리조트");
+		form.setDomainName("ViewINFRM");
 		ArrayList<String> fa = new ArrayList<String>();
 		ArrayList<String> webCam = new ArrayList<String>();
 		ArrayList<String> intro = new ArrayList<String>();
@@ -43,7 +43,7 @@ public class DicCreator {
 	public void createShopDic () {
 		DictionaryForm form = new DictionaryForm();
 		
-		form.setDomainName("매장");
+		form.setDomainName("concierge");
 		
 		ArrayList<String> proc = new ArrayList<String>();
 		
@@ -59,7 +59,7 @@ public class DicCreator {
 	public void creatHospitalDic() {
 		DictionaryForm form = new DictionaryForm();
 		
-		form.setDomainName("병원");
+		form.setDomainName("order");
 		
 		ArrayList<String> info = new ArrayList<String>();
 		ArrayList<String> body = new ArrayList<String>();

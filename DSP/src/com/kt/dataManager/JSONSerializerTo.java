@@ -58,8 +58,7 @@ public class JSONSerializerTo {
 				for (int i=0; i < ownList.size(); i++) {
 
 					JSONArray regiListInfo = new JSONArray();
-					JSONArray regiDialgoList = new JSONArray();
-					JSONObject regiData = new JSONObject();
+					
 
 					if (ownList.get(i).getUserAuth().equals(id)) {
 						
@@ -67,6 +66,9 @@ public class JSONSerializerTo {
 
 						for (int j=0; j< userList.size(); j++) {
 
+							JSONArray regiDialgoList = new JSONArray();
+							JSONObject regiData = new JSONObject();
+							
 							JSONObject data = new JSONObject();
 							ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
 
@@ -103,7 +105,7 @@ public class JSONSerializerTo {
 	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
 		
 		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
-		JSONArray tempArr = new JSONArray();
+		
 		JSONArray resArr = new JSONArray();
 		
 		
@@ -120,6 +122,7 @@ public class JSONSerializerTo {
 			
 			String keyName = iter.next();
 			ArrayList<String> tempValueList = tempList.get(keyName);
+			JSONArray tempArr = new JSONArray();
 			
 			for (int i=0; i < tempValueList.size(); i++) {
 				tempArr.add(tempValueList.get(i));

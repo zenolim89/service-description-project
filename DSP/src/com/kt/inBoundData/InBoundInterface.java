@@ -100,6 +100,36 @@ public class InBoundInterface {
 		}
 		return response;
 	}
+	
+	
+	//request Service
+		@RequestMapping(value = "/reqDialogService", method = RequestMethod.POST)
+		public JSONObject reqServiceForDialog (InputStream body){
+
+			JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
+			String bf = null;
+			String response = "";
+			JSONObject res = null;
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(body));
+
+			try {
+
+				while ((bf = in.readLine()) != null) {
+					response += bf;
+				}
+
+
+				//res = 
+
+			} catch (Exception e) {
+				response = e.getMessage().toString();
+			}
+
+			return res;
+		}
+	
 
 	//getDicInfo
 	@RequestMapping(value = "/dictionary", method = RequestMethod.POST)

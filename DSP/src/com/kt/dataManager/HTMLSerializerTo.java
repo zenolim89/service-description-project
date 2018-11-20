@@ -37,12 +37,12 @@ public class HTMLSerializerTo {
 						String keyName = iter.next();
 						
 						responseHTML += "<tr> \n";
-						responseHTML += "<th>" + keyName + "</th> \n"
+						responseHTML += "<th>" + keyName + "</th><td> \n"
 								+ "<div class=\"form-check\"> \n";
 						
 						for (int j=0; j < temp.get(keyName).size(); j++) {
 							responseHTML += "<label> <input class=\"option-input checkbox\""
-									+ "type=\"checkbox\" name=" + keyName + "value=\"food\">"
+									+ "type=\"checkbox\" name=" +"\""+ keyName +"\"" + "value=\"food\">"
 									+ "<span class=\"label-text\">" + temp.get(keyName).get(j) + "</span></label> \n";
 						}
 						responseHTML += "</div> \n"

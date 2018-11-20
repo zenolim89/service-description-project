@@ -132,7 +132,7 @@ public class InBoundInterface {
 	
 
 	//getDicInfo
-	@RequestMapping(value = "/dictionary", method = RequestMethod.POST)
+	@RequestMapping(value = "/dictionary", method = RequestMethod.POST,  produces = "application/text; charset=utf8")
 	public String getDic(InputStream body){
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -155,7 +155,7 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-
+		
 		return res;
 	}
 

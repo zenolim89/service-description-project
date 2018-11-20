@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/style.css">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +16,17 @@
 	<div class="frame">
 		<div class="header">
 			<div class="logo">KT SVC Platform</div>
-			<div class="login" id="loginForm" style="display:block">
-				<input type="text" id="id" placeholder="계정"> 
-				<input type="password" id="pw" placeholder="암호" required>
+			<div class="login" id="loginForm" style="display: block">
+				<input type="text" id="id" placeholder="계정"> <input
+					type="password" id="pw" placeholder="암호" required>
 				<button class="btn btn-default" type="button"
 					onclick="authReqFunction();">로그인</button>
 			</div>
-			
-			<div class="login" id="loginCompl" style="display:none">
+
+			<div class="login" id="loginCompl" style="display: none">
 				<a href="javascript:LoginDisplay();">로그아웃</a>
 			</div>
-			
+
 		</div>
 		<!-- //header -->
 		<div class="container">
@@ -37,12 +38,11 @@
 			<div class="content">
 				<h1>서비스 등록</h1>
 				<form>
-					<table class="mainType">
+					<table class="mainType" id="mainTable">
 						<thead>
 						</thead>
 
 						<tbody>
-
 							<tr>
 								<th>사용자 계정</th>
 								<td><input class="form-control" type="text" value="V000001"
@@ -54,28 +54,26 @@
 								<th>인터페이스 타입</th>
 								<td>
 									<div class="form-check">
-										<label><input class="custom-radio" type="radio"
-											name="interfaceType" value="touch"><span
-											class="label-text">터치</span></label> <label><input
-											class="custom-radio" type="radio" name="interfaceType"
-											value="voice" checked="checked"><span
-											class="label-text">음성</span></label> <label><input
-											class="custom-radio" type="radio" name="interfaceType"
-											value="remocon"><span class="label-text">리모컨</span></label>
+										<label><input type="radio" name="interfaceType"
+											value="touch"><span class="label-text">터치</span></label><label><input
+											type="radio" name="interfaceType" value="voice"
+											checked="checked"><span class="label-text">음성</span></label><label><input
+											type="radio" name="interfaceType" value="remocon"><span
+											class="label-text">리모컨</span></label>
 									</div>
 								</td>
 							</tr>
 
 							<tr>
 								<th>서비스 코드</th>
-								<td><select class="form-control" name="serviceCode">
-										<option value="" disabled>서비스 코드 선택</option>
-										<option value="RESVC001">RESVC001</option>
-										<option value="RESVC002">RESVC002</option>
-										<option value="RESVC003">RESVC003</option>
-										<option value="RESVC004">RESVC004</option>
-										<option value="RESVC005">RESVC005</option>
-										<option value="RESVC006">RESVC006</option>
+								<td><select class="form-control" name="serviceCode" >
+										<option value="" selected disabled>서비스 코드 선택</option>
+										<option value="REOAKSVC001">REOAKSVC001</option>
+										<option value="REOAKSVC002">REOAKSVC002</option>
+										<option value="REOAKSVC003">REOAKSVC003</option>
+										<option value="REOAKSVC004">REOAKSVC004</option>
+										<option value="REOAKSVC005">REOAKSVC005</option>
+										<option value="REOAKSVC006">REOAKSVC006</option>
 								</select></td>
 							</tr>
 							<tr>
@@ -85,10 +83,10 @@
 
 							<tr>
 								<th>인텐트 명</th>
-								<td><select class="form-control" name="intentName">
-										<option value="" disabled>인텐트 명 선택</option>
+								<td><select class="form-control" name="intentName" id="intentName" onchange="chageIntentSelect()" >
+										<option value="" selected disabled>인텐트 명 선택</option>
 										<option value="ViewINFRM">ViewINFRM</option>
-										<option value="Concierge">concierge</option>
+										<option value="Concierge">Concierge</option>
 										<option value="Amenity">Amenity</option>
 										<option value="Order">Order</option>
 										<option value="CheckOut">CheckOut</option>
@@ -104,31 +102,24 @@
 								<td><input class="form-control" type="text"
 									name="targetURL" value="http://"></td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<th>부대시설 항목</th>
 								<td>
 									<div class="form-check">
-										<label> <input class="option-input checkbox"
-											type="checkbox" name="facilitiesItems" value="food">
-											<span class="label-text">식음업장</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="sports">
-											<span class="label-text">레저/스포츠</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="shopping">
-											<span class="label-text">쇼핑/편의</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="cultural">
-											<span class="label-text">문화시설</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="dispensary">
-											<span class="label-text">의무실</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="church">
-											<span class="label-text">교회/성당</span>
-										</label> <label> <input class="custom-checkbox"
-											type="checkbox" name="facilitiesItems" value="affiliate">
-											<span class="label-text">제휴업장</span>
+										<label> <input type="checkbox" name="facilitiesItems"
+											value="food"> <span class="label-text">식음업장</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="sports"> <span class="label-text">레저/스포츠</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="shopping"> <span class="label-text">쇼핑/편의</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="cultural"> <span class="label-text">문화시설</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="dispensary"> <span class="label-text">의무실</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="church"> <span class="label-text">교회/성당</span>
+										</label> <label> <input type="checkbox" name="facilitiesItems"
+											value="affiliate"> <span class="label-text">제휴업장</span>
 										</label>
 									</div>
 								</td>
@@ -137,27 +128,21 @@
 								<th>실시간 웹캠 항목</th>
 								<td>
 									<div class="form-check">
-										<label> <input type="checkbox" name="liveWebcamsItems"
-											value="a_slopes"> <span class="label-text">A슬로프</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="b_slopes"> <span
-											class="label-text">B슬로프</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="h_slopes"> <span
-											class="label-text">H슬로프</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="i_slopes"> <span
-											class="label-text">I슬로프</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="g_slopes"> <span
-											class="label-text">G슬로프</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="mountain_view"> <span
-											class="label-text">스키장 전경</span>
-										</label> <label> <input type="checkbox"
-											name="liveWebcamsItems" value="mountain_summit"> <span
-											class="label-text">마운틴정상</span>
-										</label>
+										<label><input type="checkbox" name="liveWebcamsItems"
+											value="a_slopes"><span class="label-text">A슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="b_slopes"><span class="label-text">B슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="h_slopes"><span class="label-text">H슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="i_slopes"><span class="label-text">I슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="g_slopes"><span class="label-text">G슬로프</span>
+										</label><label><input type="checkbox" name="liveWebcamsItems"
+											value="mountain_view"><span class="label-text">스키장
+												전경</span> </label><label><input type="checkbox"
+											name="liveWebcamsItems" value="mountain_summit"><span
+											class="label-text">마운틴정상</span> </label>
 									</div>
 								</td>
 
@@ -166,20 +151,20 @@
 								<th>리조트 소개 항목</th>
 								<td>
 									<div class="form-check">
-										<label> <input type="checkbox" name="resortItems"
-											value="rateGuide"> <span class="label-text">리조트소개</span>
-										</label><label> <input type="checkbox" name="resortItems"
-											value="rateGuide"> <span class="label-text">요금안내</span>
-										</label><label> <input type="checkbox" name="resortItems"
-											value="roomInfo"> <span class="label-text">객실안내</span>
+										<label><input type="checkbox" name="resortItems"
+											value="rateGuide"><span class="label-text">리조트소개</span>
+										</label><label><input type="checkbox" name="resortItems"
+											value="rateGuide"><span class="label-text">요금안내</span>
+										</label><label><input type="checkbox" name="resortItems"
+											value="roomInfo"><span class="label-text">객실안내</span>
 										</label>
 									</div>
 								</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<th>전송 메소드</th>
 								<td><select class="form-control" name="method">
-										<option value="" disabled>인텐트 명 선택</option>
+										<option value="" selected disabled>전송 방식 선택</option>
 										<option value="POST">POST</option>
 										<option value="GET">GET</option>
 								</select></td>
@@ -187,7 +172,7 @@
 							<tr>
 								<th>데이터 타입</th>
 								<td><select class="form-control" name="dataType">
-										<option value="" disabled>데이터 타입 선택</option>
+										<option value="" selected disabled>데이터 타입 선택</option>
 										<option value="json">JSON</option>
 										<option value="xml">XML</option>
 								</select></td>
@@ -196,7 +181,7 @@
 							<tr>
 								<th>데이터 정의</th>
 								<td><select class="form-control" name="dataDefinition">
-										<option value="" disabled>데이터 정의 선택</option>
+										<option value="" selected disabled>데이터 정의 선택</option>
 										<option value="ktown">ktown</option>
 										<option value="3rdpaty">3rd party</option>
 										<option value="3rdpaty">3rd party</option>

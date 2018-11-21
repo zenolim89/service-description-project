@@ -35,8 +35,7 @@ function authReqFunction() {
 function authRespProcess() {
 	if (AuthRequest.readyState == 4 && AuthRequest.status == 200) {
 		console.log("[로그인 성공] \n" + "Detail : " + AuthRequest.responseText);
-		LoginDisplay();
-		RegSVCList(AuthRequest.responseText);
+		LoginDisplay(AuthRequest.responseText);
 	}
 }
 
@@ -63,7 +62,7 @@ function dctnrRespProcess() {
 	if (DictionaryRequest.readyState == 4 && DictionaryRequest.status == 200) {
 		console.log("[어휘사전 호출] \n" + "Detail : "
 				+ DictionaryRequest.responseText);
-		$('#mainTable > tbody > tr').not(document.getElementsByName('fixrow'))
+		$('#mainTable > tbody > tr').not('.fixrow')
 				.remove();
 		$('#mainTable').find('tr:eq(4)').after(DictionaryRequest.responseText);
 	}

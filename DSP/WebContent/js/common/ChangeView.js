@@ -3,7 +3,7 @@
  */
 
 // 로그인 성공 시 헤더 UI 변경
-function LoginDisplay() {
+function LoginDisplay(loginResult) {
 	var loginForm = document.getElementById("loginForm");
 	var loginCompl = document.getElementById("loginCompl");
 
@@ -14,18 +14,14 @@ function LoginDisplay() {
 		loginForm.style.display = 'none';
 		loginCompl.style.display = 'block';
 	}
-
+	// 계정에 등록된 서비스 목록으로 네비게이션 영역 변경 
 	var ul = document.getElementById('svcListInfo');
 	if (ul)
 		while (ul.firstChild) {
 			ul.removeChild(ul.firstChild);
 		}
-}
 
-// 계정에 등록된 서비스 목록
-function RegSVCList(loginResult) {
 	var jsonObj = JSON.parse(loginResult);
-	var ul = document.getElementById("svcListInfo");
 	for (var i = 0; i < jsonObj.ServiceNum; i++) {
 		var svcCodeName = jsonObj.regiServiceInfo[i].serviceCode;
 		var li = document.createElement("li");

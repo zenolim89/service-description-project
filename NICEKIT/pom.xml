@@ -6,11 +6,13 @@
 	<artifactId>NICEKIT</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>svcDescription Maven Webapp</name>
+	<name>NICEKIT Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
+		<maven.compilier.source>1.8</maven.compilier.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -98,6 +100,15 @@
 
 	</dependencies>
 	<build>
-		<finalName>svcDescription</finalName>
+		<finalName>NICEKIT</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>

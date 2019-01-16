@@ -15,11 +15,12 @@ import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 public class ThirdPartyDataFormatCreator {
 
 	JSONObject resJSON = new JSONObject();
-	@SuppressWarnings("unlikely-arg-type")
-	//	@SuppressWarnings("unused")
-	public JSONObject createDataformatForJOSN (ArrayList<ReqDataForm> dataForm) {
 
-		for (int i=0; i < dataForm.size(); i++ ) {
+	@SuppressWarnings("unlikely-arg-type")
+	// @SuppressWarnings("unused")
+	public JSONObject createDataformatForJOSN(ArrayList<ReqDataForm> dataForm) {
+
+		for (int i = 0; i < dataForm.size(); i++) {
 
 			ReqDataForm tempLine = dataForm.get(i);
 
@@ -37,14 +38,12 @@ public class ThirdPartyDataFormatCreator {
 
 	private JSONObject createJSONArray(ReqDataForm idxDataForm) {
 
-
-
 		if (idxDataForm.getSuperVar().equals("false")) {
-			if (idxDataForm.getSubArrType().equals("object")) {			
+			if (idxDataForm.getSubArrType().equals("object")) {
 				JSONArray subArr = this.createSubArrForObjectType(idxDataForm);
 				resJSON.put(idxDataForm.getKeyName(), subArr);
 
-			} else if (idxDataForm.getSubArrType().equals("string")) {		
+			} else if (idxDataForm.getSubArrType().equals("string")) {
 				JSONArray subArr = this.createSubArrForStringType(idxDataForm.getSubArrStringType());
 				resJSON.put(idxDataForm.getKeyName(), subArr);
 			}
@@ -68,7 +67,7 @@ public class ThirdPartyDataFormatCreator {
 			}
 
 		}
-		
+
 		return resJSON;
 
 	}
@@ -106,18 +105,16 @@ public class ThirdPartyDataFormatCreator {
 					JSONArray subArr = this.createSubArrForStringType(idxDataForm.getSubArrStringType());
 					obj.put(idxDataForm.getKeyName(), subArr);
 					resJSON.put(idxDataForm.getSuperVar(), obj);
-				}		
+				}
 			}
 		}
 	}
-
-
 
 	private JSONArray createSubArrForObjectType(ReqDataForm form) {
 
 		JSONArray subArr = new JSONArray();
 
-		if (form.getSubArrObjectType().size() > 0 && form.getSubValueArrObjType().size() > 0) {	
+		if (form.getSubArrObjectType().size() > 0 && form.getSubValueArrObjType().size() > 0) {
 			subArr = this.createKeyStringValueObjTypeforSubArr(form.getSubArrObjectType(), subArr);
 			subArr = this.createKeyArrValueObjTypeforSubArr(form.getSubValueArrObjType(), subArr);
 		} else if (form.getSubArrObjectType().size() <= 0 && form.getSubValueArrObjType().size() > 0) {
@@ -133,45 +130,44 @@ public class ThirdPartyDataFormatCreator {
 
 		JSONObject objType = new JSONObject();
 
-		//obj type에서 값 추출 
-		for (int i = 0; i < objList.size(); i ++) {
+		// obj type에서 값 추출
+		for (int i = 0; i < objList.size(); i++) {
 			objType.put(objList.get(i).getKey(), objList.get(i).getValue());
 		}
-		
+
 		arr.add(objType);
 
 		return arr;
 	}
 
-	private JSONArray createKeyArrValueObjTypeforSubArr(ArrayList<SubValueArrKeyValeTypeFormat> objList, JSONArray arr) {
+	private JSONArray createKeyArrValueObjTypeforSubArr(ArrayList<SubValueArrKeyValeTypeFormat> objList,
+			JSONArray arr) {
 
 		JSONObject objType = new JSONObject();
-		
-		
-		
-		for (int i=0; i < objList.size(); i++) {
+
+		for (int i = 0; i < objList.size(); i++) {
 			JSONArray subVarArr = new JSONArray();
 			String keyName = objList.get(i).getKey();
-			
-			for (int j=0; j < objList.get(i).getVarObjList().size(); j++) {
-				
+
+			for (int j = 0; j < objList.get(i).getVarObjList().size(); j++) {
+
 				JSONObject varObjType = new JSONObject();
-				
+
 				Hashtable<String, String> temp = objList.get(i).getVarObjList().get(j);
-								
+
 				Set<String> subKeySets = temp.keySet();
-				
+
 				Iterator<String> subIter = subKeySets.iterator();
-				
+
 				while (subIter.hasNext()) {
-					
+
 					String valueKey = subIter.next();
 					varObjType.put(valueKey, temp.get(valueKey));
-					
+
 				}
 				subVarArr.add(varObjType);
 			}
-			
+
 			objType.put(keyName, subVarArr);
 		}
 
@@ -181,13 +177,11 @@ public class ThirdPartyDataFormatCreator {
 
 	}
 
-
-
 	private JSONArray createSubArrForStringType(ArrayList<String> list) {
 
 		JSONArray arr = new JSONArray();
 
-		for (int i=0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 
 			arr.add(list.get(i));
 		}
@@ -195,5 +189,3 @@ public class ThirdPartyDataFormatCreator {
 		return arr;
 	}
 }
-
-

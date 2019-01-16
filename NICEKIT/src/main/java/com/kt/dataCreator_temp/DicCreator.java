@@ -90,12 +90,9 @@ public class DicCreator {
 		body.add("체지방");
 		body.add("골격근");
 		body.add("유전자");
-
 		form.getDictionaryList().put("병원소개", info);
 		form.getDictionaryList().put("신체정보", body);
-
 		DictionaryList.getInstance().getDicList().add(form);
-
 	}
 
 }

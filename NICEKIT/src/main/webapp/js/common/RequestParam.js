@@ -1,6 +1,3 @@
-/**
- * Created by zenolim on 2018
- */
 
 // 사용자 계정 정보 json 형식으로 반환
 function getAuthReqParam() {

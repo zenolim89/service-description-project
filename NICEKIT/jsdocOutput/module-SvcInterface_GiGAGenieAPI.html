@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>SvcInterface/GiGAGenieAPI - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ServerRequest_AuthProc.html">ServerRequest/AuthProc</a><ul class='methods'><li data-type='method'><a href="module-ServerRequest_AuthProc.html#~createXMLHttpAuthReq">createXMLHttpAuthReq</a></li><li data-type='method'><a href="module-ServerRequest_AuthProc.html#~authReqFunction">authReqFunction</a></li><li data-type='method'><a href="module-ServerRequest_AuthProc.html#~authRespProcess">authRespProcess</a></li></ul></li><li><a href="module-ServerRequest_DictionaryProc.html">ServerRequest/DictionaryProc</a><ul class='methods'><li data-type='method'><a href="module-ServerRequest_DictionaryProc.html#~createXMLHttpDctnrReq">createXMLHttpDctnrReq</a></li><li data-type='method'><a href="module-ServerRequest_DictionaryProc.html#~dctnrReqFunction">dctnrReqFunction</a></li><li data-type='method'><a href="module-ServerRequest_DictionaryProc.html#~dctnrRespProcess">dctnrRespProcess</a></li></ul></li><li><a href="module-ServerRequest_SvcRegProc.html">ServerRequest/SvcRegProc</a><ul class='methods'><li data-type='method'><a href="module-ServerRequest_SvcRegProc.html#~createXMLHttpSVCRegReq">createXMLHttpSVCRegReq</a></li><li data-type='method'><a href="module-ServerRequest_SvcRegProc.html#~svcRegReqFunction">svcRegReqFunction</a></li><li data-type='method'><a href="module-ServerRequest_SvcRegProc.html#~svcRegRespProcess">svcRegRespProcess</a></li></ul></li><li><a href="module-ServerRequest_SvcProc.html">ServerRequest/SvcProc</a><ul class='methods'><li data-type='method'><a href="module-ServerRequest_SvcProc.html#~createXMLHttpSvcReq">createXMLHttpSvcReq</a></li><li data-type='method'><a href="module-ServerRequest_SvcProc.html#~svcReqFunction">svcReqFunction</a></li><li data-type='method'><a href="module-ServerRequest_SvcProc.html#~svcRespProcess">svcRespProcess</a></li></ul></li><li><a href="module-SvcInterface_GiGAGenieAPI.html">SvcInterface/GiGAGenieAPI</a><ul class='methods'><li data-type='method'><a href="module-SvcInterface_GiGAGenieAPI.html#~init">init</a></li><li data-type='method'><a href="module-SvcInterface_GiGAGenieAPI.html#~sendTTS">sendTTS</a></li><li data-type='method'><a href="module-SvcInterface_GiGAGenieAPI.html#~stopTTS">stopTTS</a></li><li data-type='method'><a href="module-SvcInterface_GiGAGenieAPI.html#~startVoice">startVoice</a></li><li data-type='method'><a href="module-SvcInterface_GiGAGenieAPI.html#~getContainerId">getContainerId</a></li></ul></li><li><a href="module-SvcInterface_SvcActionEvent.html">SvcInterface/SvcActionEvent</a><ul class='methods'><li data-type='method'><a href="module-SvcInterface_SvcActionEvent.html#~SpeechINTRC">SpeechINTRC</a></li><li data-type='method'><a href="module-SvcInterface_SvcActionEvent.html#~BtnClickINTRC">BtnClickINTRC</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">SvcInterface/GiGAGenieAPI</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description"><pre>
+GiGA Genie에 탑재된 음성, 통화, 데이터 관리 기능을 활용하기 위한 API. 모든 API는 callback 방식으로 호출 결과를 전달한다. 
+GiGA Genie API는 다음과 같이 호출한다. 
+gigagenie.[영역].[함수](함수파라미터, callback)으로 호출한다.
+[영역] 은 API 를 Grouping 하는 단위로 이후 namespace 로 설명한다.
+callback 함수는 다음과 같이 정의 된다. 
+    function callback(result_cd,result_msg,extra) 
+    result_cd: 결과 코드, 숫자 
+    result_msg: 결과 메시지, 문자 
+    extra : 호출 결과로 전달되는 데이터들(Javascript Object) 
+    각각의 API 에 따라서 전달되는 데이터가 다르다.
+    예: getSelectedIndex 의 경우 extra 에 selected 라는 숫자 값이 설정되어 전달된다.
+</pre></div>
+            
+
+            
+                
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~init"><span class="type-signature">(inner) </span>init<span class="signature">(keytype<span class="signature-attributes">opt</span>, apikey)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>GiGA Genie Service API를 초기화 한다. GiGA Genie Service API를 이용하기
+             위해서는 API 초기화가 반드시 진행되어야 한다. API 사용전에 callback에서 result_cd 가
+             200으로 리턴했는지 확인해야 한다.</p>
+<pre>
+result_cd가 200인 경우 다음의 값이 전달된다.
+    extra.sdkversion : String, Mandatory로 이용가이드 버전이 전달된다.
+    extra.devicetype : String, Mandatory로 디바이스 유형이 전달된다.
+디바이스 유형은 다음과 같다. (sdkversion 1.4에서 지원)
+    extra.devicetype === ”GGENIE” : 기가지니
+    extra.devicetype === &quot;GGENIE2&quot; : 기가지니2
+    extra.devicetype === &quot;GGENIELTE&quot; : 기가지니LTE 
+    extra.displayflag : String, Mandatory로 해당 디바이스가 화면을 지원하는지 여부를 전달한다.
+    “Y” 의 경우 display 가 지원되며, “N”의 경우 display가 지원되지 않는다.
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>function init(keytype, apikey) { options = {}; options.keytype =
+         keytype; options.apikey = apikey; gigagenie.init(options,
+         function(result_cd, result_msg, extra) { if (result_cd == 200) {
+         console.log('Initialize Success'); alert(&amp;quot;init 실행 완료&amp;quot;);
+         sendTTSAPI(&amp;quot;음성인식 서비스를 실행합니다. &amp;quot;); } }); }</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keytype</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>"GBOXDEVM"</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>개발(GBOXDEVM) 또는 상용(GBOXCOMM) 키 종류 입력</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>apikey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>개발자 포털에서 발급받은 키 입력</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~sendTTS"><span class="type-signature">(inner) </span>sendTTS<span class="signature">(ttstext)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>입력 Text 를 사용자에게 음성으로 전달한다. stopTTS API에 의해서 중지된다.</p>
+<pre>
+result_cd 에 다음의 값이 전달된다.
+    200: TTS 재생 성공
+    409: sendTTS로 TTS 재생중임
+    501: KWS(KeyWord Spotting)에 의해 정지됨
+    502: 재생 실패
+    503: 다른 App에서 TTS 중지 메시지를 보냄(stopTTS에 의한 종료)
+    504: mute 상태로 TTS 재생 불가
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>function sendTTS(ttstext) { var options = {}; alert("startTTS")
+         options.ttstext = ttstext; gigagenie.voice.sendTTS(options,
+         function(result_cd, result_msg, extra) { if (result_cd == 200) { }
+         else { } alert(result_cd); }); }</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ttstext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>사용자에게 음성으로 전달하고자 하는 Text를 입력.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~stopTTS"><span class="type-signature">(inner) </span>stopTTS<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>TTS 를 중단한다. 음성인식도 중지된다.</p>
+<pre>
+esult_cd에 다음의 값이 전달된다.
+    200 : 중단 성공
+    404 : TTS, 음성인식 실행중이 아님
+    500 : 실행 오류
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>function stopTTS() { var options = {}; alert("stopTTS");
+         gigagenie.voice.stopTTS(options, function(result_cd, result_msg,
+         extra) { if (result_cd == 200) { } else { } }); }</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">undefined</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~startVoice"><span class="type-signature">(inner) </span>startVoice<span class="signature">(ttstext<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>사용자에게 음성 안내 후 음성 인식을 한다. TTS 출력 중에 stopTTS를 수신하면 TTS와 음성인식 모두
+             종료된다. 음성인식이 진행되면 해당 음성인식을 종료할 수 없다. (Timeout으로 처리)</p>
+<pre>
+result_cd 에 다음의 값이 전달된다.
+    200: 음성인식 성공, extra.voicetext에 인식된 결과가 전달된다.
+    500: Timeout 발생 등으로 음성 인식 실패, extra.voicetext에는 “ASRsession timeout” 가 전달된다
+    501: KWS(KeyWord Spotting)에 의해 정지됨
+    502: 재생 실패
+    503: stopTTS에 의한 TTS 종료
+    504: mute 상태로 TTS 재생 불가
+    505: 처리 용량 초과(다국어 음성인식 중 서버 용량 초과시 발생)
+extra 값에 다음이 설정되어 전달된다.
+    extra.voicetext : String, Mandatory 로 음성인식된 Text 가 전달된다.
+    extra.accuracy : Number, Optional로 인식된 결과의 정확도이다. (options.text가 설정되어 있고
+    options.voicelanguage가 1인 경우에만 설정되어 리턴됨)
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>function startVoice(ttstext) { var options = {}; options.voicemsg =
+         ttstext; gigagenie.voice.getVoiceText(options, function(result_cd,
+         result_msg, extra) { if (result_cd === 200) { } }); }</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ttstext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>null</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>음성인식 전 사용자에게 음성으로 전달하고자 하는 Text를 입력.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~getContainerId"><span class="type-signature">(inner) </span>getContainerId<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>해당 앱에 대한 G-Box 의 ContainerId 를 조회한다.</p>
+<pre>
+result_cd 는 다음과 같이 정의된다.
+    200: 성공
+    500: 시스템 Error 
+extra 값에 다음이 설정되어 전달된다.
+    extra.containerid: String, Mandatory 로 Container 의 ID 값이다.
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>function getContainerId() { var options = {};
+         gigagenie.appinfo.getContainerId(options, function(result_cd,
+         result_msg, extra) { if (result_cd === 200) { console.log("The
+         container id is " + extra.containerid); } else {
+         console.log("getContainerId is fail."); } }); }</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">undefined</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>appId</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 15 2019 14:36:19 GMT+0900 (KST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+
+</body>
+</html>

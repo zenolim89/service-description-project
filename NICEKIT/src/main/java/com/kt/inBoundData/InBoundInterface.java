@@ -132,8 +132,8 @@ public class InBoundInterface {
 	}
 
 	// setAuth
-	@RequestMapping(value = "/auth/{urlid}", method = RequestMethod.POST)
-	public JSONObject reqAuth(@PathVariable() String urlid, InputStream body) {
+	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+	public JSONObject reqAuth(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
@@ -148,7 +148,7 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-		System.out.print("[DEBUG: 인증처리 후 결과]: " + res + " " + urlid + "\n");
+		System.out.print("[DEBUG: 인증처리 후 결과]: " + res + "\n");
 		return res;
 	}
 

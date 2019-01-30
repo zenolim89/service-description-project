@@ -153,7 +153,7 @@ public class InBoundInterface {
 	}
 
 	// service registration
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	@RequestMapping(value = "/setSvcDesc", method = RequestMethod.POST)
 	public JSONObject reqRegiForService(InputStream body) {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();

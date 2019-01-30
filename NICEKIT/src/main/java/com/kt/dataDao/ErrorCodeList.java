@@ -8,11 +8,9 @@ public class ErrorCodeList {
 	
 	public ErrorCodeList () {
 		
-		errorCodeList.put("authFailed", "4001"); //인증 실패 (비밀번호 오류)
-		errorCodeList.put("notFoundAuth", "40002"); //인증 실패 (해당 계정이 없음)
-		errorCodeList.put("noUseAPI", "4004"); //사용할 수 있는 API가 없음 (API 오류)
-		errorCodeList.put("checkParam", "4000"); //파라미터 오류
-		errorCodeList.put("ok", "2000"); //인증 성공 
+		errorCodeList.put("2001", "정상적으로 서비스가 등록되었습니다"); //인증 실패 (비밀번호 오류)
+		errorCodeList.put("4004", "해당 경로를 찾을 수 없습니다"); //인증 실패 (해당 계정이 없음)
+		 
 	}
 	
 	public Hashtable<String, String> getErrorCodeList () {

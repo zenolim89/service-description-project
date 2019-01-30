@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataForms.OwnServiceForm;
 import com.kt.dataForms.ReqDataForm;
@@ -56,64 +57,51 @@ public class JSONParsingFrom {
 	}
 
 	public JSONObject regiService(String response) {
+		
+		OwnServiceForm resSvcDesc = new OwnServiceForm();
+		ErrorCodeList error = new ErrorCodeList();
+		
+		// need to define result value
 		JSONObject res = null;
-		OwnServiceForm form = new OwnServiceForm();
-		OwnServiceList list = OwnServiceList.getInstance();
-		JSONSerializerTo regi = new JSONSerializerTo();
+		
+		
 		try {
-			JSONObject receObj = (JSONObject) parser.parse(response);
-			// set ref dialog data
-			form.setRefDialog(regi.regiDialog(((JSONObject) receObj.get("refDialog"))));
-			// set other service description
-			form.setUserAuth(receObj.get("userAuth").toString());
-			form.setInterfaceType(receObj.get("interfaceType").toString());
-			form.setServiceCode(receObj.get("serviceCode").toString());
-			form.setRefAPI(receObj.get("refAPI").toString());
-			form.setIntentName(receObj.get("intentName").toString());
-			form.setServiceDesc(receObj.get("serviceDesc").toString());
-			form.setTargetURL(receObj.get("targetURL").toString());
-			form.setMethod(receObj.get("method").toString());
-			form.setDataType(receObj.get("dataType").toString());
-			form.setDataDefinition(receObj.get("dataDefinition").toString());
-
-			// set data format
-			JSONArray listArr = (JSONArray) receObj.get("dataFormat");
-			for (int i = 0; i < listArr.size(); i++) {
-				ReqDataForm dataLine = new ReqDataForm();
-				JSONObject idxListObj = (JSONObject) listArr.get(i);
-
-				dataLine.setKeyName(idxListObj.get("keyName").toString());
-				dataLine.setValueName(idxListObj.get("valueName").toString());
-				dataLine.setSuperVar(idxListObj.get("superVar").toString());
-				dataLine.setJsonType(idxListObj.get("type").toString());
-				dataLine.setIsUserDefine(idxListObj.get("userDefine").toString());
-				dataLine.setSubArrType(idxListObj.get("subArrType").toString());
-
-				// Data format의 subArr의 타입이 object인 경우,
-				if (dataLine.getSubArrType().equals("object")) {
-					JSONArray subArr = (JSONArray) idxListObj.get("subArr");
-					dataLine = regi.regiJSONArrayforObjType(dataLine, subArr);
-					// Data format의 subArr의 타입이 String인 경우,
-				} else if (dataLine.getSubArrType().equals("string")) {
-					JSONArray subArr = (JSONArray) idxListObj.get("subArr");
-					for (int j = 0; j < subArr.size(); j++) {
-						dataLine.getSubArrStringType().add(subArr.get(j).toString());
-					}
-				}
-				form.getDataFormat().add(dataLine);
-			}
-
-			list.setOwnList(form);
-			// 3rd party 데이터 전송 규격 (포멧) 생성 (등록된 서비스 기준), 등록 시 웹 사이트에 제
-			ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
-			for (int k = 0; k < list.getInstance().getOwnList().size(); k++) {
-				res = creator.createDataformatForJOSN(list.getInstance().getOwnList().get(k).getDataFormat());
-			}
-			System.out.println("[DEBUG: 만들어진 전송규격]: 사용자 ID: " + form.getUserAuth() + ", 서비스 코드: "
-					+ form.getServiceCode() + ", 전송 포멧: " + res + "\n");
+			
+			JSONObject resObj = (JSONObject) parser.parse(response);
+			
+			resSvcDesc.setComURL(resObj.get("comURL").toString());
+			resSvcDesc.setDataType(resObj.get("datatype").toString());
+			resSvcDesc.setIntentInfo((JSONArray) resObj.get("intentInfo"));
+			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
+			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));
+			resSvcDesc.setMethod(resObj.get("method").toString());
+			resSvcDesc.setProtType(resObj.get("protocolType").toString());
+			resSvcDesc.setReqSpec((JSONArray) resObj.get("reqSpec"));
+			resSvcDesc.setReqStructure((JSONArray) resObj.get("reqStructure"));
+			resSvcDesc.setResSpec((JSONArray) resObj.get("resSpec"));
+			resSvcDesc.setResStructure((JSONArray) resObj.get("resStructure"));
+			resSvcDesc.setServiceCode(resObj.get("serviceCode").toString());
+			resSvcDesc.setServiceDesc(resObj.get("serviceDesc").toString());
+			resSvcDesc.setTestURL(resObj.get("testURL").toString());
+			resSvcDesc.setUserAuth(resObj.get("userAuth").toString());
+			
+			res.put("resCode", "2001");
+			res.put("resMsg", error.getErrorCodeList().get("2001"));
+			
+			// send to db interface
+			
+			
 		} catch (ParseException e) {
-			// TODO: handle exception
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+
+		
+		
+		
+		
+		
 		return res;
 	}
 

@@ -178,7 +178,6 @@ function svcRegReqFunction() {
 	serviceRegRequest.open('POST', './registration');
 	serviceRegRequest.setRequestHeader('Content-Type', 'application/json');
 	serviceRegRequest.send(getServiceRegReqParam());
-	console.log("[테스트] \n" + "Detail : " + getServiceRegReqParam());
 	serviceRegRequest.onreadystatechange = svcRegRespProcess;
 }
 

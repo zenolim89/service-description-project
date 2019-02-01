@@ -35,11 +35,14 @@ public class InBoundInterface {
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView("index");
 		// 테스트 소스: POC 이후 삭제 필요
+		
+		if(DictionaryList.getInstance().getDicList().isEmpty()) {
 		DicCreator creator = new DicCreator();
 		creator.createResortDic();
 		creator.createShopDic();
 		creator.creatHospitalDic();
 		DictionaryList.getInstance();
+		}
 
 		for (int i = 0; i < DictionaryList.getInstance().getDicList().size(); i++) {
 			Hashtable<String, ArrayList<String>> temp = new Hashtable<String, ArrayList<String>>();

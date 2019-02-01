@@ -1,3 +1,6 @@
+$.getScript('./nbware/js/InterStandards.js', function() {
+	console.log('InterStandards.js loading...');
+});
 
 // 사용자 계정 정보 json 형식으로 반환
 function getAuthReqParam() {
@@ -28,79 +31,67 @@ function getServiceRegReqParam() {
 	var ServiceInfo = new Object();
 	var DictionaryInfo = new Object();
 
-	ServiceInfo.userAuth = document.getElementsByName('userAuth')[0].value;
+	ServiceInfo["userAuth"] = document.getElementsByName('userAuth')[0].value;
 
 	var interfaceType = document.getElementsByName("interfaceType");
 	for (var i = 0; i < interfaceType.length; i++) {
 		if (interfaceType[i].checked == true)
-			ServiceInfo.interfaceType = interfaceType[i].value;
+			ServiceInfo["interfaceType"] = interfaceType[i].value;
 	}
 
 	var serviceCode = document.getElementsByName("serviceCode")[0];
-	ServiceInfo.serviceCode = serviceCode.options[serviceCode.selectedIndex].value;
+	ServiceInfo["serviceCode"] = serviceCode.options[serviceCode.selectedIndex].value;
 
-	ServiceInfo.refAPI = document.getElementsByName('refAPI')[0].value;
+	ServiceInfo["serviceDesc"] = document.getElementsByName('serviceDesc')[0].value;
+
+	var intentInfo = new Array();
+	var intentObj = new Object();
+	var dicList = new Array();
+	var dicListTemp = new Array();
+
+	var dicName = document.getElementsByClassName("option-input checkbox");
+	for (var i = 0; i < dicName.length; i++) {
+		dicListTemp.push(dicName[i].getAttribute("name"));
+	}
+	dicListTemp = $.unique(dicListTemp); // 배열 중복제거
+
+	for (var i = 0; i < dicListTemp.length; i++) {
+		var dicObj = new Object();
+		var wordList = new Array();
+		dicObj.dicName = dicListTemp[i]; // 선택된 단어의 사전명
+		var dicParam = document.getElementsByName(dicListTemp[i]);
+		for (var j = 0; j < dicParam.length; j++) {
+			var wordObj = new Object();
+			if (dicParam[j].checked == true) {
+				wordObj.word = dicParam[j].value;
+				wordObj.similarWord = [ dicParam[j].value ];
+				wordList.push(wordObj);
+			}
+		}
+		dicObj.wordList = wordList;
+		dicList.push(dicObj);
+	}
 
 	var intentName = document.getElementsByName("intentName")[0];
-	ServiceInfo.intentName = intentName.options[intentName.selectedIndex].value;
+	intentObj.id = intentName.options[intentName.selectedIndex].value;
+	intentObj.dicList = dicList;
 
-	ServiceInfo.serviceDesc = document.getElementsByName('serviceDesc')[0].value;
-	ServiceInfo.targetURL = document.getElementsByName('targetURL')[0].value;
+	intentInfo.push(intentObj);
+	ServiceInfo["intentInfo"] = intentInfo;
 
-	var dialogArray1 = new Array();
-	var dialogArray2 = new Array();
-	var dialogArray3 = new Array();
+	var InterStandards = validationData();
+	ServiceInfo["testUrl"] = InterStandards["testUrl"];
+	ServiceInfo["comUrl"] = InterStandards["comUrl"];
+	ServiceInfo["method"] = InterStandards["method"];
+	ServiceInfo["headerInfo"] = InterStandards["headerInfo"];
+	ServiceInfo["authInfo"] = InterStandards["authInfo"];
+	ServiceInfo["dataType"] = InterStandards["dataType"];
+	ServiceInfo["reqStructure"] = InterStandards["reqStructure"];
+	ServiceInfo["reqSpec"] = InterStandards["reqSpec"];
+	ServiceInfo["resStructure"] = InterStandards["resStructure"];
+	ServiceInfo["resSpec"] = InterStandards["resSpec"];
 
-	var facilitiesItems = document.getElementsByName("facilitiesItems");
-	for (var i = 0; i < facilitiesItems.length; i++) {
-		if (facilitiesItems[i].checked == true)
-			dialogArray1.push(facilitiesItems[i].value);
-	}
-	if (dialogArray1.length)
-		DictionaryInfo.facilitiesItems = dialogArray1;
-
-	var liveWebcamsItems = document.getElementsByName("liveWebcamsItems");
-	for (var i = 0; i < liveWebcamsItems.length; i++) {
-		if (liveWebcamsItems[i].checked == true)
-			dialogArray2.push(liveWebcamsItems[i].value);
-	}
-	if (dialogArray2.length)
-		DictionaryInfo.liveWebcamsItems = dialogArray2;
-
-	var resortItems = document.getElementsByName("resortItems");
-	for (var i = 0; i < resortItems.length; i++) {
-		if (resortItems[i].checked == true)
-			dialogArray3.push(resortItems[i].value);
-	}
-	if (dialogArray3.length)
-		DictionaryInfo.resortItems = dialogArray3;
-	ServiceInfo.refDialog = DictionaryInfo;
-
-	var method = document.getElementsByName("method")[0];
-	ServiceInfo.method = method.options[method.selectedIndex].value;
-
-	var dataType = document.getElementsByName("dataType")[0];
-	ServiceInfo.dataType = dataType.options[dataType.selectedIndex].value;
-
-	var dataDefinition = document.getElementsByName("dataDefinition")[0];
-	ServiceInfo.dataDefinition = dataDefinition.options[dataDefinition.selectedIndex].value;
-
-	var DFInfoArr = new Array();
-	var dataFormatArr = document.getElementsByName("dataFormatArr");
-	for (var i = 0; i < dataFormatArr.length; i++) {
-		var DFInfobj = new Object();
-		DFInfobj.keyName = document.getElementsByName("keyName")[i].value;
-		DFInfobj.valueName = document.getElementsByName("valueName")[i].value;
-		DFInfobj.superVar = document.getElementsByName("superVar")[i].value;
-		var type = document.getElementsByName("type")[i];
-		DFInfobj.type = type.options[type.selectedIndex].value;
-		DFInfobj.userDefine = document.getElementsByName("userDefine")[i].value;
-		var subArrType = document.getElementsByName("subArrType")[i];
-		DFInfobj.subArrType = subArrType.options[subArrType.selectedIndex].value;
-		DFInfobj.subArr = document.getElementsByName("subArr")[i].value;
-		DFInfoArr.push(DFInfobj);
-	}
-	ServiceInfo.dataFormat = DFInfoArr;
 	var svcJsonInfo = JSON.stringify(ServiceInfo);
+	console.log(svcJsonInfo);
 	return svcJsonInfo;
 }

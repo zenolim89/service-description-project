@@ -6,10 +6,9 @@ import com.kt.dataDao.DictionaryList;
 import com.kt.dataForms.DictionaryForm;
 
 public class DicCreator {
+	DictionaryForm form = new DictionaryForm();
 
 	public void createResortDic() {
-		DictionaryForm form = new DictionaryForm();
-
 		form.setDomainName("ViewINFRM");
 		ArrayList<String> fa = new ArrayList<String>();
 		ArrayList<String> webCam = new ArrayList<String>();

@@ -40,7 +40,22 @@ public class JSONParsingFrom {
 		return res;
 
 	}
-
+	
+	public JSONObject convertIntentInfo (JSONArray intentInfo) {
+		
+		JSONObject obj = new JSONObject();
+				
+		for (int i=0; i < intentInfo.size(); i++) {
+			
+			obj = (JSONObject) intentInfo.get(i);
+			
+		}
+		
+		return obj;
+		
+	}
+	
+	
 	public JSONObject setAuth(String response) {
 		JSONObject res = null;
 		try {
@@ -56,6 +71,18 @@ public class JSONParsingFrom {
 		return res;
 	}
 
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
+	 * desc	: 현재는 데모용으로 하기의 데이터를 공통 도메인으로 보냄, 이후에는 내용 명칭등을 변경해주어야 함
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param response
+	 * @return
+	 */
 	public JSONObject regiService(String response) {
 		
 		OwnServiceForm resSvcDesc = new OwnServiceForm();
@@ -75,7 +102,7 @@ public class JSONParsingFrom {
 			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
 			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));
 			resSvcDesc.setMethod(resObj.get("method").toString());
-			resSvcDesc.setProtType(resObj.get("protocolType").toString());
+//			resSvcDesc.setProtType(resObj.get("protocolType").toString());
 			resSvcDesc.setReqSpec((JSONArray) resObj.get("reqSpec"));
 			resSvcDesc.setReqStructure((JSONArray) resObj.get("reqStructure"));
 			resSvcDesc.setResSpec((JSONArray) resObj.get("resSpec"));
@@ -95,11 +122,6 @@ public class JSONParsingFrom {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
-		
-		
-		
 		
 		
 		return res;

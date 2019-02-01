@@ -46,57 +46,57 @@ public class JSONSerializerTo {
 
 		} else if (authPw.equals(pw)) {
 
-			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
-			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
-
-			if (ownList.size() <=0 ) {
-
-				resMsg.put("regiServiceInfo", null);
-
-			} else {
-
-				for (int i=0; i < ownList.size(); i++) {
-
-					JSONArray regiListInfo = new JSONArray();
-					
-
-					if (ownList.get(i).getUserAuth().equals(id)) {
-						
-						userList.add(ownList.get(i));
-
-						for (int j=0; j< userList.size(); j++) {
-
-							JSONArray regiDialgoList = new JSONArray();
-							JSONObject regiData = new JSONObject();
-							
-							JSONObject data = new JSONObject();
-							ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
-
-							regiData.put("userAuth", userList.get(j).getUserAuth());
-							regiData.put("interfaceType", userList.get(j).getInterfaceType());
-							regiData.put("serviceCode", userList.get(j).getServiceCode());
-							regiData.put("refAPI", userList.get(j).getRefAPI());
-							regiData.put("intentName", userList.get(j).getIntentName());
-							regiData.put("serviceDesc", userList.get(j).getServiceDesc());
-							regiData.put("targetURL", userList.get(j).getTargetURL());
-							regiData.put("method", userList.get(j).getMethod());
-							regiData.put("dataType",userList.get(j).getDataType());
-							regiData.put("dataDefinition", userList.get(j).getDataDefinition());
-
-							data = creator.createDataformatForJOSN(userList.get(j).getDataFormat());
-							regiData.put("dataFormat", data);
-							//dialog 
-							regiData.put("refDialog", this.getDialog(userList.get(j), userList.get(j).getUserAuth()));
-							regiListInfo.add(regiData);
-						}
-					}
-					resMsg.put("regiServiceInfo", regiListInfo);
-				}
-
-			}
-			resMsg.put("resCode", errorList.getErrorCodeList().get("ok").toString());
-			resMsg.put("ServiceNum", userList.size());
-			resMsg.put("resMeg","총" + userList.size() + "개의 서비스가 등록되어 있습니다.");	
+//			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
+//			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
+//
+//			if (ownList.size() <=0 ) {
+//
+//				resMsg.put("regiServiceInfo", null);
+//
+//			} else {
+//
+//				for (int i=0; i < ownList.size(); i++) {
+//
+//					JSONArray regiListInfo = new JSONArray();
+//					
+//
+//					if (ownList.get(i).getUserAuth().equals(id)) {
+//						
+//						userList.add(ownList.get(i));
+//
+//						for (int j=0; j< userList.size(); j++) {
+//
+//							JSONArray regiDialgoList = new JSONArray();
+//							JSONObject regiData = new JSONObject();
+//							
+//							JSONObject data = new JSONObject();
+//							ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
+//
+//							regiData.put("userAuth", userList.get(j).getUserAuth());
+//							regiData.put("interfaceType", userList.get(j).getInterfaceType());
+//							regiData.put("serviceCode", userList.get(j).getServiceCode());
+//							regiData.put("refAPI", userList.get(j).getRefAPI());
+//							regiData.put("intentName", userList.get(j).getIntentName());
+//							regiData.put("serviceDesc", userList.get(j).getServiceDesc());
+//							regiData.put("targetURL", userList.get(j).getTargetURL());
+//							regiData.put("method", userList.get(j).getMethod());
+//							regiData.put("dataType",userList.get(j).getDataType());
+//							regiData.put("dataDefinition", userList.get(j).getDataDefinition());
+//
+//							data = creator.createDataformatForJOSN(userList.get(j).getDataFormat());
+//							regiData.put("dataFormat", data);
+//							//dialog 
+//							regiData.put("refDialog", this.getDialog(userList.get(j), userList.get(j).getUserAuth()));
+//							regiListInfo.add(regiData);
+//						}
+//					}
+//					resMsg.put("regiServiceInfo", regiListInfo);
+//				}
+//
+//			}
+//			resMsg.put("resCode", errorList.getErrorCodeList().get("ok").toString());
+//			resMsg.put("ServiceNum", userList.size());
+//			resMsg.put("resMeg","총" + userList.size() + "개의 서비스가 등록되어 있습니다.");	
 		}
 
 		return resMsg;

@@ -108,6 +108,23 @@
 			<artifactId>cassandra-driver-core</artifactId>
 			<version>3.6.0</version>
 		</dependency>
+
+	<!-- https://mvnrepository.com/artifact/com.datastax.oss/java-driver-query-builder -->
+	<dependency>
+		<groupId>com.datastax.oss</groupId>
+		<artifactId>java-driver-query-builder</artifactId>
+		<version>4.0.0-beta3</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core -->
+	<dependency>
+		<groupId>com.datastax.oss</groupId>
+		<artifactId>java-driver-core</artifactId>
+		<version>4.0.0-beta3</version>
+	</dependency>
+		
+
+
 	</dependencies>
 	<build>
 		<finalName>NICEKIT</finalName>

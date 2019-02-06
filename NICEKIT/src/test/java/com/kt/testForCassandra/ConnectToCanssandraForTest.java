@@ -52,13 +52,13 @@ public class ConnectToCanssandraForTest {
 	// we have to consider that type of desc is array or not
 	public void insertDescToComm (OwnServiceForm desc)
 	{
-		sessionForComm = cluster.connect("commonks");
-		
-		Statement query = QueryBuilder.insertInto("common").value("name", "value")
-				.value("name", "value");
-		
-		
-		sessionForComm.execute(query);
+//		sessionForComm = cluster.connect("commonks");
+//		
+//		Statement query = QueryBuilder.insertInto("common").value("name", "value")
+//				.value("name", "value");
+//		
+//		
+//		sessionForComm.execute(query);
 //		
 //		cluster.close();
 		

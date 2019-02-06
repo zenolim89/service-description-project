@@ -64,6 +64,7 @@ public class CreateTableFor {
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 3:54:00]
 	 * desc	: 사업장 서비스 테이블 생성
 	 * 위와 동일하게 프로파일 등 (공통에서 사용하는것) 불러오는 형태로 개발 변경되어야 할 것 같음
+	 * common table은 venertable의 intent 저장 방식 참고하여 수정 필요
 	 * @version	:
 	 * @param	: 
 	 * @return 	: void 

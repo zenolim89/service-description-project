@@ -10,7 +10,8 @@ function LoginDisplay(loginResult) {
 	if (loginForm.style.display == 'none') {
 		loginForm.style.display = 'block';
 		loginCompl.style.display = 'none';
-	} else {
+	}
+	else {
 		loginForm.style.display = 'none';
 		loginCompl.style.display = 'block';
 	}
@@ -25,8 +26,7 @@ function LoginDisplay(loginResult) {
 	for (var i = 0; i < jsonObj.ServiceNum; i++) {
 		var svcCodeName = jsonObj.regiServiceInfo[i].serviceCode;
 		var li = document.createElement("li");
-		li.innerHTML = "<li class='nav-item'><a class='nav-link'>"
-				+ svcCodeName + "</a></li>";
+		li.innerHTML = "<li class='nav-item'><a class='nav-link'>" + svcCodeName + "</a></li>";
 		ul.appendChild(li);
 	}
 }

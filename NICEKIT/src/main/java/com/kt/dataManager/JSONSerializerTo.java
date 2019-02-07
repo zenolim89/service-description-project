@@ -19,7 +19,6 @@ import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
 public class JSONSerializerTo {
 
-
 	public JSONObject resultMsgforAuth(String id, String pw) {
 
 		ErrorCodeList errorList = new ErrorCodeList();
@@ -101,45 +100,43 @@ public class JSONSerializerTo {
 
 		return resMsg;
 	}
-	
-	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
-		
+
+	public JSONArray getDialog(OwnServiceForm form, String userAuth) {
+
 		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
-		
+
 		JSONArray resArr = new JSONArray();
-		
-		
-		
-		tempList = form.getRefDialog();
-		
-		Set <String> keys = tempList.keySet();
-		
+
+		// tempList = form.getRefDialog();
+
+		Set<String> keys = tempList.keySet();
+
 		Iterator<String> iter = keys.iterator();
-		
+
 		while (iter.hasNext()) {
-			
+
 			JSONObject tempObj = new JSONObject();
-			
+
 			String keyName = iter.next();
 			ArrayList<String> tempValueList = tempList.get(keyName);
 			JSONArray tempArr = new JSONArray();
-			
-			for (int i=0; i < tempValueList.size(); i++) {
+
+			for (int i = 0; i < tempValueList.size(); i++) {
 				tempArr.add(tempValueList.get(i));
 			}
-			tempObj.put("dicName",  keyName);
+			tempObj.put("dicName", keyName);
 			tempObj.put("word", tempArr);
 			resArr.add(tempObj);
-			
+
 			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
-			
+
 		}
-		
+
 		return resArr;
 	}
 
-	// 등록 시 사전 처리 
-	public Hashtable<String, ArrayList<String>> regiDialog (JSONObject obj) {
+	// 등록 시 사전 처리
+	public Hashtable<String, ArrayList<String>> regiDialog(JSONObject obj) {
 
 		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
 
@@ -152,28 +149,27 @@ public class JSONSerializerTo {
 			JSONArray arr = (JSONArray) obj.get(curKeyName);
 
 			ArrayList<String> arrVar = new ArrayList<String>();
-			
-			for (int i=0; i < arr.size(); i++) {
-				
+
+			for (int i = 0; i < arr.size(); i++) {
+
 				arrVar.add(arr.get(i).toString());
 			}
-			
+
 			tempList.put(curKeyName, arrVar);
-			
+
 			System.out.println("[DEBUG: 등록된 사용자 단어사전] 사전명: " + curKeyName + ", 단어: " + arrVar.toString());
 		}
 
 		return tempList;
 
-
 	}
 
-	// 등록 시 jsonArray 처리  
-	public ReqDataForm regiJSONArrayforObjType (ReqDataForm dataLine, JSONArray subArr) {
+	// 등록 시 jsonArray 처리
+	public ReqDataForm regiJSONArrayforObjType(ReqDataForm dataLine, JSONArray subArr) {
 
 		KeyValueFormatForJSON arrObj = new KeyValueFormatForJSON();
 
-		for (int i=0; i <subArr.size(); i++) {
+		for (int i = 0; i < subArr.size(); i++) {
 
 			JSONObject idxObj = (JSONObject) subArr.get(i);
 
@@ -185,22 +181,23 @@ public class JSONSerializerTo {
 
 				String curKeyName = iter.next();
 
-				//subArr object 타입이 key + value[string] 타입일 경우, 
+				// subArr object 타입이 key + value[string] 타입일 경우,
 				if (idxObj.get(curKeyName).getClass().getSimpleName().equals("String")) {
 
 					arrObj.setKey(curKeyName);
 					arrObj.setValue(idxObj.get(curKeyName).toString());
 					dataLine.getSubArrObjectType().add(arrObj);
 
-					// 					dataLine.getSubArrObjectType().put(curKeyName, idxObj.get(curKeyName).toString());
+					// dataLine.getSubArrObjectType().put(curKeyName,
+					// idxObj.get(curKeyName).toString());
 
-					//subArr object 타입이 key + value[object] 타입일 경우, 
+					// subArr object 타입이 key + value[object] 타입일 경우,
 				} else if (idxObj.get(curKeyName).getClass().getSimpleName().equals("JSONArray")) {
 
 					JSONArray idxVarArr = (JSONArray) idxObj.get(curKeyName);
 					SubValueArrKeyValeTypeFormat subVar = new SubValueArrKeyValeTypeFormat();
 
-					for (int j=0; j < idxVarArr.size(); j++) {
+					for (int j = 0; j < idxVarArr.size(); j++) {
 
 						Hashtable<String, String> temp = new Hashtable<String, String>();
 
@@ -209,7 +206,6 @@ public class JSONSerializerTo {
 						Set<String> curVarKeys = idxVarObj.keySet();
 
 						Iterator<String> subIter = curVarKeys.iterator();
-
 
 						while (subIter.hasNext()) {
 
@@ -225,7 +221,6 @@ public class JSONSerializerTo {
 
 				}
 
-
 			}
 
 		}
@@ -233,6 +228,5 @@ public class JSONSerializerTo {
 		return dataLine;
 
 	}
-
 
 }

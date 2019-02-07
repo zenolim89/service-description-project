@@ -134,8 +134,7 @@ function dctnrReqFunction() {
  */
 function dctnrRespProcess() {
 	if (DictionaryRequest.readyState == 4 && DictionaryRequest.status == 200) {
-		console.log("[어휘사전 호출] \n" + "Detail : "
-					+ DictionaryRequest.responseText);
+		console.log("[어휘사전 호출] \n" + "Detail : " + DictionaryRequest.responseText);
 		$('#mainTable > tbody > tr').not('.fixrow').remove();
 		$('#mainTable').find('tr:eq(4)').after(DictionaryRequest.responseText);
 	}
@@ -193,9 +192,7 @@ function svcRegReqFunction() {
 function svcRegRespProcess() {
 	if (serviceRegRequest.readyState == 4 && serviceRegRequest.status == 200) {
 		alert(serviceRegRequest.responseText);
-		console
-					.log("[등록 성공] \n" + "Detail : "
-								+ serviceRegRequest.responseText);
+		console.log("[등록 성공] \n" + "Detail : " + serviceRegRequest.responseText);
 	}
 }
 

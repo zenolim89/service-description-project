@@ -158,11 +158,10 @@ function stopTTS() {
 function startVoice(ttstext) {
 	var options = {};
 	options.voicemsg = ttstext;
-	gigagenie.voice.getVoiceText(options,
-				function(result_cd, result_msg, extra) {
-					if (result_cd === 200) {
-					}
-				});
+	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+		}
+	});
 }
 
 /**
@@ -188,10 +187,7 @@ function startVoice(ttstext) {
 function getContainerId() {
 	var options = {};
 	var appId;
-	gigagenie.appinfo.getContainerId(options, function(
-		result_cd,
-		result_msg,
-		extra) {
+	gigagenie.appinfo.getContainerId(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
 			console.log("The container id is " + extra.containerid);
 			appId = extra.containerid;
@@ -207,9 +203,8 @@ function getContainerId() {
 // 음성명령(종료, 닫기 발화)과, 리모콘 나가기 버튼 클릭시 서비스 종료 이벤트 전달
 gigagenie.voice.onRequestClose = function() {
 	options = {};
-	gigagenie.voice.svcFinished(options,
-				function(result_cd, result_msg, extra) {
-				});
+	gigagenie.voice.svcFinished(options, function(result_cd, result_msg, extra) {
+	});
 };
 
 /**
@@ -256,12 +251,10 @@ function SpeechINTRC(appId) {
 		alert(word);
 		switch (extra.actioncode) {
 			case 'HELLOGENIE':
-				svcReqFunction(appId, extra.actioncode,
-							extra.parameter['NE-HELLO']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-HELLO']);
 				break;
 			case 'GOODBYEGENIE':
-				svcReqFunction(appId, extra.actioncode,
-							extra.parameter['NE-GOODBYE']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
 				break;
 			default:
 				break;

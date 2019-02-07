@@ -4,11 +4,9 @@ var xhr = null;
 var Connection = new function() {
 
 	// ajax 환경 설정
-	this.method = "POST", this.dataType = "JSON", this.async = true,
-				this.networkTimeout = 5000, this.crossDomain = true,
-				this.cache = false,
-				this.contentType = "application/json;charset=UTF-8",
-				this.userAgent = null;
+	this.method = "POST", this.dataType = "JSON", this.async = true, this.networkTimeout = 5000,
+				this.crossDomain = true, this.cache = false,
+				this.contentType = "application/json;charset=UTF-8", this.userAgent = null;
 	this.isEnter = false; // 요청 중..
 	this.isJob = false; // 작업 중..
 
@@ -53,18 +51,14 @@ var Connection = new function() {
 				},
 				success : function(rst) {
 					Utils.log(DEBUG, "Connection.send.rst", rst);
-					Utils
-								.log(DEBUG, "Connection.send.rst", JSON
-											.stringify(rst));
+					Utils.log(DEBUG, "Connection.send.rst", JSON.stringify(rst));
 
 					alert("전송 요청을 완료하였습니다.");
 					return;
 				},
 				error : function(xhr, excp) {
-					Utils
-								.log(ERR, "xhr.status : " + xhr.status
-											+ ", msg : " + xhr.responseText
-											+ ", excp.message : " + excp);
+					Utils.log(ERR, "xhr.status : " + xhr.status + ", msg : " + xhr.responseText
+								+ ", excp.message : " + excp);
 
 					// 접속 장애
 					alert("전송 요청 중 오류가 발생하였습니다.");

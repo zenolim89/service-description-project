@@ -1,5 +1,6 @@
 package com.kt.dataManager;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,7 +11,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.kt.dataDao.ErrorCodeList;
+import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
+import com.kt.dataDao.SelectDataTo;
+import com.kt.dataForms.DictionaryForm;
 import com.kt.dataForms.OwnServiceForm;
 import com.kt.dataForms.ReqDataForm;
 
@@ -20,7 +24,23 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-	public String getDicDictionaryList(String response) {
+	
+	
+	public JSONObject getDomainList () {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONObject res = new JSONObject();
+		
+		JSONArray arr = selectTo.selectDomainListToCommon();
+		
+		res.put("domains", arr);
+		
+		return res;
+		
+	}
+	
+	// 현재는 full list를 주는 형태, 해당 부분을 이재동 박사 작업 내용이랑 선택에 의하여 호출하는 내용으로 변경 필요
+	public String getDictionaryList(String response) {
 
 		String res = null;
 
@@ -70,6 +90,61 @@ public class JSONParsingFrom {
 		}
 		return res;
 	}
+	
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오전 10:35:27]
+	 * desc	: 도메인 사전 등록을 위한 Parser
+	 * @version	: 0.1
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param response
+	 * @return
+	 */
+	public JSONObject setDomainDictionary (String response) {
+		
+		DictionaryForm dicForm = new DictionaryForm();
+		InsertDataTo insertTo = new InsertDataTo();
+		
+		JSONObject res = new JSONObject();
+		
+		try {
+			
+			ArrayList<DictionaryForm> dicList = new ArrayList<DictionaryForm>();
+			JSONArray arr = (JSONArray) parser.parse(response);	
+			
+			for (int i =0; i < arr.size(); i++) {
+				
+				JSONObject obj = (JSONObject) arr.get(i);
+				
+				
+				// read last number of table and then add number
+								
+				dicForm.setIntentName(obj.get("id").toString());
+				dicForm.setDesc(obj.get("desc").toString());
+				dicForm.setArr((JSONArray) obj.get("dicList"));
+				
+				dicList.add(dicForm);
+				
+			}
+			
+			insertTo.insertIntents(dicList);
+		
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return res;
+		
+		
+	}
+	
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
@@ -83,9 +158,10 @@ public class JSONParsingFrom {
 	 * @param response
 	 * @return
 	 */
-	public JSONObject regiService(String response) {
+	public JSONObject setDomainService(String response) {
 		
-		OwnServiceForm resSvcDesc = new OwnServiceForm();
+		OwnServiceForm resSvcDesc = new OwnServiceForm(); //domainservice form으로 변경 필요
+		InsertDataTo insData = new InsertDataTo();
 		ErrorCodeList error = new ErrorCodeList();
 		
 		// need to define result value
@@ -111,6 +187,10 @@ public class JSONParsingFrom {
 			resSvcDesc.setServiceDesc(resObj.get("serviceDesc").toString());
 			resSvcDesc.setTestURL(resObj.get("testURL").toString());
 			resSvcDesc.setUserAuth(resObj.get("userAuth").toString());
+			
+			insData.insertSVCDesc(resSvcDesc);
+			
+			
 			
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));

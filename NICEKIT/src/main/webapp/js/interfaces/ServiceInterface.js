@@ -258,6 +258,7 @@ function SpeechINTRC(appId) {
 			case 'HELLOGENIE':
 				svcReqFunction(appId, extra.actioncode,
 							extra.parameter['NE-HELLO']);
+				
 				break;
 			case 'GOODBYEGENIE':
 				svcReqFunction(appId, extra.actioncode,

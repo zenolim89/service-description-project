@@ -1,5 +1,7 @@
 package com.kt.dataDao;
 
+import org.json.simple.JSONObject;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Session;
@@ -9,6 +11,9 @@ import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
+import com.typesafe.config.ConfigException.Parse;
+
+import ch.qos.logback.core.pattern.parser.Parser;
 
 public class CreateTableFor {
 	
@@ -41,10 +46,10 @@ public class CreateTableFor {
 	 * @param ks(keySpace 이름)
 	 * @param id(도메인 아이디)
 	 */
-	public void createTableForCommonDomain (String id) {
+	public void createTableForCommonDomain (String domainname) {
 		
-		CreateTable create = ((CreateTable) builder.createTable("commonks", id).ifNotExists())
-				.withColumn("domainname", DataTypes.TEXT)
+		CreateTable create = ((CreateTable) builder.createTable("domainks", domainname).ifNotExists())
+				.withColumn("domainid", DataTypes.TEXT)
 				.withColumn("intentname", DataTypes.TEXT)
 				.withPartitionKey("serviceid", DataTypes.TEXT)
 				.withColumn("interfacetype", DataTypes.TEXT)
@@ -96,6 +101,33 @@ public class CreateTableFor {
 		cluster.close();
 						
 		
+		
+	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오전 11:10:53]
+	 * desc	: 도메인별 어휘 사전 테이블 생성
+	 * @version	: 0.1
+	 * @param	: diclist
+	 * @return 	: void 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param dicList
+	 */
+	public void createTableForDictionary () {
+		
+			
+		CreateTable create = ((CreateTable) builder.createTable("commonks","intentInfo").ifNotExists())
+				.withPartitionKey("seqNum", DataTypes.INT)
+				.withColumn("intentname", DataTypes.TEXT)
+				.withColumn("intentDesc", DataTypes.TEXT)
+				.withColumn("dicList", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
 		
 	}
 	

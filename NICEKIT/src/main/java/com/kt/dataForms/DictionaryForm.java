@@ -3,21 +3,49 @@ package com.kt.dataForms;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.json.simple.JSONArray;
+
 public class DictionaryForm {
 	
-	String domainName;
-	Hashtable <String, ArrayList<String>> dictionaryList = new Hashtable<String, ArrayList<String>>();
+	int seqNum;
+	String intentName;
+	String desc;
+	JSONArray arr;
 	
-	public void setDomainName (String name) {
-		this.domainName = name;
+	
+	public int getSeqNum() {
+		return seqNum;
 	}
 	
-	public String getDomainName () {
-		return this.domainName;
+	public void setSeqNum(int seqNum) {
+		this.seqNum = seqNum;
 	}
 	
-	public Hashtable<String, ArrayList<String>> getDictionaryList() {
-		return this.dictionaryList;
+	public String getIntentName() {
+		return intentName;
 	}
-
+	
+	public void setIntentName(String intentName) {
+		this.intentName = intentName;
+	}
+	
+	public String getDesc() {
+		return desc;
+	}
+	
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	
+	public JSONArray getArr() {
+		return arr;
+	}
+	
+	public void setArr(JSONArray arr) {
+		this.arr = arr;
+	}
+	
+	
+	
+	
 }

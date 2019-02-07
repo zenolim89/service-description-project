@@ -3,6 +3,7 @@ package com.kt.dataManager;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.spi.ErrorCode;
@@ -102,38 +103,58 @@ public class JSONSerializerTo {
 		return resMsg;
 	}
 	
-	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
-		
-		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
+	
+	public JSONArray resDomainList (List<String> domainList) {
 		
 		JSONArray resArr = new JSONArray();
 		
-		
-		
-		tempList = form.getRefDialog();
-		
-		Set <String> keys = tempList.keySet();
-		
-		Iterator<String> iter = keys.iterator();
-		
-		while (iter.hasNext()) {
+		for (String table : domainList) {
 			
-			JSONObject tempObj = new JSONObject();
-			
-			String keyName = iter.next();
-			ArrayList<String> tempValueList = tempList.get(keyName);
-			JSONArray tempArr = new JSONArray();
-			
-			for (int i=0; i < tempValueList.size(); i++) {
-				tempArr.add(tempValueList.get(i));
-			}
-			tempObj.put("dicName",  keyName);
-			tempObj.put("word", tempArr);
-			resArr.add(tempObj);
-			
-			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
+			resArr.add(table);
 			
 		}
+		
+		return resArr;
+		
+	}
+	
+	
+	
+	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
+		
+		// 기존 hash table에서 사전을 불러온 내용을
+		// DB에서 가지고 오는 내용으로 변경 필요
+		
+//		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
+//		
+		JSONArray resArr = new JSONArray();
+//		
+//		
+//		
+//		tempList = form.getRefDialog();
+//		
+//		Set <String> keys = tempList.keySet();
+//		
+//		Iterator<String> iter = keys.iterator();
+//		
+//		while (iter.hasNext()) {
+//			
+//			JSONObject tempObj = new JSONObject();
+//			
+//			String keyName = iter.next();
+//			ArrayList<String> tempValueList = tempList.get(keyName);
+//			JSONArray tempArr = new JSONArray();
+//			
+//			for (int i=0; i < tempValueList.size(); i++) {
+//				tempArr.add(tempValueList.get(i));
+//			}
+//			tempObj.put("dicName",  keyName);
+//			tempObj.put("word", tempArr);
+//			resArr.add(tempObj);
+//			
+//			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
+//			
+//		}
 		
 		return resArr;
 	}

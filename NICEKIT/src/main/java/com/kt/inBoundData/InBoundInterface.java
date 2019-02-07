@@ -33,34 +33,79 @@ public class InBoundInterface {
 	// see also SpringDispatcher-servlet.xml
 	@RequestMapping("/")
 	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("index");
-		// 테스트 소스: POC 이후 삭제 필요
 		
-		if(DictionaryList.getInstance().getDicList().isEmpty()) {
-		DicCreator creator = new DicCreator();
-		creator.createResortDic();
-		creator.createShopDic();
-		creator.creatHospitalDic();
-		DictionaryList.getInstance();
-		}
-
-		for (int i = 0; i < DictionaryList.getInstance().getDicList().size(); i++) {
-			Hashtable<String, ArrayList<String>> temp = new Hashtable<String, ArrayList<String>>();
-			DictionaryForm form = DictionaryList.getInstance().getDicList().get(i);
-			String domName = form.getDomainName();
-			temp = form.getDictionaryList();
-			Set<String> keys = temp.keySet();
-			Iterator<String> iter = keys.iterator();
-			while (iter.hasNext()) {
-				String keyName = iter.next();
-				System.out.println(
-						"[DEBUG 현재 등록된 도메인 사전]: 도메인명: " + domName + ", 사전명: " + keyName + ", 단어: " + temp.get(keyName));
-			}
-		}
-		// 여기까지
+		ModelAndView mv = new ModelAndView("index");
+		
 		return mv;
 		// return new ModelAndView("index");
 	}
+	
+	
+	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
+	public String reqService(@RequestParam String intentName, @RequestParam String word) {
+
+		String response = "";
+		
+		System.out.println(intentName);
+		System.out.println(word);
+		
+		
+		
+		
+		return response;
+	
+	}
+	
+	
+	
+	//request domain list
+	//소스 재정비 필요
+	@RequestMapping(value = "/getDomain", method = RequestMethod.GET)
+	public JSONObject getDomain() {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String response ="";
+		JSONObject res = new JSONObject();
+		
+		try {
+			
+			res = parsingFrom.getDomainList();
+					
+			
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+		}
+		
+		return res;
+	}
+	
+
+	//set Dictionary for common domain
+	@RequestMapping(value = "/setDictionary", method = RequestMethod.POST)
+	public JSONObject setDicList (InputStream body) {
+
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		JSONObject res = null;
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+
+			res = parsingFrom.setDomainDictionary(response);
+
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+		}
+
+		return res;
+
+	}
+
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
 	public String getSomething(@RequestParam(value = "request") String request,
@@ -127,7 +172,7 @@ public class InBoundInterface {
 			while ((bf = in.readLine()) != null) {
 				response += bf;
 			}
-			res = parsingFrom.getDicDictionaryList(response);
+			res = parsingFrom.getDictionaryList(response);
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
@@ -155,9 +200,10 @@ public class InBoundInterface {
 		return res;
 	}
 
+
 	// service registration
-	@RequestMapping(value = "/setSvcDesc", method = RequestMethod.POST)
-	public JSONObject reqRegiForService(InputStream body) {
+	@RequestMapping(value = "/regiDomainSVC", method = RequestMethod.POST)
+	public JSONObject regiForDomainService(InputStream body) {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 
@@ -170,7 +216,7 @@ public class InBoundInterface {
 				response += bf;
 			}
 			// send registration to parser
-			res = parsingFrom.regiService(response);
+			res = parsingFrom.setDomainService(response);
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 			// 에러 정의 필요..보통 JSON 파일에 parm이 없을 경우 발생함...

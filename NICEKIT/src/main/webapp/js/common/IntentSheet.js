@@ -76,17 +76,17 @@ function handleFile(e) {
 function getIntentSheet(json) {
 
 	for (var i = 0; i < json.length; i++) {
-		var from = json[i].Example.indexOf("{") + 1;
-		var to = json[i].Example.indexOf("}");
+		var from = json[i]['Example'].indexOf('{') + 1;
+		var to = json[i]['Example'].indexOf('}');
 		var dicNames;
 		if (from == 0 && to == -2)
-			dicNames[0] = json[i].Example;
+			dicNames[0] = json[i]['Example'];
 		else
-			dicNames = json[i].Example.substring(from, to).split('|');
+			dicNames = json[i]['Example'].substring(from, to).split('|');
 		for (var j = 0; j < dicNames.length; j++) {
 			var intentObj = new Object();
-			intentObj["desc"] = json[i].Function;
-			intentObj["id"] = json[i].Intent;
+			intentObj["desc"] = json[i]['Function'];
+			intentObj["id"] = json[i]['Intent'];
 			intentObj["ex"] = dicNames[j];
 			tempInfo.push(intentObj);
 		}

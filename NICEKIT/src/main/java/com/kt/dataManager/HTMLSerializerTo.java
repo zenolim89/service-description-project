@@ -42,7 +42,7 @@ public class HTMLSerializerTo {
 						
 						for (int j=0; j < temp.get(keyName).size(); j++) {
 							responseHTML += "<label> <input class=\"option-input checkbox\""
-									+ "type=\"checkbox\" name=" +"\""+ keyName +"\"" + "value=\"food\">"
+									+ "type=\"checkbox\" name=" +"\""+ keyName +"\"" + "value="+"\""+temp.get(keyName).get(j)+"\""+">"
 									+ "<span class=\"label-text\">" + temp.get(keyName).get(j) + "</span></label> \n";
 						}
 						responseHTML += "</div> \n"

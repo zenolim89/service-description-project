@@ -9,7 +9,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataDao.SelectDataTo;
+import com.kt.dataForms.BaseDictionarySet;
+import com.kt.dataForms.BaseIntentInfoForm;
 
 public class HTMLSerializerTo {
 	
@@ -17,10 +19,10 @@ public class HTMLSerializerTo {
 	
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오후 6:19:04]
-	 * desc	: 현재의 저장된 Intent 정보를 가지고 오는 메소드
-	 * 향후 이재동 박사 개발 내용과 병합 필요
-	 * @version	:
-	 * @param	: 
+	 * desc	: commonks에서 등록된 Intent의 모든 정보 중 특정 intentName과 관련된 사전 정보를 가지고 옴
+	 * 향후 이재동 박사가 개발한 내용과 병합하여, 관련 키워드로 검색하여 변경하는 방침도 고민 필요
+	 * @version	: 0.1
+	 * @param	: intent name
 	 * @return 	: String 
 	 * @throws 	: 
 	 * @see		: 
@@ -28,47 +30,57 @@ public class HTMLSerializerTo {
 	 * @param doName
 	 * @return
 	 */
-	public String createHTMLForDic (String doName) {
+	public String createHTMLForIntentInfo (String intentName) {
 		
-		IntentInfoForm doList = new IntentInfoForm(); 
-		String responseHTML = "";
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		
-//		try {
-//			
-//			for (int i=0; i < list.getDicList().size(); i++) {
-//				if(list.getDicList().get(i).getDomainName().equals(doName)) {
-//					doList = list.getDicList().get(i);
-//					Hashtable<String, ArrayList<String>> temp = doList.getDictionaryList();
-//					
-//					Set <String> keys = temp.keySet();
-//					
-//					Iterator<String> iter = keys.iterator();
-//					
-//					while (iter.hasNext()) {
-//						String keyName = iter.next();
-//						
-//						responseHTML += "<tr> \n";
-//						responseHTML += "<th>" + keyName + "</th><td> \n"
-//								+ "<div class=\"form-check\"> \n";
-//						
-//						for (int j=0; j < temp.get(keyName).size(); j++) {
-//							responseHTML += "<label> <input class=\"option-input checkbox\""
-//									+ "type=\"checkbox\" name=" +"\""+ keyName +"\"" + "value="+"\""+temp.get(keyName).get(j)+"\""+">"
-//									+ "<span class=\"label-text\">" + temp.get(keyName).get(j) + "</span></label> \n";
-//						}
-//						responseHTML += "</div> \n"
-//								+ "</td> \n"
-//								+ "</tr> \n";
-//					}
-//					
-//				}
-//			}
-//			
-//			
-//		}catch (Exception e) {
-//			// TODO: handle exception
-//		}
 		
+		String ksName = "commonks";
+		String targetTable = "intentInfo";
+		
+		String reqIntentName = intentName;
+		String responseHTML ="";
+		ArrayList<BaseIntentInfoForm> resList;
+						
+		try {
+			
+			resList = selectTo.selectIntentInfo(ksName, targetTable, reqIntentName);
+			
+			for (BaseIntentInfoForm form : resList) {
+				
+				ArrayList<BaseDictionarySet> dicList = parsingFrom.parsingIntentInfo(form.getArr());
+				
+				for (BaseDictionarySet set : dicList) {
+					
+					responseHTML += "<tr> \n";
+					responseHTML += "<th>" + set.getDicName() + "</th><td> \n"
+							+ "<div class=\"form-check\"> \n";
+					
+					for (String word : set.getWordList()) {
+						
+						responseHTML += "<label> <input class=\"option-input checkbox\""
+								+ "type=\"checkbox\" name=" +"\""+ word +"\"" + "value="+"\""+ word +"\""+">"
+								+ "<span class=\"label-text\">" + word + "</span></label> \n";
+						
+					}
+					
+					responseHTML += "</div> \n"
+							+ "</td> \n"
+							+ "</tr> \n";
+					
+				}
+								
+				
+				
+			}
+			
+		} catch (Exception e) {
+			
+			e.getMessage();
+			
+		}
+					
 		System.out.println("[DEBUG 동적 HTML코드 (도메인 사전) 생성 결과]: \n" + responseHTML + "\n");
 		return responseHTML;
 		

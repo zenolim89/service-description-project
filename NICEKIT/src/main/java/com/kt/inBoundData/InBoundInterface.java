@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataManager.JSONParsingFrom;
+import com.kt.dataManager.JSONSerializerTo;
 
 @RestController
 @RequestMapping("")
@@ -47,7 +49,7 @@ public class InBoundInterface {
 		System.out.println(intentName);
 		System.out.println(word);
 
-
+// user Auth 필요
 
 
 		return response;
@@ -60,11 +62,32 @@ public class InBoundInterface {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 
-		String response ="";
 		JSONObject res = new JSONObject();
 
 		res = parsingFrom.getDomainList();
 
+		return res;
+	}
+	
+	//request intentNameList
+	@RequestMapping(value ="/getIntentList", method = RequestMethod.GET)
+	public JSONObject getIntentNameList () {
+		
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONObject res = new JSONObject();
+		try {
+			
+			res = serializerTo.resDomanIntentNameList();
+			
+		} catch (ParseException e) {
+			
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return res;
 	}
 
@@ -99,7 +122,7 @@ public class InBoundInterface {
 
 
 	// getDicInfo
-	@RequestMapping(value = "/dictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
+	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	public String getDic(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;

@@ -14,7 +14,7 @@ import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
-import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataManager.JSONParsingFrom;
 
@@ -107,7 +107,7 @@ public class InsertDataTo {
 	
 	 * @param listData
 	 */
-	public void insertDomainIntent (ArrayList<IntentInfoForm> listData) {
+	public void insertDomainIntent (ArrayList<BaseIntentInfoForm> listData) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
@@ -124,7 +124,7 @@ public class InsertDataTo {
 			createTable.createTableForDictionary();
 		}
 		
-		for (IntentInfoForm data : listData) {
+		for (BaseIntentInfoForm data : listData) {
 		
 			if (selectTo.getLastRowForDicList(keySpace, targetTable) == 0) {
 				

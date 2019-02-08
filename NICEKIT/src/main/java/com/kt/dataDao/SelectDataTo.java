@@ -40,7 +40,7 @@ public class SelectDataTo {
 		return arr;	
 	}
 
-	public int getLastRowForDicList () {
+	public int getLastRowForDicList (String ksName, String tbName) {
 		
 		Statement query = QueryBuilder.select("seqNum").from("commonks", "intetntInfo").orderBy(QueryBuilder.desc("seqNum"));
 		ResultSet res = session.execute(query);

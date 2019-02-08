@@ -9,8 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.kt.dataDao.DictionaryList;
-import com.kt.dataForms.DictionaryForm;
+import com.kt.dataForms.IntentInfoForm;
 
 public class HTMLSerializerTo {
 	
@@ -31,8 +30,7 @@ public class HTMLSerializerTo {
 	 */
 	public String createHTMLForDic (String doName) {
 		
-		DictionaryList list = DictionaryList.getInstance();
-		DictionaryForm doList = new DictionaryForm(); 
+		IntentInfoForm doList = new IntentInfoForm(); 
 		String responseHTML = "";
 		
 //		try {

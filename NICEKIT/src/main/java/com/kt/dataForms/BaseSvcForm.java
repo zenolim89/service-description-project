@@ -6,9 +6,10 @@ import java.util.Hashtable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class OwnServiceForm {
+public class BaseSvcForm {
 	
-	String userAuth;
+	String domainName;
+	String domainId;
 	String interfaceType; 
 	String serviceCode; 
 //	String refAPI; 
@@ -29,12 +30,20 @@ public class OwnServiceForm {
 //	ArrayList<ReqDataForm> dataformat = new ArrayList<ReqDataForm>();
 //	Hashtable<String, ArrayList<String>> refDialog = new Hashtable<String, ArrayList<String>>();
 	
-	public String getUserAuth() {
-		return userAuth;
+	public String getDomainName() {
+		return domainName;
 	}
 	
-	public void setUserAuth(String userAuth) {
-		this.userAuth = userAuth;
+	public void setDomainName(String name) {
+		this.domainName = name;
+	}
+	
+	public String getDomainId() {
+		return domainId;
+	}
+	
+	public void setDomainId(String id) {
+		this.domainId = id;
 	}
 	
 	public String getInterfaceType() {

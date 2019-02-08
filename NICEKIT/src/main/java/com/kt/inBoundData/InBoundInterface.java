@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kt.dataCreator_temp.DicCreator;
-import com.kt.dataDao.DictionaryList;
-import com.kt.dataForms.DictionaryForm;
+import com.kt.dataForms.IntentInfoForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 @RestController
@@ -33,62 +31,51 @@ public class InBoundInterface {
 	// see also SpringDispatcher-servlet.xml
 	@RequestMapping("/")
 	public ModelAndView index() {
-		
+
 		ModelAndView mv = new ModelAndView("index");
-		
+
 		return mv;
 		// return new ModelAndView("index");
 	}
-	
-	
+
+
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
 	public String reqService(@RequestParam String intentName, @RequestParam String word) {
 
 		String response = "";
-		
+
 		System.out.println(intentName);
 		System.out.println(word);
-		
-		
-		
-		
+
+
+
+
 		return response;
-	
+
 	}
-	
-	
-	
+
 	//request domain list
-	//소스 재정비 필요
 	@RequestMapping(value = "/getDomain", method = RequestMethod.GET)
 	public JSONObject getDomain() {
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String response ="";
 		JSONObject res = new JSONObject();
-		
-		try {
-			
-			res = parsingFrom.getDomainList();
-					
-			
-		} catch (Exception e) {
-			response = e.getMessage().toString();
-		}
-		
+
+		res = parsingFrom.getDomainList();
+
 		return res;
 	}
-	
 
-	//set Dictionary for common domain
+	//registration domain intent information
 	@RequestMapping(value = "/setDictionary", method = RequestMethod.POST)
 	public JSONObject setDicList (InputStream body) {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
-		JSONObject res = null;
+		JSONObject res = new JSONObject();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 		try {
@@ -99,6 +86,10 @@ public class InBoundInterface {
 			res = parsingFrom.setDomainDictionary(response);
 
 		} catch (Exception e) {
+
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+
 			response = e.getMessage().toString();
 		}
 
@@ -106,59 +97,6 @@ public class InBoundInterface {
 
 	}
 
-
-	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
-	public String getSomething(@RequestParam(value = "request") String request,
-			@RequestParam(value = "version", required = false, defaultValue = "1") int version) {
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("Start getSomething");
-			logger.debug("data: '" + request + "'");
-		}
-
-		String response = null;
-
-		try {
-			switch (version) {
-			case 1:
-				if (logger.isDebugEnabled())
-					logger.debug("in version 1");
-				// TODO: add your business logic here
-				response = "Response from Spring RESTful Webservice : " + request;
-
-				break;
-			default:
-				throw new Exception("Unsupported version: " + version);
-			}
-		} catch (Exception e) {
-			response = e.getMessage().toString();
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("result: '" + response + "'");
-			logger.debug("End getSomething");
-		}
-		return response;
-	}
-
-	// request Service
-	@RequestMapping(value = "/reqDialogService", method = RequestMethod.POST)
-	public JSONObject reqServiceForDialog(InputStream body) {
-		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		String bf = null;
-		String response = "";
-		JSONObject res = null;
-		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		try {
-			while ((bf = in.readLine()) != null) {
-				response += bf;
-			}
-			// res =
-		} catch (Exception e) {
-			response = e.getMessage().toString();
-		}
-		return res;
-	}
 
 	// getDicInfo
 	@RequestMapping(value = "/dictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
@@ -202,14 +140,14 @@ public class InBoundInterface {
 
 
 	// service registration
-	@RequestMapping(value = "/regiDomainSVC", method = RequestMethod.POST)
+	@RequestMapping(value = "/domainRegistration", method = RequestMethod.POST)
 	public JSONObject regiForDomainService(InputStream body) {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 
 		String bf = null;
 		String response = "";
-		JSONObject res = null;
+		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 		try {
 			while ((bf = in.readLine()) != null) {
@@ -218,8 +156,12 @@ public class InBoundInterface {
 			// send registration to parser
 			res = parsingFrom.setDomainService(response);
 		} catch (Exception e) {
+
+			res.put("code", "4000");
+			res.put("message", e.getMessage());
+
 			response = e.getMessage().toString();
-			// 에러 정의 필요..보통 JSON 파일에 parm이 없을 경우 발생함...
+
 		}
 		return res;
 	}
@@ -249,6 +191,40 @@ public class InBoundInterface {
 		if (logger.isDebugEnabled()) {
 			logger.debug("result: '" + response + "'");
 			logger.debug("End putSomething");
+		}
+		return response;
+	}
+
+	@RequestMapping(value = "/<add method name here>", method = RequestMethod.GET)
+	public String getSomething(@RequestParam(value = "request") String request,
+			@RequestParam(value = "version", required = false, defaultValue = "1") int version) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Start getSomething");
+			logger.debug("data: '" + request + "'");
+		}
+
+		String response = null;
+
+		try {
+			switch (version) {
+			case 1:
+				if (logger.isDebugEnabled())
+					logger.debug("in version 1");
+				// TODO: add your business logic here
+				response = "Response from Spring RESTful Webservice : " + request;
+
+				break;
+			default:
+				throw new Exception("Unsupported version: " + version);
+			}
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("result: '" + response + "'");
+			logger.debug("End getSomething");
 		}
 		return response;
 	}

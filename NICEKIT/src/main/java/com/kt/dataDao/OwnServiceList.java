@@ -3,13 +3,13 @@ package com.kt.dataDao;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import com.kt.dataForms.OwnServiceForm;
+import com.kt.dataForms.BaseSvcForm;
 
 public class OwnServiceList {
 
 	private static OwnServiceList ownServiceList;
 
-	ArrayList<OwnServiceForm> ownList = new ArrayList<OwnServiceForm>();
+	ArrayList<BaseSvcForm> ownList = new ArrayList<BaseSvcForm>();
 
 	private OwnServiceList () {
 
@@ -26,13 +26,13 @@ public class OwnServiceList {
 
 	
 
-	public ArrayList<OwnServiceForm> getOwnList() {
+	public ArrayList<BaseSvcForm> getOwnList() {
 		
 		return this.ownList;
 		
 	}
 	
-	public void setOwnList(OwnServiceForm form) {
+	public void setOwnList(BaseSvcForm form) {
 		
 		this.ownList.add(form);
 	}

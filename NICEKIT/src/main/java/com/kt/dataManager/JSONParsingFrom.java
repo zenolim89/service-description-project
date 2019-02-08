@@ -14,8 +14,8 @@ import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
-import com.kt.dataForms.DictionaryForm;
-import com.kt.dataForms.OwnServiceForm;
+import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.ReqDataForm;
 
 public class JSONParsingFrom {
@@ -106,14 +106,14 @@ public class JSONParsingFrom {
 	 */
 	public JSONObject setDomainDictionary (String response) {
 		
-		DictionaryForm dicForm = new DictionaryForm();
+		IntentInfoForm dicForm = new IntentInfoForm();
 		InsertDataTo insertTo = new InsertDataTo();
 		
 		JSONObject res = new JSONObject();
 		
 		try {
 			
-			ArrayList<DictionaryForm> dicList = new ArrayList<DictionaryForm>();
+			ArrayList<IntentInfoForm> dicList = new ArrayList<IntentInfoForm>();
 			JSONArray arr = (JSONArray) parser.parse(response);	
 			
 			for (int i =0; i < arr.size(); i++) {
@@ -131,11 +131,18 @@ public class JSONParsingFrom {
 				
 			}
 			
-			insertTo.insertIntents(dicList);
+			insertTo.insertDomainIntent(dicList);
+			
+			res.put("resCode", "2001");
+			res.put("resMsg", "정상적으로 등록되었습니다");
 		
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
+			
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+			
 			e.printStackTrace();
 		}
 		
@@ -148,24 +155,24 @@ public class JSONParsingFrom {
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
-	 * desc	: 현재는 데모용으로 하기의 데이터를 공통 도메인으로 보냄, 이후에는 내용 명칭등을 변경해주어야 함
-	 * @version	:
-	 * @param	: 
+	 * desc	: 도메인 서비스 등록을 DB에 저장하기 위하여 클라이언트로 받은 JSON 데이터를 파싱하는 함수
+	 * @version	:0.1
+	 * @param	: response
 	 * @return 	: JSONObject 
 	 * @throws 	: 
-	 * @see		: 
+	 * @see		: BaseScvForm, InsertDataTo, ErrorCodeList
 	
 	 * @param response
 	 * @return
 	 */
 	public JSONObject setDomainService(String response) {
 		
-		OwnServiceForm resSvcDesc = new OwnServiceForm(); //domainservice form으로 변경 필요
+		BaseSvcForm resSvcDesc = new BaseSvcForm(); //domainservice form으로 변경 필요
 		InsertDataTo insData = new InsertDataTo();
 		ErrorCodeList error = new ErrorCodeList();
 		
 		// need to define result value
-		JSONObject res = null;
+		JSONObject res = new JSONObject();
 		
 		
 		try {
@@ -186,20 +193,21 @@ public class JSONParsingFrom {
 			resSvcDesc.setServiceCode(resObj.get("serviceCode").toString());
 			resSvcDesc.setServiceDesc(resObj.get("serviceDesc").toString());
 			resSvcDesc.setTestURL(resObj.get("testURL").toString());
-			resSvcDesc.setUserAuth(resObj.get("userAuth").toString());
+			resSvcDesc.setDomainName(resObj.get("domainName").toString());
+			resSvcDesc.setDomainId(resObj.get("domainId").toString());
 			
-			insData.insertSVCDesc(resSvcDesc);
-			
-			
+			insData.insertDomainSvcTo(resSvcDesc);
 			
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
 			
-			// send to db interface
-			
 			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
+			
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+			
 			e.printStackTrace();
 		}
 		

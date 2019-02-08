@@ -14,7 +14,7 @@ import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataForms.KeyValueFormatForJSON;
-import com.kt.dataForms.OwnServiceForm;
+import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
@@ -120,7 +120,7 @@ public class JSONSerializerTo {
 	
 	
 	
-	public JSONArray getDialog (OwnServiceForm form, String userAuth) {
+	public JSONArray getDialog (BaseSvcForm form, String userAuth) {
 		
 		// 기존 hash table에서 사전을 불러온 내용을
 		// DB에서 가지고 오는 내용으로 변경 필요

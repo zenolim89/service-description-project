@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 import org.json.simple.JSONArray;
 
-public class DictionaryForm {
+public class IntentInfoForm {
 	
 	int seqNum;
 	String intentName;

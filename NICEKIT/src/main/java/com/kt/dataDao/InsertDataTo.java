@@ -7,13 +7,15 @@ import org.json.simple.JSONObject;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
-import com.kt.dataForms.DictionaryForm;
-import com.kt.dataForms.OwnServiceForm;
+import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
+import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 public class InsertDataTo {
@@ -31,13 +33,13 @@ public class InsertDataTo {
 		session = cluster.connect();
 	}
 	
-	public TableMetadata checkExsitingTable ( String usrAuth )
+	public TableMetadata checkExsitingTable ( String tableName, String ksName )
 
 	{
-		String tableName = usrAuth;
+		String tn = tableName;
 
-		KeyspaceMetadata ks = cluster.getMetadata().getKeyspace("domainks");
-		TableMetadata table = ks.getTable(tableName);
+		KeyspaceMetadata ks = cluster.getMetadata().getKeyspace(ksName);
+		TableMetadata table = ks.getTable(tn);
 
 		return table;
 
@@ -46,7 +48,8 @@ public class InsertDataTo {
 	
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 6:05:54]
-	 * desc	: auth 정보 미입력, 추가적으로 postman 프로토콜에서 비어있는 부분찾아서 여기와, 테이블 생성에 반영
+	 * desc	: 기존 프로토콜에서 usrAuth는 제외, 그리고 클라이언트에서 hardcording으로
+	 * domainname과 domainid를 추가하였음
 	 * @version	:
 	 * @param	: 
 	 * @return 	: void 
@@ -55,22 +58,26 @@ public class InsertDataTo {
 	
 	 * @param desc
 	 */
-	public void insertSVCDesc (OwnServiceForm desc) {
+	public void insertDomainSvcTo (BaseSvcForm desc) {
 		
 		JSONParsingFrom parseringFrom = new JSONParsingFrom();
+		
+		String keySpace = "domainks";
 						
-		TableMetadata res = this.checkExsitingTable(desc.getUserAuth());
+		TableMetadata res = this.checkExsitingTable(desc.getDomainName(), keySpace);
 		
 		if (res == null) {
 			
-			createTable.createTableForCommonDomain(desc.getUserAuth());
+			createTable.createTableForCommonDomain(desc.getDomainName());
 			
 		}
 		
 		JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
 		
-		Statement query = QueryBuilder.insertInto(desc.getUserAuth())
+		
+		Statement query = QueryBuilder.insertInto(keySpace, desc.getDomainName())
 				.value("intentname", obj.get("id").toString())
+				.value("domainid", desc.getDomainId())
 				.value("servicecode", desc.getServiceCode())
 				.value("commURL", desc.getComURL())
 				.value("testURL", desc.getTestURL())
@@ -80,7 +87,11 @@ public class InsertDataTo {
 				.value("requestspec", desc.getReqSpec().toString())
 				.value("responseFormat", desc.getResStructure().toString())
 				.value("responsespec", desc.getResSpec().toString())
-				.value("dicList", obj.get("dicList").toString());
+				.value("dicList", obj.get("dicList").toString()).ifNotExists();
+		
+		ResultSet resSet = session.execute(query);
+		
+		System.out.println(resSet.toString());
 	}
 	
 	/**
@@ -96,11 +107,14 @@ public class InsertDataTo {
 	
 	 * @param listData
 	 */
-	public void insertIntents (ArrayList<DictionaryForm> listData) {
+	public void insertDomainIntent (ArrayList<IntentInfoForm> listData) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
-		TableMetadata res = this.checkExsitingTable("intentInfo");
+		String keySpace = "commonks";
+		String targetTable = "intentInfo";
+		
+		TableMetadata res = this.checkExsitingTable(keySpace, targetTable);
 		
 		int idx = 0;
 		Statement query;
@@ -110,16 +124,16 @@ public class InsertDataTo {
 			createTable.createTableForDictionary();
 		}
 		
-		for (DictionaryForm data : listData) {
+		for (IntentInfoForm data : listData) {
 		
-			if (selectTo.getLastRowForDicList() == 0) {
+			if (selectTo.getLastRowForDicList(keySpace, targetTable) == 0) {
 				
 				idx = 1;
 			} else {
-				idx = selectTo.getLastRowForDicList() + 1;
+				idx = selectTo.getLastRowForDicList(keySpace, targetTable) + 1;
 			}
 			
-			query = QueryBuilder.insertInto("intentInfo")
+			query = QueryBuilder.insertInto(keySpace, targetTable)
 					.value("seqNum", idx)
 					.value("intentname", data.getIntentName())
 					.value("intentDesc", data.getDesc())

@@ -8,7 +8,7 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.kt.dataForms.OwnServiceForm;
+import com.kt.dataForms.BaseSvcForm;
 
 public class ConnectToCanssandraForTest {
 	
@@ -50,7 +50,7 @@ public class ConnectToCanssandraForTest {
 	
 	// insert desc of svc
 	// we have to consider that type of desc is array or not
-	public void insertDescToComm (OwnServiceForm desc)
+	public void insertDescToComm (BaseSvcForm desc)
 	{
 //		sessionForComm = cluster.connect("commonks");
 //		

@@ -49,14 +49,18 @@ public class CreateTableFor {
 	public void createTableForCommonDomain (String domainname) {
 		
 		CreateTable create = ((CreateTable) builder.createTable("domainks", domainname).ifNotExists())
-				.withColumn("domainid", DataTypes.TEXT)
 				.withColumn("intentname", DataTypes.TEXT)
-				.withPartitionKey("serviceid", DataTypes.TEXT)
-				.withColumn("interfacetype", DataTypes.TEXT)
-				.withColumn("servicedescription", DataTypes.TEXT)
-				.withColumn("servicefunctionname", DataTypes.TEXT)
-				.withColumn("dicname", DataTypes.TEXT)
-				.withColumn("mainword", DataTypes.TEXT);
+				.withColumn("domainid", DataTypes.TEXT)
+				.withPartitionKey("servicecode", DataTypes.TEXT)
+				.withColumn("commURL", DataTypes.TEXT)
+				.withColumn("testURL", DataTypes.TEXT)
+				.withColumn("method", DataTypes.TEXT)
+				.withColumn("datatype", DataTypes.TEXT)
+				.withColumn("requestformat", DataTypes.TEXT)
+				.withColumn("requestspec", DataTypes.TEXT)
+				.withColumn("responseFormat", DataTypes.TEXT)
+				.withColumn("responsespec", DataTypes.TEXT)
+				.withColumn("dicList", DataTypes.TEXT);
 		
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
@@ -70,6 +74,7 @@ public class CreateTableFor {
 	 * desc	: 사업장 서비스 테이블 생성
 	 * 위와 동일하게 프로파일 등 (공통에서 사용하는것) 불러오는 형태로 개발 변경되어야 할 것 같음
 	 * common table은 venertable의 intent 저장 방식 참고하여 수정 필요
+	 * 향후 NBware와 병합시 사용, 현재는 등록기로만 사용하는 걸로 연동
 	 * @version	:
 	 * @param	: 
 	 * @return 	: void 
@@ -78,10 +83,11 @@ public class CreateTableFor {
 	
 	 * @param id
 	 */
-	public void createTableForVenderService (String id) {
+	public void createTableForVenderService (String venderId) {
 		
-		CreateTable create = ((CreateTable) builder.createTable("ownserviceks", id).ifNotExists())
+		CreateTable create = ((CreateTable) builder.createTable("ownserviceks", venderId).ifNotExists())
 
+				.withColumn("vendername", DataTypes.TEXT)
 				.withColumn("intentname", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)

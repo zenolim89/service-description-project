@@ -57,9 +57,9 @@ function handleFile(e) {
 // var formulae = XLSX.utils .sheet_to_formulae(workbook.Sheets[item]);
 
 				if (index == 1)
-					getIntentSheet(json);
+					setIntentSheet(json);
 				else if (index == 2)
-					getDicSheet(json);
+					setIntentDataforReg(json);
 
 				$("#my_file_output").html(JSON.stringify(IntentInfo));
 			});// end. forEach
@@ -73,16 +73,13 @@ function handleFile(e) {
 	}// end. for
 }
 
-function getIntentSheet(json) {
+function setIntentSheet(json) {
 	for (var i = 0; i < json.length; i++) {
 		var intentObj = new Object();
 		var from = json[i]['Example'].indexOf('{') + 1;
 		var to = json[i]['Example'].indexOf('}');
-		var dicNames;
-		if (from == 0 && to == -2)
-			dicNames = json[i]['Example'];
-		else
-			dicNames = json[i]['Example'].substring(from, to);
+		var dicNames = (from == 0 && to == -2) ? dicNames = json[i]['Example']
+					: dicNames = json[i]['Example'].substring(from, to);
 		intentObj["desc"] = json[i]['Function'];
 		intentObj["id"] = json[i]['Intent'];
 		intentObj["ex"] = dicNames;
@@ -112,7 +109,7 @@ function getDicList(extra, dicjson) {
 	return owndicList;
 }
 
-function getDicSheet(json) {
+function setIntentDataforReg(json) {
 	for (var i = 0; i < tempInfo.length; i++) {
 		var IntentObj = new Object();
 		IntentObj['id'] = tempInfo[i]['id'];
@@ -123,7 +120,7 @@ function getDicSheet(json) {
 	console.log(JSON.stringify(IntentInfo));
 }
 
-function getRegiData() {
+function getIntentDataforReg() {
 	return JSON.stringify(IntentInfo);
 }
 

@@ -11,6 +11,7 @@
 
 	<properties>
 		<spring.version>4.0.0.RELEASE</spring.version>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compilier.source>1.8</maven.compilier.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
@@ -123,7 +124,46 @@
 		<version>4.0.0-beta3</version>
 	</dependency>
 		
-
+		
+	
+	
+    <dependency>
+      <groupId>org.deeplearning4j</groupId>
+      <artifactId>deeplearning4j-core</artifactId>
+      <version>1.0.0-beta3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.deeplearning4j</groupId>
+      <artifactId>deeplearning4j-nlp</artifactId>
+      <version>1.0.0-beta3</version>
+    </dependency>  
+    
+    <dependency>
+      <groupId>org.nd4j</groupId>
+      <artifactId>nd4j-native-platform</artifactId>
+      <version>1.0.0-beta3</version>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.5</version>
+    </dependency>
+   
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.openkoreantext</groupId>
+      <artifactId>open-korean-text</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    
+    
 
 	</dependencies>
 	<build>

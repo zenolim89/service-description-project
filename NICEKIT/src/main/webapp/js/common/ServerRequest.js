@@ -15,6 +15,7 @@ $.getScript('./js/common/ChangeView.js', function() {
 var AuthRequest;
 var DictionaryRequest;
 var serviceRegRequest;
+var intentRegRequest;
 var SvcRequest;
 
 /**
@@ -134,8 +135,7 @@ function dctnrReqFunction() {
  */
 function dctnrRespProcess() {
 	if (DictionaryRequest.readyState == 4 && DictionaryRequest.status == 200) {
-		console.log("[어휘사전 호출] \n" + "Detail : "
-					+ DictionaryRequest.responseText);
+		console.log("[어휘사전 호출] \n" + "Detail : " + DictionaryRequest.responseText);
 		$('#mainTable > tbody > tr').not('.fixrow').remove();
 		$('#mainTable').find('tr:eq(4)').after(DictionaryRequest.responseText);
 	}
@@ -193,9 +193,64 @@ function svcRegReqFunction() {
 function svcRegRespProcess() {
 	if (serviceRegRequest.readyState == 4 && serviceRegRequest.status == 200) {
 		alert(serviceRegRequest.responseText);
-		console
-					.log("[등록 성공] \n" + "Detail : "
-								+ serviceRegRequest.responseText);
+		console.log("[등록 성공] \n" + "Detail : " + serviceRegRequest.responseText);
+	}
+}
+
+/**
+ * @file 서비스 등록 단계에서 업로드한 인텐트 및 어휘 정보를 등록하기 위한 요청 API.
+ * @module ServerRequest/IntentRegProc
+ */
+
+/**
+ * @method createXMLHttpIntentRegReq
+ * @param {undefined}
+ * @returns {undefined}
+ * @description Ajax 방식의 서비스 등록 요청을 위한 XMLHttpRequest 객체를 생성하는 메소드로, 요청 전송 전에
+ *              호출된다.
+ * @example if (window.ActiveXObject) { intentRegRequest = new
+ *          ActiveXObject("Microsoft.XMLHTTP"); } else if
+ *          (window.XMLHttpRequest) { intentRegRequest = new XMLHttpRequest(); }
+ */
+function createXMLHttpIntentRegReq() {
+	if (window.ActiveXObject) {
+		intentRegRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	else if (window.XMLHttpRequest) {
+		intentRegRequest = new XMLHttpRequest();
+	}
+}
+
+/**
+ * @method intentRegReqFunction
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 인텐트 및 어휘 등록 요청 전송을 위한 메소드로, 업로드한 인텐트 및 어휘 정보를 전달한다.
+ * @example <input class="btn btn-warning" type="button"
+ *          onClick="svcRegReqFunction();" value="등록" />
+ */
+function intentRegReqFunction(json) {
+	createXMLHttpIntentRegReq();
+	intentRegRequest.open('POST', './setDictionary');
+	intentRegRequest.setRequestHeader('Content-Type', 'application/json');
+	intentRegRequest.send(json);
+	console.log(json);
+	intentRegRequest.onreadystatechange = intentRegRespProcess;
+}
+
+/**
+ * @method intentRegRespProcess
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 서비스 등록 요청에 대한 응답 처리를 위한 메소드로, 서버로부터 응답이 도착하면 요청을 전송한
+ *              XMLHttpRequest 객체로부터 호출된다. 이때, 사용되는 Property는 XMLHttpRequest 객체의
+ *              onreadystatechange 이다.
+ * @example intentRegRequest.onreadystatechange = intentRegRespProcess;
+ */
+function intentRegRespProcess() {
+	if (intentRegRequest.readyState == 4 && intentRegRequest.status == 200) {
+		alert(intentRegRequest.responseText);
+		console.log("[등록 성공] \n" + "Detail : " + intentRegRequest.responseText);
 	}
 }
 

@@ -134,7 +134,7 @@ public class JSONParsingFrom {
 	 */
 	public JSONObject setDomainDictionary (String response) {
 		
-		BaseIntentInfoForm dicForm = new BaseIntentInfoForm();
+		
 		InsertDataTo insertTo = new InsertDataTo();
 		
 		JSONObject res = new JSONObject();
@@ -145,6 +145,8 @@ public class JSONParsingFrom {
 			JSONArray arr = (JSONArray) parser.parse(response);	
 			
 			for (int i =0; i < arr.size(); i++) {
+				
+				BaseIntentInfoForm dicForm = new BaseIntentInfoForm();
 				
 				JSONObject obj = (JSONObject) arr.get(i);
 				

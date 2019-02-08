@@ -7,6 +7,7 @@ import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.TableMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.ClusteringOrder;
 import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
@@ -124,11 +125,15 @@ public class CreateTableFor {
 	public void createTableForDictionary () {
 		
 			
-		CreateTable create = ((CreateTable) builder.createTable("commonks","intentInfo").ifNotExists())
-				.withPartitionKey("seqNum", DataTypes.INT)
-				.withColumn("intentname", DataTypes.TEXT)
+		CreateTable create = (CreateTable) builder.createTable("commonks","intentInfo")
+				.ifNotExists()
+				.withPartitionKey("intentname", DataTypes.TEXT)
+//				.withClusteringColumn("seqnum", DataTypes.INT)
 				.withColumn("intentDesc", DataTypes.TEXT)
 				.withColumn("dicList", DataTypes.TEXT);
+				
+//				.withClusteringOrder("seqnum", ClusteringOrder.DESC);
+						
 		
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);

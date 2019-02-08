@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
@@ -114,7 +115,7 @@ public class InsertDataTo {
 		String keySpace = "commonks";
 		String targetTable = "intentInfo";
 		
-		TableMetadata res = this.checkExsitingTable(keySpace, targetTable);
+		TableMetadata res = this.checkExsitingTable(targetTable, keySpace);
 		
 		int idx = 0;
 		Statement query;
@@ -126,15 +127,20 @@ public class InsertDataTo {
 		
 		for (BaseIntentInfoForm data : listData) {
 		
-			if (selectTo.getLastRowForDicList(keySpace, targetTable) == 0) {
-				
-				idx = 1;
-			} else {
-				idx = selectTo.getLastRowForDicList(keySpace, targetTable) + 1;
-			}
+			ResultSet rs = selectTo.getLastRowForDicList(keySpace, targetTable);
+			
+			Row row = rs.one();
+						
+//			if (row == null) {
+//				
+//				idx = 1;
+//				
+//			} else {		
+//				idx = (row.getInt("seqnum")) + 1;
+//			}
 			
 			query = QueryBuilder.insertInto(keySpace, targetTable)
-					.value("seqNum", idx)
+//					.value("seqNum", idx)
 					.value("intentname", data.getIntentName())
 					.value("intentDesc", data.getDesc())
 					.value("dicList", data.getArr().toString());

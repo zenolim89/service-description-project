@@ -114,6 +114,7 @@ public class InBoundInterface {
 			res.put("resMsg", e.getMessage());
 
 			response = e.getMessage().toString();
+			System.out.println(response);
 		}
 
 		return res;

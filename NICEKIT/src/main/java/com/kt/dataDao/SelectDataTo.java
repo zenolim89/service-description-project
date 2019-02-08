@@ -46,14 +46,13 @@ public class SelectDataTo {
 		return arr;	
 	}
 
-	public int getLastRowForDicList (String ksName, String tbName) {
+	public ResultSet getLastRowForDicList (String ksName, String tbName) {
 		
-		Statement query = QueryBuilder.select("seqNum").from(ksName, tbName).orderBy(QueryBuilder.desc("seqNum"));
+		Statement query = QueryBuilder.select().from(ksName, tbName);
 		ResultSet res = session.execute(query);
+				
+		return res;
 		
-		int lastNum = Integer.parseInt(res.one().toString());
-		
-		return lastNum;
 		
 	}
 	
@@ -61,7 +60,7 @@ public class SelectDataTo {
 		
 		ArrayList<String> intentList = new ArrayList<String>();
 		
-		Statement query = QueryBuilder.select().from(ksName, tableName).orderBy(QueryBuilder.asc("seqNum"));
+		Statement query = QueryBuilder.select().from(ksName, tableName);
 		ResultSet res = session.execute(query);
 		
 		List<Row> resList = res.all();
@@ -94,7 +93,7 @@ public class SelectDataTo {
 			
 			BaseIntentInfoForm intentForm = new BaseIntentInfoForm();
 			
-			intentForm.setSeqNum(row.getInt("seqNum"));
+//			intentForm.setSeqNum(row.getInt("seqNum"));
 			intentForm.setIntentName(row.getString("intentname"));
 			intentForm.setDesc(row.getString("intentDesc"));
 			intentForm.setArr((JSONArray) parser.parse(row.getString("dicList")));

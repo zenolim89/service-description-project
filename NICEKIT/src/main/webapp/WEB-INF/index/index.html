@@ -9,33 +9,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NICEKIT</title>
 <link rel="stylesheet" href="./css/style.css">
-<link type="text/css" rel="stylesheet"
-	href="https://apilink.kt.co.kr/css/style.css"
-/>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-></script>
+<link type="text/css" rel="stylesheet" href="https://apilink.kt.co.kr/css/style.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="./js/common/ServerRequest.js" type="text/javascript"></script>
 <script src="./js/common/ChangeView.js" type="text/javascript"></script>
 <!--  nicekit  source  -->
-<link type="text/css" rel="stylesheet"
-	href="./nbware/assets/css/popup.css"
-/>
-<script type="text/javascript"
-	src="./nbware/js/jquery/jquery-2.1.4.min.js" charset="utf-8"
-></script>
-<script type="text/javascript"
-	src="./nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"
-></script>
-<script type="text/javascript" src="./nbware/js/Configuration.js"
-	charset="utf-8"
-></script>
-<script type="text/javascript" src="./nbware/js/Utils.js"
-	charset="utf-8"
-></script>
-<script type="text/javascript" src="./nbware/js/Connection.js"
-	charset="utf-8"
-></script>
+<link type="text/css" rel="stylesheet" href="./nbware/assets/css/popup.css" />
+<script type="text/javascript" src="./nbware/js/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="./nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
+<script type="text/javascript" src="./nbware/js/Configuration.js" charset="utf-8"></script>
+<script type="text/javascript" src="./nbware/js/Utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="./nbware/js/Connection.js" charset="utf-8"></script>
 <!--  nbware source  -->
 </head>
 <body>
@@ -54,7 +38,15 @@
 			<div class="login" id="loginCompl" style="display: none">
 				<a href="javascript:LoginDisplay();">로그아웃</a>
 			</div> -->
-		</div>
+			<button class="btn btn02 blue" type="button"
+					onclick="popup('http://localhost:8080/NICEKIT/sheet.html',800,500,'팝업','scroll'); return false;">
+					<em>인텐트/어휘 등록</em>
+				</button>
+			
+			
+			
+			</div>
+
 		<!-- header -->
 		<div class="containerpage">
 			<div class="nav">
@@ -63,32 +55,24 @@
 			</div>
 			<!-- 네비게이션 -->
 			<div class="content">
-				<span
-					style="font-style: italic; font-weight: bold; font-size: 25px; font-weight: 700; line-height: 1.0em; color: #333; font-family: arial;"
-				> NICE-Service Registration Tool </span>
+				<span style="font-style: italic; font-weight: bold; font-size: 25px; font-weight: 700; line-height: 1.0em; color: #333; font-family: arial;">
+					NICE-Service Registration Tool </span>
 				<table class="mainType" id="mainTable">
 					<thead>
 					</thead>
 					<tbody>
 						<tr class='fixrow'>
 							<th>사용자 계정</th>
-							<td><input class="form-control" type="text" value="V000001"
-								name="userAuth" readonly
-							></td>
+							<td><input class="form-control" type="text" value="V000001" name="userAuth" readonly></td>
 						</tr>
 						<!-- 도메인 선택으로 변경 -->
 						<tr class='fixrow'>
 							<th>인터페이스 타입</th>
 							<td>
 								<div class="form-check">
-									<label><input type="radio" name="interfaceType"
-										value="touch"
-									><span class="label-text">터치</span></label><label><input
-										type="radio" name="interfaceType" value="voice"
-										checked="checked"
-									><span class="label-text">음성</span></label><label><input
-										type="radio" name="interfaceType" value="remocon"
-									><span class="label-text">리모컨</span></label>
+									<label><input type="radio" name="interfaceType" value="touch"><span class="label-text">터치</span></label><label><input
+										type="radio" name="interfaceType" value="voice" checked="checked"
+									><span class="label-text">음성</span></label><label><input type="radio" name="interfaceType" value="remocon"><span class="label-text">리모컨</span></label>
 								</div>
 							</td>
 						</tr>
@@ -108,9 +92,7 @@
 						<!-- 서비스 코드 선택 -->
 						<tr class='fixrow'>
 							<th>인텐트 명</th>
-							<td><select class="form-control" name="intentName"
-								id="intentName" onchange="dctnrReqFunction()"
-							>
+							<td><select class="form-control" name="intentName" id="intentName" onchange="dctnrReqFunction()">
 									<option value="" selected disabled>인텐트 명 선택</option>
 									<option value="ViewINFRM">ViewINFRM</option>
 									<option value="Concierge">Concierge</option>
@@ -122,9 +104,7 @@
 						<!-- 인텐트 명 선택 -->
 						<tr class='fixrow'>
 							<th>서비스 개요</th>
-							<td><textarea class="text" rows="5" cols="30"
-									name="serviceDesc"
-								></textarea></td>
+							<td><textarea class="text" rows="5" cols="30" name="serviceDesc"></textarea></td>
 						</tr>
 						<!-- 서비스 개요/설명  -->
 						<!-- 인텐트명 선택에 따른  관련 어휘(체크박스) 항목, innerhtml 영역-->
@@ -140,24 +120,21 @@
 													<div class="popup_content">
 														<div class="ai_b2b_form">
 															<div class="opt_check">
-																<strong class="lb">Method</strong> <span class="chk_frm">
-																	<input class="hid_rdo" type="radio" name="rdo_type"
-																	id="type_post" value="POST" checked="checked"
+																<strong class="lb">Method</strong> <span class="chk_frm"> <input class="hid_rdo" type="radio" name="rdo_type" id="type_post"
+																	value="POST" checked="checked"
 																/> <label for="type_post" class="chk"><span></span>POST</label>
-																</span> <span class="chk_frm"> <input class="hid_rdo"
-																	type="radio" name="rdo_type" id="type_get" value="GET"
-																/> <label for="type_get" class="chk"><span></span>GET</label>
+																</span> <span class="chk_frm"> <input class="hid_rdo" type="radio" name="rdo_type" id="type_get" value="GET" /> <label for="type_get"
+																	class="chk"
+																><span></span>GET</label>
 																</span>
 															</div>
 															<!-- 전송 메소드  선택  -->
 															<ul class="frm">
-																<li><label class="lb" for="com_url">com Url</label>
-																	<input class="text" name="comUrl" id="comUrl"
-																	type="text" placeholder="input url" title="com Url"
+																<li><label class="lb" for="com_url">com Url</label> <input class="text" name="comUrl" id="comUrl" type="text"
+																	placeholder="input url" title="com Url"
 																/></li>
-																<li><label class="lb" for="test_url">test
-																		Url</label> <input class="text" name="testUrl" id="testUrl"
-																	type="text" placeholder="input url" title="test Url"
+																<li><label class="lb" for="test_url">test Url</label> <input class="text" name="testUrl" id="testUrl" type="text"
+																	placeholder="input url" title="test Url"
 																/></li>
 															</ul>
 															<!-- 상용 및 테스트 URL 입력 -->
@@ -165,12 +142,8 @@
 																<li>
 																	<div class="tab">
 																		<ul class="tabt">
-																			<li class="on"><a href="#" class="bt"
-																				onClick="controlTab('request'); return false;"
-																			>Request</a></li>
-																			<li><a href="#" class="bt"
-																				onClick="controlTab('response'); return false;"
-																			>Response</a></li>
+																			<li class="on"><a href="#" class="bt" onClick="controlTab('request'); return false;">Request</a></li>
+																			<li><a href="#" class="bt" onClick="controlTab('response'); return false;">Response</a></li>
 																		</ul>
 																	</div>
 																</li>
@@ -184,25 +157,14 @@
 																				<ul class="hd">
 																					<li>Key</li>
 																					<li>Value</li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_add black"
-																							onClick="addHeader(); return false;"
-																						>
+																					<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;">
 																							<em>추가</em>
 																						</button></li>
 																				</ul>
 																				<ul>
-																					<li><input class="text" type="text" name="key"
-																						value="" placeholder="input key" title="Value"
-																					/></li>
-																					<li><input class="text" type="text"
-																						name="value" value="" placeholder="input value"
-																						title="Value"
-																					/></li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_remove"
-																							onClick="removeHeader(this); return false;"
-																						>
+																					<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+																					<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																					<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;">
 																							<em>삭제</em>
 																						</button></li>
 																				</ul>
@@ -217,33 +179,19 @@
 																						<li>Key</li>
 																						<li>Value</li>
 																						<li>Spec</li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_add black"
-																								onClick="addBody(); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;">
 																								<em>추가</em>
 																							</button></li>
 																					</ul>
 																					<ul>
-																						<li><input class="text" type="text"
-																							name="key" value="" placeholder="input key"
-																							title="Key"
-																						/></li>
-																						<li><input class="text" type="text"
-																							name="value" value="" placeholder="input value"
-																							title="Value"
-																						/></li>
-																						<li title="Spec"><select name="spec"
-																							class="sel"
-																						>
+																						<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+																						<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																						<li title="Spec"><select name="spec" class="sel">
 																								<option value="spec1" selected="selected">spec1</option>
 																								<option value="spec2">spec2</option>
 																								<option value="spec3">spec3</option>
 																						</select></li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_remove"
-																								onClick="removeBody(this); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;">
 																								<em>삭제</em>
 																							</button></li>
 																					</ul>
@@ -253,16 +201,12 @@
 																				<ul class="post_check">
 																					<li class="check"></li>
 																					<li>
-																						<button type="button" class="btn btn02 black"
-																							onClick="jsonPretty(); return false;"
-																						>
+																						<button type="button" class="btn btn02 black" onClick="jsonPretty(); return false;">
 																							<em>Validation</em>
 																						</button>
 																					</li>
 																					<li>
-																						<button type="submit" class="btn btn02 black"
-																							onClick="saveSpec(); return false;"
-																						>
+																						<button type="submit" class="btn btn02 black" onClick="saveSpec(); return false;">
 																							<em>Spec 저장</em>
 																						</button>
 																					</li>
@@ -296,25 +240,14 @@
 																				<ul class="hd">
 																					<li>Key</li>
 																					<li>Value</li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_add black"
-																							onClick="addHeader(); return false;"
-																						>
+																					<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;">
 																							<em>추가</em>
 																						</button></li>
 																				</ul>
 																				<ul>
-																					<li><input class="text" type="text" name="key"
-																						value="" placeholder="input key" title="Value"
-																					/></li>
-																					<li><input class="text" type="text"
-																						name="value" value="" placeholder="input value"
-																						title="Value"
-																					/></li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_remove"
-																							onClick="removeHeader(this); return false;"
-																						>
+																					<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+																					<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																					<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;">
 																							<em>삭제</em>
 																						</button></li>
 																				</ul>
@@ -328,33 +261,19 @@
 																						<li>Key</li>
 																						<li>Value</li>
 																						<li>Spec</li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_add black"
-																								onClick="addBody(); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;">
 																								<em>추가</em>
 																							</button></li>
 																					</ul>
 																					<ul>
-																						<li><input class="text" type="text"
-																							name="key" value="" placeholder="input key"
-																							title="Key"
-																						/></li>
-																						<li><input class="text" type="text"
-																							name="value" value="" placeholder="input value"
-																							title="Value"
-																						/></li>
-																						<li title="Spec"><select name="spec"
-																							class="sel"
-																						>
+																						<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+																						<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																						<li title="Spec"><select name="spec" class="sel">
 																								<option value="spec1" selected="selected">spec1</option>
 																								<option value="spec2">spec2</option>
 																								<option value="spec3">spec3</option>
 																						</select></li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_remove"
-																								onClick="removeBody(this); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;">
 																								<em>삭제</em>
 																							</button></li>
 																					</ul>
@@ -364,16 +283,12 @@
 																				<ul class="post_check">
 																					<li class="check"></li>
 																					<li>
-																						<button type="button" class="btn btn02 black"
-																							onClick="jsonPretty(); return false;"
-																						>
+																						<button type="button" class="btn btn02 black" onClick="jsonPretty(); return false;">
 																							<em>Validation</em>
 																						</button>
 																					</li>
 																					<li>
-																						<button type="submit" class="btn btn02 black"
-																							onClick="saveSpec(); return false;"
-																						>
+																						<button type="submit" class="btn btn02 black" onClick="saveSpec(); return false;">
 																							<em>Spec 저장</em>
 																						</button>
 																					</li>
@@ -410,25 +325,14 @@
 																				<ul class="hd">
 																					<li>Key</li>
 																					<li>Value</li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_add black"
-																							onClick="addHeader(); return false;"
-																						>
+																					<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;">
 																							<em>추가</em>
 																						</button></li>
 																				</ul>
 																				<ul>
-																					<li><input class="text" type="text" name="key"
-																						value="" placeholder="input key" title="Value"
-																					/></li>
-																					<li><input class="text" type="text"
-																						name="value" value="" placeholder="input value"
-																						title="Value"
-																					/></li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_remove"
-																							onClick="removeHeader(this); return false;"
-																						>
+																					<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+																					<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																					<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;">
 																							<em>삭제</em>
 																						</button></li>
 																				</ul>
@@ -442,33 +346,19 @@
 																						<li>Key</li>
 																						<li>Value</li>
 																						<li>Spec</li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_add black"
-																								onClick="addBody(); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;">
 																								<em>추가</em>
 																							</button></li>
 																					</ul>
 																					<ul>
-																						<li><input class="text" type="text"
-																							name="key" value="" placeholder="input key"
-																							title="Key"
-																						/></li>
-																						<li><input class="text" type="text"
-																							name="value" value="" placeholder="input value"
-																							title="Value"
-																						/></li>
-																						<li title="Spec"><select name="spec"
-																							class="sel"
-																						>
+																						<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+																						<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																						<li title="Spec"><select name="spec" class="sel">
 																								<option value="spec1" selected="selected">spec1</option>
 																								<option value="spec2">spec2</option>
 																								<option value="spec3">spec3</option>
 																						</select></li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_remove"
-																								onClick="removeBody(this); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;">
 																								<em>삭제</em>
 																							</button></li>
 																					</ul>
@@ -478,16 +368,12 @@
 																				<ul class="post_check">
 																					<li class="check"></li>
 																					<li>
-																						<button type="button" class="btn02 black btn_val"
-																							onClick="jsonPretty(); return false;"
-																						>
+																						<button type="button" class="btn02 black btn_val" onClick="jsonPretty(); return false;">
 																							<em>Validation</em>
 																						</button>
 																					</li>
 																					<li>
-																						<button type="submit" class="btn02 black btn_save"
-																							onClick="saveSpec(); return false;"
-																						>
+																						<button type="submit" class="btn02 black btn_save" onClick="saveSpec(); return false;">
 																							<em>Spec 저장</em>
 																						</button>
 																					</li>
@@ -521,25 +407,14 @@
 																				<ul class="hd">
 																					<li>Key</li>
 																					<li>Value</li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_add black"
-																							onClick="addHeader(); return false;"
-																						>
+																					<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;">
 																							<em>추가</em>
 																						</button></li>
 																				</ul>
 																				<ul>
-																					<li><input class="text" type="text" name="key"
-																						value="" placeholder="input key" title="Value"
-																					/></li>
-																					<li><input class="text" type="text"
-																						name="value" value="" placeholder="input value"
-																						title="Value"
-																					/></li>
-																					<li class="ctrl"><button type="button"
-																							class="bn btn_remove"
-																							onClick="removeHeader(this); return false;"
-																						>
+																					<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+																					<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																					<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;">
 																							<em>삭제</em>
 																						</button></li>
 																				</ul>
@@ -553,33 +428,19 @@
 																						<li>Key</li>
 																						<li>Value</li>
 																						<li>Spec</li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_add black"
-																								onClick="addBody(); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;">
 																								<em>추가</em>
 																							</button></li>
 																					</ul>
 																					<ul>
-																						<li><input class="text" type="text"
-																							name="key" value="" placeholder="input key"
-																							title="Key"
-																						/></li>
-																						<li><input class="text" type="text"
-																							name="value" value="" placeholder="input value"
-																							title="Value"
-																						/></li>
-																						<li title="Spec"><select name="spec"
-																							class="sel"
-																						>
+																						<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+																						<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+																						<li title="Spec"><select name="spec" class="sel">
 																								<option value="spec1" selected="selected">spec1</option>
 																								<option value="spec2">spec2</option>
 																								<option value="spec3">spec3</option>
 																						</select></li>
-																						<li class="ctrl"><button type="button"
-																								class="bn btn_remove"
-																								onClick="removeBody(this); return false;"
-																							>
+																						<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;">
 																								<em>삭제</em>
 																							</button></li>
 																					</ul>
@@ -589,16 +450,12 @@
 																				<ul class="post_check">
 																					<li class="check"></li>
 																					<li>
-																						<button type="button" class="btn02 black btn_val"
-																							onClick="jsonPretty(); return false;"
-																						>
+																						<button type="button" class="btn02 black btn_val" onClick="jsonPretty(); return false;">
 																							<em>Validation</em>
 																						</button>
 																					</li>
 																					<li>
-																						<button type="submit" class="btn02 black btn_save"
-																							onClick="saveSpec(); return false;"
-																						>
+																						<button type="submit" class="btn02 black btn_save" onClick="saveSpec(); return false;">
 																							<em>Spec 저장</em>
 																						</button>
 																					</li>
@@ -642,9 +499,7 @@
 					<!-- 버텀부 -->
 					<tfoot>
 						<tr name='fixrow'>
-							<td colspan="2"><button class="btn red" type="button"
-									onClick="svcRegReqFunction();"
-								>등록</button>
+							<td colspan="2"><button class="btn red" type="button" onClick="svcRegReqFunction();">등록</button>
 								<button class="btn black" type="button">취소</button></td>
 						</tr>
 					</tfoot>
@@ -653,8 +508,7 @@
 		</div>
 		<!-- container -->
 		<div class="footer">
-			<span>㈜케이티 대표이사 황창규</span><span>사업자등록번호 : 102-81-42945</span><span>통신판매업신고
-				: 2002-경기성남-0048</span>
+			<span>㈜케이티 대표이사 황창규</span><span>사업자등록번호 : 102-81-42945</span><span>통신판매업신고 : 2002-경기성남-0048</span>
 			<address>경기도 성남시 분당구 불정로 90 (정자동)</address>
 			<p class="copyright">Copyrightⓒ2018 KT corp. All rights reserved.</p>
 		</div>

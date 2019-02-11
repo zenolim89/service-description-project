@@ -16,7 +16,7 @@ function LoginDisplay(loginResult) {
 		loginCompl.style.display = 'block';
 	}
 
-	// 계정에 등록된 서비스 목록으로 네비게이션 영역 변경 
+	// 계정에 등록된 서비스 목록으로 네비게이션 영역 변경
 	var ul = document.getElementById('svcListInfo');
 	if (ul)
 		while (ul.firstChild) {
@@ -29,6 +29,25 @@ function LoginDisplay(loginResult) {
 		var li = document.createElement("li");
 		li.innerHTML = "<li class='nav-item'><a class='nav-link'>" + svcCodeName + "</a></li>";
 		ul.appendChild(li);
+	}
+}
+
+//도메인 리스트 추가
+function addDomainList(result) {
+	for (var count = 0; count < result.length; count++) {
+		var option = $("<option>" + result[count] + "</option>");
+		$('#domainName').append(option);
+	}
+}
+
+// 인텐트 리스트 추가
+function addIntentList(result) {
+	for (var count = 0; count < result.length; count++) {
+		var from = result[count].indexOf('(') + 1;
+		var to = result[count].indexOf(')');
+		var IntentValue = result[count].substring(from, to);
+		var option = $("<option value='" + IntentValue + "'>" + result[count] + "</option>");
+		$('#intentName').append(option);
 	}
 }
 
@@ -79,20 +98,17 @@ function deleteLine(obj) {
 	tr.remove();
 }
 
-//팝업
+// 팝업
 function popup(url, w, h, name, option) {
-    var pozX, pozY;
-    var sw = screen.availWidth;
-    var sh = screen.availHeight;
-    var scroll = 0;
-    if (option == 'scroll') {
-        scroll = 1;
-    }
-    pozX = (sw - w) / 2;
-    pozY = (sh - h) / 2;
-    window.open(url, name, "toolbar=no,menubar=no,location=no,status=0,scrollbars=" + scroll + ",resizable=1,width=" + w + ",height=" + h + 
-    ",left=" + pozX + ",top=" + pozY);
+	var pozX, pozY;
+	var sw = screen.availWidth;
+	var sh = screen.availHeight;
+	var scroll = 0;
+	if (option == 'scroll') {
+		scroll = 1;
+	}
+	pozX = (sw - w) / 2;
+	pozY = (sh - h) / 2;
+	window.open(url, name, "toolbar=no,menubar=no,location=no,status=0,scrollbars=" + scroll
+				+ ",resizable=1,width=" + w + ",height=" + h + ",left=" + pozX + ",top=" + pozY);
 }
-
-
-

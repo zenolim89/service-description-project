@@ -31,7 +31,7 @@ function getServiceRegReqParam() {
 	var ServiceInfo = new Object();
 	var DictionaryInfo = new Object();
 
-	ServiceInfo["userAuth"] = document.getElementsByName('userAuth')[0].value;
+	ServiceInfo["domainId"] = document.getElementsByName('domainId')[0].value;
 
 	var interfaceType = document.getElementsByName("interfaceType");
 	for (var i = 0; i < interfaceType.length; i++) {

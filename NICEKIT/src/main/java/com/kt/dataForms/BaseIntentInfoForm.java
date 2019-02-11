@@ -5,21 +5,21 @@ import java.util.Hashtable;
 
 import org.json.simple.JSONArray;
 
-public class IntentInfoForm {
+public class BaseIntentInfoForm {
 	
-	int seqNum;
+//	int seqNum;
 	String intentName;
 	String desc;
 	JSONArray arr;
 	
 	
-	public int getSeqNum() {
-		return seqNum;
-	}
-	
-	public void setSeqNum(int seqNum) {
-		this.seqNum = seqNum;
-	}
+//	public int getSeqNum() {
+//		return seqNum;
+//	}
+//	
+//	public void setSeqNum(int seqNum) {
+//		this.seqNum = seqNum;
+//	}
 	
 	public String getIntentName() {
 		return intentName;

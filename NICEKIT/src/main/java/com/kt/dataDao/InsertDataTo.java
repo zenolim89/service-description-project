@@ -8,13 +8,14 @@ import org.json.simple.JSONObject;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
-import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataManager.JSONParsingFrom;
 
@@ -107,14 +108,14 @@ public class InsertDataTo {
 	
 	 * @param listData
 	 */
-	public void insertDomainIntent (ArrayList<IntentInfoForm> listData) {
+	public void insertDomainIntent (ArrayList<BaseIntentInfoForm> listData) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
 		String keySpace = "commonks";
 		String targetTable = "intentInfo";
 		
-		TableMetadata res = this.checkExsitingTable(keySpace, targetTable);
+		TableMetadata res = this.checkExsitingTable(targetTable, keySpace);
 		
 		int idx = 0;
 		Statement query;
@@ -124,17 +125,22 @@ public class InsertDataTo {
 			createTable.createTableForDictionary();
 		}
 		
-		for (IntentInfoForm data : listData) {
+		for (BaseIntentInfoForm data : listData) {
 		
-			if (selectTo.getLastRowForDicList(keySpace, targetTable) == 0) {
-				
-				idx = 1;
-			} else {
-				idx = selectTo.getLastRowForDicList(keySpace, targetTable) + 1;
-			}
+			ResultSet rs = selectTo.getLastRowForDicList(keySpace, targetTable);
+			
+			Row row = rs.one();
+						
+//			if (row == null) {
+//				
+//				idx = 1;
+//				
+//			} else {		
+//				idx = (row.getInt("seqnum")) + 1;
+//			}
 			
 			query = QueryBuilder.insertInto(keySpace, targetTable)
-					.value("seqNum", idx)
+//					.value("seqNum", idx)
 					.value("intentname", data.getIntentName())
 					.value("intentDesc", data.getDesc())
 					.value("dicList", data.getArr().toString());

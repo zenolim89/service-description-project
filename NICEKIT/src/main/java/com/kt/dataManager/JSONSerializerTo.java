@@ -9,11 +9,14 @@ import java.util.Set;
 import org.apache.log4j.spi.ErrorCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.OwnServiceList;
+import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.KeyValueFormatForJSON;
+import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
@@ -104,6 +107,29 @@ public class JSONSerializerTo {
 	}
 	
 	
+	public JSONObject resDomanIntentNameList () throws ParseException {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		String ksName = "commonks";
+		String targetTable = "intentInfo";
+		
+		ArrayList<String> resList = selectTo.selectIntentNameList(ksName, targetTable);
+		JSONArray arr = new JSONArray();
+		JSONObject obj = new JSONObject();
+		
+		for (String name : resList) {
+			
+			arr.add(name);	
+		}
+		
+		obj.put("intentList", arr);
+		
+		return obj;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	public JSONArray resDomainList (List<String> domainList) {
 		
 		JSONArray resArr = new JSONArray();

@@ -14,7 +14,8 @@ import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
-import com.kt.dataForms.IntentInfoForm;
+import com.kt.dataForms.BaseDictionarySet;
+import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.ReqDataForm;
 
@@ -39,6 +40,33 @@ public class JSONParsingFrom {
 		
 	}
 	
+	public ArrayList<BaseDictionarySet> parsingIntentInfo (JSONArray arr) {
+		
+		ArrayList<BaseDictionarySet> dicList = new ArrayList<BaseDictionarySet>();
+		
+		for (int i=0; i < arr.size(); i++) {
+			
+			BaseDictionarySet dicSet = new BaseDictionarySet();
+			JSONObject obj = (JSONObject) arr.get(i);
+			
+			dicSet.setDicName(obj.get("dicName").toString());
+			JSONArray wordArr = (JSONArray) obj.get("wordList");
+			
+			for (int j = 0; j < wordArr.size(); j++) {
+				
+				dicSet.getWordList().add(wordArr.get(i).toString());
+				
+			}
+			
+			dicList.add(dicSet);
+			
+		}
+		
+		return dicList;
+		
+	}
+	
+	
 	// 현재는 full list를 주는 형태, 해당 부분을 이재동 박사 작업 내용이랑 선택에 의하여 호출하는 내용으로 변경 필요
 	public String getDictionaryList(String response) {
 
@@ -50,7 +78,7 @@ public class JSONParsingFrom {
 
 			String doName = obj.get("domainName").toString();
 
-			res = htmlSerializer.createHTMLForDic(doName);
+			res = htmlSerializer.createHTMLForIntentInfo(doName); 			// 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
 
 		} catch (ParseException e) {
 			// TODO: handle exception
@@ -106,17 +134,19 @@ public class JSONParsingFrom {
 	 */
 	public JSONObject setDomainDictionary (String response) {
 		
-		IntentInfoForm dicForm = new IntentInfoForm();
+		
 		InsertDataTo insertTo = new InsertDataTo();
 		
 		JSONObject res = new JSONObject();
 		
 		try {
 			
-			ArrayList<IntentInfoForm> dicList = new ArrayList<IntentInfoForm>();
+			ArrayList<BaseIntentInfoForm> dicList = new ArrayList<BaseIntentInfoForm>();
 			JSONArray arr = (JSONArray) parser.parse(response);	
 			
 			for (int i =0; i < arr.size(); i++) {
+				
+				BaseIntentInfoForm dicForm = new BaseIntentInfoForm();
 				
 				JSONObject obj = (JSONObject) arr.get(i);
 				

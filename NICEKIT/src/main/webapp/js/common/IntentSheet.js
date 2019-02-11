@@ -78,8 +78,9 @@ function setIntentSheet(json) {
 		var intentObj = new Object();
 		var from = json[i]['Example'].indexOf('{') + 1;
 		var to = json[i]['Example'].indexOf('}');
-		var dicNames = (from == 0 && to == -2) ? dicNames = json[i]['Example']
+		var dicNames = (from == 0 || to == -2) ? dicNames = json[i]['Example']
 					: dicNames = json[i]['Example'].substring(from, to);
+
 		intentObj["desc"] = json[i]['Function'];
 		intentObj["id"] = json[i]['Intent'];
 		intentObj["ex"] = dicNames;
@@ -91,10 +92,11 @@ function setIntentSheet(json) {
 function getDicList(extra, dicjson) {
 	var owndicList = new Array();
 	var pivot = extra.split('|');
-	var dicObj = new Object();
-
+	
 	for (var i = 0; i < pivot.length; i++) {
+		var dicObj = new Object();
 		dicObj['dicName'] = pivot[i];
+		console.log("dicName : " + pivot[i]);
 		var wordList = new Array();
 		for (var j = 0; j < dicjson.length; j++) {
 			if (pivot[i] == dicjson[j]['Parameter']) {
@@ -102,10 +104,11 @@ function getDicList(extra, dicjson) {
 				wordObj['word'] = dicjson[j]['식별값'];
 				wordList.push(wordObj);
 			}
+			dicObj['wordList'] = wordList;
 		}
-		dicObj['wordList'] = wordList;
+		owndicList.push(dicObj);
 	}
-	owndicList.push(dicObj);
+
 	return owndicList;
 }
 

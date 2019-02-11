@@ -32,6 +32,9 @@ function getServiceRegReqParam() {
 	var DictionaryInfo = new Object();
 
 	ServiceInfo["domainId"] = document.getElementsByName('domainId')[0].value;
+	
+	var domainName = document.getElementsByName("domainName")[0];
+	ServiceInfo["domainName"] = domainName.options[domainName.selectedIndex].value;
 
 	var interfaceType = document.getElementsByName("interfaceType");
 	for (var i = 0; i < interfaceType.length; i++) {
@@ -41,7 +44,6 @@ function getServiceRegReqParam() {
 
 	var serviceCode = document.getElementsByName("serviceCode")[0];
 	ServiceInfo["serviceCode"] = serviceCode.options[serviceCode.selectedIndex].value;
-
 	ServiceInfo["serviceDesc"] = document.getElementsByName('serviceDesc')[0].value;
 
 	var intentInfo = new Array();

@@ -54,7 +54,8 @@ public class JSONParsingFrom {
 			
 			for (int j = 0; j < wordArr.size(); j++) {
 				
-				dicSet.getWordList().add(wordArr.get(i).toString());
+				JSONObject wordObj = (JSONObject) wordArr.get(j);
+				dicSet.getWordList().add(wordObj.get("word").toString());
 				
 			}
 			

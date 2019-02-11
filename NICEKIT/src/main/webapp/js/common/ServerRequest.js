@@ -12,11 +12,129 @@ $.getScript('./js/common/ChangeView.js', function() {
 	console.log('ChangeView.js loading...');
 });
 
+var DomainRequest;
+var IntentRequest;
 var AuthRequest;
 var DictionaryRequest;
 var serviceRegRequest;
 var intentRegRequest;
 var SvcRequest;
+
+/**
+ * @file 서비스 등록 단계에서 도메인 리스트를 얻기 위한 도메인 리스트 요청 API.
+ * @module ServerRequest/getDomainProc
+ */
+
+/**
+ * @method createXMLHttpDomainReq
+ * @param {undefined}
+ * @returns {undefined}
+ * @description Ajax 방식의 도메인 리스트 요청을 위한 XMLHttpRequest 객체를 생성하는 메소드로, 요청 전송 전에
+ *              호출된다.
+ * @example if (window.ActiveXObject) { DomainRequest = new
+ *          ActiveXObject("Microsoft.XMLHTTP"); } else if
+ *          (window.XMLHttpRequest) { DomainRequest = new XMLHttpRequest(); }
+ */
+function createXMLHttpDomainReq() {
+	if (window.ActiveXObject) {
+		DomainRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	else if (window.XMLHttpRequest) {
+		DomainRequest = new XMLHttpRequest();
+	}
+}
+
+/**
+ * @method domainReqFunction
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 도메인 리스트 요청 전송을 위한 메소드로, 요청 파라미터를 설정하는 부분과 서버로부터 응답이 도착했을 때 특정한
+ *              자바스크립트 함수를 호출하는 부분을 포함하고 있다. 페이지가 로딩 됐을 때, 해당 함수가 호출된다.
+ * @example
+ */
+function domainReqFunction() {
+	createXMLHttpDomainReq();
+	DomainRequest.open('GET', './getDomain');
+	DomainRequest.setRequestHeader('Content-Type', 'application/json');
+	DomainRequest.send();
+	DomainRequest.onreadystatechange = domainRespProcess;
+}
+
+/**
+ * @method domainRespProcess
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 도메인 리스트 요청에 대한 응답 처리를 위한 메소드로, 서버로부터 응답이 도착하면 요청을 전송한
+ *              XMLHttpRequest 객체로부터 호출된다. 이때, 사용되는 Property는 XMLHttpRequest 객체의
+ *              onreadystatechange 이다.
+ * @example DomainRequest.onreadystatechange = domainRespProcess;
+ */
+function domainRespProcess() {
+	if (DomainRequest.readyState == 4 && DomainRequest.status == 200) {
+		console.log("[도메인 리스트] \n" + "Detail : " + DomainRequest.responseText);
+		var domainObj = JSON.parse(DomainRequest.responseText);
+		var domainList = domainObj.domains;
+		addDomainList(domainList);
+	}
+}
+
+/**
+ * @file 서비스 등록 단계에서 인텐트 리스트를 얻기 위한 인텐트 리스트 요청 API.
+ * @module ServerRequest/getIntentListProc
+ */
+
+/**
+ * @method createXMLHttpIntentReq
+ * @param {undefined}
+ * @returns {undefined}
+ * @description Ajax 방식의 도메인 리스트 요청을 위한 XMLHttpRequest 객체를 생성하는 메소드로, 요청 전송 전에
+ *              호출된다.
+ * @example if (window.ActiveXObject) { IntentRequest = new
+ *          ActiveXObject("Microsoft.XMLHTTP"); } else if
+ *          (window.XMLHttpRequest) { IntentRequest = new XMLHttpRequest(); }
+ */
+function createXMLHttpIntentReq() {
+	if (window.ActiveXObject) {
+		IntentRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	else if (window.XMLHttpRequest) {
+		IntentRequest = new XMLHttpRequest();
+	}
+}
+
+/**
+ * @method intentReqFunction
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 인텐트 리스트 요청 전송을 위한 메소드로, 요청 파라미터를 설정하는 부분과 서버로부터 응답이 도착했을 때 특정한
+ *              자바스크립트 함수를 호출하는 부분을 포함하고 있다. 페이지가 로딩 됐을 때, 해당 함수가 호출된다.
+ * @example
+ */
+function intentReqFunction() {
+	createXMLHttpIntentReq();
+	IntentRequest.open('GET', './getIntentList');
+	IntentRequest.setRequestHeader('Content-Type', 'application/json');
+	IntentRequest.send();
+	IntentRequest.onreadystatechange = intentRespProcess;
+}
+
+/**
+ * @method intentRespProcess
+ * @param {undefined}
+ * @returns {undefined}
+ * @description 도메인 리스트 요청에 대한 응답 처리를 위한 메소드로, 서버로부터 응답이 도착하면 요청을 전송한
+ *              XMLHttpRequest 객체로부터 호출된다. 이때, 사용되는 Property는 XMLHttpRequest 객체의
+ *              onreadystatechange 이다.
+ * @example IntentRequest.onreadystatechange = intentRespProcess;
+ */
+function intentRespProcess() {
+	if (IntentRequest.readyState == 4 && IntentRequest.status == 200) {
+		console.log("[인텐트 리스트1] \n" + "Detail : " + IntentRequest.responseText);
+		var intentObj = JSON.parse(IntentRequest.responseText);
+		var intentList = intentObj.intentList;
+		addIntentList(intentList);
+	}
+}
 
 /**
  * @file 서비스 등록 단계에서 사용자 로그인을 위한 사용자 인증 요청 API.
@@ -74,6 +192,7 @@ function authRespProcess() {
 		LoginDisplay(AuthRequest.responseText);
 	}
 }
+
 /**
  * @file 서비스 등록 단계에서 선택한 인텐트의 어휘사전 정보를 불러오기 위한 어휘사전 정보 요청 API.
  * @module ServerRequest/DictionaryProc
@@ -118,7 +237,7 @@ function createXMLHttpDctnrReq() {
  */
 function dctnrReqFunction() {
 	createXMLHttpDctnrReq();
-	DictionaryRequest.open('POST', './dictionary');
+	DictionaryRequest.open('POST', './getDictionary');
 	DictionaryRequest.setRequestHeader('Content-Type', 'application/json');
 	DictionaryRequest.send(getIntentSelectedParam());
 	DictionaryRequest.onreadystatechange = dctnrRespProcess;
@@ -137,7 +256,7 @@ function dctnrRespProcess() {
 	if (DictionaryRequest.readyState == 4 && DictionaryRequest.status == 200) {
 		console.log("[어휘사전 호출] \n" + "Detail : " + DictionaryRequest.responseText);
 		$('#mainTable > tbody > tr').not('.fixrow').remove();
-		$('#mainTable').find('tr:eq(4)').after(DictionaryRequest.responseText);
+		$('#mainTable').find('tr:eq(5)').after(DictionaryRequest.responseText);
 	}
 }
 /**
@@ -175,7 +294,7 @@ function createXMLHttpSVCRegReq() {
  */
 function svcRegReqFunction() {
 	createXMLHttpSVCRegReq();
-	serviceRegRequest.open('POST', './registration');
+	serviceRegRequest.open('POST', './domainRegistration');
 	serviceRegRequest.setRequestHeader('Content-Type', 'application/json');
 	serviceRegRequest.send(getServiceRegReqParam());
 	serviceRegRequest.onreadystatechange = svcRegRespProcess;
@@ -227,7 +346,7 @@ function createXMLHttpIntentRegReq() {
  * @returns {undefined}
  * @description 인텐트 및 어휘 등록 요청 전송을 위한 메소드로, 업로드한 인텐트 및 어휘 정보를 전달한다.
  * @example <input class="btn btn-warning" type="button"
- *          onClick="svcRegReqFunction();" value="등록" />
+ *          onClick="intentRegReqFunction();" value="등록" />
  */
 function intentRegReqFunction(json) {
 	createXMLHttpIntentRegReq();

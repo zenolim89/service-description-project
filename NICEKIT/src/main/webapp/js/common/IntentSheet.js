@@ -86,7 +86,7 @@ function setIntentSheet(json) {
 		intentObj["ex"] = dicNames;
 		tempInfo.push(intentObj);
 	}
-	console.log(JSON.stringify(tempInfo));
+	//console.log(JSON.stringify(tempInfo));
 }
 
 function getDicList(extra, dicjson) {
@@ -96,7 +96,6 @@ function getDicList(extra, dicjson) {
 	for (var i = 0; i < pivot.length; i++) {
 		var dicObj = new Object();
 		dicObj['dicName'] = pivot[i];
-		console.log("dicName : " + pivot[i]);
 		var wordList = new Array();
 		for (var j = 0; j < dicjson.length; j++) {
 			if (pivot[i] == dicjson[j]['Parameter']) {
@@ -120,7 +119,7 @@ function setIntentDataforReg(json) {
 		IntentObj['dicList'] = getDicList(tempInfo[i]['ex'], json);
 		IntentInfo.push(IntentObj);
 	}
-	console.log(JSON.stringify(IntentInfo));
+	//console.log(JSON.stringify(IntentInfo));
 }
 
 function getIntentDataforReg() {

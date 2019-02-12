@@ -60,7 +60,7 @@ public class HTMLSerializerTo {
 					for (String word : set.getWordList()) {
 						
 						responseHTML += "<label> <input class=\"option-input checkbox\""
-								+ "type=\"checkbox\" name=" +"\""+ word +"\"" + "value="+"\""+ word +"\""+">"
+								+ "type=\"checkbox\" name=" +"\""+ set.getDicName() +"\"" + "value="+"\""+ word +"\""+">"
 								+ "<span class=\"label-text\">" + word + "</span></label> \n";
 						
 					}

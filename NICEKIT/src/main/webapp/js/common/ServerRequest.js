@@ -129,7 +129,7 @@ function intentReqFunction() {
  */
 function intentRespProcess() {
 	if (IntentRequest.readyState == 4 && IntentRequest.status == 200) {
-		console.log("[인텐트 리스트1] \n" + "Detail : " + IntentRequest.responseText);
+		console.log("[인텐트 리스트] \n" + "Detail : " + IntentRequest.responseText);
 		var intentObj = JSON.parse(IntentRequest.responseText);
 		var intentList = intentObj.intentList;
 		addIntentList(intentList);

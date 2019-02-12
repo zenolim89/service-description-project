@@ -210,8 +210,8 @@ public class JSONParsingFrom {
 			
 			JSONObject resObj = (JSONObject) parser.parse(response);
 			
-			resSvcDesc.setComURL(resObj.get("comURL").toString());
-			resSvcDesc.setDataType(resObj.get("datatype").toString());
+			resSvcDesc.setComURL(resObj.get("comUrl").toString());
+			resSvcDesc.setDataType(resObj.get("dataType").toString());
 			resSvcDesc.setIntentInfo((JSONArray) resObj.get("intentInfo"));
 			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
 			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));
@@ -223,7 +223,7 @@ public class JSONParsingFrom {
 			resSvcDesc.setResStructure((JSONArray) resObj.get("resStructure"));
 			resSvcDesc.setServiceCode(resObj.get("serviceCode").toString());
 			resSvcDesc.setServiceDesc(resObj.get("serviceDesc").toString());
-			resSvcDesc.setTestURL(resObj.get("testURL").toString());
+			resSvcDesc.setTestURL(resObj.get("testUrl").toString());
 			resSvcDesc.setDomainName(resObj.get("domainName").toString());
 			resSvcDesc.setDomainId(resObj.get("domainId").toString());
 			

@@ -49,6 +49,8 @@ public class GetDESCForTable {
 		}
 		
 		
+		// selec로 전체 검색 후 set을 이용해서 key 값 확인 후 각 키의 타입 확인 시도 
+		
 		
 		
 	}

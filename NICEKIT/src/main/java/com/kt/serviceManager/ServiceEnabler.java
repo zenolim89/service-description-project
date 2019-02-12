@@ -21,17 +21,29 @@ public class ServiceEnabler {
 		for (int i=0; i < arr.size(); i++) {
 
 			JSONObject obj = (JSONObject) arr.get(i);
+			
+			JSONArray wordArr = (JSONArray) obj.get("wordList");
+			
+			for (int j = 0; j < wordArr.size(); j++) {
+				
+				JSONObject wordObj = (JSONObject) wordArr.get(j);
+				
+				if (word.equals(wordObj.get("word").toString())) {
 
-			if (word.equals(obj.get("word").toString())) {
+					res = this.createRequestData(desc, word);
+					
+					return res;
 
-				res = this.createRequestData(desc, word);
+				} else {
 
-			} else {
-
-				res.put("resCode", "404");
-				res.put("resMsg", "해당 서비스를 찾을 수 없습니다");
+					res.put("resCode", "404");
+					res.put("resMsg", "해당 서비스를 찾을 수 없습니다");
+					
+				}
 				
 			}
+
+			
 
 		}
 		
@@ -76,6 +88,7 @@ public class ServiceEnabler {
 		JSONObject specObj = new JSONObject();
 		
 		
+		
 		for (int i = 0; i < reqFormat.size(); i++ ) {
 			
 			specObj = (JSONObject) reqFormat.get(i);
@@ -86,7 +99,14 @@ public class ServiceEnabler {
 			
 			while (iter.hasNext()) {
 				
+				String resKey = iter.next();
 				
+				if ( (specObj.get(resKey).getClass().getName()).equals("JSONObject")) {
+					
+					
+					
+					
+				}
 				
 				
 				
@@ -98,6 +118,21 @@ public class ServiceEnabler {
 		
 		
 	}
+	
+	
+	public String extractValueSpecForObj (JSONObject specObj, String key) {
+		
+		String valType = "spec1";
+		String derivedKey = null;
+		
+		if (valType.equals(specObj.get(key).toString())) {
+			
+			derivedKey = key;
+		} 
+		
+		return derivedKey;
+	}
+	
 
 
 }

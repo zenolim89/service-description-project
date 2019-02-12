@@ -38,7 +38,9 @@ public class SelectDataTo {
 		JSONObject resObj = new JSONObject();
 		ServiceEnabler enabler = new ServiceEnabler();
 
-		Statement query = QueryBuilder.select().from(keySpace, name).where(QueryBuilder.eq("intentname", intentName));
+		Statement query = QueryBuilder.select().from(keySpace, name)
+				.where(QueryBuilder.eq("intentname", intentName))
+				.allowFiltering();
 		ResultSet set = session.execute(query);
 
 		List<Row> rowList = set.all();
@@ -52,7 +54,7 @@ public class SelectDataTo {
 				DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
 
 
-				desc.setComURL(r.getString("comurl"));
+				desc.setComURL(r.getString("commurl"));
 				desc.setDomainId(r.getString("domainid"));
 				desc.setTestURL(r.getString("testurl"));
 				desc.setMethod(r.getString("method"));

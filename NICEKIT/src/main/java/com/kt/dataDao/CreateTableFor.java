@@ -50,7 +50,7 @@ public class CreateTableFor {
 	public void createTableForCommonDomain (String domainname) {
 		
 		CreateTable create = ((CreateTable) builder.createTable("domainks", domainname).ifNotExists())
-				.withColumn("intentname", DataTypes.TEXT)
+				.withClusteringColumn("intentname", DataTypes.TEXT)
 				.withColumn("domainid", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)

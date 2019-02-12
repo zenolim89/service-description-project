@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
@@ -41,18 +42,32 @@ public class InBoundInterface {
 	}
 
 
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07]
+	 * desc	: 요청된 서비스를 처리하기 위한 인터페이스, 현재는 Auth부분을 별도의 parm형태로 받아 id 값을 확인하여 해당 서비스 벤터를 검색
+	 * Demo 이후 수정 필요
+	 * @version	:
+	 * @param	: 
+	 * @return 	: String 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param intentName
+	 * @param word
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
-	public String reqService(@RequestParam String intentName, @RequestParam String word) {
+	public JSONObject reqService(@RequestParam String intentName, @RequestParam String word, @RequestParam String name) {
 
-		String response = "";
-
-		System.out.println(intentName);
-		System.out.println(word);
-
-// user Auth 필요
-
-
-		return response;
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONObject res = new JSONObject();
+		
+		String keySpace = "domainks";
+		
+		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+		
+		return res;
 
 	}
 

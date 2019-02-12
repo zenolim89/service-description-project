@@ -183,15 +183,7 @@ public class JSONParsingFrom {
 		
 	}
 	
-	public JSONObject setVenderService (String response) {
-		
-		JSONObject obj = new JSONObject();
-		
-		
-		return obj;
-		
-		
-	}
+
 	
 
 	/**

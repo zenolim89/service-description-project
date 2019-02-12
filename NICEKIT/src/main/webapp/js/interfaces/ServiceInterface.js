@@ -1,3 +1,7 @@
+$.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
+	console.log('gigagenie.js loading...');
+});
+
 /**
  * @fileOverview ServiceInterface
  * @author zenolim <zenolim89@gmail.com>
@@ -53,22 +57,23 @@
  */
 
 var options = {};
-
-function init(keytype, apikey) {
+var keytype = "GBOXDEVM";
+var keytype = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+function init() {
 	options = {};
-	options.keytype = keytype;
-	options.apikey = apikey;
+	options.keytype = "GBOXDEVM";
+	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
 			alert("init 실행 완료");
-			sendTTSAPI("음성인식 서비스를 실행합니다. ");
+			sendTTSAPI("음성인식 서비스를 시작합니다. ");
 		}
 	});
 }
 
 /**
- * @method sendTTS
+ * @method sendTTSAPI
  * @param {String} ttstext - 사용자에게 음성으로 전달하고자 하는 Text를 입력.
  * @returns {undefined}
  * @description 입력 Text 를 사용자에게 음성으로 전달한다. stopTTS API에 의해서 중지된다.
@@ -88,7 +93,7 @@ function init(keytype, apikey) {
  *          function(result_cd, result_msg, extra) { if (result_cd == 200) { }
  *          else { } alert(result_cd); }); }
  */
-function sendTTS(ttstext) {
+function sendTTSAPI(ttstext) {
 	var options = {};
 	alert("startTTS")
 	options.ttstext = ttstext;
@@ -158,11 +163,11 @@ function stopTTS() {
 function startVoice(ttstext) {
 	var options = {};
 	options.voicemsg = ttstext;
-	gigagenie.voice.getVoiceText(options,
-				function(result_cd, result_msg, extra) {
-					if (result_cd === 200) {
-					}
-				});
+	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			alert(extra);
+		}
+	});
 }
 
 /**
@@ -188,10 +193,7 @@ function startVoice(ttstext) {
 function getContainerId() {
 	var options = {};
 	var appId;
-	gigagenie.appinfo.getContainerId(options, function(
-		result_cd,
-		result_msg,
-		extra) {
+	gigagenie.appinfo.getContainerId(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
 			console.log("The container id is " + extra.containerid);
 			appId = extra.containerid;
@@ -207,9 +209,8 @@ function getContainerId() {
 // 음성명령(종료, 닫기 발화)과, 리모콘 나가기 버튼 클릭시 서비스 종료 이벤트 전달
 gigagenie.voice.onRequestClose = function() {
 	options = {};
-	gigagenie.voice.svcFinished(options,
-				function(result_cd, result_msg, extra) {
-				});
+	gigagenie.voice.svcFinished(options, function(result_cd, result_msg, extra) {
+	});
 };
 
 /**
@@ -256,13 +257,12 @@ function SpeechINTRC(appId) {
 		alert(word);
 		switch (extra.actioncode) {
 			case 'HELLOGENIE':
-				svcReqFunction(appId, extra.actioncode,
-							extra.parameter['NE-HELLO']);
-				
+				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-HELLO']);
+				sendTTSAPI("전송 요청");
 				break;
 			case 'GOODBYEGENIE':
-				svcReqFunction(appId, extra.actioncode,
-							extra.parameter['NE-GOODBYE']);
+				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
+				sendTTSAPI("전송 요청");
 				break;
 			default:
 				break;

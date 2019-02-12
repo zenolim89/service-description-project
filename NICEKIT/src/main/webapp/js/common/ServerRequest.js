@@ -415,14 +415,9 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('POST', './svc/TEST');
+	SvcRequest.open('GET', './reqService' +"?" +"");
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
-	var SvcInfo = new Object();
-	SvcInfo.id = appId;
-	SvcInfo.intent = intent;
-	SvcInfo.param = parameter;
-	var SvcJsonInfo = JSON.stringify(SvcInfo);
-	SvcRequest.send(getSvcReqParam());
+	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
 }
 

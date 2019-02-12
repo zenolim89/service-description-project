@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>KT_GigaGenie</title>
+<meta name="viewport"
+	content="width=1920, height=1080, user-scalable=no" />
+<script src="svcCommon/js/jq-lastest.js"></script>
+<script src="svcCommon/js/swiper.js"></script>
+<script src="js/interfaces/ServiceInterface.js"></script>
+<link rel="stylesheet" type="text/css" href="svcCommon/css/gigagenie.css">
+
+</head>
+<body onload=init()>
+
+<script type="text/javascript">
+
+</script>
+	<div id="document" class="type-index"
+		style="background-image: url(svcCommon/images/bg_main.jpg);">
+		<main id="contents-main">
+		<h1>
+			<img src="svcCommon/images/h1_logo.png" alt="">
+		</h1>
+		<div class="info-room">
+			<h2>
+			<a href="#notice-popup"
+					class="layer-pop-control">
+			스키빌리지 노스콘도 301호
+			</a></h2>
+			<ul class="notice-main">
+				<li class="notice"><a href="#notice-popup"
+					class="layer-pop-control">이용안내</a></li>
+			</ul>
+		</div>
+		<div class="weather-api">
+			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png"
+				alt=""></i> <span class="tmper-area"><em class="f-rb">28</em>℃</span>
+			<span class="day-date"> 금요일<br> 2018.01.27
+			</span> <em class="time f-rb200">06:21</em> <span class="am-pm">오후</span>
+		</div>
+		<div class="menu-main">
+		<button  type="button" class="set-btn-type2"  onclick="startVoice('서비스 요청')">서비스 실행</button>
+		</div>
+	
+		</main>
+
+
+
+		<article id="notice-popup" class="popup-fulltype type2"
+			style="display: none;">
+			<div class="wrap-notice">
+				<h1>골라 노는 재미가 있다 가까운 우리 가족 스키장</h1>
+				<span class="date">2019년 3월 19일</span>
+				<div class="wrap-notice">
+					<div class="cont">
+						<div class="scroll-type" tabindex="0">
+
+						</div>
+					</div>
+					<span class="guide-cell"> <i class="prev">이전</i> <i
+						class="next">다음</i>
+					</span> <span class="guide-cell2"> <i class="up">위</i> <i
+						class="down">아래</i>
+					</span>
+					<div class="btn-area">
+						<button type="button" class="set-btn-type1 confirm w282">확인</button>
+					</div>
+				</div>
+			</div>
+		</article>
+
+	</div>
+	<script>
+function popupControl() {
+	var target = $('.layer-pop-control');
+	$.each(target,function() {
+		$(this).on('click',function(e) {
+			e.preventDefault();
+			$($(this).attr('href')).show();
+			$($(this).attr('href')).find('.confirm').on('click',function(e) {
+        e.preventDefault();
+        $(this).closest($('.popup-fulltype')).hide();
+			})
+      $($(this).attr('href')).find('.cancel').on('click',function(e) {
+        e.preventDefault();
+				$(this).closest($('.popup-fulltype')).hide();
+			})
+		})
+	})
+}
+popupControl();
+
+/* var checkView = 0;
+function initSlide() {
+  var check = $('.menu-main .swiper-slide').length,
+      check2 = $('.menu-main .swiper-slide-duplicate').length;
+  $('.placeholder').html($('.menu-main .swiper-slide').eq(0).data('slidedesc'));
+  checkView = check - check2;
+  $('.menu-main .swiper-container').css({width:(225 * (checkView)) - 18})
+  return checkView;
+}
+initSlide();
+function setSlide() {
+  $('.menu-main').css({opacity:1})
+  var menuSwiper = new Swiper('.menu-main .swiper-container', {
+    slidesPerView: checkView,
+    spaceBetween: 18,
+    centeredSlides: true,
+    loop: true,
+  });
+  $('.menu-main .prev').on('click',function() {
+    menuSwiper.slidePrev();
+  })
+  $('.menu-main .next').on('click',function() {
+    menuSwiper.slideNext();
+  })
+  menuSwiper.on('slideChange', function () {
+    $('.placeholder').html($('.menu-main .swiper-slide').eq(menuSwiper.realIndex).data('slidedesc'));
+  });
+  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    direction: 'vertical',
+    loop: true,
+    height: 69,
+    autoplay: {
+      delay: 1000,청
+    }
+  });
+}
+setTimeout(function() {setSlide()},10) */
+</script>
+
+</body>
+</html>

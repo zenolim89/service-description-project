@@ -19,7 +19,6 @@ function getIntentSelectedParam() {
 	var SelectedValue = IntentName.options[IntentName.selectedIndex].value;
 	// select element에서 선택된 option의 text가 저장된다.
 	var SelectedText = IntentName.options[IntentName.selectedIndex].text;
-	console.log("인텐트 선택 = " + SelectedText + ":" + SelectedValue);
 	var IntentInfo = new Object();
 	IntentInfo.domainName = SelectedValue;
 	var DctnrJsonInfo = JSON.stringify(IntentInfo);
@@ -32,7 +31,7 @@ function getServiceRegReqParam() {
 	var DictionaryInfo = new Object();
 
 	ServiceInfo["domainId"] = document.getElementsByName('domainId')[0].value;
-	
+
 	var domainName = document.getElementsByName("domainName")[0];
 	ServiceInfo["domainName"] = domainName.options[domainName.selectedIndex].value;
 
@@ -70,8 +69,10 @@ function getServiceRegReqParam() {
 				wordList.push(wordObj);
 			}
 		}
-		dicObj.wordList = wordList;
-		dicList.push(dicObj);
+		if (wordList.length != 0) {
+			dicObj.wordList = wordList;
+			dicList.push(dicObj);
+		}
 	}
 
 	var intentName = document.getElementsByName("intentName")[0];
@@ -86,12 +87,17 @@ function getServiceRegReqParam() {
 	ServiceInfo["comUrl"] = InterStandards["comUrl"];
 	ServiceInfo["method"] = InterStandards["method"];
 	ServiceInfo["headerInfo"] = InterStandards["headerInfo"];
-	ServiceInfo["authInfo"] = InterStandards["authInfo"];
 	ServiceInfo["dataType"] = InterStandards["dataType"];
-	ServiceInfo["reqStructure"] = InterStandards["reqStructure"];
-	ServiceInfo["reqSpec"] = InterStandards["reqSpec"];
-	ServiceInfo["resStructure"] = InterStandards["resStructure"];
-	ServiceInfo["resSpec"] = InterStandards["resSpec"];
+
+	var reqStructureArr = new Array(InterStandards["reqStructure"]);
+	var reqSpecArr = new Array(InterStandards["reqSpec"]);
+	var resStructureArr = new Array(InterStandards["resStructure"]);
+	var resSpecArr = new Array(InterStandards["resSpec"]);
+
+	ServiceInfo["reqStructure"] = reqStructureArr;
+	ServiceInfo["reqSpec"] = reqSpecArr;
+	ServiceInfo["resStructure"] = resStructureArr;
+	ServiceInfo["resSpec"] = resSpecArr;
 
 	var svcJsonInfo = JSON.stringify(ServiceInfo);
 	console.log(svcJsonInfo);

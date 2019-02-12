@@ -163,7 +163,7 @@ public class InBoundInterface {
 	}
 
 
-	// service registration
+	// service registration for domain
 	@RequestMapping(value = "/domainRegistration", method = RequestMethod.POST)
 	public JSONObject regiForDomainService(InputStream body) {
 
@@ -189,6 +189,36 @@ public class InBoundInterface {
 		}
 		return res;
 	}
+	
+	// service create for vender
+	@RequestMapping(value = "/venderServiceCreation", method = RequestMethod.POST)
+	public JSONObject createVenderService (InputStream body ) {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String bf = null;
+		String response ="";
+		JSONObject res = new JSONObject();
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+				
+			}
+			
+			// send response to a specific method in parsingfrom
+		} catch (Exception e) {
+			
+			res.put("code", "4000");
+			res.put("resMsg", e.getMessage());
+		}
+		
+		return res;
+		
+	}
+	
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.PUT)
 	public String putSomething(@RequestBody String request,

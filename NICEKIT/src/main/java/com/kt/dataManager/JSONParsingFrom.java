@@ -183,6 +183,16 @@ public class JSONParsingFrom {
 		
 	}
 	
+	public JSONObject setVenderService (String response) {
+		
+		JSONObject obj = new JSONObject();
+		
+		
+		return obj;
+		
+		
+	}
+	
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]

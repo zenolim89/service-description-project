@@ -63,14 +63,14 @@ table.subType td {
 }
 
 .frame {
-	width: 1920px;
+	width: 100%;
 	margin: 0 auto;
 	border: 1px solid #aaa;
 }
 
 .hheader {
 	padding: 20px 15px;
-	height: 150px;
+	height: 100px;
 	background:
 		url(https://apilink.kt.co.kr/images/img_GIGAGENIE_visual01.jpg)
 		no-repeat center top;
@@ -266,48 +266,8 @@ input[type="radio"]:disabled+.label-text:before {
 }
 
 /* nbware */
-.ai_b2b_form
-
- 
-
-.frm_tb
-
-
-.spec_div
->
-ul
->
-li
-
-
-:not
-
- 
-
-(
-.ctrl
-
- 
-
-)
-{
-border
-
-
-:
-
-
-0
-px
-
-
-solid
-
-
-#ccc
-;
-
-
+.ai_b2b_form .frm_tb.spec_div > ul > li :not(.ctrl){
+border :0px solid #ccc;
 }
 .ai_b2b_form .btns {
 	padding-left: 0px;

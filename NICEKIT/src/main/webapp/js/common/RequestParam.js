@@ -33,7 +33,8 @@ function getServiceRegReqParam() {
 	ServiceInfo["domainId"] = document.getElementsByName('domainId')[0].value;
 
 	var domainName = document.getElementsByName("domainName")[0];
-	ServiceInfo["domainName"] = domainName.options[domainName.selectedIndex].value;
+	ServiceInfo["domainName"] = "RESORT";
+	//ServiceInfo["domainName"] = domainName.options[domainName.selectedIndex].value;
 
 	var interfaceType = document.getElementsByName("interfaceType");
 	for (var i = 0; i < interfaceType.length; i++) {

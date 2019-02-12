@@ -183,6 +183,16 @@ public class JSONParsingFrom {
 		
 	}
 	
+	public JSONObject setVenderService (String response) {
+		
+		JSONObject obj = new JSONObject();
+		
+		
+		return obj;
+		
+		
+	}
+	
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
@@ -211,7 +221,7 @@ public class JSONParsingFrom {
 			JSONObject resObj = (JSONObject) parser.parse(response);
 			
 			resSvcDesc.setComURL(resObj.get("comUrl").toString());
-			resSvcDesc.setDataType(resObj.get("datatype").toString());
+			resSvcDesc.setDataType(resObj.get("dataType").toString());
 			resSvcDesc.setIntentInfo((JSONArray) resObj.get("intentInfo"));
 			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
 			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));

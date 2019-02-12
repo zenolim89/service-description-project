@@ -10,6 +10,9 @@ public class BaseSvcForm {
 	
 	String domainName;
 	String domainId;
+//	
+
+	
 	String interfaceType; 
 	String serviceCode; 
 //	String refAPI; 

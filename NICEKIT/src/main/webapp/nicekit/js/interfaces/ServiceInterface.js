@@ -2,6 +2,10 @@ $.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
 	console.log('gigagenie.js loading...');
 });
 
+$.getScript('./nicekit/js/common/ServerRequest.js', function() {
+	console.log('ServerRequst.js loading...');
+});
+
 /**
  * @fileOverview ServiceInterface
  * @author zenolim <zenolim89@gmail.com>
@@ -67,13 +71,13 @@ function init() {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
 			alert("init 실행 완료");
-			sendTTSAPI("음성인식 서비스를 시작합니다. ");
+			SpeechINTRC('appId');
 		}
 	});
 }
 
 /**
- * @method sendTTSAPI
+ * @method sendTTS
  * @param {String} ttstext - 사용자에게 음성으로 전달하고자 하는 Text를 입력.
  * @returns {undefined}
  * @description 입력 Text 를 사용자에게 음성으로 전달한다. stopTTS API에 의해서 중지된다.
@@ -88,21 +92,19 @@ function init() {
  * 	504: mute 상태로 TTS 재생 불가
  * </pre>
  * 
- * @example function sendTTS(ttstext) { var options = {}; alert("startTTS")
+ * @example function sendTTSAPI(ttstext) { var options = {}; alert("startTTS")
  *          options.ttstext = ttstext; gigagenie.voice.sendTTS(options,
  *          function(result_cd, result_msg, extra) { if (result_cd == 200) { }
  *          else { } alert(result_cd); }); }
  */
-function sendTTSAPI(ttstext) {
+function sendTTS(ttstext) {
 	var options = {};
-	alert("startTTS")
 	options.ttstext = ttstext;
 	gigagenie.voice.sendTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 		}
 		else {
 		}
-		alert(result_cd);
 	});
 }
 
@@ -125,7 +127,6 @@ function sendTTSAPI(ttstext) {
  */
 function stopTTS() {
 	var options = {};
-	alert("stopTTS");
 	gigagenie.voice.stopTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 		}
@@ -161,11 +162,13 @@ function stopTTS() {
  *          result_msg, extra) { if (result_cd === 200) { } }); }
  */
 function startVoice(ttstext) {
+	alert(ttstext);
 	var options = {};
 	options.voicemsg = ttstext;
 	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			alert(extra);
+			svcReqFunction('resort', 'HotelViewPage','식음주점');
+			alert("[인식 문장] : " + extra.voicetext);
 		}
 	});
 }
@@ -258,13 +261,19 @@ function SpeechINTRC(appId) {
 		switch (extra.actioncode) {
 			case 'HELLOGENIE':
 				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-HELLO']);
-				sendTTSAPI("전송 요청");
+				sendTTS("전송 요청");
 				break;
 			case 'GOODBYEGENIE':
 				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
-				sendTTSAPI("전송 요청");
+				sendTTS("전송 요청");
+				break;
+			case 'HotelViewPage':
+				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
+				alert( extra.parameter['NE-FACILITIES']);
+				sendTTS("전송 요청");
 				break;
 			default:
+				sendTTS("전송실패");
 				break;
 		}
 	}

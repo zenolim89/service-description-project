@@ -4,11 +4,15 @@
  * @version 1.0.0
  */
 
-$.getScript('./js/common/RequestParam.js', function() {
+$.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
+	console.log('gigagenie.js loading...');
+});
+
+$.getScript('./nicekit/js/common/RequestParam.js', function() {
 	console.log('RequestParam.js loading...');
 });
 
-$.getScript('./js/common/ChangeView.js', function() {
+$.getScript('./nicekit/js/common/ChangeView.js', function() {
 	console.log('ChangeView.js loading...');
 });
 
@@ -415,7 +419,8 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('GET', './reqService' +"?" +"");
+	SvcRequest.open('GET', './reqService' + "?" + "intentName" + "=" + intent + "&" + "word" + "="
+				+ parameter + "&" + "name" + "=" + appId);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
@@ -433,6 +438,8 @@ function svcReqFunction(appId, intent, parameter) {
 function svcRespProcess() {
 	if (SvcRequest.readyState == 4 && SvcRequest.status == 200) {
 		console.log("[서비스 요청] \n" + "Detail : " + SvcRequest.responseText);
-		LoginDisplay(SvcRequest.responseText);
+		var svcObj = JSON.parse(SvcRequest.responseText);
+		var resMsg = svcObj.resMsg;
+		sendTTS(resMsg);
 	}
 }

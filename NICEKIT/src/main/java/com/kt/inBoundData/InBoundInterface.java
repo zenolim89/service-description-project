@@ -60,13 +60,14 @@ public class InBoundInterface {
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
 	public JSONObject reqService(@RequestParam String intentName, @RequestParam String word, @RequestParam String name) {
 
-		String response = "";
-
-		System.out.println(intentName);
-		System.out.println(word);
-
-
-		return response;
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONObject res = new JSONObject();
+		
+		String keySpace = "domainks";
+		
+		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+		
+		return res;
 
 	}
 

@@ -167,8 +167,8 @@ function startVoice(ttstext) {
 	options.voicemsg = ttstext;
 	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			svcReqFunction('resort', 'HotelViewPage', '식음주점');
-			alert("[인식 문장] : " + extra.voicetext);
+			svcReqFunction('rsrt001', 'HotelViewPage', '식음주점');
+			alert("인식 문장 : " + extra.voicetext);
 		}
 	});
 }
@@ -254,60 +254,60 @@ gigagenie.voice.onRequestClose = function() {
  *          extra.parameter['NE-GOODBYE']; break; default: break; } } }
  */
 
-function SpeechINTRC(appId ) {
+function SpeechINTRC(appId) {
 	gigagenie.voice.onActionEvent = function(extra) {
 		var word = extra.uword;
-		alert("인식문장 : " +word);
+		alert("인식문장 : " + word);
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
-				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-AMENITY']);
+				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelCheckout':
-				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-CHECKOUT']);
+				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-CHECKOUT']);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelHelp':
-				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-QUESTIONS']);
+				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-QUESTIONS']);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelViewPage':
 				var parameter;
-				switch(extra.parameter){
-					case extra.parameter['NE-FACILITIES'] != null :
+				switch (extra.parameter) {
+					case extra.parameter['NE-FACILITIES'] != null:
 						parameter = extra.parameter['NE-FACILITIES'];
-					break;
-					case extra.parameter['NE-RESTAURANT'] != null :
+						break;
+					case extra.parameter['NE-RESTAURANT'] != null:
 						parameter = extra.parameter['NE-RESTAURANT'];
-					break;
-					case extra.parameter['NE-LEISURE'] != null :
+						break;
+					case extra.parameter['NE-LEISURE'] != null:
 						parameter = extra.parameter['NE-LEISURE'];
-					break;
-					case extra.parameter['NE-SHOPPING'] != null :
+						break;
+					case extra.parameter['NE-SHOPPING'] != null:
 						parameter = extra.parameter['NE-SHOPPING'];
-					break;
-					case extra.parameter['NE-CULTURAL'] != null :
+						break;
+					case extra.parameter['NE-CULTURAL'] != null:
 						parameter = extra.parameter['NE-CULTURAL'];
-					break;
-					case extra.parameter['NE-MEDICAL'] != null :
+						break;
+					case extra.parameter['NE-MEDICAL'] != null:
 						parameter = extra.parameter['NE-MEDICAL'];
-					break;
-					case extra.parameter['NE-RELIGION'] != null :
+						break;
+					case extra.parameter['NE-RELIGION'] != null:
 						parameter = extra.parameter['NE-RELIGION'];
-					break;
-					case extra.parameter['NE-PARTNERSHIP'] != null :
+						break;
+					case extra.parameter['NE-PARTNERSHIP'] != null:
 						parameter = extra.parameter['NE-PARTNERSHIP'];
-					break;
+						break;
 				}
-				svcReqFunction('resort', extra.actioncode, parameter);
+				svcReqFunction('rsrt001', extra.actioncode, parameter);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelWebCam':
-				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-WEBCAM']);
+				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-WEBCAM']);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelTourInfo':
-				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
+				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
 				alert("구문 해석 : " + extra.parameter);
 				break;
 			default:

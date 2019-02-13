@@ -63,7 +63,7 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
 		
-		String keySpace = "domainks";
+		String keySpace = "vendersvcks";
 		
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
 		
@@ -204,6 +204,36 @@ public class InBoundInterface {
 		}
 		return res;
 	}
+	
+	// service registration for vender
+	@RequestMapping(value = "/venderRegistration", method = RequestMethod.POST)
+	public JSONObject regiForVanerderService (InputStream body) {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String bf = null;
+		String response ="";
+		JSONObject res = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		
+		try {
+			while ( (bf = in.readLine()) != null) {
+				response += bf;
+			}
+			
+			res = parsingFrom.setVenderService(response);
+		} catch (Exception e) {
+			
+			res.put("code", "4000");
+			res.put("message", e.getMessage());
+
+			response = e.getMessage().toString();
+			
+		}
+		
+		return res;
+	}
+	
 	
 	// service create for vender
 	@RequestMapping(value = "/venderServiceCreation", method = RequestMethod.POST)

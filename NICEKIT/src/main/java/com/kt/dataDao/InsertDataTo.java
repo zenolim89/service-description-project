@@ -20,20 +20,20 @@ import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 public class InsertDataTo {
-	
+
 	ConnectToCanssandra connDB = new ConnectToCanssandra();
 	SchemaBuilderDsl builder = new SchemaBuilderDsl();
 	CreateTableFor createTable = new CreateTableFor();
-	
+
 	Cluster cluster;
 	Session session;
-	
+
 	public InsertDataTo() {
-		
+
 		cluster = connDB.getCluster();
 		session = cluster.connect();
 	}
-	
+
 	public TableMetadata checkExsitingTable ( String tableName, String ksName )
 
 	{
@@ -45,8 +45,8 @@ public class InsertDataTo {
 		return table;
 
 	}
-	
-	
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 6:05:54]
 	 * desc	: 기존 프로토콜에서 usrAuth는 제외, 그리고 클라이언트에서 hardcording으로
@@ -56,27 +56,28 @@ public class InsertDataTo {
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param desc
 	 */
 	public void insertDomainSvcTo (BaseSvcForm desc) {
-		
+
 		JSONParsingFrom parseringFrom = new JSONParsingFrom();
-		
+
 		String keySpace = "domainks";
-						
+
 		TableMetadata res = this.checkExsitingTable(desc.getDomainName(), keySpace);
-		
+
 		if (res == null) {
-			
-			createTable.createTableForCommonDomain(desc.getDomainName());
-			
+
+			createTable.createTableFor(keySpace, desc.getDomainName());
+
 		}
-		
+
 		JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
-		
-		
+
+
 		Statement query = QueryBuilder.insertInto(keySpace, desc.getDomainName())
+				.value("domainname", desc.getDomainName())
 				.value("intentname", obj.get("id").toString())
 				.value("domainid", desc.getDomainId())
 				.value("servicecode", desc.getServiceCode())
@@ -89,12 +90,56 @@ public class InsertDataTo {
 				.value("responseFormat", desc.getResStructure().toString())
 				.value("responsespec", desc.getResSpec().toString())
 				.value("dicList", obj.get("dicList").toString()).ifNotExists();
-		
+
 		ResultSet resSet = session.execute(query);
-		
+
 		System.out.println(resSet.toString());
 	}
-	
+
+	public void insertVenderSvcTo (ArrayList<BaseSvcForm> descList) {
+
+		JSONParsingFrom parseringFrom = new JSONParsingFrom();
+
+		String keySpace = "vendersvcks";
+
+		for (BaseSvcForm desc : descList) {
+
+			TableMetadata res = this.checkExsitingTable(desc.getDomainId(), keySpace);
+
+			if (res == null) {
+
+				createTable.createTableFor(keySpace, desc.getDomainId());
+
+			}
+
+			JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
+
+
+			Statement query = QueryBuilder.insertInto(keySpace, desc.getDomainId())
+					.value("domainname", desc.getDomainName())
+					.value("intentname", obj.get("id").toString())
+					.value("domainid", desc.getDomainId())
+					.value("servicecode", desc.getServiceCode())
+					.value("commURL", desc.getComURL())
+					.value("testURL", desc.getTestURL())
+					.value("method", desc.getMethod())
+					.value("datatype", desc.getDataType())
+					.value("requestformat", desc.getReqStructure().toString())
+					.value("requestspec", desc.getReqSpec().toString())
+					.value("responseFormat", desc.getResStructure().toString())
+					.value("responsespec", desc.getResSpec().toString())
+					.value("dicList", obj.get("dicList").toString()).ifNotExists();
+
+			ResultSet resSet = session.execute(query);
+
+			System.out.println(resSet.toString());
+		}
+
+
+	}
+
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오후 6:17:39]
 	 * desc	: 엑셀 양식에 따른 Intent 정보 저장
@@ -105,57 +150,57 @@ public class InsertDataTo {
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param listData
 	 */
 	public void insertDomainIntent (ArrayList<BaseIntentInfoForm> listData) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		String keySpace = "commonks";
 		String targetTable = "intentInfo";
-		
+
 		TableMetadata res = this.checkExsitingTable(targetTable, keySpace);
-		
+
 		int idx = 0;
 		Statement query;
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForDictionary();
 		}
-		
+
 		for (BaseIntentInfoForm data : listData) {
-		
+
 			ResultSet rs = selectTo.getLastRowForDicList(keySpace, targetTable);
-			
+
 			Row row = rs.one();
-						
-//			if (row == null) {
-//				
-//				idx = 1;
-//				
-//			} else {		
-//				idx = (row.getInt("seqnum")) + 1;
-//			}
-			
+
+			//			if (row == null) {
+			//				
+			//				idx = 1;
+			//				
+			//			} else {		
+			//				idx = (row.getInt("seqnum")) + 1;
+			//			}
+
 			query = QueryBuilder.insertInto(keySpace, targetTable)
-//					.value("seqNum", idx)
+					//					.value("seqNum", idx)
 					.value("intentname", data.getIntentName())
 					.value("intentDesc", data.getDesc())
 					.value("dicList", data.getArr().toString());
-			
+
 			session.execute(query);
-			
+
 		}
-		
-		
+
+
 		cluster.close();
-		 
-		
-		
-		
-		
+
+
+
+
+
 	}
 
 }

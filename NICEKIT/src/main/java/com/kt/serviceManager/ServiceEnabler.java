@@ -118,7 +118,7 @@ public class ServiceEnabler {
 
 							formatObj.replace(targetKey, word);
 							
-							System.out.println(formatObj.toString());
+							System.out.println("전달된 규격: " + formatObj.toString());
 							
 							return formatObj;
 						}
@@ -149,10 +149,37 @@ public class ServiceEnabler {
 		
 	}
 	
+	public Iterator<String> extractKeynTypeForJSON (JSONObject jsonObj) {
+		
+		ArrayList<String> keyTypes = new ArrayList<String>();
+				
+		JSONObject obj = jsonObj;
+		Set<String> keys = obj.keySet();
+		Iterator<String> iter = keys.iterator();
+		
+		while (iter.hasNext()) {
+			
+			String jsonKey = iter.next();
+			
+			
+			
+			System.out.println(obj.get(jsonKey).getClass().getSimpleName());
+			
+			
+			
+		}
+		
+		
+				
+		return iter;
+		 		
+	}
+	
+	
 	
 	public String extractValueSpecForString (JSONObject specObj, String key) {
 		
-		String valType = "spec2";
+		String valType = "spec1";
 		String derivedKey = null;
 		
 		if (valType.equals(specObj.get(key).toString())) {

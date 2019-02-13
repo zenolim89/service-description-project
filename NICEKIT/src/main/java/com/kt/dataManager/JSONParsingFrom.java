@@ -25,49 +25,49 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-	
-	
+
+
 	public JSONObject getDomainList () {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
-		
+
 		JSONArray arr = selectTo.selectDomainListToCommon();
-		
+
 		res.put("domains", arr);
-		
+
 		return res;
-		
+
 	}
-	
+
 	public ArrayList<BaseDictionarySet> parsingIntentInfo (JSONArray arr) {
-		
+
 		ArrayList<BaseDictionarySet> dicList = new ArrayList<BaseDictionarySet>();
-		
+
 		for (int i=0; i < arr.size(); i++) {
-			
+
 			BaseDictionarySet dicSet = new BaseDictionarySet();
 			JSONObject obj = (JSONObject) arr.get(i);
-			
+
 			dicSet.setDicName(obj.get("dicName").toString());
 			JSONArray wordArr = (JSONArray) obj.get("wordList");
-			
+
 			for (int j = 0; j < wordArr.size(); j++) {
-				
+
 				JSONObject wordObj = (JSONObject) wordArr.get(j);
 				dicSet.getWordList().add(wordObj.get("word").toString());
-				
+
 			}
-			
+
 			dicList.add(dicSet);
-			
+
 		}
-		
+
 		return dicList;
-		
+
 	}
-	
-	
+
+
 	// 현재는 full list를 주는 형태, 해당 부분을 이재동 박사 작업 내용이랑 선택에 의하여 호출하는 내용으로 변경 필요
 	public String getDictionaryList(String response) {
 
@@ -89,22 +89,22 @@ public class JSONParsingFrom {
 		return res;
 
 	}
-	
+
 	public JSONObject convertIntentInfo (JSONArray intentInfo) {
-		
+
 		JSONObject obj = new JSONObject();
-				
+
 		for (int i=0; i < intentInfo.size(); i++) {
-			
+
 			obj = (JSONObject) intentInfo.get(i);
-			
+
 		}
-		
+
 		return obj;
-		
+
 	}
-	
-	
+
+
 	public JSONObject setAuth(String response) {
 		JSONObject res = null;
 		try {
@@ -119,8 +119,8 @@ public class JSONParsingFrom {
 		}
 		return res;
 	}
-	
-	
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오전 10:35:27]
 	 * desc	: 도메인 사전 등록을 위한 Parser
@@ -129,62 +129,62 @@ public class JSONParsingFrom {
 	 * @return 	: JSONObject 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param response
 	 * @return
 	 */
 	public JSONObject setDomainDictionary (String response) {
-		
-		
+
+
 		InsertDataTo insertTo = new InsertDataTo();
-		
+
 		JSONObject res = new JSONObject();
-		
+
 		try {
-			
+
 			ArrayList<BaseIntentInfoForm> dicList = new ArrayList<BaseIntentInfoForm>();
 			JSONArray arr = (JSONArray) parser.parse(response);	
-			
+
 			for (int i =0; i < arr.size(); i++) {
-				
+
 				BaseIntentInfoForm dicForm = new BaseIntentInfoForm();
-				
+
 				JSONObject obj = (JSONObject) arr.get(i);
-				
-				
+
+
 				// read last number of table and then add number
-								
+
 				dicForm.setIntentName(obj.get("id").toString());
 				dicForm.setDesc(obj.get("desc").toString());
 				dicForm.setArr((JSONArray) obj.get("dicList"));
-				
+
 				dicList.add(dicForm);
-				
+
 			}
-			
+
 			insertTo.insertDomainIntent(dicList);
-			
+
 			res.put("resCode", "2001");
 			res.put("resMsg", "정상적으로 등록되었습니다");
-		
-			
+
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			
+
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
-			
+
 			e.printStackTrace();
 		}
-		
-		
-		return res;
-		
-		
-	}
-	
 
-	
+
+		return res;
+
+
+	}
+
+
+
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
@@ -194,31 +194,31 @@ public class JSONParsingFrom {
 	 * @return 	: JSONObject 
 	 * @throws 	: 
 	 * @see		: BaseScvForm, InsertDataTo, ErrorCodeList
-	
+
 	 * @param response
 	 * @return
 	 */
 	public JSONObject setDomainService(String response) {
-		
+
 		BaseSvcForm resSvcDesc = new BaseSvcForm(); //domainservice form으로 변경 필요
 		InsertDataTo insData = new InsertDataTo();
 		ErrorCodeList error = new ErrorCodeList();
-		
+
 		// need to define result value
 		JSONObject res = new JSONObject();
-		
-		
+
+
 		try {
-			
+
 			JSONObject resObj = (JSONObject) parser.parse(response);
-			
+
 			resSvcDesc.setComURL(resObj.get("comUrl").toString());
 			resSvcDesc.setDataType(resObj.get("dataType").toString());
 			resSvcDesc.setIntentInfo((JSONArray) resObj.get("intentInfo"));
 			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
 			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));
 			resSvcDesc.setMethod(resObj.get("method").toString());
-//			resSvcDesc.setProtType(resObj.get("protocolType").toString());
+			//			resSvcDesc.setProtType(resObj.get("protocolType").toString());
 			resSvcDesc.setReqSpec((JSONArray) resObj.get("reqSpec"));
 			resSvcDesc.setReqStructure((JSONArray) resObj.get("reqStructure"));
 			resSvcDesc.setResSpec((JSONArray) resObj.get("resSpec"));
@@ -228,24 +228,90 @@ public class JSONParsingFrom {
 			resSvcDesc.setTestURL(resObj.get("testUrl").toString());
 			resSvcDesc.setDomainName(resObj.get("domainName").toString());
 			resSvcDesc.setDomainId(resObj.get("domainId").toString());
-			
+
 			insData.insertDomainSvcTo(resSvcDesc);
+
+			res.put("resCode", "2001");
+			res.put("resMsg", error.getErrorCodeList().get("2001"));
+
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+
+			e.printStackTrace();
+		}
+
+
+		return res;
+	}
+
+	public JSONObject setVenderService (String response) {
+
+		ArrayList<BaseSvcForm> descList = new ArrayList<BaseSvcForm>();
+		InsertDataTo inserTo = new InsertDataTo();
+
+		ErrorCodeList error = new ErrorCodeList();
+
+		// need to define result value
+		JSONObject res = new JSONObject();
+
+		try {
+
+			JSONObject obj = (JSONObject) parser.parse(response);
+			JSONArray arr = (JSONArray) obj.get("svcList");
+
+			for (int arrRow = 0; arrRow < arr.size(); arrRow++) {
+
+				BaseSvcForm resSvcDesc = new BaseSvcForm();
+
+				JSONObject descObj = (JSONObject) arr.get(arrRow);
+
+				resSvcDesc.setComURL(descObj.get("comUrl").toString());
+				resSvcDesc.setDataType(descObj.get("dataType").toString());
+				resSvcDesc.setIntentInfo((JSONArray) descObj.get("intentInfo"));
+				resSvcDesc.setInterfaceType(descObj.get("interfaceType").toString());
+				resSvcDesc.setHeaderInfo((JSONArray) descObj.get("headerInfo"));
+				resSvcDesc.setMethod(descObj.get("method").toString());
+				resSvcDesc.setReqSpec((JSONArray) descObj.get("reqSpec"));
+				resSvcDesc.setReqStructure((JSONArray) descObj.get("reqStructure"));
+				resSvcDesc.setResSpec((JSONArray) descObj.get("resSpec"));
+				resSvcDesc.setResStructure((JSONArray) descObj.get("resStructure"));
+				resSvcDesc.setServiceCode(descObj.get("serviceCode").toString());
+				resSvcDesc.setServiceDesc(descObj.get("serviceDesc").toString());
+				resSvcDesc.setTestURL(descObj.get("testUrl").toString());
+				resSvcDesc.setDomainName(descObj.get("domainName").toString());
+				resSvcDesc.setDomainId(descObj.get("domainId").toString());
+
+				descList.add(resSvcDesc);
+			}
 			
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
 			
+			inserTo.insertVenderSvcTo(descList);
 			
-		} catch (ParseException e) {
+			
+			
+			
+			
+			
+		}catch (ParseException e) {
 			// TODO Auto-generated catch block
-			
+
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
-			
+
 			e.printStackTrace();
 		}
-		
-		
+
 		return res;
+
 	}
 
+
+
 }
+

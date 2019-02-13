@@ -17,40 +17,39 @@ import com.typesafe.config.ConfigException.Parse;
 import ch.qos.logback.core.pattern.parser.Parser;
 
 public class CreateTableFor {
-	
+
 	ConnectToCanssandra connDB = new ConnectToCanssandra();
 	SchemaBuilderDsl builder = new SchemaBuilderDsl();
-	
+
 	Cluster cluster;
 	Session session;
-	
+
 	public CreateTableFor() {
-		
+
 		cluster = connDB.getCluster();
 		session = cluster.connect();
 	}
-	
-		
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 3:42:10]
-	 * desc	: 도메인 정보에 따른 신규 테이블 생성 명렁
-	 * 또한, 해당 명렁을 도메인 공통 테이블 생성으로할지, 범용으로 할지 고려해야함 (To do)
-	 * 현재는 지정하여 각 컬럼을 정의하였으나, 이후에는 범용적 생성 방법을 고려해야함
-	 * 예를 들면 프로파일을 불러와서 각각의 컬럼을 정의
-	 * 이유는 도메인마다 가지는 특이한 컬럼이 있을 것이기 때문 (예: 호텔-방번호, 타입 등)
+	 * desc	: 테이블 생성 메소드
+	 * 현재는 정의된 컬럼명으로 테이블을 생성하지만, 이후 동적으로 테이블 생성이 필요함
+	 * 예를 들면 기존 사업장을 기준으로 확장 하는 것등
 	 * @version	:0.1
 	 * @param	: 
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param ks(keySpace 이름)
 	 * @param id(도메인 아이디)
 	 */
-	public void createTableForCommonDomain (String domainname) {
-		
-		CreateTable create = ((CreateTable) builder.createTable("domainks", domainname).ifNotExists())
+	public void createTableFor (String ksName, String tableName) {
+
+		CreateTable create = ((CreateTable) builder.createTable(ksName, tableName).ifNotExists())
 				.withClusteringColumn("intentname", DataTypes.TEXT)
+				.withColumn("domainname", DataTypes.TEXT)
 				.withColumn("domainid", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)
@@ -62,14 +61,39 @@ public class CreateTableFor {
 				.withColumn("responseFormat", DataTypes.TEXT)
 				.withColumn("responsespec", DataTypes.TEXT)
 				.withColumn("dicList", DataTypes.TEXT);
-		
+
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
-		
+
 		cluster.close();
-		
+
 	}
-	
+
+//	public void createTableForVender (String id) {
+//
+//		CreateTable create = ((CreateTable) builder.createTable("vendersvcks", id).ifNotExists())
+//				.withClusteringColumn("intentname", DataTypes.TEXT)
+//				.withColumn("domainid", DataTypes.TEXT)
+//				.withPartitionKey("servicecode", DataTypes.TEXT)
+//				.withColumn("commURL", DataTypes.TEXT)
+//				.withColumn("testURL", DataTypes.TEXT)
+//				.withColumn("method", DataTypes.TEXT)
+//				.withColumn("datatype", DataTypes.TEXT)
+//				.withColumn("requestformat", DataTypes.TEXT)
+//				.withColumn("requestspec", DataTypes.TEXT)
+//				.withColumn("responseFormat", DataTypes.TEXT)
+//				.withColumn("responsespec", DataTypes.TEXT)
+//				.withColumn("dicList", DataTypes.TEXT);
+//
+//		SimpleStatement query = new SimpleStatement(create.toString());
+//		session.execute(query);
+//
+//		cluster.close();
+//
+//	}
+
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 3:54:00]
 	 * desc	: 사업장 서비스 테이블 생성
@@ -81,11 +105,11 @@ public class CreateTableFor {
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param id
 	 */
 	public void createTableForVenderService (String venderId) {
-		
+
 		CreateTable create = ((CreateTable) builder.createTable("ownserviceks", venderId).ifNotExists())
 
 				.withColumn("vendername", DataTypes.TEXT)
@@ -100,17 +124,17 @@ public class CreateTableFor {
 				.withColumn("responseFormat", DataTypes.TEXT)
 				.withColumn("responsespec", DataTypes.TEXT)
 				.withColumn("dicList", DataTypes.TEXT);
-				
-		
+
+
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
-		
+
 		cluster.close();
-						
-		
-		
+
+
+
 	}
-	
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오전 11:10:53]
 	 * desc	: 도메인별 어휘 사전 테이블 생성
@@ -119,34 +143,34 @@ public class CreateTableFor {
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 * @param dicList
 	 */
 	public void createTableForDictionary () {
-		
-			
+
+
 		CreateTable create = (CreateTable) builder.createTable("commonks","intentInfo")
 				.ifNotExists()
 				.withPartitionKey("intentname", DataTypes.TEXT)
-//				.withClusteringColumn("seqnum", DataTypes.INT)
+				//				.withClusteringColumn("seqnum", DataTypes.INT)
 				.withColumn("intentDesc", DataTypes.TEXT)
 				.withColumn("dicList", DataTypes.TEXT);
-				
-//				.withClusteringOrder("seqnum", ClusteringOrder.DESC);
-						
-		
+
+		//				.withClusteringOrder("seqnum", ClusteringOrder.DESC);
+
+
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
-		
+
 		cluster.close();
-		
+
 	}
-	
-		
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
 }

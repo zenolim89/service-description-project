@@ -78,20 +78,21 @@ public class ServiceEnabler {
 		obj.put("resMsg", "해당 요청을 수행하였습니다");
 		
 		
+		obj = this.createRequestFormat(desc.getReqStructure(), desc.getReqSpec(), word);
+		
+		
 		return obj;
 		
 		
 	}
 	
-	public void createRequestFormat (JSONArray reqFormat, JSONArray reqSpec, String word) {
+	public JSONObject createRequestFormat (JSONArray reqFormat, JSONArray reqSpec, String word) {
 		
-		JSONObject specObj = new JSONObject();
+		JSONObject formatObj = new JSONObject();
 		
-		
-		
-		for (int i = 0; i < reqFormat.size(); i++ ) {
+		for (int specRowNum = 0; specRowNum < reqSpec.size(); specRowNum++ ) {
 			
-			specObj = (JSONObject) reqFormat.get(i);
+			JSONObject specObj  = (JSONObject) reqSpec.get(specRowNum);
 			
 			Set<String> keys = specObj.keySet(); 
 			
@@ -101,28 +102,57 @@ public class ServiceEnabler {
 				
 				String resKey = iter.next();
 				
-				if ( (specObj.get(resKey).getClass().getName()).equals("JSONObject")) {
+				String jsonType = specObj.get(resKey).getClass().getSimpleName();
+				
+				System.out.println( specRowNum + "행 Type은: " + jsonType );
+				
+				if ( jsonType.equals("String")) {
 					
+					String targetKey = this.extractValueSpecForString(specObj, resKey);
 					
+					if ( !(targetKey.equals(null)) ) {
+						
+						for (int formatRowNum=0; formatRowNum < reqFormat.size(); formatRowNum++) {
+							
+							formatObj = (JSONObject) reqFormat.get(specRowNum);
+
+							formatObj.replace(targetKey, word);
+							
+							System.out.println(formatObj.toString());
+							
+							return formatObj;
+						}
+					}
 					
+				} else if (jsonType.equals("JSONArray")) {
+					
+					JSONArray arr = (JSONArray) specObj.get(resKey);
+					JSONArray resArr = new JSONArray();
+					
+					for (int arrRowNum=0; arrRowNum < arr.size(); arrRowNum++) {
+						
+						JSONObject obj = (JSONObject) arr.get(arrRowNum);
+						
+						resArr = this.extractValueSpecForArr(obj, word);
+						
+					}
 					
 				}
-				
-				
 				
 			}
 			
 			
 		}
 		
+		return formatObj;
 		
 		
 	}
 	
 	
-	public String extractValueSpecForObj (JSONObject specObj, String key) {
+	public String extractValueSpecForString (JSONObject specObj, String key) {
 		
-		String valType = "spec1";
+		String valType = "spec2";
 		String derivedKey = null;
 		
 		if (valType.equals(specObj.get(key).toString())) {
@@ -131,6 +161,18 @@ public class ServiceEnabler {
 		} 
 		
 		return derivedKey;
+	}
+	
+	public JSONArray extractValueSpecForArr (JSONObject obj, String word) {
+		
+		JSONArray arr = new JSONArray();
+		
+//		Set<String> keys = 
+		
+		
+		return arr;
+		
+		
 	}
 	
 

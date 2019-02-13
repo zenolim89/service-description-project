@@ -441,5 +441,6 @@ function svcRespProcess() {
 		var svcObj = JSON.parse(SvcRequest.responseText);
 		var resMsg = svcObj.resMsg;
 		sendTTS(resMsg);
+		alert("요청 응답 : " + SvcRequest.responseText);
 	}
 }

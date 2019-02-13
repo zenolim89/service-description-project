@@ -167,7 +167,7 @@ function startVoice(ttstext) {
 	options.voicemsg = ttstext;
 	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			svcReqFunction('resort', 'HotelViewPage','식음주점');
+			svcReqFunction('resort', 'HotelViewPage', '식음주점');
 			alert("[인식 문장] : " + extra.voicetext);
 		}
 	});
@@ -254,23 +254,61 @@ gigagenie.voice.onRequestClose = function() {
  *          extra.parameter['NE-GOODBYE']; break; default: break; } } }
  */
 
-function SpeechINTRC(appId) {
+function SpeechINTRC(appId ) {
 	gigagenie.voice.onActionEvent = function(extra) {
 		var word = extra.uword;
-		alert(word);
+		alert("인식문장 : " +word);
 		switch (extra.actioncode) {
-			case 'HELLOGENIE':
-				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-HELLO']);
-				sendTTS("전송 요청");
+			case 'HotelAmenityItem':
+				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-AMENITY']);
+				alert("구문 해석 : " + extra.parameter);
 				break;
-			case 'GOODBYEGENIE':
-				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
-				sendTTS("전송 요청");
+			case 'HotelCheckout':
+				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-CHECKOUT']);
+				alert("구문 해석 : " + extra.parameter);
+				break;
+			case 'HotelHelp':
+				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-QUESTIONS']);
+				alert("구문 해석 : " + extra.parameter);
 				break;
 			case 'HotelViewPage':
-				//svcReqFunction(appId, extra.actioncode, extra.parameter['NE-GOODBYE']);
-				alert( extra.parameter['NE-FACILITIES']);
-				sendTTS("전송 요청");
+				var parameter;
+				switch(extra.parameter){
+					case extra.parameter['NE-FACILITIES'] != null :
+						parameter = extra.parameter['NE-FACILITIES'];
+					break;
+					case extra.parameter['NE-RESTAURANT'] != null :
+						parameter = extra.parameter['NE-RESTAURANT'];
+					break;
+					case extra.parameter['NE-LEISURE'] != null :
+						parameter = extra.parameter['NE-LEISURE'];
+					break;
+					case extra.parameter['NE-SHOPPING'] != null :
+						parameter = extra.parameter['NE-SHOPPING'];
+					break;
+					case extra.parameter['NE-CULTURAL'] != null :
+						parameter = extra.parameter['NE-CULTURAL'];
+					break;
+					case extra.parameter['NE-MEDICAL'] != null :
+						parameter = extra.parameter['NE-MEDICAL'];
+					break;
+					case extra.parameter['NE-RELIGION'] != null :
+						parameter = extra.parameter['NE-RELIGION'];
+					break;
+					case extra.parameter['NE-PARTNERSHIP'] != null :
+						parameter = extra.parameter['NE-PARTNERSHIP'];
+					break;
+				}
+				svcReqFunction('resort', extra.actioncode, parameter);
+				alert("구문 해석 : " + extra.parameter);
+				break;
+			case 'HotelWebCam':
+				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-WEBCAM']);
+				alert("구문 해석 : " + extra.parameter);
+				break;
+			case 'HotelTourInfo':
+				svcReqFunction('resort', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
+				alert("구문 해석 : " + extra.parameter);
 				break;
 			default:
 				sendTTS("전송실패");

@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.kt.dataForms.DiscoveredServiceDESC;
+import com.kt.dataForms.ExtractionKeynTypeForJSON;
 
 public class ServiceEnabler {
 
@@ -78,7 +79,7 @@ public class ServiceEnabler {
 		obj.put("resMsg", "해당 요청을 수행하였습니다");
 		
 		
-		obj = this.createRequestFormat(desc.getReqStructure(), desc.getReqSpec(), word);
+//		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		
 		
 		return obj;
@@ -86,7 +87,7 @@ public class ServiceEnabler {
 		
 	}
 	
-	public JSONObject createRequestFormat (JSONArray reqFormat, JSONArray reqSpec, String word) {
+	public JSONObject createReqFormat (JSONArray reqFormat, JSONArray reqSpec, String word) {
 		
 		JSONObject formatObj = new JSONObject();
 		
@@ -149,9 +150,9 @@ public class ServiceEnabler {
 		
 	}
 	
-	public Iterator<String> extractKeynTypeForJSON (JSONObject jsonObj) {
+	public ArrayList<ExtractionKeynTypeForJSON> extractKeynTypeForJSON (JSONObject jsonObj) {
 		
-		ArrayList<String> keyTypes = new ArrayList<String>();
+		ArrayList<ExtractionKeynTypeForJSON> extractList = new ArrayList<ExtractionKeynTypeForJSON>();
 				
 		JSONObject obj = jsonObj;
 		Set<String> keys = obj.keySet();
@@ -159,19 +160,19 @@ public class ServiceEnabler {
 		
 		while (iter.hasNext()) {
 			
-			String jsonKey = iter.next();
+			ExtractionKeynTypeForJSON knt = new ExtractionKeynTypeForJSON();
 			
+			knt.setKey(iter.next());
+//			/
 			
+			String getKey = iter.next();
 			
-			System.out.println(obj.get(jsonKey).getClass().getSimpleName());
-			
-			
+		
 			
 		}
 		
-		
 				
-		return iter;
+		return extractList;
 		 		
 	}
 	

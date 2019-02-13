@@ -1313,11 +1313,11 @@ function validationData() {
 		}
 
 		var reSIsData = saveData[method]["response"]["isData"];
-		var reqOriginData = saveData[method]["response"]["originData"];
-		var reqSpecData = saveData[method]["response"]["specData"];
+		var resOriginData = saveData[method]["response"]["originData"];
+		var resSpecData = saveData[method]["response"]["specData"];
 		if (reSIsData
-					&& (!Utils.isEmptyParams(reqOriginData) && !Utils
-								.isEmptyParams(reqSpecData))) {
+					&& (!Utils.isEmptyParams(resOriginData) && !Utils
+								.isEmptyParams(resSpecData))) {
 			// 
 		}
 		else {
@@ -1335,8 +1335,8 @@ function validationData() {
 		parameters["dataType"] = parameters["dataType"];
 		parameters["reqStructure"] = reqOriginData;
 		parameters["reqSpec"] = reqSpecData;
-		parameters["resStructure"] = reqOriginData;
-		parameters["resSpec"] = reqSpecData;
+		parameters["resStructure"] = resOriginData;
+		parameters["resSpec"] = resSpecData;
 
 		Utils.log(DEBUG, "validationData.parameters", parameters);
 		return parameters;

@@ -1,0 +1,285 @@
+@import
+	url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+	;
+
+body {
+	font: 16px/1.8 Arial, Helvetica, sans-serif;
+}
+
+label {
+	width: 15%;
+	height: 30px;
+	display: inline-block;
+}
+
+table.mainType {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	border-top: 1px solid #ccc;
+	border-left: 3px solid #c3373a;
+	margin: 20px 10px;
+}
+
+table.mainType th {
+	width: 20%;
+	padding: 10px;
+	font-weight: bold;
+	vertical-align: top;
+	color: #333;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+table.mainType td {
+	width: 80%;
+	padding: 10px;
+	vertical-align: top;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+table.subType {
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	margin: 5px 5px;
+}
+
+table.subType th {
+	width: 150px;
+	padding: 2px;
+	font-weight: bold;
+	vertical-align: top;
+	border: 1px solid #fff;
+}
+
+table.subType td {
+	width: 350px;
+	padding: 2px;
+	vertical-align: top;
+	border: 1px solid #fff;
+}
+
+.frame {
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid #aaa;
+}
+
+.hheader {
+	padding: 20px 15px;
+	height: 100px;
+	background:
+		url(https://apilink.kt.co.kr/images/img_GIGAGENIE_visual01.jpg)
+		no-repeat center top;
+	background-size: cover;
+}
+
+.logo {
+	font-size: 2em;
+	font-weight: bold;
+	color: #fff;
+	padding: 0 10px;
+}
+
+.login {
+	width: 50%;
+	padding: 2px;
+	vertical-align: top;
+}
+
+.containerpage {
+	display: table;
+}
+
+.nav {
+	display: table-cell;
+	width: 300px;
+	background: #333;
+	color: #fff;
+	margin-right: 20px;
+}
+
+.nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 10px;
+}
+
+.nav-item {
+	margin: 4px;
+	padding: 10px;
+}
+
+.nav-link {
+	display: block;
+	text-decoration: none;
+	padding: 10px 10px;
+	color: #fff;
+}
+
+.nav-link:hover {
+	background: #364b50;
+}
+
+.content {
+	display: table-cell;
+	width: 1600px;
+	padding: 20px 50px;
+}
+
+.footer {
+	text-align: center;
+	border-top: 1px solid #aaa;
+	margin: 20px 20px 0;
+	padding: 20px 0px;
+	font-size: 12px;
+}
+
+.form-control {
+	display: block;
+	width: 100%;
+	height: 35px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6);
+}
+
+.form-control::-moz-placeholder {
+	color: #999;
+	opacity: 1;
+}
+
+.form-control:-ms-input-placeholder {
+	color: #999;
+}
+
+.form-control::-webkit-input-placeholder {
+	color: #999;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
+	{
+	cursor: not-allowed;
+	background-color: #eee;
+	opacity: 1;
+}
+
+textarea.form-control {
+	height: auto;
+}
+
+label {
+	position: relative;
+	cursor: pointer;
+	color: #666;
+	font-size: 15px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+	position: absolute;
+	right: 9000px;
+}
+
+/*Check box*/
+input[type="checkbox"]+.label-text:before {
+	content: "\f096";
+	font-family: "FontAwesome";
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	width: 1em;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+input[type="checkbox"]:checked+.label-text:before {
+	content: "\f14a";
+	color: #666;
+	animation: effect 250ms ease-in;
+}
+
+input[type="checkbox"]:disabled+.label-text {
+	color: #ccc;
+}
+
+input[type="checkbox"]:disabled+.label-text:before {
+	content: "\f0c8";
+	color: #aaa;
+}
+
+/*Radio box*/
+input[type="radio"]+.label-text:before {
+	content: "\f10c";
+	font-family: "FontAwesome";
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	width: 1em;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+input[type="radio"]:checked+.label-text:before {
+	content: "\f192";
+	color: #666;
+	animation: effect 250ms ease-in;
+}
+
+input[type="radio"]:disabled+.label-text {
+	color: #ccc;
+}
+
+input[type="radio"]:disabled+.label-text:before {
+	content: "\f111";
+	color: #aaa;
+}
+
+/* nbware */
+.ai_b2b_form .frm_tb.spec_div > ul > li :not(.ctrl){
+border :0px solid #ccc;
+}
+.ai_b2b_form .btns {
+	padding-left: 0px;
+}
+
+.ai_b2b_form .frm.req {
+	border-top: 0px solid #333;
+	padding-top: 0px;
+}
+
+.ai_b2b_form .frm.header {
+	border-top: 1px solid #333;
+	margin-top: 20px;
+	padding-top: 20px;
+}

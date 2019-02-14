@@ -257,7 +257,7 @@ gigagenie.voice.onRequestClose = function() {
 function SpeechINTRC(appId) {
 	gigagenie.voice.onActionEvent = function(extra) {
 		var sentence = extra.uword;
-		alert("인식문장 : " + sentence);
+		alert("인식문장 : " + sentence); //발화 문장
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);

@@ -50,6 +50,7 @@ function handleFile(e) {
 			console.log("workbook : " + JSON.stringify(workbook));
 			/* 워크북 처리 */
 			workbook.SheetNames.forEach(function(item, index, array) {
+				console.log("workbook item : " + item);
 				var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
 // var csv = XLSX.utils.sheet_to_csv(workbook.Sheets[item]);
 // var html = XLSX.utils.sheet_to_html(workbook.Sheets[item]);

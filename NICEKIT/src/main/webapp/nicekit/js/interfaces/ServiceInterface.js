@@ -261,15 +261,15 @@ function SpeechINTRC(appId) {
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelCheckout':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-CHECKOUT']);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelHelp':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-QUESTIONS']);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelViewPage':
 				var parameter;
@@ -300,15 +300,15 @@ function SpeechINTRC(appId) {
 						break;
 				}
 				svcReqFunction('rsrt001', extra.actioncode, parameter);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelWebCam':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-WEBCAM']);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelTourInfo':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
-				alert("구문 해석 : " + extra.parameter);
+				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:
 				sendTTS("전송실패");

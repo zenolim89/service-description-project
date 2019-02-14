@@ -47,32 +47,41 @@ function handleFile(e) {
 					type : 'base64'
 				});
 			}// end. if
-			console.log("workbook : " + JSON.stringify(workbook));
 			/* 워크북 처리 */
-			workbook.SheetNames.forEach(function(item, index, array) {
-				console.log("workbook item : " + item);
-				var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
+			workbook.SheetNames
+						.forEach(function(item, index, array) {
+
+							var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
 // var csv = XLSX.utils.sheet_to_csv(workbook.Sheets[item]);
 // var html = XLSX.utils.sheet_to_html(workbook.Sheets[item]);
 // var formulae = XLSX.utils .sheet_to_formulae(workbook.Sheets[item]);
 
-				if (index == 1) { // 첫번째 시트
-					$("#first_sheet_check").append(
-								"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
-											+ json.length + "건, 실패 " + "0건");
-					$("#first_sheet_output").append(
-								JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
-					setIntentSheet(json);
-				}
-				else if (index == 2) { // 두번째 시트
-					$("#second_sheet_check").append(
-								"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
-											+ json.length + "건, 실패 " + "0건");
-					$("#second_sheet_output").append(
-								JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
-					setIntentDataforReg(json);
-				}
-			});// end. forEach
+							if (index == 1) { // 첫번째 시트
+								console.log("workbook item : "
+											+ JSON.stringify(workbook.Sheets[item]['!ref'])); // 엑셀
+																								// 데이터
+																								// 범위
+
+								$("#first_sheet_check").append(
+											"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
+														+ json.length + "건, 실패 " + "0건");
+								$("#first_sheet_output").append(
+											JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
+								setIntentSheet(json);
+							}
+							else if (index == 2) { // 두번째 시트
+								console.log("workbook item : "
+											+ JSON.stringify(workbook.Sheets[item]['!ref'])); // 엑셀
+																								// 데이터
+																								// 범위
+								$("#second_sheet_check").append(
+											"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
+														+ json.length + "건, 실패 " + "0건");
+								$("#second_sheet_output").append(
+											JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
+								setIntentDataforReg(json);
+							}
+						});// end. forEach
 		}; // end onload
 
 		if (rABS)

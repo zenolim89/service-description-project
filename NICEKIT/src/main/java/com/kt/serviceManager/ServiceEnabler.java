@@ -164,14 +164,11 @@ public class ServiceEnabler {
 			ExtractionKeynTypeForJSON knt = new ExtractionKeynTypeForJSON();
 			
 			knt.setKey(iter.next());
-//			/
+			knt.setType(obj.get(iter.next()).getClass().getSimpleName());
 			
-			String getKey = iter.next();
-			
-		
+			extractList.add(knt);
 			
 		}
-		
 				
 		return extractList;
 		 		

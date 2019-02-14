@@ -38,7 +38,7 @@ public class ServiceEnabler {
 				} else {
 
 					res.put("resCode", "404");
-					res.put("resMsg", "해당 서비스를 찾을 수 없습니다");
+					res.put("resMsg", "요청하신 " + word + "관련 서비스를 찾을 수 없습니다 확인 후 다시 말씀해주세요");
 					
 				}
 				
@@ -76,10 +76,10 @@ public class ServiceEnabler {
 		// set을 통한 스펙값과 전송 규격값 확인 및 데이터 변환
 		 
 		obj.put("resCode", "201");
-		obj.put("resMsg", "해당 요청을 수행하였습니다");
+		obj.put("resMsg", "요청하신 " + word + "서비스를 요청하였습니다");
 		
 		
-//		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
+		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		
 		
 		return obj;
@@ -105,7 +105,7 @@ public class ServiceEnabler {
 				
 				String jsonType = specObj.get(resKey).getClass().getSimpleName();
 				
-				System.out.println( specRowNum + "행 Type은: " + jsonType );
+				System.out.println( "[DEBUG] " + specRowNum + "행 Type은: " + jsonType );
 				
 				if ( jsonType.equals("String")) {
 					
@@ -119,9 +119,8 @@ public class ServiceEnabler {
 
 							formatObj.replace(targetKey, word);
 							
-							System.out.println("전달된 규격: " + formatObj.toString());
+							System.out.println("[DEBUG] 변경된 규격: " + formatObj.toString());
 							
-							return formatObj;
 						}
 					}
 					
@@ -144,6 +143,8 @@ public class ServiceEnabler {
 			
 			
 		}
+		
+		System.out.println("[NOTIFICATION] 최종 생성된 규격 :" + formatObj.toJSONString());
 		
 		return formatObj;
 		

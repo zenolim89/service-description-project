@@ -65,6 +65,8 @@ public class InBoundInterface {
 		
 		String keySpace = "vendersvcks";
 		
+		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
+		
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
 		
 		return res;
@@ -99,6 +101,7 @@ public class InBoundInterface {
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
 			
+						
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

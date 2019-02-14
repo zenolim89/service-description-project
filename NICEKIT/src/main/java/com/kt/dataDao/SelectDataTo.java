@@ -64,18 +64,23 @@ public class SelectDataTo {
 				desc.setResStructure( (JSONArray) parser.parse(r.getString("responseformat")));
 				desc.setResSpec( (JSONArray) parser.parse(r.getString("responsespec")));
 				desc.setDicList( (JSONArray) parser.parse(r.getString("diclist")));
-				
+
 				resObj = enabler.discoverMatchingWord(desc, word);
 
 			}
-			
-			
+
+			resObj.put("resCode", "404");
+			resObj.put("resMsg", "해당 서비스는 지원하지 않습니다");
+
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+
+
 		};
-		
-				
+
+
 		return resObj;
 	}
 

@@ -256,8 +256,8 @@ gigagenie.voice.onRequestClose = function() {
 
 function SpeechINTRC(appId) {
 	gigagenie.voice.onActionEvent = function(extra) {
-		var word = extra.uword;
-		alert("인식문장 : " + word);
+		var sentence = extra.uword;
+		alert("인식문장 : " + sentence);
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
@@ -273,32 +273,24 @@ function SpeechINTRC(appId) {
 				break;
 			case 'HotelViewPage':
 				var parameter;
-				switch (extra.parameter) {
-					case extra.parameter['NE-FACILITIES'] != null:
-						parameter = extra.parameter['NE-FACILITIES'];
-						break;
-					case extra.parameter['NE-RESTAURANT'] != null:
-						parameter = extra.parameter['NE-RESTAURANT'];
-						break;
-					case extra.parameter['NE-LEISURE'] != null:
-						parameter = extra.parameter['NE-LEISURE'];
-						break;
-					case extra.parameter['NE-SHOPPING'] != null:
-						parameter = extra.parameter['NE-SHOPPING'];
-						break;
-					case extra.parameter['NE-CULTURAL'] != null:
-						parameter = extra.parameter['NE-CULTURAL'];
-						break;
-					case extra.parameter['NE-MEDICAL'] != null:
-						parameter = extra.parameter['NE-MEDICAL'];
-						break;
-					case extra.parameter['NE-RELIGION'] != null:
-						parameter = extra.parameter['NE-RELIGION'];
-						break;
-					case extra.parameter['NE-PARTNERSHIP'] != null:
-						parameter = extra.parameter['NE-PARTNERSHIP'];
-						break;
-				}
+				if (extra.parameter.hasOwnProperty('NE-SERVICEMENU'))
+					parameter = extra.parameter['NE-SERVICEMENU'];
+				else if (extra.parameter.hasOwnProperty('NE-FACILITIES'))
+					parameter = extra.parameter['NE-FACILITIES'];
+				else if (extra.parameter.hasOwnProperty('NE-RESTAURANT'))
+					parameter = extra.parameter['NE-RESTAURANT'];
+				else if (extra.parameter.hasOwnProperty('NE-LEISURE'))
+					parameter = extra.parameter['NE-LEISURE'];
+				else if (extra.parameter.hasOwnProperty('NE-SHOPPING'))
+					parameter = extra.parameter['NE-SHOPPING'];
+				else if (extra.parameter.hasOwnProperty('NE-CULTURAL'))
+					parameter = extra.parameter['NE-CULTURAL'];
+				else if (extra.parameter.hasOwnProperty('NE-MEDICAL'))
+					parameter = extra.parameter['NE-MEDICAL'];
+				else if (extra.parameter.hasOwnProperty('NE-RELIGION'))
+					parameter = extra.parameter['NE-RELIGION'];
+				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
+					parameter = extra.parameter['NE-PARTNERSHIP'];
 				svcReqFunction('rsrt001', extra.actioncode, parameter);
 				alert("구문 해석 : " + JSON.stringify(extra.parameter));
 				break;

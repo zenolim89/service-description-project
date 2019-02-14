@@ -25,7 +25,7 @@ public class ConnectToCanssandra {
 	public ConnectToCanssandra() {
 
 		clu = Cluster.builder()
-				.addContactPoint("218.145.218.216")
+				.addContactPoint("222.107.124.9")
 				.build();
 
 	}

@@ -69,10 +69,6 @@ public class SelectDataTo {
 
 			}
 
-			resObj.put("resCode", "404");
-			resObj.put("resMsg", "해당 서비스는 지원하지 않습니다");
-
-
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

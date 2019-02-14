@@ -111,31 +111,31 @@ public class ServiceEnabler {
 					
 					String targetKey = this.extractValueSpecForString(specObj, resKey);
 					
-					if ( !(targetKey.equals(null)) ) {
+					if( targetKey != null) {
 						
 						for (int formatRowNum=0; formatRowNum < reqFormat.size(); formatRowNum++) {
 							
 							formatObj = (JSONObject) reqFormat.get(specRowNum);
 
 							formatObj.replace(targetKey, word);
-							
+							System.out.println("[DEBUG 포멧 스펙: " + specObj.toString());
 							System.out.println("[DEBUG] 변경된 규격: " + formatObj.toString());
 							
 						}
-					}
+					} 
 					
 				} else if (jsonType.equals("JSONArray")) {
 					
-					JSONArray arr = (JSONArray) specObj.get(resKey);
-					JSONArray resArr = new JSONArray();
-					
-					for (int arrRowNum=0; arrRowNum < arr.size(); arrRowNum++) {
-						
-						JSONObject obj = (JSONObject) arr.get(arrRowNum);
-						
-						resArr = this.extractValueSpecForArr(obj, word);
-						
-					}
+//					JSONArray arr = (JSONArray) specObj.get(resKey);
+//					JSONArray resArr = new JSONArray();
+//					
+//					for (int arrRowNum=0; arrRowNum < arr.size(); arrRowNum++) {
+//						
+//						JSONObject obj = (JSONObject) arr.get(arrRowNum);
+//						
+//						resArr = this.extractValueSpecForArr(obj, word);
+//						
+//					}
 					
 				}
 				
@@ -178,7 +178,7 @@ public class ServiceEnabler {
 	
 	public String extractValueSpecForString (JSONObject specObj, String key) {
 		
-		String valType = "spec1";
+		String valType = "spec2";
 		String derivedKey = null;
 		
 		if (valType.equals(specObj.get(key).toString())) {

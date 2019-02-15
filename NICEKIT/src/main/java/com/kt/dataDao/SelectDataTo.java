@@ -44,6 +44,13 @@ public class SelectDataTo {
 		ResultSet set = session.execute(query);
 
 		List<Row> rowList = set.all();
+		
+		if( rowList.size() == 0) {
+			resObj.put("resCode", "404");
+			resObj.put("resMsg", "요청하신 " + word + "관련 서비스를 찾을 수 없습니다 확인 후 다시 말씀해주세요");
+			
+			System.out.println("[DEBUG] : 어휘 검색결과가 없음");
+		}
 
 		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
 

@@ -40,6 +40,8 @@ public class ServiceEnabler {
 					res.put("resCode", "404");
 					res.put("resMsg", "요청하신 " + word + "관련 서비스를 찾을 수 없습니다 확인 후 다시 말씀해주세요");
 					
+					System.out.println("[DEBUG] : 어휘 검색결과가 없음");
+					
 				}
 				
 			}
@@ -69,6 +71,7 @@ public class ServiceEnabler {
 	public JSONObject createRequestData (DiscoveredServiceDESC desc, String word) {
 		
 		JSONObject obj = new JSONObject();
+		JSONObject res = new JSONObject();
 		
 		String host = desc.getComURL();
 		String method = desc.getMethod();
@@ -81,8 +84,10 @@ public class ServiceEnabler {
 		
 		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		
+		res.put("resCode", "201");
+		res.put("resMsg", word + "서비스를 요청하였습니다");
 		
-		return obj;
+		return res;
 		
 		
 	}

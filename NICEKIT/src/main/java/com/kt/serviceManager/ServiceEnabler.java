@@ -170,6 +170,7 @@ public class ServiceEnabler {
 			
 		}
 				
+		
 		return extractList;
 		 		
 	}
@@ -189,7 +190,8 @@ public class ServiceEnabler {
 		return derivedKey;
 	}
 	
-	public JSONArray extractValueSpecForArr (JSONObject obj, String word) {
+	public JSONArray extractValueSpecForArr (JSONArray specObj, String key) {
+		// arry 된 spec json이 들어오고, 해당 키값으로 안에를 다시 분석
 		
 		JSONArray arr = new JSONArray();
 		

@@ -48,40 +48,55 @@ function handleFile(e) {
 				});
 			}// end. if
 			/* 워크북 처리 */
-			workbook.SheetNames
-						.forEach(function(item, index, array) {
+			$("#first_sheet_check").html("");
+			$("#first_sheet_output").html("");
+			$("#second_sheet_check").html("");
+			$("#second_sheet_output").html("");
+			workbook.SheetNames.forEach(function(item, index, array) {
 
-							var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
+				var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
 // var csv = XLSX.utils.sheet_to_csv(workbook.Sheets[item]);
 // var html = XLSX.utils.sheet_to_html(workbook.Sheets[item]);
 // var formulae = XLSX.utils .sheet_to_formulae(workbook.Sheets[item]);
 
-							if (index == 1) { // 첫번째 시트
-								console.log("workbook item : "
-											+ JSON.stringify(workbook.Sheets[item]['!ref'])); // 엑셀
-																								// 데이터
-																								// 범위
+				if (index == 1) { // 첫번째 시트
+					var err = 0;
+					err += nullCHKIntentSheet(json).length;
+					err += synCHKIntentSheet(json).length;
+					$("#first_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 
-								$("#first_sheet_check").append(
-											"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
-														+ json.length + "건, 실패 " + "0건");
-								$("#first_sheet_output").append(
-											JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
-								setIntentSheet(json);
-							}
-							else if (index == 2) { // 두번째 시트
-								console.log("workbook item : "
-											+ JSON.stringify(workbook.Sheets[item]['!ref'])); // 엑셀
-																								// 데이터
-																								// 범위
-								$("#second_sheet_check").append(
-											"<h>" + item + "</h>" + " 전체 " + json.length + "건, 성공 "
-														+ json.length + "건, 실패 " + "0건");
-								$("#second_sheet_output").append(
-											JSON.stringify(json).replace(/(\r\n|\n|\r)/gm, "<br>"));
-								setIntentDataforReg(json);
-							}
-						});// end. forEach
+					nullCHKIntentSheet(json).forEach(function(item, index, array) {
+						$("#first_sheet_output").append("[DEBUG] " + item);
+						console.log(item, index);
+					});
+					synCHKIntentSheet(json).forEach(function(item, index, array) {
+						$("#first_sheet_output").append("[DEBUG] " + item);
+						console.log(item, index);
+					});
+					if (err == 0)
+						setIntentSheet(json);
+				}
+				else if (index == 2) { // 두번째 시트
+					var err = 0;
+					err += nullCHKDicSheet(json).length;
+					err += synCHKDicSheet(json).length;
+					$("#second_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
+					nullCHKDicSheet(json).forEach(function(item, index, array) {
+						$("#second_sheet_output").append("[DEBUG] " + item);
+						console.log(item, index);
+					});
+					synCHKDicSheet(json).forEach(function(item, index, array) {
+						$("#second_sheet_output").append("[DEBUG] " + item);
+						console.log(item, index);
+					});
+					if (err == 0)
+						setIntentDataforReg(json);
+				}
+			});// end. forEach
 		}; // end onload
 
 		if (rABS)
@@ -91,8 +106,69 @@ function handleFile(e) {
 
 	}// end. for
 }
+function nullCHKIntentSheet(json) {
+	var logmsg = new Array();
 
-function setIntentSheet(json) {
+	for (var i = 0; i < json.length; i++) {
+		if (!(json[i].hasOwnProperty('Function'))) {
+			logmsg.push((i + 2) + "행 A열 : \'Function\' value \'미 정의\'" + "<br>");
+		}
+		else if (!(json[i].hasOwnProperty('Intent'))) {
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'미 정의\'" + "<br>");
+		}
+		else if (!(json[i].hasOwnProperty('Example'))) {
+			logmsg.push((i + 2) + "행 C열 : \'Example\' value \'미 정의\'" + "<br>");
+		}
+	}
+	return logmsg;
+}
+
+function synCHKIntentSheet(json) {
+	var logmsg = new Array();
+	var regExp = /[`~!@#$%^&*\\\'\";:\/?]/gi;
+	for (var i = 0; i < json.length; i++) {
+		if (json[i].hasOwnProperty('Function') && regExp.test(json[i]['Function'])) {
+			logmsg.push((i + 2) + "행 A열 : \'Function\' value \'구문 오류\'" + "<br>");
+		}
+		else if (json[i].hasOwnProperty('Intent') && regExp.test(json[i]['Intent'])) {
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'구문 오류\'" + "<br>");
+		}
+		else if (json[i].hasOwnProperty('Example') && regExp.test(json[i]['Example'])) {
+			logmsg.push((i + 2) + "행 C열 : \'Example\' value \'구문 오류\'" + "<br>");
+		}
+	}
+	return logmsg;
+}
+
+function nullCHKDicSheet(json) {
+	var logmsg = new Array();
+
+	for (var i = 0; i < json.length; i++) {
+		if (!(json[i].hasOwnProperty('Parameter'))) {
+			logmsg.push((i + 2) + "행 A열 : \'Parameter\' value \'미 정의\'" + "<br>");
+		}
+		else if (!(json[i].hasOwnProperty('식별값'))) {
+			logmsg.push((i + 2) + "행 B열 : \'식별값\' value \'미 정의\'" + "<br>");
+		}
+	}
+	return logmsg;
+}
+
+function synCHKDicSheet(json) {
+	var logmsg = new Array();
+	var regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+	for (var i = 0; i < json.length; i++) {
+		if (json[i].hasOwnProperty('Parameter') && regExp.test(json[i]['Parameter'])) {
+			logmsg.push((i + 2) + "행 A열 : '\Function\' value \'구문 오류\'" + "<br>");
+		}
+		else if (json[i].hasOwnProperty('식별값') && regExp.test(json[i]['식별값'])) {
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'구문 오류\'" + "<br>");
+		}
+	}
+	return logmsg;
+}
+
+function setIntentSheet(json) { // 인텐트 정의
 	for (var i = 0; i < json.length; i++) {
 		var intentObj = new Object();
 		var from = json[i]['Example'].indexOf('{') + 1;
@@ -108,7 +184,7 @@ function setIntentSheet(json) {
 	// console.log(JSON.stringify(tempInfo));
 }
 
-function getDicList(extra, dicjson) {
+function getDicList(extra, dicjson) { // 어휘 정의
 	var owndicList = new Array();
 	var pivot = extra.split('|');
 
@@ -130,7 +206,7 @@ function getDicList(extra, dicjson) {
 	return owndicList;
 }
 
-function setIntentDataforReg(json) {
+function setIntentDataforReg(json) { // 전송 데이터 merge
 	for (var i = 0; i < tempInfo.length; i++) {
 		var IntentObj = new Object();
 		IntentObj['id'] = tempInfo[i]['id'];
@@ -142,6 +218,7 @@ function setIntentDataforReg(json) {
 }
 
 function getIntentDataforReg() {
+	console.log(JSON.stringify(IntentInfo));
 	return JSON.stringify(IntentInfo);
 }
 

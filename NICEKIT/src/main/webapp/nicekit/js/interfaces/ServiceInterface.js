@@ -2,7 +2,7 @@ $.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
 	console.log('gigagenie.js loading...');
 });
 
-$.getScript('../nicekit/js/common/ServerRequest.js', function() {
+$.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
 	console.log('ServerRequst.js loading...');
 });
 

@@ -17,6 +17,7 @@ import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
+import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 public class InsertDataTo {
@@ -96,13 +97,13 @@ public class InsertDataTo {
 		System.out.println(resSet.toString());
 	}
 
-	public void insertVenderSvcTo (ArrayList<BaseSvcForm> descList) {
+	public void insertVenderSvcTo (ArrayList<BaseVenderSvcForm> descList) {
 
 		JSONParsingFrom parseringFrom = new JSONParsingFrom();
 
 		String keySpace = "vendersvcks";
 
-		for (BaseSvcForm desc : descList) {
+		for (BaseVenderSvcForm desc : descList) {
 
 			TableMetadata res = this.checkExsitingTable(desc.getDomainId(), keySpace);
 

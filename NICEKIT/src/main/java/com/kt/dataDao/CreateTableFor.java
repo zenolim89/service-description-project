@@ -1,5 +1,6 @@
 package com.kt.dataDao;
 
+import org.dom4j.datatype.DatatypeElement;
 import org.json.simple.JSONObject;
 
 import com.datastax.driver.core.Cluster;
@@ -56,6 +57,8 @@ public class CreateTableFor {
 				.withColumn("testURL", DataTypes.TEXT)
 				.withColumn("method", DataTypes.TEXT)
 				.withColumn("datatype", DataTypes.TEXT)
+				.withColumn("servicetype", DataTypes.TEXT)
+				.withColumn("tourl", DataTypes.TEXT)
 				.withColumn("requestformat", DataTypes.TEXT)
 				.withColumn("requestspec", DataTypes.TEXT)
 				.withColumn("responseFormat", DataTypes.TEXT)

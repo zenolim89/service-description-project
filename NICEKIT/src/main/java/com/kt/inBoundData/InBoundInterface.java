@@ -35,7 +35,7 @@ public class InBoundInterface {
 	@RequestMapping("/")
 	public ModelAndView index() {
 
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("/index/index");
 
 		return mv;
 		// return new ModelAndView("index");

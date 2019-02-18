@@ -17,6 +17,7 @@ import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
+import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqDataForm;
 
 public class JSONParsingFrom {
@@ -250,7 +251,7 @@ public class JSONParsingFrom {
 
 	public JSONObject setVenderService (String response) {
 
-		ArrayList<BaseSvcForm> descList = new ArrayList<BaseSvcForm>();
+		ArrayList<BaseVenderSvcForm> descList = new ArrayList<BaseVenderSvcForm>();
 		InsertDataTo inserTo = new InsertDataTo();
 
 		ErrorCodeList error = new ErrorCodeList();
@@ -265,7 +266,7 @@ public class JSONParsingFrom {
 
 			for (int arrRow = 0; arrRow < arr.size(); arrRow++) {
 
-				BaseSvcForm resSvcDesc = new BaseSvcForm();
+				BaseVenderSvcForm resSvcDesc = new BaseVenderSvcForm();
 
 				JSONObject descObj = (JSONObject) arr.get(arrRow);
 
@@ -275,6 +276,8 @@ public class JSONParsingFrom {
 				resSvcDesc.setInterfaceType(descObj.get("interfaceType").toString());
 				resSvcDesc.setHeaderInfo((JSONArray) descObj.get("headerInfo"));
 				resSvcDesc.setMethod(descObj.get("method").toString());
+				resSvcDesc.setToUrl(descObj.get("toUrl").toString());
+				resSvcDesc.setSvcType(descObj.get("svcType").toString());
 				resSvcDesc.setReqSpec((JSONArray) descObj.get("reqSpec"));
 				resSvcDesc.setReqStructure((JSONArray) descObj.get("reqStructure"));
 				resSvcDesc.setResSpec((JSONArray) descObj.get("resSpec"));

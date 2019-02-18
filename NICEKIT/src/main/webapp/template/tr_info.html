@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>KT_GigaGenie</title>
+  <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
+  <script src="common/js/jq-lastest.js"></script>
+  <script src="common/js/swiper.js"></script>
+  <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
+</head>
+<body>
+
+<div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
+  <section id="contents">
+		<div class="wrap-title-area">
+			<h1 class="type-txt">관광정보</h1>
+			<span class="public-data">
+				<img src="common/images/img_trip_data.png" alt="">
+				<img src="common/images/img_trip_data02.png" alt="">
+			</span>
+		</div>
+		<ul class="trip-list">
+			<li>
+				<a href="#">
+					<img src="common/images/img_trip.jpg" alt="">
+					<strong>관광지</strong>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="common/images/img_trip02.jpg" alt="">
+					<strong>쇼핑몰</strong>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="common/images/img_trip03.jpg" alt="">
+					<strong>음식점</strong>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="common/images/img_trip04.jpg" alt="">
+					<strong>여행코스</strong>
+				</a>
+			</li>
+		</ul>
+    <div class="genie-voice">
+      <em>지니야,</em>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">관광지 보여줘</div>
+            <div class="swiper-slide">쇼핑몰 보여줘</div>
+            <div class="swiper-slide">음식점 보여줘</div>
+            <div class="swiper-slide">여행코스 보여줘</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+function setSlide() {
+  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    direction: 'vertical',
+    loop: true,
+    height: 69,
+    autoplay: {
+      delay: 1000,
+    }
+  });
+}
+setTimeout(function() {setSlide()},10)
+</script>
+</body>
+</html>

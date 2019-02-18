@@ -38,7 +38,9 @@ public class ServiceEnabler {
 				} else {
 
 					res.put("resCode", "404");
-					res.put("resMsg", "해당 서비스를 찾을 수 없습니다");
+					res.put("resMsg", "요청하신 " + word + "관련 서비스를 찾을 수 없습니다 확인 후 다시 말씀해주세요");
+					
+					System.out.println("[DEBUG] : 어휘 검색결과가 없음");
 					
 				}
 				
@@ -69,6 +71,7 @@ public class ServiceEnabler {
 	public JSONObject createRequestData (DiscoveredServiceDESC desc, String word) {
 		
 		JSONObject obj = new JSONObject();
+		JSONObject res = new JSONObject();
 		
 		String host = desc.getComURL();
 		String method = desc.getMethod();
@@ -76,13 +79,15 @@ public class ServiceEnabler {
 		// set을 통한 스펙값과 전송 규격값 확인 및 데이터 변환
 		 
 		obj.put("resCode", "201");
-		obj.put("resMsg", "해당 요청을 수행하였습니다");
+		obj.put("resMsg", "요청하신 " + word + "서비스를 요청하였습니다");
 		
 		
-//		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
+		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		
+		res.put("resCode", "201");
+		res.put("resMsg", word + "서비스를 요청하였습니다");
 		
-		return obj;
+		return res;
 		
 		
 	}
@@ -105,38 +110,37 @@ public class ServiceEnabler {
 				
 				String jsonType = specObj.get(resKey).getClass().getSimpleName();
 				
-				System.out.println( specRowNum + "행 Type은: " + jsonType );
+				System.out.println( "[DEBUG] " + specRowNum + "행 Type은: " + jsonType );
 				
 				if ( jsonType.equals("String")) {
 					
 					String targetKey = this.extractValueSpecForString(specObj, resKey);
 					
-					if ( !(targetKey.equals(null)) ) {
+					if( targetKey != null) {
 						
 						for (int formatRowNum=0; formatRowNum < reqFormat.size(); formatRowNum++) {
 							
 							formatObj = (JSONObject) reqFormat.get(specRowNum);
 
 							formatObj.replace(targetKey, word);
+							System.out.println("[DEBUG 포멧 스펙: " + specObj.toString());
+							System.out.println("[DEBUG] 변경된 규격: " + formatObj.toString());
 							
-							System.out.println("전달된 규격: " + formatObj.toString());
-							
-							return formatObj;
 						}
-					}
+					} 
 					
 				} else if (jsonType.equals("JSONArray")) {
 					
-					JSONArray arr = (JSONArray) specObj.get(resKey);
-					JSONArray resArr = new JSONArray();
-					
-					for (int arrRowNum=0; arrRowNum < arr.size(); arrRowNum++) {
-						
-						JSONObject obj = (JSONObject) arr.get(arrRowNum);
-						
-						resArr = this.extractValueSpecForArr(obj, word);
-						
-					}
+//					JSONArray arr = (JSONArray) specObj.get(resKey);
+//					JSONArray resArr = new JSONArray();
+//					
+//					for (int arrRowNum=0; arrRowNum < arr.size(); arrRowNum++) {
+//						
+//						JSONObject obj = (JSONObject) arr.get(arrRowNum);
+//						
+//						resArr = this.extractValueSpecForArr(obj, word);
+//						
+//					}
 					
 				}
 				
@@ -144,6 +148,8 @@ public class ServiceEnabler {
 			
 			
 		}
+		
+		System.out.println("[NOTIFICATION] 최종 생성된 규격 :" + formatObj.toJSONString());
 		
 		return formatObj;
 		
@@ -163,15 +169,13 @@ public class ServiceEnabler {
 			ExtractionKeynTypeForJSON knt = new ExtractionKeynTypeForJSON();
 			
 			knt.setKey(iter.next());
-//			/
+			knt.setType(obj.get(iter.next()).getClass().getSimpleName());
 			
-			String getKey = iter.next();
-			
-		
+			extractList.add(knt);
 			
 		}
-		
 				
+		
 		return extractList;
 		 		
 	}
@@ -180,7 +184,7 @@ public class ServiceEnabler {
 	
 	public String extractValueSpecForString (JSONObject specObj, String key) {
 		
-		String valType = "spec1";
+		String valType = "spec2";
 		String derivedKey = null;
 		
 		if (valType.equals(specObj.get(key).toString())) {
@@ -191,7 +195,8 @@ public class ServiceEnabler {
 		return derivedKey;
 	}
 	
-	public JSONArray extractValueSpecForArr (JSONObject obj, String word) {
+	public JSONArray extractValueSpecForArr (JSONArray specObj, String key) {
+		// arry 된 spec json이 들어오고, 해당 키값으로 안에를 다시 분석
 		
 		JSONArray arr = new JSONArray();
 		

@@ -31,7 +31,7 @@ public class ThirdPartyDataFormatCreator {
 				this.createJSONArray(tempLine);
 
 			}
-		}
+		} 
 
 		return resJSON;
 	}
@@ -57,6 +57,9 @@ public class ThirdPartyDataFormatCreator {
 				JSONArray subArr = this.createSubArrForObjectType(idxDataForm);
 				obj.put(idxDataForm.getKeyName(), subArr);
 				resJSON.put(idxDataForm.getSuperVar(), obj);
+				
+				
+				
 
 			} else if (idxDataForm.getSubArrType().equals("string")) {
 

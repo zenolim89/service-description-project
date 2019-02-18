@@ -40,6 +40,15 @@ public class InBoundInterface {
 		return mv;
 		// return new ModelAndView("index");
 	}
+	
+	@RequestMapping("/getPage")
+	public ModelAndView getPage() {
+		
+		ModelAndView mv = new ModelAndView("/template/main");
+		
+		return mv;
+	}
+	
 
 
 	/**

@@ -8,11 +8,11 @@ $.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
 	console.log('gigagenie.js loading...');
 });
 
-$.getScript('./nicekit/js/common/RequestParam.js', function() {
+$.getScript('/NICEKIT/nicekit/js/common/RequestParam.js', function() {
 	console.log('RequestParam.js loading...');
 });
 
-$.getScript('./nicekit/js/common/ChangeView.js', function() {
+$.getScript('/NICEKIT/nicekit/js/common/ChangeView.js', function() {
 	console.log('ChangeView.js loading...');
 });
 

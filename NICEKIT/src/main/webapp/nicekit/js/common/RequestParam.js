@@ -1,4 +1,4 @@
-$.getScript('./nbware/js/InterStandards.js', function() {
+$.getScript('/NICEKIT/nbware/js/InterStandards.js', function() {
 	console.log('InterStandards.js loading...');
 });
 

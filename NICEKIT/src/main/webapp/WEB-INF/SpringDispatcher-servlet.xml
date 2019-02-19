@@ -13,10 +13,16 @@
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 	<context:component-scan
 		base-package="com.kt.inBoundData" />
+			<mvc:resources mapping="/resources/**"
+		location="/resources/" />
+			<mvc:resources mapping="/template/**"
+		location="/template/" />
+	<mvc:resources mapping="/svcCommon/**"
+		location="/svcCommon/" />
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
-
-	<!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+	
+	
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -24,5 +30,8 @@
 		<property name="prefix" value="/resources" />
 		<property name="suffix" value=".html" />
 	</bean>
+
+	
+
 </beans>
 

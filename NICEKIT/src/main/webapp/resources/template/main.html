@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <title>KT_GigaGenie</title>
 <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
-<script src="/svcCommon/js/jq-lastest.js"></script>
-<script src="./resources/template/svcCommon/js/swiper.js"></script>
-<script src="/NICEKIT/nicekit/js/interfaces/ServiceInterface.js"></script>
-<script src="http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js"></script>
-<link rel="stylesheet" type="text/css" href="./resources/template/svcCommon/css/gigagenie.css">
+<script type="text/javascript" src="./svcCommon/js/jq-lastest.js"></script>
+<script type="text/javascript" src="./svcCommon/js/swiper.js"></script>
+<script type="text/javascript" src="../../nicekit/js/interfaces/ServiceInterface.js"></script>
+<script type="text/javascript" src="http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js"></script>
+<link rel="stylesheet" type="text/css" href="./svcCommon/css/gigagenie.css">
 </head>
 <body onload=init()>
-	<div id="document" class="type-index" style="background-image: url(./resources/template/svcCommon/images/bg_main.jpg);">
+
+	<div id="document" class="type-index" style="background-image: url(svcCommon/images/bg_main.jpg);">
 		<main id="contents-main">
 		<h1>
-			<img src="./resources/template/svcCommon/images/h1_logo.png" alt="">
+			<img src="svcCommon/images/h1_logo.png" alt="">
 		</h1>
 		<div class="info-room">
 			<h2>스키빌리지 노스콘도 301호</h2>
@@ -24,9 +25,9 @@
 			</ul>
 		</div>
 		<div class="weather-api">
-			<i class="icon"><img src="./resources/template/svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em
-				class="f-rb"
-			>28</em>℃</span> <span class="day-date"> 수요일<br> 2019.02.20
+			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">28</em>℃</span> <span
+				class="day-date"
+			> 금요일<br> 2018.01.27
 			</span> <em class="time f-rb200">06:21</em> <span class="am-pm">오후</span>
 		</div>
 		<div class="wrap-menu-main">
@@ -39,49 +40,50 @@
 					<div class="swiper-wrapper">
 						<!-- Slides -->
 						<div class="swiper-slide" data-slidedesc="엔터테인먼트">
-							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main02.png" alt="">
-									<img src="./resources/template/svcCommon/images/ic_menu_main02_big.png" alt="" class="big">
+							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="svcCommon/images/ic_menu_main02.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main02_big.png" alt="" class="big"
+								>
 							</i> 엔터테인먼트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="이벤트">
-							<a href="#"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main05.png" alt=""> <img
-									src="./resources/template/svcCommon/images/ic_menu_main05_big.png" alt="" class="big"
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_menu_main05.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main05_big.png" alt="" class="big"
 								>
 							</i> 이벤트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="관광정보">
-							<a href="#"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main03.png" alt=""> <img
-									src="./resources/template/svcCommon/images/ic_menu_main03_big.png" alt="" class="big"
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_menu_main03.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main03_big.png" alt="" class="big"
 								>
 							</i> 관광정보
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="체크아웃">
-							<a href="#checkout-popup" class="layer-pop-control"> <i class="icon"> <img
-									src="./resources/template/svcCommon/images/ic_menu_main04.png" alt=""
-								> <img src="./resources/template/svcCommon/images/ic_menu_main04_big.png" alt="" class="big">
+							<a href="#checkout-popup" class="layer-pop-control"> <i class="icon"> <img src="svcCommon/images/ic_menu_main04.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main04_big.png" alt="" class="big"
+								>
 							</i> 체크아웃
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="부대시설">
-							<a onclick="startVoice('서비스 요청')"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main06.png" alt=""> <img
-									src="./resources/template/svcCommon/images/ic_menu_main06_big.png" alt="" class="big"
+							<a onclick="startVoice('서비스 요청')"> <i class="icon"> <img src="svcCommon/images/ic_menu_main06.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main06_big.png" alt="" class="big"
 								>
 							</i> 부대시설
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="웹캠">
-							<a href="#"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main07.png" alt=""> <img
-									src="./resources/template/svcCommon/images/ic_menu_main07_big.png" alt="" class="big"
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_menu_main07.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main07_big.png" alt="" class="big"
 								>
 							</i> 웹캠
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="객실용품">
-							<a href="#"> <i class="icon"> <img src="./resources/template/svcCommon/images/ic_menu_main01.png" alt=""> <img
-									src="./resources/template/svcCommon/images/ic_menu_main01_big.png" alt="" class="big"
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_menu_main01.png" alt=""> <img
+									src="svcCommon/images/ic_menu_main01_big.png" alt="" class="big"
 								>
 							</i> 객실용품
 							</a>
@@ -184,7 +186,6 @@
 		</article>
 	</div>
 	<script>
-
 function popupControl() {
 	var target = $('.layer-pop-control');
 	$.each(target,function() {

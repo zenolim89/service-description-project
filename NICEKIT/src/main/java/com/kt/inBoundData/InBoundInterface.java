@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -40,57 +42,63 @@ public class InBoundInterface {
 		return mv;
 		// return new ModelAndView("index");
 	}
-	
+
 	@RequestMapping("/getPage")
 	public ModelAndView getPage() {
-		
+
 		ModelAndView mv = new ModelAndView("/template/main");
-		
+
 		return mv;
 	}
-	
-
 
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07]
-	 * desc	: 요청된 서비스를 처리하기 위한 인터페이스, 현재는 Auth부분을 별도의 parm형태로 받아 id 값을 확인하여 해당 서비스 벤터를 검색
-	 * Demo 이후 수정 필요
-	 * @version	:
-	 * @param	: 
-	 * @return 	: String 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07] desc : 요청된 서비스를 처리하기 위한
+	 *         인터페이스, 현재는 Auth부분을 별도의 parm형태로 받아 id 값을 확인하여 해당 서비스 벤터를 검색 Demo 이후 수정
+	 *         필요
+	 * @version :
+	 * @param :
+	 * @return : String
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param intentName
 	 * @param word
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
-	public JSONObject reqService(@RequestParam String intentName, @RequestParam String word, @RequestParam String name) {
+	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
+			@RequestParam String name) {
 
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
-		
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		String keySpace = "vendersvcks";
-		
+
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
-		
+
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
-		
-		if (res.get("serviceType") == "RetriveATChangeView") {
-			
-			ModelAndView mv = new ModelAndView("/template/" + res.get("toUrl").toString());
-			mv.addObject("resCode", res.get("resCode"));
-			mv.addObject("resMsg", res.get("resMsg"));
-			
+
+		if ((res.get("serviceType").toString()).equals("RetriveATChangeView")) {
+
+			// mv.setViewName("/template" + res.get("toUrl").toString());
+			// mv.addObject("resCode", res.get("resCode"));
+			// mv.addObject("resMsg", res.get("resMsg"));
+
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("resCode", res.get("resCode").toString());
+			map.put("resMsg", res.get("resMsg").toString());
+			map.put("resUrl", res.get("toUrl").toString());
+			mv.addObject("obj", map);
+
 		}
-		
-		return res;
+
+		return mv;
 
 	}
 
-	//request domain list
+	// request domain list
 	@RequestMapping(value = "/getDomain", method = RequestMethod.GET)
 	public JSONObject getDomain() {
 
@@ -102,33 +110,32 @@ public class InBoundInterface {
 
 		return res;
 	}
-	
-	//request intentNameList
-	@RequestMapping(value ="/getIntentList", method = RequestMethod.GET)
-	public JSONObject getIntentNameList () {
-		
+
+	// request intentNameList
+	@RequestMapping(value = "/getIntentList", method = RequestMethod.GET)
+	public JSONObject getIntentNameList() {
+
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		JSONObject res = new JSONObject();
 		try {
-			
+
 			res = serializerTo.resDomanIntentNameList();
-			
+
 		} catch (ParseException e) {
-			
+
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
-			
-						
+
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return res;
 	}
 
-	//registration domain intent information
+	// registration domain intent information
 	@RequestMapping(value = "/setDictionary", method = RequestMethod.POST)
-	public JSONObject setDicList (InputStream body) {
+	public JSONObject setDicList(InputStream body) {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
@@ -155,7 +162,6 @@ public class InBoundInterface {
 		return res;
 
 	}
-
 
 	// getDicInfo
 	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
@@ -197,7 +203,6 @@ public class InBoundInterface {
 		return res;
 	}
 
-
 	// service registration for domain
 	@RequestMapping(value = "/domainRegistration", method = RequestMethod.POST)
 	public JSONObject regiForDomainService(InputStream body) {
@@ -224,66 +229,64 @@ public class InBoundInterface {
 		}
 		return res;
 	}
-	
+
 	// service registration for vender
 	@RequestMapping(value = "/venderRegistration", method = RequestMethod.POST)
-	public JSONObject regiForVanerderService (InputStream body) {
-		
+	public JSONObject regiForVanerderService(InputStream body) {
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String bf = null;
-		String response ="";
+		String response = "";
 		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		
+
 		try {
-			while ( (bf = in.readLine()) != null) {
+			while ((bf = in.readLine()) != null) {
 				response += bf;
 			}
-			
+
 			res = parsingFrom.setVenderService(response);
 		} catch (Exception e) {
-			
+
 			res.put("code", "4000");
 			res.put("message", e.getMessage());
 
 			response = e.getMessage().toString();
-			
+
 		}
-		
+
 		return res;
 	}
-	
-	
+
 	// service create for vender
 	@RequestMapping(value = "/venderServiceCreation", method = RequestMethod.POST)
-	public JSONObject createVenderService (InputStream body ) {
-		
+	public JSONObject createVenderService(InputStream body) {
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String bf = null;
-		String response ="";
+		String response = "";
 		JSONObject res = new JSONObject();
-		
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		
+
 		try {
 			while ((bf = in.readLine()) != null) {
 				response += bf;
-				
+
 			}
-			
+
 			// send response to a specific method in parsingfrom
 		} catch (Exception e) {
-			
+
 			res.put("code", "4000");
 			res.put("resMsg", e.getMessage());
 		}
-		
+
 		return res;
-		
+
 	}
-	
 
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.PUT)
 	public String putSomething(@RequestBody String request,

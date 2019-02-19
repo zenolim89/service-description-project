@@ -127,7 +127,11 @@ public class ServiceEnabler {
 							System.out.println("[DEBUG] 변경된 규격: " + formatObj.toString());
 							
 						}
-					} 
+					} else {
+						formatObj = (JSONObject) reqFormat.get(specRowNum);
+					
+						System.out.println("[DEBUG 포멧 스펙: " + specObj.toString());
+					}
 					
 				} else if (jsonType.equals("JSONArray")) {
 					

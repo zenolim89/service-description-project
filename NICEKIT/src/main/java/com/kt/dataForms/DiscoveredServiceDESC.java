@@ -13,6 +13,8 @@ public class DiscoveredServiceDESC {
 	String comURL;
 	String testURL;
 	String method;
+	String toUrl;
+	String serviceType;
 	
 	JSONArray headerInfo;
 	JSONArray reqStructure;
@@ -20,6 +22,23 @@ public class DiscoveredServiceDESC {
 	JSONArray resStructure;
 	JSONArray resSpec;
 	JSONArray dicList;
+	
+	
+	public void setToUrl (String url) {
+		this.toUrl = url;
+	}
+	
+	public String getToUrl () {
+		return toUrl;
+	}
+	
+	public void setServiceType (String type) {
+		this.serviceType = type;
+	}
+	
+	public String getServiceType () {
+		return serviceType;
+	}
 	
 	public void setDicList(JSONArray dic) {
 		this.dicList = dic;

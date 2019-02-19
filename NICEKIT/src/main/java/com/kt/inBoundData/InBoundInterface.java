@@ -67,11 +67,10 @@ public class InBoundInterface {
 	 * @return
 	 */
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
-	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word, @RequestParam String name) {
+	public JSONObject reqService(@RequestParam String intentName, @RequestParam String word, @RequestParam String name) {
 
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
-		ModelAndView mv = new ModelAndView();
 		
 		String keySpace = "vendersvcks";
 		
@@ -81,13 +80,13 @@ public class InBoundInterface {
 		
 		if (res.get("serviceType") == "RetriveATChangeView") {
 			
-			mv.setViewName("/template/" + res.get("toUrl").toString());
+			ModelAndView mv = new ModelAndView("/template/" + res.get("toUrl").toString());
 			mv.addObject("resCode", res.get("resCode"));
 			mv.addObject("resMsg", res.get("resMsg"));
 			
 		}
 		
-		return mv;
+		return res;
 
 	}
 

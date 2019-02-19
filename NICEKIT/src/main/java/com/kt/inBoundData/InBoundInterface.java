@@ -79,11 +79,13 @@ public class InBoundInterface {
 		
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
 		
-		if (res.get("serviceType") == "RetriveATChangeView") {
+		if ( (res.get("serviceType").toString() ).equals("RetriveATChangeView") ){
 			
-			mv.setViewName("/template/" + res.get("toUrl").toString());
+			mv.setViewName("/template" + res.get("toUrl").toString());
 			mv.addObject("resCode", res.get("resCode"));
 			mv.addObject("resMsg", res.get("resMsg"));
+			
+			System.out.println("/template" + res.get("toUrl").toString());
 			
 		}
 		

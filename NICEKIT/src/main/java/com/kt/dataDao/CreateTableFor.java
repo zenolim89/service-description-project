@@ -72,30 +72,6 @@ public class CreateTableFor {
 
 	}
 
-//	public void createTableForVender (String id) {
-//
-//		CreateTable create = ((CreateTable) builder.createTable("vendersvcks", id).ifNotExists())
-//				.withClusteringColumn("intentname", DataTypes.TEXT)
-//				.withColumn("domainid", DataTypes.TEXT)
-//				.withPartitionKey("servicecode", DataTypes.TEXT)
-//				.withColumn("commURL", DataTypes.TEXT)
-//				.withColumn("testURL", DataTypes.TEXT)
-//				.withColumn("method", DataTypes.TEXT)
-//				.withColumn("datatype", DataTypes.TEXT)
-//				.withColumn("requestformat", DataTypes.TEXT)
-//				.withColumn("requestspec", DataTypes.TEXT)
-//				.withColumn("responseFormat", DataTypes.TEXT)
-//				.withColumn("responsespec", DataTypes.TEXT)
-//				.withColumn("dicList", DataTypes.TEXT);
-//
-//		SimpleStatement query = new SimpleStatement(create.toString());
-//		session.execute(query);
-//
-//		cluster.close();
-//
-//	}
-
-
 
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 3:54:00]
@@ -119,6 +95,10 @@ public class CreateTableFor {
 				.withColumn("intentname", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)
+				//added to argument for demo
+				.withColumn("tourl", DataTypes.TEXT)
+				.withColumn("servicetype", DataTypes.TEXT)
+				//
 				.withColumn("testURL", DataTypes.TEXT)
 				.withColumn("method", DataTypes.TEXT)
 				.withColumn("datatype", DataTypes.TEXT)

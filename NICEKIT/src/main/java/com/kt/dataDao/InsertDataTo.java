@@ -120,7 +120,11 @@ public class InsertDataTo {
 					.value("domainname", desc.getDomainName())
 					.value("intentname", obj.get("id").toString())
 					.value("domainid", desc.getDomainId())
+					// added to argument for demo
+					.value("tourl", obj.get("toUrl"))
+					.value("svcType", obj.get("serviceType"))
 					.value("servicecode", desc.getServiceCode())
+					//
 					.value("commURL", desc.getComURL())
 					.value("testURL", desc.getTestURL())
 					.value("method", desc.getMethod())

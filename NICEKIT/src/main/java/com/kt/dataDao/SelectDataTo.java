@@ -66,6 +66,12 @@ public class SelectDataTo {
 				desc.setTestURL(r.getString("testurl"));
 				desc.setMethod(r.getString("method"));
 				desc.setDataType(r.getString("datatype"));
+				
+				
+				desc.setToUrl(r.getString("tourl"));
+				desc.setServiceType(r.getString("servicetype"));
+				
+				
 				desc.setReqStructure( (JSONArray) parser.parse(r.getString("requestformat")));
 				desc.setReqSpec( (JSONArray) parser.parse(r.getString("requestspec")));
 				desc.setResStructure( (JSONArray) parser.parse(r.getString("responseformat")));
@@ -73,6 +79,8 @@ public class SelectDataTo {
 				desc.setDicList( (JSONArray) parser.parse(r.getString("diclist")));
 
 				resObj = enabler.discoverMatchingWord(desc, word);
+				resObj.put("toUrl", r.getString("tourl"));
+				resObj.put("serviceType", r.getString("servicetype"));
 
 			}
 

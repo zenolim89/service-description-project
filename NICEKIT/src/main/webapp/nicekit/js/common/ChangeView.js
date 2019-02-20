@@ -117,6 +117,4 @@ function popup(url, w, h, name, option) {
 function pageTrans(resCode, resUrl) {
 	if (resCode == "201")
 		location.href = "/NICEKIT/resources/template" + resUrl + ".html";
-	else
-		location.href = "/NICEKIT/resources/template/main.html";
 }

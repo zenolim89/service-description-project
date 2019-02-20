@@ -32,7 +32,7 @@ function LoginDisplay(loginResult) {
 	}
 }
 
-//도메인 리스트 추가
+// 도메인 리스트 추가
 function addDomainList(result) {
 	for (var count = 0; count < result.length; count++) {
 		var option = $("<option>" + result[count] + "</option>");
@@ -111,4 +111,12 @@ function popup(url, w, h, name, option) {
 	pozY = (sh - h) / 2;
 	window.open(url, name, "toolbar=no,menubar=no,location=no,status=0,scrollbars=" + scroll
 				+ ",resizable=1,width=" + w + ",height=" + h + ",left=" + pozX + ",top=" + pozY);
+}
+
+//페이지 전환
+function pageTrans(resCode, resUrl) {
+	if (resCode == "201")
+		location.href = "/NICEKIT/resources/template" + resUrl + ".html";
+	else
+		location.href = "/NICEKIT/resources/template/main.html";
 }

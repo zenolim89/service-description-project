@@ -61,29 +61,28 @@ function handleFile(e) {
 
 				if (index == 1) { // 첫번째 시트
 					var err = 0;
-					err += CheckIntentSheet(json).length;
-					$("#first_sheet_check").append(
-								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
-											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
-
 					CheckIntentSheet(json).forEach(function(item, index, array) {
+						err++;
 						$("#first_sheet_output").append("[DEBUG] " + item);
 						console.log(item, index);
 					});
+					$("#first_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 
 					if (err == 0)
 						setIntentSheet(json);
 				}
 				else if (index == 2) { // 두번째 시트
 					var err = 0;
-					err += CheckDicSheet(json).length;
-					$("#second_sheet_check").append(
-								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
-											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 					CheckDicSheet(json).forEach(function(item, index, array) {
+						err++;
 						$("#second_sheet_output").append("[DEBUG] " + item);
 						console.log(item, index);
 					});
+					$("#second_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 
 					if (err == 0)
 						setIntentDataforReg(json);

@@ -437,15 +437,11 @@ function svcReqFunction(appId, intent, parameter) {
  */
 function svcRespProcess() {
 	if (SvcRequest.readyState == 4 && SvcRequest.status == 200) {
-		alert("[서비스 요청/응답] \n" + SvcRequest.responseText);
+		alert("[DEBUG] 응답 메시지 : " + SvcRequest.responseText);
 		var svcObj = JSON.parse(SvcRequest.responseText);
 		var resCode = svcObj.obj['resCode'];
 		var resMsg = svcObj.obj['resMsg'];
 		var resUrl = svcObj.obj['resUrl'];
-		sendTTS(resMsg);
-		if (resCode == "201")
-			location.href = "/NICEKIT/resources/template" + resUrl + ".html";
-		else
-			location.href = "/NICEKIT/resources/template/main.html";
+		sendTTS(resMsg, resCode, resUrl);
 	}
 }

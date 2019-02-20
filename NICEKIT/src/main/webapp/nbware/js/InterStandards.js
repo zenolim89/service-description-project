@@ -188,8 +188,7 @@ function onEditorPretty(method, type) {
 }
 
 /**
- * method : get, post
- * type: request, response
+ * method : get, post type: request, response
  */
 function controlUi(method, type) {
 	Utils.log(DEBUG, "controlUi.call");
@@ -237,7 +236,7 @@ function controlUi(method, type) {
 		$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab").find("ul.tabt").find(
 					"li").eq(1).addClass("on");
 		if (method == "GET") {
-			// TODO: 
+			// TODO:
 			// get, response --> show json editor
 			$("div[id=getDiv]").show();
 			$("div[id=getDiv]").find("div[id=resDiv]").show();
@@ -331,7 +330,9 @@ function addHeader() {
 					.push('<input class="text" type="text" name="value" placeholder="input value" title="Value" />');
 		setHtml.push('</li>');
 		setHtml.push('<li class="ctrl">');
-		// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeHeader(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
+		// setHtml.push('<button type="button" class="bn btn_remove"
+		// onClick="removeHeader(\'' + method + '\', \'' + type + '\', this);
+		// return false;"><em>삭제</em></button>');
 		setHtml
 					.push('<button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button>');
 		setHtml.push('</li>');
@@ -436,7 +437,9 @@ function addBody() {
 		setHtml.push('</select>');
 		setHtml.push('</li>');
 		setHtml.push('<li class="ctrl">');
-		// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeBody(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
+		// setHtml.push('<button type="button" class="bn btn_remove"
+		// onClick="removeBody(\'' + method + '\', \'' + type + '\', this);
+		// return false;"><em>삭제</em></button>');
 		setHtml
 					.push('<button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button>');
 		setHtml.push('</li>');
@@ -536,7 +539,8 @@ function jsonPretty() {
 	Utils.log(DEBUG, "jsonPretty.call");
 
 	// monacoEditor.getAction('editor.action.formatDocument').run();
-	// monacoEditor.getAction('editor.action.formatDocument').run().then(() =>	setEditor() );
+	// monacoEditor.getAction('editor.action.formatDocument').run().then(() =>
+	// setEditor() );
 	// monacoEditor.getAction('editor.action.formatDocument').run();
 
 	var method = config["method"];
@@ -966,14 +970,12 @@ function createDomElement(obj) {
 					}
 					setHtml.push('</li>');
 
-					/*setHtml.push('<li>');
-					if ((elmType == "string" || elmType == "number" || elmType == "boolean") && actionType == "input") {
-						setHtml.push(value);
-					}
-					else {
-						setHtml.push('&nbsp;');
-					}
-					setHtml.push('</li>');*/
+					/*
+					 * setHtml.push('<li>'); if ((elmType == "string" ||
+					 * elmType == "number" || elmType == "boolean") &&
+					 * actionType == "input") { setHtml.push(value); } else {
+					 * setHtml.push('&nbsp;'); } setHtml.push('</li>');
+					 */
 
 					setHtml.push('<li>');
 					if (specUse == "y") {
@@ -1328,7 +1330,7 @@ function validationData() {
 			}
 		}
 
-		//check body
+		// check body
 		var reqIsValidation = saveData[method]["request"]["isValidation"];
 		var reqIsData = saveData[method]["request"]["isData"];
 		var reqOriginData = saveData[method]["request"]["originData"];
@@ -1388,8 +1390,9 @@ function validationData() {
 
 		Utils.log(DEBUG, "validationData.parameters", parameters);
 
-/*        // call api
- Connection.send(parameters);*/
+/*
+ * // call api Connection.send(parameters);
+ */
 		return parameters;
 	}
 	catch (err) {

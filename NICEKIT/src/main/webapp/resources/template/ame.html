@@ -1,137 +1,128 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <title>KT_GigaGenie</title>
-  <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
-  <script src="common/js/jq-lastest.js"></script>
-  <script src="common/js/swiper.js"></script>
-  <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
+<meta charset="utf-8">
+<title>KT_GigaGenie</title>
+<meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
+<script src="svcCommon/js/jq-lastest.js"></script>
+<script src="svcCommon/js/swiper.js"></script>
+<script type="text/javascript" src="../../nicekit/js/interfaces/ServiceInterface.js"></script>
+<link rel="stylesheet" type="text/css" href="svcCommon/css/gigagenie.css">
 </head>
-<body>
-
-<div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
-  <section id="contents">
-    <h1 class="type-txt">객실용품</h1>
-	<p class="desc-title">필요하신 사항을 선택해주세요.</p>
-    <div class="weather-api">
-      <i class="icon"><img src="common/images/ic_weather_type01.png" alt=""></i>
-      <span class="tmper-area"><em class="f-rb">28</em>℃</span>
-      <span class="day-date">
-        금요일<br>
-        2018.01.27
-      </span>
-      <em class="time f-rb200">06:21</em>
-      <span class="am-pm">오후</span>
-    </div>
-	<div class="wrap-ame">
-		<button class="prev"></button>
-		<div class="swiper-container">
-			<div class="swiper-wrapper">
-				<!-- Slides -->
-				<div class="swiper-slide">
-					<a href="#">
-						<i class="icon">
-							<img src="common/images/ic_ame01.png" alt="">
-							<img src="common/images/ic_ame01_over.png" alt="" class="over">
-						</i>
-						객실용품
-					</a>
+<body onload=init()>
+	<div id="document" class="type-index" style="background-image: url(svcCommon/images/bg_webcam.jpg);">
+		<section id="contents">
+			<h1 class="type-txt">객실용품</h1>
+			<p class="desc-title">필요하신 사항을 선택해주세요.</p>
+			<div class="weather-api">
+				<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">28</em>℃</span> <span
+					class="day-date"
+				> 금요일<br> 2018.01.27
+				</span> <em class="time f-rb200">06:21</em> <span class="am-pm">오후</span>
+			</div>
+			<div class="wrap-ame">
+				<button class="prev"></button>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<!-- Slides -->
+						<div class="swiper-slide">
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_ame01.png" alt=""> <img src="svcCommon/images/ic_ame01_over.png"
+									alt="" class="over"
+								>
+							</i> 객실용품
+							</a>
+						</div>
+						<div class="swiper-slide">
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_ame02.png" alt=""> <img src="svcCommon/images/ic_ame02_over.png"
+									alt="" class="over"
+								>
+							</i> 욕실용품
+							</a>
+						</div>
+						<div class="swiper-slide">
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_ame03.png" alt=""> <img src="svcCommon/images/ic_ame03_over.png"
+									alt="" class="over"
+								>
+							</i> 린넨용품
+							</a>
+						</div>
+						<div class="swiper-slide">
+							<a href="#"> <i class="icon"> <img src="svcCommon/images/ic_ame04.png" alt=""> <img src="svcCommon/images/ic_ame04_over.png"
+									alt="" class="over"
+								>
+							</i> 침구류
+							</a>
+						</div>
+					</div>
 				</div>
-				<div class="swiper-slide">
-					<a href="#">
-						<i class="icon">
-							<img src="common/images/ic_ame02.png" alt="">
-							<img src="common/images/ic_ame02_over.png" alt="" class="over">
-						</i>
-						욕실용품
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#">
-						<i class="icon">
-							<img src="common/images/ic_ame03.png" alt="">
-							<img src="common/images/ic_ame03_over.png" alt="" class="over">
-						</i>
-						린넨용품
-					</a>
-				</div>
-				<div class="swiper-slide">
-					<a href="#">
-						<i class="icon">
-							<img src="common/images/ic_ame04.png" alt="">
-							<img src="common/images/ic_ame04_over.png" alt="" class="over">
-						</i>
-						침구류
-					</a>
+				<button class="next"></button>
+			</div>
+			<div class="genie-voice">
+				<em>지니야,</em>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<!-- Slides -->
+						<div class="swiper-slide">객실용품 보여줘</div>
+						<div class="swiper-slide">욕실용품 보여줘</div>
+						<div class="swiper-slide">린넨용품 보여줘</div>
+						<div class="swiper-slide">침구류 보여줘</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<button class="next"></button>
+			<a href="#request" class="request add-guide layer-pop-control">요청내역</a>
+		</section>
+		<!-- layer popup 객실 요청 (요청내역) -->
+		<article id="request" class="popup-fulltype" style="display: none;">
+			<div class="alert-layout">
+				<h1>신청 내역</h1>
+				<table class="popup-tbl subsection30">
+					<colgroup>
+						<col style="width: 50%;">
+						<col>
+						<col style="width: 25%;">
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">용품</th>
+							<th scope="col">수량</th>
+							<th scope="col">상태</th>
+						</tr>
+					</thead>
+				</table>
+				<div class="wrap-popup-tbl scroll-type" tabindex="0">
+					<table class="popup-tbl type2">
+						<colgroup>
+							<col style="width: 50%;">
+							<col>
+							<col style="width: 25%;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<td class="a-left">슬리퍼</td>
+								<td class="f-rb">3</td>
+								<td class="status"><i>요청중</i></td>
+							</tr>
+							<tr>
+								<td class="a-left">슬리퍼</td>
+								<td class="f-rb">3</td>
+								<td class="status">완료</td>
+							</tr>
+							<tr>
+								<td class="a-left">슬리퍼</td>
+								<td class="f-rb">1</td>
+								<td class="status">완료</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="btn-area">
+					<button type="button" class="set-btn-type1 w100p confirm">확인</button>
+				</div>
+			</div>
+		</article>
+		<!-- //layer popup 객실 요청 (요청내역) -->
 	</div>
-	<div class="genie-voice">
-      <em>지니야,</em>
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide">객실용품 보여줘</div>
-            <div class="swiper-slide">욕실용품 보여줘</div>
-            <div class="swiper-slide">린넨용품 보여줘</div>
-            <div class="swiper-slide">침구류 보여줘</div>
-        </div>
-      </div>
-    </div>
-	<a href="#request" class="request add-guide layer-pop-control">요청내역</a>
-	<span class="guide-cell">
-      <i class="prev">이전</i>
-      <i class="next">다음</i>
-    </span>
-  </section>
-<!-- layer popup 객실 요청 (요청내역) -->
-<article id="request" class="popup-fulltype" style="display:none;">
-  <div class="alert-layout">
-    <h1>신청 내역</h1>
-    <table class="popup-tbl subsection30">
-        <colgroup><col style="width:50%;"><col><col style="width:25%;"></colgroup>
-        <thead>
-            <tr>
-                <th scope="col">용품</th>
-                <th scope="col">수량</th>
-                <th scope="col">상태</th>
-            </tr>
-        </thead>
-    </table>
-    <div class="wrap-popup-tbl scroll-type" tabindex="0">
-        <table class="popup-tbl type2">
-            <colgroup><col style="width:50%;"><col><col style="width:25%;"></colgroup>
-            <tbody>
-                <tr>
-                    <td class="a-left">슬리퍼</td>
-                    <td class="f-rb">3</td>
-                    <td class="status"><i>요청중</i></td>
-                </tr>
-                <tr>
-                    <td class="a-left">슬리퍼</td>
-                    <td class="f-rb">3</td>
-                    <td class="status">완료</td>
-                </tr>
-                <tr>
-                    <td class="a-left">슬리퍼</td>
-                    <td class="f-rb">1</td>
-                    <td class="status">완료</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="btn-area">
-        <button type="button" class="set-btn-type1 w100p confirm">확인</button>
-    </div>
-</div>
-</article>
-<!-- //layer popup 객실 요청 (요청내역) -->
-</div>
-
-<script>
+	<script>
 function popupControl() {
 	var target = $('.layer-pop-control');
 	$.each(target,function() {

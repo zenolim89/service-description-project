@@ -70,7 +70,7 @@ function init() {
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
-			alert("init 실행 완료");
+			alert("[DEBUG] init 실행 완료");
 			SpeechINTRC('appId');
 		}
 	});
@@ -97,11 +97,12 @@ function init() {
  *          function(result_cd, result_msg, extra) { if (result_cd == 200) { }
  *          else { } alert(result_cd); }); }
  */
-function sendTTS(ttstext) {
+function sendTTS(ttstext, resCode, resUrl) {
 	var options = {};
 	options.ttstext = ttstext;
 	gigagenie.voice.sendTTS(options, function(result_cd, result_msg, extra) {
-		if (result_cd == 200) {
+		if (result_cd == 200 || result_cd == 409) {
+			pageTrans(resCode, resUrl);
 		}
 		else {
 		}
@@ -130,11 +131,11 @@ function stopTTS() {
 	gigagenie.voice.stopTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 		}
-		else {;
+		else {
+			;
 		}
 	});
 }
-
 
 /**
  * @method startVoice
@@ -168,8 +169,6 @@ function startVoice(ttstext) {
 	options.voicemsg = ttstext;
 	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			svcReqFunction('rsrt001', 'HotelViewPage', '식음주점');
-			alert("인식 문장 : " + extra.voicetext);
 		}
 	});
 }
@@ -258,19 +257,19 @@ gigagenie.voice.onRequestClose = function() {
 function SpeechINTRC(appId) {
 	gigagenie.voice.onActionEvent = function(extra) {
 		var sentence = extra.uword;
-		alert("인식문장 : " + sentence); //발화 문장
+		alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelCheckout':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-CHECKOUT']);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelHelp':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-QUESTIONS']);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelViewPage':
 				var parameter;
@@ -293,15 +292,15 @@ function SpeechINTRC(appId) {
 				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
 					parameter = extra.parameter['NE-PARTNERSHIP'];
 				svcReqFunction('rsrt001', extra.actioncode, parameter);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelWebCam':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-WEBCAM']);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelTourInfo':
 				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
-				alert("구문 해석 : " + JSON.stringify(extra.parameter));
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:
 				sendTTS("전송실패");

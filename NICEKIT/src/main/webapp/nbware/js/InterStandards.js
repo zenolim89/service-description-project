@@ -1,3 +1,5 @@
+"use strict";
+
 $(document).ready(function() {
 
 	// 초기 설정
@@ -17,6 +19,29 @@ $(document).ready(function() {
 	$(".ai_b2b_form").on("change", "input[name='rdo_type']", function() {
 		var method = $(this).val();
 		controlUi(method, "request");
+	});
+
+	// onload json editor
+	// onInitEditor("", "GET", "response");
+	// onInitEditor("", "POST", "request");
+	// onInitEditor("", "POST", "response");
+
+	// add select spec
+	addSpec();
+
+	// 엑셀 파일 업로드
+	$("input[name=uploadExcel]").on("change", function(e) {
+		var files = e.target.files;
+		var file = files[0];
+
+		var fileReader = new FileReader();
+		var name = file.name;
+		fileReader.onload = ExcelParser.readFile;
+		fileReader.onload = function(e) {
+			console.log(e.target.result);
+			ExcelParser.readFile(e);
+		}
+		fileReader.readAsArrayBuffer(file);
 	});
 
 });
@@ -43,12 +68,11 @@ function onInitEditor(str, method, type) {
 			else {
 				removeSpecDom(method, type);
 				require([ 'vs/editor/editor.main' ], function() {
-					monacoEditor["post"]["request"] = monaco.editor.create(
-								document.getElementById('ta_post_request'), {
-										value : str,
-										language : 'json' // type 'json' or
-															// 'xml'
-								});
+					monacoEditor["post"]["request"] = monaco.editor.create(document
+								.getElementById('ta_post_request'), {
+							value : str,
+							language : 'json' // type 'json' or 'xml'
+					});
 				});
 			}
 		}
@@ -62,12 +86,11 @@ function onInitEditor(str, method, type) {
 			else {
 				removeSpecDom(method, type);
 				require([ 'vs/editor/editor.main' ], function() {
-					monacoEditor["get"]["response"] = monaco.editor.create(
-								document.getElementById('ta_get_response'), {
-										value : str,
-										language : 'json' // type 'json' or
-															// 'xml'
-								});
+					monacoEditor["get"]["response"] = monaco.editor.create(document
+								.getElementById('ta_get_response'), {
+							value : str,
+							language : 'json' // type 'json' or 'xml'
+					});
 				});
 			}
 		}
@@ -78,12 +101,11 @@ function onInitEditor(str, method, type) {
 			else {
 				removeSpecDom(method, type);
 				require([ 'vs/editor/editor.main' ], function() {
-					monacoEditor["post"]["response"] = monaco.editor.create(
-								document.getElementById('ta_post_response'), {
-										value : str,
-										language : 'json' // type 'json' or
-															// 'xml'
-								});
+					monacoEditor["post"]["response"] = monaco.editor.create(document
+								.getElementById('ta_post_response'), {
+							value : str,
+							language : 'json' // type 'json' or 'xml'
+					});
 				});
 			}
 		}
@@ -166,7 +188,8 @@ function onEditorPretty(method, type) {
 }
 
 /**
- * method : get, post type: request, response
+ * method : get, post
+ * type: request, response
  */
 function controlUi(method, type) {
 	Utils.log(DEBUG, "controlUi.call");
@@ -181,26 +204,24 @@ function controlUi(method, type) {
 	config["type"] = type;
 
 	var $parentDiv = null;
-	$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab").find(
-				"ul.tabt").find("li").removeClass("on");
+	$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab").find("ul.tabt").find("li")
+				.removeClass("on");
 	$("div[id*=Div]").hide();
 	$("div.tab_cont").hide();
 
 	// request
 	if (type == "request") {
-		$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab")
-					.find("ul.tabt").find("li").eq(0).addClass("on");
+		$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab").find("ul.tabt").find(
+					"li").eq(0).addClass("on");
 		if (method == "GET") {
 			$("div[id=getDiv]").show();
 			$("div[id=getDiv]").find("div[id=reqDiv]").show();
-			$("div[id=getDiv]").find("div[id=reqDiv]").find("div.tab_cont").eq(
-						0).show();
+			$("div[id=getDiv]").find("div[id=reqDiv]").find("div.tab_cont").eq(0).show();
 		}
 		else {
 			$("div[id=postDiv]").show();
 			$("div[id=postDiv]").find("div[id=reqDiv]").show();
-			$("div[id=postDiv]").find("div[id=reqDiv]").find("div.tab_cont")
-						.eq(1).show();
+			$("div[id=postDiv]").find("div[id=reqDiv]").find("div.tab_cont").eq(1).show();
 
 			if (!Utils.isEmpty(monacoEditor["post"]["request"])) {
 				var str = onGetEditorData(method, type);
@@ -213,15 +234,14 @@ function controlUi(method, type) {
 	}
 	// response
 	else {
-		$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab")
-					.find("ul.tabt").find("li").eq(1).addClass("on");
+		$("div.ai_b2b_form").find("ul.frm ").filter(".req").find("div.tab").find("ul.tabt").find(
+					"li").eq(1).addClass("on");
 		if (method == "GET") {
-			// TODO:
+			// TODO: 
 			// get, response --> show json editor
 			$("div[id=getDiv]").show();
 			$("div[id=getDiv]").find("div[id=resDiv]").show();
-			$("div[id=getDiv]").find("div[id=resDiv]").find("div.tab_cont").eq(
-						1).show();
+			$("div[id=getDiv]").find("div[id=resDiv]").find("div.tab_cont").eq(1).show();
 
 			if (!Utils.isEmpty(monacoEditor["get"]["response"])) {
 				var str = onGetEditorData(method, type);
@@ -234,8 +254,7 @@ function controlUi(method, type) {
 		else {
 			$("div[id=postDiv]").show();
 			$("div[id=postDiv]").find("div[id=resDiv]").show();
-			$("div[id=postDiv]").find("div[id=resDiv]").find("div.tab_cont")
-						.eq(1).show();
+			$("div[id=postDiv]").find("div[id=resDiv]").find("div.tab_cont").eq(1).show();
 
 			if (!Utils.isEmpty(monacoEditor["post"]["response"])) {
 				var str = onGetEditorData(method, type);
@@ -312,12 +331,10 @@ function addHeader() {
 					.push('<input class="text" type="text" name="value" placeholder="input value" title="Value" />');
 		setHtml.push('</li>');
 		setHtml.push('<li class="ctrl">');
-		// setHtml.push('<button type="button" class="bn btn_remove"
-		// onClick="removeHeader(\'' + method + '\', \'' + type + '\', this);
-		// return false;"><em>삭제</em></button>');
+		// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeHeader(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
 		setHtml
 					.push('<button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button>');
-		setHtml.push('</li');
+		setHtml.push('</li>');
 		setHtml.push('</ul>');
 
 		$elm.after(setHtml.join(" "));
@@ -357,6 +374,35 @@ function removeHeader(obj) {
 	}
 }
 
+function addSpec() {
+	Utils.log(DEBUG, "addSpec.call");
+
+	var $elm = $("li[title='Spec']");
+	var setHtml = [];
+	try {
+		setHtml.push('<select name="spec" class="sel">');
+		for (var i = 0; i < specObj["list"].length; i++) {
+			if (i == 0) {
+				setHtml.push('<option value="' + specObj["list"][i] + '" selected="selected">'
+							+ specObj["list"][i] + '</option>');
+			}
+			else {
+				setHtml.push('<option value="' + specObj["list"][i] + '">' + specObj["list"][i]
+							+ '</option>');
+			}
+		}
+		setHtml.push('</select>');
+
+		$elm.html(setHtml.join(" "));
+	}
+	catch (err) {
+		Utils.log(ERR, "addSpec.err", err);
+	}
+	finally {
+		$elm, setHtml = null;
+	}
+}
+
 function addBody() {
 	Utils.log(DEBUG, "addBody.call");
 
@@ -377,25 +423,29 @@ function addBody() {
 		setHtml.push('</li>');
 		setHtml.push('<li>');
 		setHtml.push('<select name="spec" class="sel">');
-		setHtml
-					.push('<option value="spec1" selected="selected">spec1</option>');
-		setHtml.push('<option value="spec2">spec2</option>');
-		setHtml.push('<option value="spec3">spec3</option>');
+		for (var i = 0; i < specObj["list"].length; i++) {
+			if (i == 0) {
+				setHtml.push('<option value="' + specObj["list"][i] + '" selected="selected">'
+							+ specObj["list"][i] + '</option>');
+			}
+			else {
+				setHtml.push('<option value="' + specObj["list"][i] + '">' + specObj["list"][i]
+							+ '</option>');
+			}
+		}
 		setHtml.push('</select>');
 		setHtml.push('</li>');
 		setHtml.push('<li class="ctrl">');
-		// setHtml.push('<button type="button" class="bn btn_remove"
-		// onClick="removeBody(\'' + method + '\', \'' + type + '\', this);
-		// return false;"><em>삭제</em></button>');
+		// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeBody(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
 		setHtml
 					.push('<button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button>');
-		setHtml.push('</li');
+		setHtml.push('</li>');
 		setHtml.push('</ul>');
 
 		$elm.after(setHtml.join(" "));
 	}
 	catch (err) {
-		Utils.log(ERR, "addHeader.err", err);
+		Utils.log(ERR, "addBody.err", err);
 	}
 	finally {
 		$elm, setHtml = null;
@@ -438,32 +488,30 @@ function removeSpecDom(method, type) {
 	var $elm = null;
 	if (type == "request") {
 		if (method == "GET") {
-			$elm = $("div[id=getDiv]").find("div[id=reqDiv]")
-						.find("div.result").find("div.frm_tb").filter(
-									".spec_div");
+			$elm = $("div[id=getDiv]").find("div[id=reqDiv]").find("div.result").find("div.frm_tb")
+						.filter(".spec_div");
 		}
 		else {
-			$elm = $("div[id=postDiv]").find("div[id=reqDiv]").find(
-						"div.result").find("div.frm_tb").filter(".spec_div");
+			$elm = $("div[id=postDiv]").find("div[id=reqDiv]").find("div.result")
+						.find("div.frm_tb").filter(".spec_div");
 		}
 	}
 	// response
 	else {
 		if (method == "GET") {
-			$elm = $("div[id=getDiv]").find("div[id=resDiv]")
-						.find("div.result").find("div.frm_tb").filter(
-									".spec_div");
+			$elm = $("div[id=getDiv]").find("div[id=resDiv]").find("div.result").find("div.frm_tb")
+						.filter(".spec_div");
 		}
 		else {
-			$elm = $("div[id=postDiv]").find("div[id=resDiv]").find(
-						"div.result").find("div.frm_tb").filter(".spec_div");
+			$elm = $("div[id=postDiv]").find("div[id=resDiv]").find("div.result")
+						.find("div.frm_tb").filter(".spec_div");
 		}
 	}
 
 	var setHtml = [];
 	try {
 		setHtml.push('<ul class="hd">');
-		setHtml.push('<li class="no">라인1</li>');
+		setHtml.push('<li class="no">라인</li>');
 		setHtml.push('<li style="width: 237px;">Key</li>');
 		setHtml.push('<li>Spec</li>');
 		setHtml.push('</ul>');
@@ -488,8 +536,7 @@ function jsonPretty() {
 	Utils.log(DEBUG, "jsonPretty.call");
 
 	// monacoEditor.getAction('editor.action.formatDocument').run();
-	// monacoEditor.getAction('editor.action.formatDocument').run().then(() =>
-	// setEditor() );
+	// monacoEditor.getAction('editor.action.formatDocument').run().then(() =>	setEditor() );
 	// monacoEditor.getAction('editor.action.formatDocument').run();
 
 	var method = config["method"];
@@ -598,8 +645,8 @@ function jsonAssign(obj) {
 	jsonArrs = [];
 	var depth = 0;
 	if (obj && typeof (obj) === "object") {
-		jsonArrs = jsonDataToDomObject(obj, depth,
-					obj.constructor == Array ? "array" : "object", null, null);
+		jsonArrs = jsonDataToDomObject(obj, depth, obj.constructor == Array ? "array" : "object",
+					null, null);
 	}
 
 	return jsonArrs;
@@ -657,17 +704,13 @@ function jsonDataToDomObject(obj, originDepth, parentType, parentKey, keys) {
 
 					Utils.log(DEBUG, "jsonDataToDomObject.o", o);
 					Utils.log(DEBUG, "jsonDataToDomObject.key", key);
-					Utils
-								.log(DEBUG, "jsonDataToDomObject.o.typeof",
-											typeof (o));
-					Utils.log(DEBUG, "jsonDataToDomObject.o.constructor",
-								o.constructor);
+					Utils.log(DEBUG, "jsonDataToDomObject.o.typeof", typeof (o));
+					Utils.log(DEBUG, "jsonDataToDomObject.o.constructor", o.constructor);
 
 					if (o.constructor === Array) {
 						key = parentType == "array" ? Number(key) : key;
 
-						var objKey = typeof (key) == "number" ? "[" + key + "]"
-									: key;
+						var objKey = typeof (key) == "number" ? "[" + key + "]" : key;
 						var tempKey = keys.concat(".", objKey);
 						map = {};
 						map["elmType"] = "array";
@@ -680,8 +723,7 @@ function jsonDataToDomObject(obj, originDepth, parentType, parentKey, keys) {
 						map["jsonPath"] = tempKey;
 						jsonArrs.push(map);
 
-						jsonArrs = jsonDataToDomObject(o, nextDepth, "array",
-									key, tempKey);
+						jsonArrs = jsonDataToDomObject(o, nextDepth, "array", key, tempKey);
 
 						map = {};
 						map["elmType"] = "array";
@@ -696,8 +738,7 @@ function jsonDataToDomObject(obj, originDepth, parentType, parentKey, keys) {
 					else if (o.constructor === Object) {
 						key = parentType == "array" ? Number(key) : key;
 
-						var objKey = typeof (key) == "number" ? "[" + key + "]"
-									: key;
+						var objKey = typeof (key) == "number" ? "[" + key + "]" : key;
 						var tempKey = keys.concat(".", objKey);
 						map = {};
 						map["elmType"] = "object";
@@ -710,8 +751,7 @@ function jsonDataToDomObject(obj, originDepth, parentType, parentKey, keys) {
 						map["jsonPath"] = tempKey;
 						jsonArrs.push(map);
 
-						jsonArrs = jsonDataToDomObject(o, nextDepth, "object",
-									key, tempKey);
+						jsonArrs = jsonDataToDomObject(o, nextDepth, "object", key, tempKey);
 
 						map = {};
 						map["elmType"] = "object";
@@ -723,13 +763,11 @@ function jsonDataToDomObject(obj, originDepth, parentType, parentKey, keys) {
 						map["selected"] = "n";
 						jsonArrs.push(map);
 					}
-					else if (o.constructor === String
-								|| o.constructor === Number
+					else if (o.constructor === String || o.constructor === Number
 								|| o.constructor === Boolean) {
 						key = parentType == "array" ? Number(key) : key;
 
-						var objKey = typeof (key) == "number" ? "[" + key + "]"
-									: key;
+						var objKey = typeof (key) == "number" ? "[" + key + "]" : key;
 						var tempKey = keys.concat(".", objKey);
 						map = {};
 						map["elmType"] = typeof (o);
@@ -808,6 +846,7 @@ function makeSpec() {
 				Utils.log(DEBUG, "setEditor.jsonElm.len", jsonElm.length);
 				if (jsonElm && jsonElm.length >= 3) {
 					isJsonFormatting = true;
+					saveData[method][type]["isValidation"] = true;
 					createDomElement(jsonElm);
 				}
 				else {
@@ -838,8 +877,7 @@ function createDomElement(obj) {
 	var method = config["method"];
 	var type = config["type"];
 
-	var $elm = getParentElement().find("div.result").find("div.frm_tb").filter(
-				".spec_div");
+	var $elm = getParentElement().find("div.result").find("div.frm_tb").filter(".spec_div");
 	var setHtml = [];
 	try {
 		setHtml.push('<ul class="hd">');
@@ -866,14 +904,11 @@ function createDomElement(obj) {
 					var selected = objData["selected"];
 					var jsonPath = objData["jsonPath"];
 
-					setHtml.push('<ul data-elmType="' + elmType
-								+ '" data-actionType="' + actionType
-								+ '" data-depth="' + depth + '" data-specUse="'
-								+ specUse + '" data-selected="' + selected
-								+ '" data-key="' + key + '" data-keyType="'
-								+ typeof (key) + '" data-value="' + value
-								+ '" data-jsonPath="' + jsonPath + '" title="'
-								+ key + '">');
+					setHtml.push('<ul data-elmType="' + elmType + '" data-actionType="'
+								+ actionType + '" data-depth="' + depth + '" data-specUse="'
+								+ specUse + '" data-selected="' + selected + '" data-key="' + key
+								+ '" data-keyType="' + typeof (key) + '" data-value="' + value
+								+ '" data-jsonPath="' + jsonPath + '" title="' + key + '">');
 
 					setHtml.push('<li class="no">');
 					setHtml.push(no);
@@ -931,38 +966,44 @@ function createDomElement(obj) {
 					}
 					setHtml.push('</li>');
 
-					/*
-					 * setHtml.push('<li>'); if ((elmType == "string" ||
-					 * elmType == "number" || elmType == "boolean") &&
-					 * actionType == "input") { setHtml.push(value); } else {
-					 * setHtml.push('&nbsp;'); } setHtml.push('</li>');
-					 */
+					/*setHtml.push('<li>');
+					if ((elmType == "string" || elmType == "number" || elmType == "boolean") && actionType == "input") {
+						setHtml.push(value);
+					}
+					else {
+						setHtml.push('&nbsp;');
+					}
+					setHtml.push('</li>');*/
 
 					setHtml.push('<li>');
 					if (specUse == "y") {
 						if (selected == "y") {
 							setHtml.push('<select name="spec" class="sel">');
-							setHtml
-										.push('<option value="spec1">spec1</option>');
-							setHtml
-										.push('<option value="spec2">spec2</option>');
-							setHtml
-										.push('<option value="spec3">spec3</option>');
+							for (var y = 0; y < specObj["list"].length; y++) {
+								if (y == 0) {
+									setHtml.push('<option value="' + specObj["list"][y]
+												+ '" selected="selected">' + specObj["list"][y]
+												+ '</option>');
+								}
+								else {
+									setHtml.push('<option value="' + specObj["list"][y] + '">'
+												+ specObj["list"][y] + '</option>');
+								}
+							}
 							setHtml.push('</select>');
 						}
 						else {
-							setHtml
-										.push('<select name="spec" class="sel" disabled>');
-							setHtml
-										.push('<option value="undefined">undefined</option>');
+							setHtml.push('<select name="spec" class="sel" disabled>');
+							setHtml.push('<option value="' + specObj["undefined"] + '">'
+										+ specObj["undefined"] + '</option>');
 							setHtml.push('</select>');
 						}
 					}
 					else {
 						setHtml
 									.push('<select name="spec" class="sel" disabled style="visibility:hidden;">');
-						setHtml
-									.push('<option value="undefined">undefined</option>');
+						setHtml.push('<option value="' + specObj["undefined"] + '">'
+									+ specObj["undefined"] + '</option>');
 						setHtml.push('</select>');
 					}
 					setHtml.push('</li>');
@@ -989,8 +1030,8 @@ function saveSpec() {
 
 	var method = config["method"];
 	var type = config["type"];
-	var $elm = getParentElement().find("div.result").find("div.frm_tb").filter(
-				".spec_div").find("ul:not(.hd)");
+	var $elm = getParentElement().find("div.result").find("div.frm_tb").filter(".spec_div").find(
+				"ul:not(.hd)");
 	var originJson = null;
 	var specJson = null;
 	try {
@@ -1014,10 +1055,9 @@ function saveSpec() {
 
 				if (specLen > 0) {
 					for (var i = 0; i < specLen; i++) {
-						var spectype = $elm.filter("[data-specuse='y']").eq(i)
-									.find("select[name=spec]").val();
-						var jsonpath = $elm.filter("[data-specuse='y']").eq(i)
-									.data("jsonpath");
+						var spectype = $elm.filter("[data-specuse='y']").eq(i).find(
+									"select[name=spec]").val();
+						var jsonpath = $elm.filter("[data-specuse='y']").eq(i).data("jsonpath");
 
 						var paths = [];
 						paths = getJsonPath(jsonpath);
@@ -1030,8 +1070,9 @@ function saveSpec() {
 					setMessage("save spec success");
 				}
 				Utils.log(DEBUG, "saveSpec.specJson", specJson);
-				console.log("[DEBUG] saveSpec.specJson : "
-							+ JSON.stringify(specJson, undefined, 3));
+				console
+							.log("[DEBUG] saveSpec.specJson : "
+										+ JSON.stringify(specJson, undefined, 3));
 				// alert(JSON.stringify(specJson, undefined, 3));
 				Utils.log(DEBUG, "saveSpec.originJson", originJson);
 				Utils.log(DEBUG, "saveSpec.method", method);
@@ -1159,16 +1200,12 @@ function validationData() {
 		}
 
 		// check Header
-		var $reqHeader = method == "GET" ? $("div[id=getDiv]").find(
-					"div[id=reqDiv]").find("div.frm_tb").eq(0).find(
-					"ul:not(.hd)") : $("div[id=postDiv]")
-					.find("div[id=reqDiv]").find("div.frm_tb").eq(0).find(
-								"ul:not(.hd)");
-		var $resHeader = method == "GET" ? $("div[id=getDiv]").find(
-					"div[id=resDiv]").find("div.frm_tb").eq(0).find(
-					"ul:not(.hd)") : $("div[id=postDiv]")
-					.find("div[id=resDiv]").find("div.frm_tb").eq(0).find(
-								"ul:not(.hd)");
+		var $reqHeader = method == "GET" ? $("div[id=getDiv]").find("div[id=reqDiv]").find(
+					"div.frm_tb").eq(0).find("ul:not(.hd)") : $("div[id=postDiv]").find(
+					"div[id=reqDiv]").find("div.frm_tb").eq(0).find("ul:not(.hd)");
+		var $resHeader = method == "GET" ? $("div[id=getDiv]").find("div[id=resDiv]").find(
+					"div.frm_tb").eq(0).find("ul:not(.hd)") : $("div[id=postDiv]").find(
+					"div[id=resDiv]").find("div.frm_tb").eq(0).find("ul:not(.hd)");
 
 		var reqHeaders = [];
 		var resHeaders = [];
@@ -1181,10 +1218,8 @@ function validationData() {
 		// check request header
 		if (reqHeaderLen >= 1) {
 			for (var i = 0; i < reqHeaderLen; i++) {
-				var key = $reqHeader.eq(i).find("li").find("input[name=key]")
-							.val();
-				var value = $reqHeader.eq(i).find("li").find(
-							"input[name=value]").val();
+				var key = $reqHeader.eq(i).find("li").find("input[name=key]").val();
+				var value = $reqHeader.eq(i).find("li").find("input[name=value]").val();
 				if (!Utils.isEmpty(key.trim()) && !Utils.isEmpty(value.trim())) {
 					var headerMap = {};
 					headerMap[key] = value;
@@ -1213,10 +1248,8 @@ function validationData() {
 		// check response header
 		if (resHeaderLen >= 1) {
 			for (var i = 0; i < resHeaderLen; i++) {
-				var key = $resHeader.eq(i).find("li").find("input[name=key]")
-							.val();
-				var value = $resHeader.eq(i).find("li").find(
-							"input[name=value]").val();
+				var key = $resHeader.eq(i).find("li").find("input[name=key]").val();
+				var value = $resHeader.eq(i).find("li").find("input[name=value]").val();
 				if (!Utils.isEmpty(key.trim()) && !Utils.isEmpty(value.trim())) {
 					var headerMap = {};
 					headerMap[key] = value;
@@ -1246,19 +1279,15 @@ function validationData() {
 			// check body
 			var requestBody = [];
 			var requestSpec = [];
-			var $body = $("div[id=getDiv]").find("div[id=reqDiv]").find(
-						"div.frm_tb").eq(1).find("ul:not(.hd)");
+			var $body = $("div[id=getDiv]").find("div[id=reqDiv]").find("div.frm_tb").eq(1).find(
+						"ul:not(.hd)");
 			var bodyLen = $body.length;
 			if (bodyLen >= 1) {
 				for (var i = 0; i < bodyLen; i++) {
-					var key = $body.eq(i).find("li").find("input[name=key]")
-								.val();
-					var value = $body.eq(i).find("li")
-								.find("input[name=value]").val();
-					var spec = $body.eq(i).find("li").find("select[name=spec]")
-								.val();
-					if (!Utils.isEmpty(key.trim())
-								&& !Utils.isEmpty(value.trim())
+					var key = $body.eq(i).find("li").find("input[name=key]").val();
+					var value = $body.eq(i).find("li").find("input[name=value]").val();
+					var spec = $body.eq(i).find("li").find("select[name=spec]").val();
+					if (!Utils.isEmpty(key.trim()) && !Utils.isEmpty(value.trim())
 								&& !Utils.isEmpty(spec.trim())) {
 						var bodyMap = {};
 						bodyMap[key] = value;
@@ -1288,6 +1317,7 @@ function validationData() {
 				Utils.log(DEBUG, "validationData.requestBody", requestBody);
 				Utils.log(DEBUG, "validationData.requestSpec", requestSpec);
 
+				saveData[method]["request"]["isValidation"] = true;
 				saveData[method]["request"]["isData"] = true;
 				saveData[method]["request"]["originData"] = requestBody;
 				saveData[method]["request"]["specData"] = requestSpec;
@@ -1298,30 +1328,48 @@ function validationData() {
 			}
 		}
 
-		// check body
+		//check body
+		var reqIsValidation = saveData[method]["request"]["isValidation"];
 		var reqIsData = saveData[method]["request"]["isData"];
 		var reqOriginData = saveData[method]["request"]["originData"];
 		var reqSpecData = saveData[method]["request"]["specData"];
-		if (reqIsData
-					&& (!Utils.isEmptyParams(reqOriginData) && !Utils
-								.isEmptyParams(reqSpecData))) {
-			// 
+		Utils.log(DEBUG, "validationData.reqIsValidation", reqIsValidation);
+		Utils.log(DEBUG, "validationData.reqIsData", reqIsData);
+		Utils.log(DEBUG, "validationData.reqOriginData", reqOriginData);
+		Utils.log(DEBUG, "validationData.reqSpecData", reqSpecData);
+
+		if (reqIsValidation && reqIsData
+					&& (!Utils.isEmptyParams(reqOriginData) && !Utils.isEmptyParams(reqSpecData))) {
+			//
+		}
+		else if (reqIsValidation && !reqIsData) {
+			alert("request body의 Spec 저장 여부를 확인해 주세요.");
+			return;
 		}
 		else {
-			alert("request body의 validaton 또는 spec 데이터를 확인해 주세요.");
+			alert("request body의 Validaton 여부를 확인해 주세요.");
 			return;
 		}
 
-		var reSIsData = saveData[method]["response"]["isData"];
+		var resIsValidation = saveData[method]["response"]["isValidation"];
+		var resIsData = saveData[method]["response"]["isData"];
 		var resOriginData = saveData[method]["response"]["originData"];
 		var resSpecData = saveData[method]["response"]["specData"];
-		if (reSIsData
-					&& (!Utils.isEmptyParams(resOriginData) && !Utils
-								.isEmptyParams(resSpecData))) {
-			// 
+		Utils.log(DEBUG, "validationData.resIsValidation", resIsValidation);
+		Utils.log(DEBUG, "validationData.resIsData", resIsData);
+		Utils.log(DEBUG, "validationData.resOriginData", resOriginData);
+		Utils.log(DEBUG, "validationData.resSpecData", resSpecData);
+
+		if (resIsValidation && resIsData
+					&& (!Utils.isEmptyParams(resOriginData) && !Utils.isEmptyParams(resSpecData))) {
+			//
+		}
+		else if (resIsValidation && !resIsData) {
+			alert("response body의 Spec 저장 여부를 확인해 주세요.");
+			return;
 		}
 		else {
-			alert("response body의 validaton 또는 spec 데이터를 확인해 주세요.");
+			alert("response body의 Validaton 여부를 확인해 주세요.");
 			return;
 		}
 
@@ -1339,8 +1387,10 @@ function validationData() {
 		parameters["resSpec"] = resSpecData;
 
 		Utils.log(DEBUG, "validationData.parameters", parameters);
+
+/*        // call api
+ Connection.send(parameters);*/
 		return parameters;
-		// Connection.send(parameters);
 	}
 	catch (err) {
 		Utils.log(ERR, "validationData.err", err);

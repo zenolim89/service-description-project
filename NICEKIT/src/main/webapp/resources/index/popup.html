@@ -1,0 +1,511 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>AI B2B Service Tool</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=1280"/>
+
+<meta name="_csrf" content=""/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content=""/>
+<link type="text/css" rel="stylesheet" href="/NICEKIT/nicekit/css/style.css">
+<link type="text/css" rel="stylesheet" href="https://apilink.kt.co.kr/css/style.css" />
+<link type="text/css" rel="stylesheet" href="/NICEKIT/nbware/assets/css/popup.css" />
+<script type="text/javascript" src="/NICEKIT/nbware/js/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/xlsx/xlsx.full.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Configuration.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Connection.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/ExcelParser.js" charset="utf-8"></script>
+
+
+<script async>
+console.log("[DEBUG] app start!!!");
+
+</script>
+
+</head>
+<body>
+
+<form name="frm" method="post">
+<input type="hidden" name="" value=""/>
+
+<div style="margin:30px; position:relative;">
+	
+			
+		<div class="popup_content">
+			<div class="ai_b2b_form">
+				<div class="opt_check">
+				<div >
+					   <input type="file" name="uploadExcel" id="uploadExcel" style="display:inline;" />
+					</div>
+				
+				
+					<strong class="lb">Method</strong>
+		
+					<span class="chk_frm">
+						<input class="hid_rdo" type="radio" name="rdo_type" id="type_post" value="POST" checked="checked" />
+                        <label for="type_post" class="chk"><span></span>POST</label>
+					</span>
+		
+					<span class="chk_frm">
+						<input class="hid_rdo" type="radio" name="rdo_type" id="type_get" value="GET" />
+                        <label for="type_get" class="chk"><span></span>GET</label>
+					</span>
+					
+				</div>
+		
+				<ul class="frm">
+					<li>
+						<label class="lb" for="com_url">com Url</label>
+						<input class="text" name="comUrl" id="comUrl" type="text" placeholder="input url" title="com Url" />
+					</li>
+					<li>
+                        <label class="lb" for="test_url">test Url</label>
+                        <input class="text" name="testUrl" id="testUrl" type="text" placeholder="input url" title="test Url" />
+                    </li>
+				</ul><!-- frm -->
+				
+				<ul class="frm req">
+					<li>
+						<div class="tab">
+							<ul class="tabt">
+								<li class="on"><a href="#" class="bt" onClick="controlTab('request'); return false;">Request</a></li>
+								<li><a href="#" class="bt" onClick="controlTab('response'); return false;">Response</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul><!-- frm -->
+				
+				<div id="getDiv" style="display:none;">
+					<div id="reqDiv" style="display:none;">
+						<ul class="frm header">
+							<li>
+								<strong class="lb">Header</strong>
+								
+								<div class="frm_tb">
+									<ul class="hd">
+										<li>Key</li>
+										<li>Value</li>
+										<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;"><em>추가</em></button></li>
+									</ul>
+									<ul>
+										<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+										<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+										<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					
+						<ul class="frm">
+							<li>
+				
+							<!-- 추후 사용 
+							<div class="opt_check">
+								<strong class="lb">개발 언어</strong>
+				
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_json" value="" checked />
+									<label for="type_json" class="chk"><span></span>Json</label>
+								</span>
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_xml" value="" />
+									<label for="type_xml" class="chk"><span></span>XML</label>
+								</span>
+							</div>
+							-->
+							
+							<strong class="lb">Body</strong>
+				
+								<div class="tab_cont" style="display:none;">
+									<div class="frm_tb">
+										<ul class="hd">
+											<li>Key</li>
+											<li>Value</li>
+											<li>Spec</li>
+											<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;"><em>추가</em></button></li>
+										</ul>
+										<ul>
+											<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+											<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+											<li title="Spec"></li>
+											<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button></li>
+										</ul>
+									</div>
+									
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+								</div><!-- tab_cont -->
+				
+								<div class="tab_cont" style="display:none;">
+									<ul class="post_check">
+										<li class="check"></li>
+										<li>
+											<button type="button" class="btn02 blue btn_val" onClick="jsonPretty(); return false;"><em>Validation</em></button>
+										</li>
+										<li>
+											<button type="submit" class="btn02 red btn_save" onClick="saveSpec(); return false;"><em>Spec 저장</em></button>
+										</li>
+									</ul>
+				
+									<div class="result">
+										<ul class="rs">
+											<li>
+												<div class="codes">
+													<div class="ta" id="ta_get_request"></div>
+													<!--
+													<textarea class="ta ta_get_request"></textarea>
+													-->
+												</div>
+											</li>
+											<li>
+												<div class="frm_tb spec_div">
+													<ul class="hd">
+														<li class="no">라인</li>
+														<li style="width: 237px;">Key</li>
+														<li>Spec</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+				
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+				
+								</div><!-- tab_cont -->
+							</li>
+						</ul><!-- frm -->
+					</div>
+					
+					<div id="resDiv" style="display:none;">
+						<ul class="frm header">
+							<li>
+								<strong class="lb">Header</strong>
+								
+								<div class="frm_tb">
+									<ul class="hd">
+										<li>Key</li>
+										<li>Value</li>
+										<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;"><em>추가</em></button></li>
+									</ul>
+									<ul>
+										<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+										<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+										<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					
+						<ul class="frm">
+							<li>
+				
+							<!-- 추후 사용 
+							<div class="opt_check">
+								<strong class="lb">개발 언어</strong>
+				
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_json" value="" checked />
+									<label for="type_json" class="chk"><span></span>Json</label>
+								</span>
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_xml" value="" />
+									<label for="type_xml" class="chk"><span></span>XML</label>
+								</span>
+							</div>
+							-->
+							
+							<strong class="lb">Body</strong>
+				
+								<div class="tab_cont" style="display:none;">
+									<div class="frm_tb">
+										<ul class="hd">
+											<li>Key</li>
+											<li>Value</li>
+											<li>Spec</li>
+											<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;"><em>추가</em></button></li>
+										</ul>
+										<ul>
+											<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+											<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+											<li title="Spec"></li>
+											<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button></li>
+										</ul>
+									</div>
+									
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+								</div><!-- tab_cont -->
+				
+								<div class="tab_cont" style="display:none;">
+									<ul class="post_check">
+										<li class="check"></li>
+										<li>
+											<button type="button" class="btn02 blue btn_val" onClick="jsonPretty(); return false;"><em>Validation</em></button>
+										</li>
+										<li>
+											<button type="submit" class="btn02 red btn_save" onClick="saveSpec(); return false;"><em>Spec 저장</em></button>
+										</li>
+									</ul>
+				
+									<div class="result">
+										<ul class="rs">
+											<li>
+												<div class="codes">
+													<div class="ta" id="ta_get_response"></div>
+													<!--
+													<textarea class="ta ta_get_response"></textarea>
+													-->
+												</div>
+											</li>
+											<li>
+												<div class="frm_tb spec_div">
+													<ul class="hd">
+														<li class="no">라인</li>
+														<li style="width: 237px;">Key</li>
+														<li>Spec</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+				
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+				
+								</div><!-- tab_cont -->
+							</li>
+						</ul><!-- frm -->
+					</div>
+					
+				</div>
+				
+				<div id="postDiv" style="display:none;">
+					<div id="reqDiv" style="display:none;">
+						<ul class="frm header">
+							<li>
+								<strong class="lb">Header</strong>
+								
+								<div class="frm_tb">
+									<ul class="hd">
+										<li>Key</li>
+										<li>Value</li>
+										<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;"><em>추가</em></button></li>
+									</ul>
+									<ul>
+										<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+										<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+										<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					
+						<ul class="frm">
+							<li>
+				
+							<!-- 추후 사용 
+							<div class="opt_check">
+								<strong class="lb">개발 언어</strong>
+				
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_json" value="" checked />
+									<label for="type_json" class="chk"><span></span>Json</label>
+								</span>
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_xml" value="" />
+									<label for="type_xml" class="chk"><span></span>XML</label>
+								</span>
+							</div>
+							-->
+							
+							<strong class="lb">Body</strong>
+				
+								<div class="tab_cont" style="display:none;">
+									<div class="frm_tb">
+										<ul class="hd">
+											<li>Key</li>
+											<li>Value</li>
+											<li>Spec</li>
+											<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;"><em>추가</em></button></li>
+										</ul>
+										<ul>
+											<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+											<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+											<li title="Spec"></li>
+											<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button></li>
+										</ul>
+									</div>
+									
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+								</div><!-- tab_cont -->
+				
+								<div class="tab_cont" style="display:none;">
+									<ul class="post_check">
+										<li class="check"></li>
+										<li>
+											<button type="button" class="btn02 blue btn_val" onClick="jsonPretty(); return false;"><em>Validation</em></button>
+										</li>
+										<li>
+											<button type="submit" class="btn02 red btn_save" onClick="saveSpec(); return false;"><em>Spec 저장</em></button>
+										</li>
+									</ul>
+				
+									<div class="result">
+										<ul class="rs">
+											<li>
+												<div class="codes">
+													<div class="ta" id="ta_post_request"></div>
+													<!--
+													<textarea class="ta ta_post_request"></textarea>
+													-->
+												</div>
+											</li>
+											<li>
+												<div class="frm_tb spec_div">
+													<ul class="hd">
+														<li class="no">라인</li>
+														<li style="width: 237px;">Key</li>
+														<li>Spec</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+				
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+				
+								</div><!-- tab_cont -->
+							</li>
+						</ul><!-- frm -->
+					</div>
+					
+					<div id="resDiv" style="display:none;">
+						<ul class="frm header">
+							<li>
+								<strong class="lb">Header</strong>
+								
+								<div class="frm_tb">
+									<ul class="hd">
+										<li>Key</li>
+										<li>Value</li>
+										<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addHeader(); return false;"><em>추가</em></button></li>
+									</ul>
+									<ul>
+										<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Value" /></li>
+										<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+										<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button></li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					
+						<ul class="frm">
+							<li>
+				
+							<!-- 추후 사용 
+							<div class="opt_check">
+								<strong class="lb">개발 언어</strong>
+				
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_json" value="" checked />
+									<label for="type_json" class="chk"><span></span>Json</label>
+								</span>
+								<span class="chk_frm">
+									<input class="hid_rdo" type="radio" name="rdo_lang" id="type_xml" value="" />
+									<label for="type_xml" class="chk"><span></span>XML</label>
+								</span>
+							</div>
+							-->
+							
+							<strong class="lb">Body</strong>
+				
+								<div class="tab_cont" style="display:none;">
+									<div class="frm_tb">
+										<ul class="hd">
+											<li>Key</li>
+											<li>Value</li>
+											<li>Spec</li>
+											<li class="ctrl"><button type="button" class="bn btn_add black" onClick="addBody(); return false;"><em>추가</em></button></li>
+										</ul>
+										<ul>
+											<li><input class="text" type="text" name="key" value="" placeholder="input key" title="Key" /></li>
+											<li><input class="text" type="text" name="value" value="" placeholder="input value" title="Value" /></li>
+											<li title="Spec"></li>
+											<li class="ctrl"><button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button></li>
+										</ul>
+									</div>
+									
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+								</div><!-- tab_cont -->
+				
+								<div class="tab_cont" style="display:none;">
+									<ul class="post_check">
+										<li class="check"></li>
+										<li>
+											<button type="button" class="btn02 blue btn_val" onClick="jsonPretty(); return false;"><em>Validation</em></button>
+										</li>
+										<li>
+											<button type="submit" class="btn02 red btn_save" onClick="saveSpec(); return false;"><em>Spec 저장</em></button>
+										</li>
+									</ul>
+				
+									<div class="result">
+										<ul class="rs">
+											<li>
+												<div class="codes">
+													<div class="ta" id="ta_post_response"></div>
+													<!--
+													<textarea class="ta ta_post_resposne"></textarea>
+													-->
+												</div>
+											</li>
+											<li>
+												<div class="frm_tb spec_div">
+													<ul class="hd">
+														<li class="no">라인</li>
+														<li style="width: 237px;">Key</li>
+														<li>Spec</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+				
+									<div class="btns">
+										<button type="button" class="btn btn02 black" onclick="validationData(); return false;"><em>전송</em></button>
+									</div>
+				
+								</div><!-- tab_cont -->
+							</li>
+						</ul><!-- frm -->
+					</div>
+					
+				</div>
+				
+			</div><!-- ai_b2b_form -->
+		</div><!-- popup_content -->
+	
+</div>
+</form>
+
+<script type="text/javascript">
+
+</script></body>
+</html>

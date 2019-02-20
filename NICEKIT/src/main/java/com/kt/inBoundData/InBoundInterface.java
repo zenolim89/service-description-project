@@ -79,19 +79,25 @@ public class InBoundInterface {
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
 
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+		if (res.containsKey("serviceType")) {
+			if ((res.get("serviceType").toString()).equals("RetriveATChangeView")) {
 
-		if ((res.get("serviceType").toString()).equals("RetriveATChangeView")) {
+				// mv.setViewName("/template" + res.get("toUrl").toString());
+				// mv.addObject("resCode", res.get("resCode"));
+				// mv.addObject("resMsg", res.get("resMsg"));
 
-			// mv.setViewName("/template" + res.get("toUrl").toString());
-			// mv.addObject("resCode", res.get("resCode"));
-			// mv.addObject("resMsg", res.get("resMsg"));
-
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("resCode", res.get("resCode").toString());
+				map.put("resMsg", res.get("resMsg").toString());
+				map.put("resUrl", res.get("toUrl").toString());
+				mv.addObject("obj", map);
+			}
+		} else {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("resCode", res.get("resCode").toString());
 			map.put("resMsg", res.get("resMsg").toString());
-			map.put("resUrl", res.get("toUrl").toString());
+			map.put("resUrl", "none");
 			mv.addObject("obj", map);
-
 		}
 
 		return mv;

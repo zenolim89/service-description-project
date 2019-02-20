@@ -419,8 +419,8 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word" + "="
-				+ parameter + "&" + "name" + "=" + appId);
+	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
+				+ "=" + parameter + "&" + "name" + "=" + appId);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
@@ -437,12 +437,15 @@ function svcReqFunction(appId, intent, parameter) {
  */
 function svcRespProcess() {
 	if (SvcRequest.readyState == 4 && SvcRequest.status == 200) {
-		alert("[서비스 요청/응답] \n" +  SvcRequest.responseText);
+		alert("[서비스 요청/응답] \n" + SvcRequest.responseText);
 		var svcObj = JSON.parse(SvcRequest.responseText);
 		var resCode = svcObj.obj['resCode'];
 		var resMsg = svcObj.obj['resMsg'];
 		var resUrl = svcObj.obj['resUrl'];
-		sendTTS(resMsg);	
-		location.href = "http://localhost:8080/NICEKIT/resources/template"+resUrl +".html";
+		sendTTS(resMsg);
+		if (resCode == "201")
+			location.href = "/NICEKIT/resources/template" + resUrl + ".html";
+		else
+			location.href = "/NICEKIT/resources/template/main.html";
 	}
 }

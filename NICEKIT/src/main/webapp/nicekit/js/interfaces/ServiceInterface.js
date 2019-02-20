@@ -130,10 +130,11 @@ function stopTTS() {
 	gigagenie.voice.stopTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 		}
-		else {
+		else {;
 		}
 	});
 }
+
 
 /**
  * @method startVoice

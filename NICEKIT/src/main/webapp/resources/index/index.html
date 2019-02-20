@@ -10,8 +10,8 @@
 <title>NICEKIT</title>
 <link type="text/css" rel="stylesheet" href="./nicekit/css/style.css">
 <link type="text/css" rel="stylesheet" href="https://apilink.kt.co.kr/css/style.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="./nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="./nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
 <!--  nicekit  source  -->
 <link type="text/css" rel="stylesheet" href="./nbware/assets/css/popup.css" />
 <script type="text/javascript" src="./nbware/js/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
@@ -44,7 +44,7 @@ window.onload=initPage();
 			<div class="login" id="loginCompl" style="display: none">
 				<a href="javascript:LoginDisplay();">로그아웃</a>
 			</div> -->
-			<button class="btn btn02 blue" type="button" onclick="popup('http://localhost:8080/NICEKIT/resources/index/sheet.html',800,500,'팝업','scroll'); return false;">
+			<button class="btn btn02 blue" type="button" onclick="popup('/NICEKIT/resources/index/sheet.html',800,500,'팝업','scroll'); return false;">
 				<em>인텐트/어휘 등록</em>
 			</button>
 		</div>
@@ -69,7 +69,7 @@ window.onload=initPage();
 						<!-- 도메인 선택으로 변경 -->
 						<tr class='fixrow'>
 							<th>도메인 이름</th>
-							<td><select class="form-control" name="domainName" id="domainName" >
+							<td><select class="form-control" name="domainName" id="domainName">
 									<option value="" selected disabled>도메인 선택</option>
 							</select></td>
 						</tr>

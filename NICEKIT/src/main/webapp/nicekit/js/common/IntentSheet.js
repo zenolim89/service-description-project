@@ -3,6 +3,13 @@ var rABS = true; // T : 바이너리, F : 어레이 버퍼
 var tempInfo = new Array();
 var IntentInfo = new Array();
 var dicList = new Array();
+var statusCode = {
+		"200" : "객체생성 완료",
+		"500" : "업로드한 파일이 없습니다.",
+		"501" : "파일 업로드 중입니다.",
+		"502" : "오류 수정 후 재업로드 바랍니다."
+};
+var status="500";
 
 // 어레이 버퍼를 처리한다 ( 오직 readAsArrayBuffer 데이터만 가능하다 )
 function fixdata(data) {
@@ -74,8 +81,8 @@ function handleFile(e) {
 					$("#first_sheet_check").append(
 								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
 											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
-					if (err == 0)
-						setIntentSheet(json);
+					err == 0 ? setIntentSheet(json) : status = "502";
+
 				}
 				else if (index == 2) { // 두번째 시트
 					var err = 0;
@@ -92,8 +99,9 @@ function handleFile(e) {
 					$("#second_sheet_check").append(
 								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
 											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
-					if (err == 0)
-						setIntentDataforReg(json);
+
+					err == 0 ? setIntentDataforReg(json) : status = "502";
+
 				}
 			});// end. forEach
 		}; // end onload
@@ -212,13 +220,18 @@ function setIntentDataforReg(json) { // 전송 데이터 merge
 		IntentObj['desc'] = tempInfo[i]['desc'];
 		IntentObj['dicList'] = getDicList(tempInfo[i]['ex'], json);
 		IntentInfo.push(IntentObj);
+		status = "200";
 	}
 	// console.log(JSON.stringify(IntentInfo));
 }
 
 function getIntentDataforReg() {
+	var sendParam = new Object();
+	sendParam['resCode'] = status;
+	sendParam['resMSG'] = statusCode[status];
+	sendParam['resData'] = IntentInfo;
 	console.log(JSON.stringify(IntentInfo));
-	return JSON.stringify(IntentInfo);
+	return sendParam;
 }
 
 var input_dom_element;

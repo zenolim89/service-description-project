@@ -23,6 +23,24 @@ table.basic td {
 	padding: 5px;
 }
 </style>
+<script type="text/javascript">
+function sendData(data){
+switch(data['resCode']){
+	case "200":
+		intentRegReqFunction(JSON.stringify(data['resData']));
+		break;
+	case "500":
+		alert(data['resMSG']);
+		break;
+	case "501":
+		alert(data['resMSG']);
+		break;
+	case "502":
+		alert(data['resMSG']);
+		break;
+}
+}
+</script>
 </head>
 <body>
 	<div>
@@ -30,7 +48,7 @@ table.basic td {
 		<table class='basic'>
 			<tr>
 				<td><input type="file" id="my_file_input" /></td>
-				<td><input type="button" value="전송" onclick="intentRegReqFunction(getIntentDataforReg());" /></td>
+				<td><input type="button" value="전송" onclick="sendData(getIntentDataforReg());" /></td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -87,13 +87,11 @@ var Utils =  new function(){
 	
 	this.log = function(log, msg, value) {
 		if (printLog) {
-			console.log('['+ log + '] '+ msg + ' : ', value); 
-		}
-		/*	if(jQuery.trim(value) != "" && jQuery.trim(value).length > 0){
+			if(jQuery.trim(value) != "" && jQuery.trim(value).length > 0){
 				console.log('['+ log + '] '+ msg + ' : ', value); 
 			} else {
 				console.log('['+ log + '] '+ msg);
 			}
-		}*/
+		}
 	};
 };

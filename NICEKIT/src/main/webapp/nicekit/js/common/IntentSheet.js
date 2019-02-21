@@ -61,38 +61,37 @@ function handleFile(e) {
 
 				if (index == 1) { // 첫번째 시트
 					var err = 0;
-					err += nullCHKIntentSheet(json).length;
-					err += synCHKIntentSheet(json).length;
-					$("#first_sheet_check").append(
-								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
-											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
-
 					nullCHKIntentSheet(json).forEach(function(item, index, array) {
-						$("#first_sheet_output").append("[DEBUG] " + item);
+						err++;
+						$("#first_sheet_output").append("<font color='red'>" + item + "</font>");
 						console.log(item, index);
 					});
 					synCHKIntentSheet(json).forEach(function(item, index, array) {
-						$("#first_sheet_output").append("[DEBUG] " + item);
+						err++;
+						$("#first_sheet_output").append("<font color='red'>" + item + "</font>");
 						console.log(item, index);
 					});
+					$("#first_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 					if (err == 0)
 						setIntentSheet(json);
 				}
 				else if (index == 2) { // 두번째 시트
 					var err = 0;
-					err += nullCHKDicSheet(json).length;
-					err += synCHKDicSheet(json).length;
-					$("#second_sheet_check").append(
-								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
-											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 					nullCHKDicSheet(json).forEach(function(item, index, array) {
-						$("#second_sheet_output").append("[DEBUG] " + item);
+						err++;
+						$("#second_sheet_output").append("<font color='red'>" + item + "</font>");
 						console.log(item, index);
 					});
 					synCHKDicSheet(json).forEach(function(item, index, array) {
-						$("#second_sheet_output").append("[DEBUG] " + item);
+						err++;
+						$("#second_sheet_output").append("<font color='red'>" + item + "</font>");
 						console.log(item, index);
 					});
+					$("#second_sheet_check").append(
+								"<h3>" + item + " sheet </h3>" + " 전체 " + json.length + "건, 성공 "
+											+ (json.length - err) + "건, 실패 " + err + "건" + "<br>");
 					if (err == 0)
 						setIntentDataforReg(json);
 				}
@@ -111,13 +110,13 @@ function nullCHKIntentSheet(json) {
 
 	for (var i = 0; i < json.length; i++) {
 		if (!(json[i].hasOwnProperty('Function'))) {
-			logmsg.push((i + 2) + "행 A열 : \'Function\' value \'미 정의\'" + "<br>");
+			logmsg.push((i + 2) + "행 A열 : \'Function\' 항목 누락" + "<br>");
 		}
 		else if (!(json[i].hasOwnProperty('Intent'))) {
-			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'미 정의\'" + "<br>");
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' 항목 누락" + "<br>");
 		}
 		else if (!(json[i].hasOwnProperty('Example'))) {
-			logmsg.push((i + 2) + "행 C열 : \'Example\' value \'미 정의\'" + "<br>");
+			logmsg.push((i + 2) + "행 C열 : \'Example\' 항목 누락" + "<br>");
 		}
 	}
 	return logmsg;
@@ -128,13 +127,13 @@ function synCHKIntentSheet(json) {
 	var regExp = /[`~!@#$%^&*\\\'\";:\/?]/gi;
 	for (var i = 0; i < json.length; i++) {
 		if (json[i].hasOwnProperty('Function') && regExp.test(json[i]['Function'])) {
-			logmsg.push((i + 2) + "행 A열 : \'Function\' value \'구문 오류\'" + "<br>");
+			logmsg.push((i + 2) + "행 A열 : \'Function\' 항목 구문오류" + "<br>");
 		}
 		else if (json[i].hasOwnProperty('Intent') && regExp.test(json[i]['Intent'])) {
-			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'구문 오류\'" + "<br>");
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' 항목 구문오류" + "<br>");
 		}
 		else if (json[i].hasOwnProperty('Example') && regExp.test(json[i]['Example'])) {
-			logmsg.push((i + 2) + "행 C열 : \'Example\' value \'구문 오류\'" + "<br>");
+			logmsg.push((i + 2) + "행 C열 : \'Example\' 항목 구문오류" + "<br>");
 		}
 	}
 	return logmsg;
@@ -145,10 +144,10 @@ function nullCHKDicSheet(json) {
 
 	for (var i = 0; i < json.length; i++) {
 		if (!(json[i].hasOwnProperty('Parameter'))) {
-			logmsg.push((i + 2) + "행 A열 : \'Parameter\' value \'미 정의\'" + "<br>");
+			logmsg.push((i + 2) + "행 A열 : \'Parameter\' 항목 누락" + "<br>");
 		}
 		else if (!(json[i].hasOwnProperty('식별값'))) {
-			logmsg.push((i + 2) + "행 B열 : \'식별값\' value \'미 정의\'" + "<br>");
+			logmsg.push((i + 2) + "행 B열 : \'식별값\'  항목 누락" + "<br>");
 		}
 	}
 	return logmsg;
@@ -159,10 +158,10 @@ function synCHKDicSheet(json) {
 	var regExp = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
 	for (var i = 0; i < json.length; i++) {
 		if (json[i].hasOwnProperty('Parameter') && regExp.test(json[i]['Parameter'])) {
-			logmsg.push((i + 2) + "행 A열 : '\Function\' value \'구문 오류\'" + "<br>");
+			logmsg.push((i + 2) + "행 A열 : '\Function\' 항목 구문오류" + "<br>");
 		}
 		else if (json[i].hasOwnProperty('식별값') && regExp.test(json[i]['식별값'])) {
-			logmsg.push((i + 2) + "행 B열 : \'Intent\' value \'구문 오류\'" + "<br>");
+			logmsg.push((i + 2) + "행 B열 : \'Intent\' 항목 구문오류" + "<br>");
 		}
 	}
 	return logmsg;

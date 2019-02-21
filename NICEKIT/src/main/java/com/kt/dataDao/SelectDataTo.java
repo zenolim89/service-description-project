@@ -31,24 +31,22 @@ public class SelectDataTo {
 	Cluster cluster = connDB.getCluster();
 	Session session = cluster.connect();
 
-
-	public JSONObject selectMatchingService (String intentName, String word, String name, String keySpace) {
+	public JSONObject selectMatchingService(String intentName, String word, String name, String keySpace) {
 
 		JSONParser parser = new JSONParser();
 		JSONObject resObj = new JSONObject();
 		ServiceEnabler enabler = new ServiceEnabler();
 
-		Statement query = QueryBuilder.select().from(keySpace, name)
-				.where(QueryBuilder.eq("intentname", intentName))
+		Statement query = QueryBuilder.select().from(keySpace, name).where(QueryBuilder.eq("intentname", intentName))
 				.allowFiltering();
 		ResultSet set = session.execute(query);
 
 		List<Row> rowList = set.all();
-		
-		if( rowList.size() == 0) {
+
+		if (rowList.size() == 0) {
 			resObj.put("resCode", "404");
-			resObj.put("resMsg", "요청하신 " + word + "관련 서비스를 찾을 수 없습니다 확인 후 다시 말씀해주세요");
-			
+			resObj.put("resMsg", "요청하신 " + word + " 관련 서비스를 찾을 수 없습니다. ");
+
 			System.out.println("[DEBUG] : 어휘 검색결과가 없음");
 		}
 
@@ -60,19 +58,24 @@ public class SelectDataTo {
 
 				DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
 
-
 				desc.setComURL(r.getString("commurl"));
 				desc.setDomainId(r.getString("domainid"));
 				desc.setTestURL(r.getString("testurl"));
 				desc.setMethod(r.getString("method"));
 				desc.setDataType(r.getString("datatype"));
-				desc.setReqStructure( (JSONArray) parser.parse(r.getString("requestformat")));
-				desc.setReqSpec( (JSONArray) parser.parse(r.getString("requestspec")));
-				desc.setResStructure( (JSONArray) parser.parse(r.getString("responseformat")));
-				desc.setResSpec( (JSONArray) parser.parse(r.getString("responsespec")));
-				desc.setDicList( (JSONArray) parser.parse(r.getString("diclist")));
+
+				desc.setToUrl(r.getString("tourl"));
+				desc.setServiceType(r.getString("servicetype"));
+
+				desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
+				desc.setReqSpec((JSONArray) parser.parse(r.getString("requestspec")));
+				desc.setResStructure((JSONArray) parser.parse(r.getString("responseformat")));
+				desc.setResSpec((JSONArray) parser.parse(r.getString("responsespec")));
+				desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
 
 				resObj = enabler.discoverMatchingWord(desc, word);
+				resObj.put("toUrl", r.getString("tourl"));
+				resObj.put("serviceType", r.getString("servicetype"));
 
 			}
 
@@ -80,43 +83,35 @@ public class SelectDataTo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-
-		};
-
+		}
+		;
 
 		return resObj;
 	}
 
+	public JSONArray selectDomainListToCommon() {
 
+		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
 
-	public JSONArray selectDomainListToCommon () {
-
-		Collection<TableMetadata> tables = cluster.getMetadata()
-				.getKeyspace("domainks")
-				.getTables();
-
-		List<String> tableList = tables.stream()
-				.map(tm -> tm.getName())
-				.collect(Collectors.toList());
+		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
 
 		JSONArray arr = serializerTo.resDomainList(tableList);
 
 		cluster.close();
 
-		return arr;	
+		return arr;
 	}
 
-	public ResultSet getLastRowForDicList (String ksName, String tbName) {
+	public ResultSet getLastRowForDicList(String ksName, String tbName) {
 
 		Statement query = QueryBuilder.select().from(ksName, tbName);
 		ResultSet res = session.execute(query);
 
 		return res;
 
-
 	}
 
-	public ArrayList<String> selectIntentNameList (String ksName, String tableName) throws ParseException {
+	public ArrayList<String> selectIntentNameList(String ksName, String tableName) throws ParseException {
 
 		ArrayList<String> intentList = new ArrayList<String>();
 
@@ -125,12 +120,12 @@ public class SelectDataTo {
 
 		List<Row> resList = res.all();
 
-		for(Row row : resList) {
+		for (Row row : resList) {
 
 			String name = row.getString("intentname");
 			String desc = row.getString("intentDesc");
 
-			intentList.add(desc + " (" + name +")");
+			intentList.add(desc + " (" + name + ")");
 
 		}
 
@@ -138,12 +133,14 @@ public class SelectDataTo {
 
 	}
 
-	public ArrayList<BaseIntentInfoForm> selectIntentInfo (String ksName, String tableName, String intentName) throws ParseException {
+	public ArrayList<BaseIntentInfoForm> selectIntentInfo(String ksName, String tableName, String intentName)
+			throws ParseException {
 
 		JSONParser parser = new JSONParser();
 		ArrayList<BaseIntentInfoForm> intentInfoList = new ArrayList<BaseIntentInfoForm>();
 
-		Statement query = QueryBuilder.select().from(ksName, tableName).where(QueryBuilder.eq("intentname", intentName));
+		Statement query = QueryBuilder.select().from(ksName, tableName)
+				.where(QueryBuilder.eq("intentname", intentName));
 
 		ResultSet res = session.execute(query);
 
@@ -153,11 +150,10 @@ public class SelectDataTo {
 
 			BaseIntentInfoForm intentForm = new BaseIntentInfoForm();
 
-			//			intentForm.setSeqNum(row.getInt("seqNum"));
+			// intentForm.setSeqNum(row.getInt("seqNum"));
 			intentForm.setIntentName(row.getString("intentname"));
 			intentForm.setDesc(row.getString("intentDesc"));
 			intentForm.setArr((JSONArray) parser.parse(row.getString("dicList")));
-
 
 			intentInfoList.add(intentForm);
 
@@ -166,6 +162,5 @@ public class SelectDataTo {
 		return intentInfoList;
 
 	}
-
 
 }

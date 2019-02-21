@@ -16,13 +16,25 @@
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 
-	<!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"> -->
+<!-- 뷰 이름과 View 객체간의 매핑 정보를 저장하기 위해 자원 파일을 사용한다. -->
+	<bean id="beanNameViewResolver"
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0" />
+	</bean>
+
+	<!-- 뷰 이름으로부터 jsp나 Tiles 연동을 위한 View 객체를 리턴한다. -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/resources" />
 		<property name="suffix" value=".html" />
+		<property name="order" value="1" />
 	</bean>
+
+	<bean id="jsonView"
+		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+
 </beans>
 

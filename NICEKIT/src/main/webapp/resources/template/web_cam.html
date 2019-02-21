@@ -1,101 +1,71 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <title>KT_GigaGenie</title>
-  <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
-  <script src="common/js/jq-lastest.js"></script>
-  <script src="common/js/swiper.js"></script>
-  <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
+<meta charset="utf-8">
+<title>KT_GigaGenie</title>
+<meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
+<script src="./svcCommon/js/jq-lastest.js"></script>
+<script src="./svcCommon/js/swiper.js"></script>
+<script type="text/javascript" src="../../nicekit/js/interfaces/ServiceInterface.js"></script>
+<link rel="stylesheet" type="text/css" href="./svcCommon/css/gigagenie.css">
 </head>
-<body>
-
-<div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
-  <section id="contents">
-    <h1 class="type-txt">실시간 웹캠</h1>
-	<p class="desc-title">즐거움과 생동감이 가득한 오크밸리 현장 모습을 24시간 중계해 드립니다.</p>
-    <div class="weather-api">
-      <i class="icon"><img src="common/images/ic_weather_type01.png" alt=""></i>
-      <span class="tmper-area"><em class="f-rb">28</em>℃</span>
-      <span class="day-date">
-        금요일<br>
-        2018.01.27
-      </span>
-      <em class="time f-rb200">06:21</em>
-      <span class="am-pm">오후</span>
-    </div>
-	<ul class="webcam-list">
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam.jpg" alt="">
-				<strong>오크밸리 스키장</strong>
-			</a>
-		</li>
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam02.jpg" alt="">
-				<strong>마운틴 정상</strong>
-			</a>
-		</li>
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam03.jpg" alt="">
-				<strong>A 슬로프</strong>
-			</a>
-		</li>
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam04.jpg" alt="">
-				<strong>G 슬로프</strong>
-			</a>
-		</li>
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam05.jpg" alt="">
-				<strong>I 슬로프</strong>
-			</a>
-		</li>
-		<li>
-			<a href="#webcam-popup">
-				<img src="common/images/img_webcam06.jpg" alt="">
-				<strong>H 슬로프</strong>
-			</a>
-		</li>
-	</ul>
-    <div class="genie-voice">
-      <em>지니야,</em>
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide">오크밸리 스키장 보여줘</div>
-            <div class="swiper-slide">마운틴 정상 보여줘</div>
-            <div class="swiper-slide">A 슬로프 보여줘</div>
-            <div class="swiper-slide">G 슬로프 보여줘</div>
-            <div class="swiper-slide">I 슬로프 보여줘</div>
-            <div class="swiper-slide">H 슬로프 보여줘</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <article id="webcam-popup" class="popup-fulltype" style="display:none;">
-  	<div class="popup-webcam">
-  		<h1></h1>
-  		<div class="webcam-area">
-  			<img src="common/images/img_webcam07.jpg" alt="">
-  			<button type="button" class="prev">prev</button>
-  			<button type="button" class="next">next</button>
-      </div>
-      <span class="guide-cell">
-        <i class="prev">이전</i>
-        <i class="next">다음</i>
-      </span>
-      <div class="btn-area">
-  			<button type="button" class="set-btn-type1 close">닫기</button>
-  		</div>
-  	</div>
-  </article>
-</div>
-<script>
+<body onload=init()>
+	<div id="document" class="type-index" style="background-image: url(svcCommon/images/bg_webcam.jpg);">
+		<section id="contents">
+			<h1 class="type-txt">실시간 웹캠</h1>
+			<p class="desc-title">즐거움과 생동감이 가득한 오크밸리 현장 모습을 24시간 중계해 드립니다.</p>
+			<div class="weather-api">
+			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">2</em>℃</span> <span
+				class="day-date"
+			> 목요일<br> 2019.02.21
+			</span> <em class="time f-rb200">05:21</em> <span class="am-pm">오후</span>
+		</div>
+			<ul class="webcam-list">
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam.jpg" alt=""> <strong>오크밸리 스키장</strong>
+				</a></li>
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam02.jpg" alt=""> <strong>마운틴 정상</strong>
+				</a></li>
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam03.jpg" alt=""> <strong>A 슬로프</strong>
+				</a></li>
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam04.jpg" alt=""> <strong>G 슬로프</strong>
+				</a></li>
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam05.jpg" alt=""> <strong>I 슬로프</strong>
+				</a></li>
+				<li><a href="#webcam-popup"> <img src="svcCommon/images/img_webcam06.jpg" alt=""> <strong>H 슬로프</strong>
+				</a></li>
+			</ul>
+			<div class="genie-voice">
+				<em>지니야,</em>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<!-- Slides -->
+						<div class="swiper-slide">오크밸리 스키장 보여줘</div>
+						<div class="swiper-slide">마운틴 정상 보여줘</div>
+						<div class="swiper-slide">A 슬로프 보여줘</div>
+						<div class="swiper-slide">G 슬로프 보여줘</div>
+						<div class="swiper-slide">I 슬로프 보여줘</div>
+						<div class="swiper-slide">H 슬로프 보여줘</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<article id="webcam-popup" class="popup-fulltype" style="display: none;">
+			<div class="popup-webcam">
+				<h1></h1>
+				<div class="webcam-area">
+					<img src="svcCommon/images/img_webcam07.jpg" alt="">
+					<button type="button" class="prev">prev</button>
+					<button type="button" class="next">next</button>
+				</div>
+				<span class="guide-cell"> <i class="prev">이전</i> <i class="next">다음</i>
+				</span>
+				<div class="btn-area">
+					<button type="button" class="set-btn-type1 close">닫기</button>
+				</div>
+			</div>
+		</article>
+	</div>
+	<script>
 function popupControl() {
 	var target = $('.webcam-list a');
 	$.each(target,function() {

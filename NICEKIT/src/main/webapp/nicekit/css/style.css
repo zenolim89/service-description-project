@@ -1,6 +1,4 @@
-@import
-	url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
-	;
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
 body {
 	font: 16px/1.8 Arial, Helvetica, sans-serif;
@@ -71,9 +69,7 @@ table.subType td {
 .hheader {
 	padding: 20px 15px;
 	height: 100px;
-	background:
-		url(https://apilink.kt.co.kr/images/img_GIGAGENIE_visual01.jpg)
-		no-repeat center top;
+	background: url(https://apilink.kt.co.kr/images/img_GIGAGENIE_visual01.jpg) no-repeat center top;
 	background-size: cover;
 }
 
@@ -151,20 +147,16 @@ table.subType td {
 	border-radius: 4px;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
-		ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
-		.15s;
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
 .form-control:focus {
 	border-color: #66afe9;
 	outline: 0;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 .form-control::-moz-placeholder {
@@ -180,8 +172,7 @@ table.subType td {
 	color: #999;
 }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control
-	{
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
 	cursor: not-allowed;
 	background-color: #eee;
 	opacity: 1;
@@ -269,6 +260,7 @@ input[type="radio"]:disabled+.label-text:before {
 .ai_b2b_form .frm_tb.spec_div > ul > li :not(.ctrl){
 border :0px solid #ccc;
 }
+
 .ai_b2b_form .btns {
 	padding-left: 0px;
 }
@@ -282,4 +274,10 @@ border :0px solid #ccc;
 	border-top: 1px solid #333;
 	margin-top: 20px;
 	padding-top: 20px;
+}
+
+.ai_b2b_form .hid_rdo {
+	position: absolute;
+	opacity: 0;
+	/* visibility: hidden; */
 }

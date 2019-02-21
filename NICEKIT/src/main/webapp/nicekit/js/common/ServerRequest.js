@@ -354,7 +354,7 @@ function createXMLHttpIntentRegReq() {
  */
 function intentRegReqFunction(json) {
 	createXMLHttpIntentRegReq();
-	intentRegRequest.open('POST', './setDictionary');
+	intentRegRequest.open('POST', '/NICEKIT/setDictionary');
 	intentRegRequest.setRequestHeader('Content-Type', 'application/json');
 	intentRegRequest.send(json);
 	console.log(json);
@@ -419,8 +419,8 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('GET', './reqService' + "?" + "intentName" + "=" + intent + "&" + "word" + "="
-				+ parameter + "&" + "name" + "=" + appId);
+	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
+				+ "=" + parameter + "&" + "name" + "=" + appId);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
@@ -437,10 +437,11 @@ function svcReqFunction(appId, intent, parameter) {
  */
 function svcRespProcess() {
 	if (SvcRequest.readyState == 4 && SvcRequest.status == 200) {
-		console.log("[서비스 요청] \n" + "Detail : " + SvcRequest.responseText);
+		alert("[DEBUG] 응답 메시지 : " + SvcRequest.responseText);
 		var svcObj = JSON.parse(SvcRequest.responseText);
-		var resMsg = svcObj.resMsg;
-		sendTTS(resMsg);
-		alert("요청 응답 : " + resMsg);
+		var resCode = svcObj.obj['resCode'];
+		var resMsg = svcObj.obj['resMsg'];
+		var resUrl = svcObj.obj['resUrl'];
+		sendTTS(resMsg, resCode, resUrl);
 	}
 }

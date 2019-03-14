@@ -11,8 +11,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +53,48 @@ public class InBoundInterface {
 
 		return mv;
 	}
+	
+	@RequestMapping(value = "/downloadSample", method = RequestMethod.POST)
+	public Workbook downloadSample (InputStream body) {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		Workbook res = new XSSFWorkbook();
+		
+
+		
+		
+		  
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+
+			res = parsingFrom.setDomainDictionary(response);
+
+		} catch (Exception e) {
+
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+
+			response = e.getMessage().toString();
+			System.out.println(response);
+		}
+
+		return res;
+
+	}
+		
+		
+		
+		
+		
+	}
+	
+	
+	
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07] desc : 요청된 서비스를 처리하기 위한

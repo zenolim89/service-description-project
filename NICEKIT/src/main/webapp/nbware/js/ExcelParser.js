@@ -20,8 +20,7 @@ var excelJson = {
 var ExcelParser = new function() {
 
 	/**
-	 * 엑셀 파서
-	 * convert format (excel --> json array)
+	 * 엑셀 파서 convert format (excel --> json array)
 	 */
 	this.readFile = function(e) {
 		Utils.log(DEBUG, "ExcelParser.readFile call");
@@ -65,6 +64,7 @@ var ExcelParser = new function() {
 							else {
 								excelJson[uploadType]["comUrl"] = null;
 							}
+							림
 
 							if (!Utils.isEmptyParams(json[i]["test_url"])) {
 								excelJson[uploadType]["testUrl"] = json[i]["test_url"];
@@ -262,7 +262,7 @@ var ExcelParser = new function() {
 			return;
 		}
 		finally {
-			// reset file input field 
+			// reset file input field
 			$("input[name=uploadExcel]").val("");
 		}
 	};
@@ -325,14 +325,16 @@ var ExcelParser = new function() {
 			// controlTab("request")
 
 			// set method
-			// $form.find("radio[name=rdo_type]").filter("[value=" + method + "]").prop("checked", true);
+			// $form.find("radio[name=rdo_type]").filter("[value=" + method +
+			// "]").prop("checked", true);
 			$form.find("input[name='rdo_type'][value='" + method + "']").prop('checked', true);
 
-			//set comUrl, testUrl
+			// set comUrl, testUrl
 			$form.find("input[name=comUrl]").val(comUrl);
 			$form.find("input[name=testUrl]").val(testUrl);
 
-			// var $elm = getParentElement().find("div.frm_tb").eq(0).find("ul").last();
+			// var $elm =
+			// getParentElement().find("div.frm_tb").eq(0).find("ul").last();
 
 			// set header
 			ExcelParser.addHeader(method, "request", reqHeaders);
@@ -490,7 +492,9 @@ var ExcelParser = new function() {
 											+ value + '" />');
 					setHtml.push('</li>');
 					setHtml.push('<li class="ctrl">');
-					// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeHeader(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
+					// setHtml.push('<button type="button" class="bn btn_remove"
+					// onClick="removeHeader(\'' + method + '\', \'' + type +
+					// '\', this); return false;"><em>삭제</em></button>');
 					setHtml
 								.push('<button type="button" class="bn btn_remove" onClick="removeHeader(this); return false;"><em>삭제</em></button>');
 					setHtml.push('</li>');
@@ -551,7 +555,9 @@ var ExcelParser = new function() {
 					setHtml.push('</select>');
 					setHtml.push('</li>');
 					setHtml.push('<li class="ctrl">');
-					// setHtml.push('<button type="button" class="bn btn_remove" onClick="removeBody(\'' + method + '\', \'' + type + '\', this); return false;"><em>삭제</em></button>');
+					// setHtml.push('<button type="button" class="bn btn_remove"
+					// onClick="removeBody(\'' + method + '\', \'' + type + '\',
+					// this); return false;"><em>삭제</em></button>');
 					setHtml
 								.push('<button type="button" class="bn btn_remove" onClick="removeBody(this); return false;"><em>삭제</em></button>');
 					setHtml.push('</li>');

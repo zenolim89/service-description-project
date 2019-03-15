@@ -23,9 +23,8 @@
 			</ul>
 		</div>
 		<div class="weather-api">
-			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">2</em>℃</span> <span
-				class="day-date"
-			> 목요일<br> 2019.02.21
+			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">2</em>℃</span> <span class="day-date"> 목요일<br>
+				2019.02.21
 			</span> <em class="time f-rb200">05:21</em> <span class="am-pm">오후</span>
 		</div>
 		<div class="wrap-menu-main">
@@ -38,23 +37,19 @@
 					<div class="swiper-wrapper">
 						<!-- Slides -->
 						<div class="swiper-slide" data-slidedesc="엔터테인먼트">
-							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="svcCommon/images/ic_menu_main02.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main02_big.png" alt="" class="big"
+							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="svcCommon/images/ic_menu_main02.png" alt=""> <img src="svcCommon/images/ic_menu_main02_big.png"
+									alt="" class="big"
 								>
 							</i> 엔터테인먼트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="이벤트">
-							<a href="./evt_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main05.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main05_big.png" alt="" class="big"
-								>
+							<a href="./evt_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main05.png" alt=""> <img src="svcCommon/images/ic_menu_main05_big.png" alt="" class="big">
 							</i> 이벤트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="관광정보">
-							<a href="./tr_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main03.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main03_big.png" alt="" class="big"
-								>
+							<a href="./tr_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main03.png" alt=""> <img src="svcCommon/images/ic_menu_main03_big.png" alt="" class="big">
 							</i> 관광정보
 							</a>
 						</div>
@@ -73,16 +68,12 @@
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="웹캠">
-							<a href="./web_cam.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main07.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main07_big.png" alt="" class="big"
-								>
+							<a href="./web_cam.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main07.png" alt=""> <img src="svcCommon/images/ic_menu_main07_big.png" alt="" class="big">
 							</i> 웹캠
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="객실용품">
-							<a href="./ame.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main01.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main01_big.png" alt="" class="big"
-								>
+							<a href="./ame.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main01.png" alt=""> <img src="svcCommon/images/ic_menu_main01_big.png" alt="" class="big">
 							</i> 객실용품
 							</a>
 						</div>
@@ -184,64 +175,70 @@
 		</article>
 	</div>
 	<script>
-function popupControl() {
-	var target = $('.layer-pop-control');
-	$.each(target,function() {
-		$(this).on('click',function(e) {
-			e.preventDefault();
-			$($(this).attr('href')).show();
-			$($(this).attr('href')).find('.confirm').on('click',function(e) {
-        e.preventDefault();
-        $(this).closest($('.popup-fulltype')).hide();
-			})
-      $($(this).attr('href')).find('.cancel').on('click',function(e) {
-        e.preventDefault();
-				$(this).closest($('.popup-fulltype')).hide();
+	function popupControl() {
+		var target = $('.layer-pop-control');
+		$.each(target, function() {
+			$(this).on('click', function(e) {
+				e.preventDefault();
+				$($(this).attr('href')).show();
+				$($(this).attr('href')).find('.confirm').on('click', function(e) {
+					e.preventDefault();
+					$(this).closest($('.popup-fulltype')).hide();
+				})
+				$($(this).attr('href')).find('.cancel').on('click', function(e) {
+					e.preventDefault();
+					$(this).closest($('.popup-fulltype')).hide();
+				})
 			})
 		})
-	})
-}
-popupControl();
+	}
+	popupControl();
 
-var checkView = 0;
-function initSlide() {
-  var check = $('.menu-main .swiper-slide').length,
-      check2 = $('.menu-main .swiper-slide-duplicate').length;
-  $('.placeholder').html($('.menu-main .swiper-slide').eq(0).data('slidedesc'));
-  checkView = check - check2;
-  $('.menu-main .swiper-container').css({width:(225 * (checkView)) - 18})
-  return checkView;
-}
-initSlide();
-function setSlide() {
-  $('.menu-main').css({opacity:1})
-  var menuSwiper = new Swiper('.menu-main .swiper-container', {
-    slidesPerView: checkView,
-    spaceBetween: 18,
-    centeredSlides: true,
-    loop: true,
-  });
-  $('.menu-main .prev').on('click',function() {
-    menuSwiper.slidePrev();
-  })
-  $('.menu-main .next').on('click',function() {
-    menuSwiper.slideNext();
-  })
-  menuSwiper.on('slideChange', function () {
-    $('.placeholder').html($('.menu-main .swiper-slide').eq(menuSwiper.realIndex).data('slidedesc'));
-  });
-  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
-    slidesPerView: 1,
-    spaceBetween: 0,
-    direction: 'vertical',
-    loop: true,
-    height: 69,
-    autoplay: {
-      delay: 1000,
-    }
-  });
-}
-setTimeout(function() {setSlide()},10)
+	var checkView = 0;
+	function initSlide() {
+		var check = $('.menu-main .swiper-slide').length, check2 = $('.menu-main .swiper-slide-duplicate').length;
+		$('.placeholder').html($('.menu-main .swiper-slide').eq(0).data('slidedesc'));
+		checkView = check - check2;
+		$('.menu-main .swiper-container').css({
+			width : (225 * (checkView)) - 18
+		})
+		return checkView;
+	}
+	initSlide();
+	function setSlide() {
+		$('.menu-main').css({
+			opacity : 1
+		})
+		var menuSwiper = new Swiper('.menu-main .swiper-container', {
+				slidesPerView : checkView,
+				spaceBetween : 18,
+				centeredSlides : true,
+				loop : true,
+		});
+		$('.menu-main .prev').on('click', function() {
+			menuSwiper.slidePrev();
+		})
+		$('.menu-main .next').on('click', function() {
+			menuSwiper.slideNext();
+		})
+		menuSwiper.on('slideChange', function() {
+			$('.placeholder').html(
+						$('.menu-main .swiper-slide').eq(menuSwiper.realIndex).data('slidedesc'));
+		});
+		var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+				slidesPerView : 1,
+				spaceBetween : 0,
+				direction : 'vertical',
+				loop : true,
+				height : 69,
+				autoplay : {
+					delay : 1000,
+				}
+		});
+	}
+	setTimeout(function() {
+		setSlide()
+	}, 10)
 </script>
 </body>
 </html>

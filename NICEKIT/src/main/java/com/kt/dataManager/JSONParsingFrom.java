@@ -73,9 +73,10 @@ public class JSONParsingFrom {
 
 
 	// 현재는 full list를 주는 형태, 해당 부분을 이재동 박사 작업 내용이랑 선택에 의하여 호출하는 내용으로 변경 필요
-	public String getDictionaryList(String response) {
+	public JSONObject getDictionaryList(String response) {
 
-		String res = null;
+		JSONObject res = new JSONObject();
+		JSONSerializerTo jsonSerializerTo = new JSONSerializerTo();
 
 		try {
 
@@ -83,8 +84,8 @@ public class JSONParsingFrom {
 
 			String doName = obj.get("domainName").toString();
 
-			res = htmlSerializer.createHTMLForIntentInfo(doName); 			// 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
-
+			res = jsonSerializerTo.createJSONForIntentInfo(doName); 			// 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
+			
 		} catch (ParseException e) {
 			// TODO: handle exception
 			e.printStackTrace();

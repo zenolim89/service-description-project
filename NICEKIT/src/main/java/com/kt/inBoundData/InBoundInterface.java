@@ -46,6 +46,7 @@ public class InBoundInterface {
 		// return new ModelAndView("index");
 	}
 
+	//test source --> Should delete
 	@RequestMapping("/getPage")
 	public ModelAndView getPage() {
 
@@ -57,35 +58,35 @@ public class InBoundInterface {
 	@RequestMapping(value = "/downloadSample", method = RequestMethod.POST)
 	public Workbook downloadSample (InputStream body) {
 		
-		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		String bf = null;
-		String response = "";
-		Workbook res = new XSSFWorkbook();
-		
-
-		
-		
-		  
-		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		try {
-			while ((bf = in.readLine()) != null) {
-				response += bf;
-			}
-
-			res = parsingFrom.setDomainDictionary(response);
-
-		} catch (Exception e) {
-
-			res.put("resCode", "4000");
-			res.put("resMsg", e.getMessage());
-
-			response = e.getMessage().toString();
-			System.out.println(response);
-		}
-
-		return res;
-
-	}
+		//		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		//		String bf = null;
+		//		String response = "";
+				Workbook res = new XSSFWorkbook();
+		//		
+		//
+		//		
+		//		
+		//		  
+		//		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		//		try {
+		//			while ((bf = in.readLine()) != null) {
+		//				response += bf;
+		//			}
+		//
+		//			res = parsingFrom.setDomainDictionary(response);
+		//
+		//		} catch (Exception e) {
+		//
+		//			res.put("resCode", "4000");
+		//			res.put("resMsg", e.getMessage());
+		//
+		//			response = e.getMessage().toString();
+		//			System.out.println(response);
+		//		}
+		//
+				return res;
+		//
+		//	}
 		
 		
 		
@@ -215,12 +216,12 @@ public class InBoundInterface {
 	}
 
 	// getDicInfo
-	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public String getDic(InputStream body) {
+	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST)
+	public JSONObject getDic(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
-		String res = null;
+		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 		try {
 			while ((bf = in.readLine()) != null) {

@@ -1,9 +1,14 @@
 package com.kt.dataManager;
 
+import javax.xml.bind.ValidationEventHandler;
+
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -31,7 +36,7 @@ public class SampleController {
 //		CellStyle style = this.createCellStype();
 		
 		sheet = this.createServiceDesc(sheet); //수신 받은 정보도 넘겨야 함
-		sheet = this.createHederInformation(sheet); // 수신받은 정보도 넘겨야 함
+		sheet = this.createHeaderInformation(sheet); // 수신받은 정보도 넘겨야 함
 
 
 
@@ -84,23 +89,31 @@ public class SampleController {
 		cell.setCellValue("설명");
 		
 		
+		
+		
+		return xls;
+		
+		
 	}
 	
 	public Sheet createRequestFormatForPOST(Sheet sheet) {
 		
+		Sheet xls = sheet;
+		
+		return xls;
+		
 	}
-	
+	  
 	public Sheet createSelectBoxItem(Sheet sheet ) {
 		
 		Sheet xls = sheet;
 		
-		CellRangeAddressList list = new CellRangeAddressList(4, 100, 5, 5);
-		String [] values = {"test1", "test2", "test3"};
+		DataValidation dataValidation = null;
+		DataValidationConstraint constraint = null;
+		DataValidationHelper validationHelper = null;
 		
-		DVConstraint constraint = DVConstraint.createExplicitListConstraint(values);
 		
-		XSSFDataValidationHelper validation = new XSSData
-		
+//		validationHelper = new XSSFDataValidationHelper(xls);
 		
 		
 		
@@ -111,8 +124,10 @@ public class SampleController {
 		
 	}
 	
+
+
 	
-	public Sheet createHederInformation (Sheet sheet) {
+	public Sheet createHeaderInformation (Sheet sheet) {
 		
 		Sheet xls = sheet;
 		

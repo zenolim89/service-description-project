@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +30,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.kt.dataDao.CreateTableFor;
+import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import net.sf.json.JSONException;
 
 @RestController
@@ -50,56 +60,128 @@ public class InBoundInterface {
 		// return new ModelAndView("index");
 	}
 
-	//test source --> Should delete
-	@RequestMapping("/getPage")
-	public ModelAndView getPage() {
-
-		ModelAndView mv = new ModelAndView("/template/main");
-
-		return mv;
-	}
 	
-	@RequestMapping(value = "/downloadSample", method = RequestMethod.POST)
-	public Workbook downloadSample (InputStream body) {
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 7:14:13]
+	 * desc	: 등록기에서 도메인 추가 시 사용
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param domainName
+	 * @return
+	 */
+	@RequestMapping(value = "/setDomain", method = RequestMethod.GET, produces="application/json; charset=UTF-8")
+	public JSONObject setDomain (@RequestParam String domainName) {
+				
+		InsertDataTo insertTo = new InsertDataTo();
+		JSONObject resObj = new JSONObject();
 		
-		//		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		//		String bf = null;
-		//		String response = "";
-				Workbook res = new XSSFWorkbook();
-		//		
-		//
-		//		
-		//		
-		//		  
-		//		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		//		try {
-		//			while ((bf = in.readLine()) != null) {
-		//				response += bf;
-		//			}
-		//
-		//			res = parsingFrom.setDomainDictionary(response);
-		//
-		//		} catch (Exception e) {
-		//
-		//			res.put("resCode", "4000");
-		//			res.put("resMsg", e.getMessage());
-		//
-		//			response = e.getMessage().toString();
-		//			System.out.println(response);
-		//		}
-		//
-				return res;
-		//
-		//	}
+		Boolean res = insertTo.insertDomainList(domainName);
 		
+		if (res == true) {
+			
+			resObj.put("resCode", "201");
+			resObj.put("resMsg", "성공");
+			
+		} else if (res == false) {
+			resObj.put("resCode", "409");
+			resObj.put("resMsg", "동일한 도메인 이름이 존재합니다");
+		} else {
+			resObj.put("resCode", "400");
+			resObj.put("resMsg", "잘못된 접근 입니다.");
+		}
 		
-		
-		
+				
+		return resObj;
 		
 	}
 	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 7:19:05]
+	 * desc	: 등록기에서 사용하는 규격 생성요청 응대 API; 먼저 도메인 이름으로 해당 도메인 이름이 도메인 리스트 테이블에 존재하는지 여부 확인 후
+	 *        신규 규격을 위한 테이블을 생성
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
 	
-	
+	 * @param domainName
+	 * @param specName
+	 * @return
+	 */
+	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)
+	public JSONObject setSpec(@RequestParam String domainName, @RequestParam String specName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		InsertDataTo insertTo = new InsertDataTo();
+		
+		JSONObject resObj = new JSONObject();
+		
+		String ks = "commonks";
+		
+		
+		ResultSet resSet = insertTo.insertSpecIndexTo(specName, domainName);
+		
+		List<Row> resList = resSet.all();
+				
+		for(Row row : resList) {
+			
+			if (row.getBool(0) == true) {
+				
+				resObj.put("resCode", "201");
+				resObj.put("resMsg", "성공");
+				
+			} else if (row.getBool(0) == false) {
+				resObj.put("resCode", "409");
+				resObj.put("resMsg", "동일한 도메인 이름이 존재합니다");
+			} else {
+				resObj.put("resCode", "400");
+				resObj.put("resMsg", "잘못된 접근 입니다.");
+			}
+			
+		}
+		
+		return resObj;
+						
+	}
+
+
+//	@RequestMapping(value = "/downloadSample", method = RequestMethod.POST)
+//	public Workbook downloadSample (InputStream body) {
+//
+//		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+//		String bf = null;
+//		String response = "";
+//		Workbook res = new XSSFWorkbook();
+//
+//		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+//		try {
+//			while ((bf = in.readLine()) != null) {
+//				response += bf;
+//			}
+//
+////			res = parsingFrom.setDomainDictionary(response);
+//
+//		} catch (Exception e) {
+//
+//			res.put("resCode", "4000");
+//			res.put("resMsg", e.getMessage());
+//
+//			response = e.getMessage().toString();
+//			System.out.println(response);
+//		}
+//
+//		return res;
+//
+//	}
+
+
+
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07] desc : 요청된 서비스를 처리하기 위한
@@ -153,16 +235,47 @@ public class InBoundInterface {
 		return mv;
 
 	}
+	
+	@RequestMapping(value = "/svcCode", method = RequestMethod.POST)
+	public JSONObject getServiceCode(InputStream body) {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		JSONObject res = new JSONObject();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+
+			res = parsingFrom.getServiceCodeTo(response);
+
+		} catch (Exception e) {
+
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+
+			response = e.getMessage().toString();
+			System.out.println(response);
+		}
+
+		return res;
+
+		
+	}
 
 	// request domain list
 	@RequestMapping(value = "/getDomain", method = RequestMethod.GET)
 	public JSONObject getDomain() {
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		SelectDataTo selectTo = new SelectDataTo();
 
 		JSONObject res = new JSONObject();
 
-		res = parsingFrom.getDomainList();
+		res = selectTo.selectDomainList();
 
 		return res;
 	}
@@ -218,6 +331,8 @@ public class InBoundInterface {
 		return res;
 
 	}
+	
+	
 
 	// getDicInfo
 	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST)

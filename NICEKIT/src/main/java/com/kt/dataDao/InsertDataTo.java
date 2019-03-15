@@ -1,7 +1,9 @@
 package com.kt.dataDao;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.cassandra.locator.SeedProvider;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -14,10 +16,12 @@ import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
+import com.datastax.oss.driver.internal.core.cql.ResultSets;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
 
 public class InsertDataTo {
@@ -46,6 +50,103 @@ public class InsertDataTo {
 		return table;
 
 	}
+	
+	public Boolean insertDomainList (String domainName) {
+		
+		
+		String keySpace = "commonks";
+		String tableName = "domainlist";
+		Boolean response = null;
+		
+		TableMetadata res = this.checkExsitingTable(tableName, keySpace);
+		
+		if (res == null) {
+			
+			createTable.createTableForDomain(keySpace, tableName);
+			
+		}
+		
+		Statement query = QueryBuilder.insertInto(keySpace, tableName)
+				.value("domainname", domainName).ifNotExists();
+		
+		ResultSet resSet = session.execute(query);
+		
+		List<Row> resList = resSet.all();
+		
+		for(Row row : resList) {
+			
+			response = row.getBool(0);
+		
+		}
+		
+		return response;
+		
+	}
+	
+	public void insertDomainService (ReqSvcCodeForm form) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		String keySpace = "commonks";
+		String table = "domainservicelist";
+		
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if (res == null) {
+			
+			createTable.createDomainServiceList();
+			
+		}
+		
+		Boolean checkSvcType = selectTo.isExistedItem(keySpace, table, form.getServiceType());
+		
+		if (checkSvcType == false) {
+			
+			int code = 0001;
+			
+			Statement query = QueryBuilder.insertInto(keySpace, table)
+					.value("servicetype", form.getServiceType())
+					.value("servicecode", code)
+					.value("domainname", form.getDomainName())
+					.value("servicedesc", form.getServiceDesc());
+			
+			session.execute(query);
+			
+		}
+		
+		selectTo.selectServiceCode(keySpace, table, form.getServiceType());
+		
+		
+		
+				
+		
+		
+	}
+	
+	public ResultSet insertSpecIndexTo (String specName, String domainName) {
+		
+		String keySpace = "commonks";
+		String tableName = "specindexList";
+		
+		TableMetadata res = this.checkExsitingTable(tableName, keySpace);
+		
+		if (res == null) {
+			createTable.createTableForSpecIndexList();
+		}
+		
+		Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
+				.value("specname", specName)
+				.value("domainname", domainName);
+				
+		
+		
+		
+		ResultSet resSet = session.execute(query);
+		
+		return resSet;
+
+		
+	}
 
 
 	/**
@@ -68,11 +169,11 @@ public class InsertDataTo {
 
 		TableMetadata res = this.checkExsitingTable(desc.getDomainName(), keySpace);
 
-		if (res == null) {
-
-			createTable.createTableFor(keySpace, desc.getDomainName());
-
-		}
+//		if (res == null) {
+//
+//			createTable.createTableFor(keySpace, desc.getDomainName());
+//
+//		}
 
 		JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
 
@@ -107,11 +208,11 @@ public class InsertDataTo {
 
 			TableMetadata res = this.checkExsitingTable(desc.getDomainId(), keySpace);
 
-			if (res == null) {
-
-				createTable.createTableFor(keySpace, desc.getDomainId());
-
-			}
+//			if (res == null) {
+//
+//				createTable.createTableFor(keySpace, desc.getDomainId());
+//
+//			}
 
 			JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
 
@@ -176,18 +277,6 @@ public class InsertDataTo {
 		}
 
 		for (BaseIntentInfoForm data : listData) {
-
-			ResultSet rs = selectTo.getLastRowForDicList(keySpace, targetTable);
-
-			Row row = rs.one();
-
-			//			if (row == null) {
-			//				
-			//				idx = 1;
-			//				
-			//			} else {		
-			//				idx = (row.getInt("seqnum")) + 1;
-			//			}
 
 			query = QueryBuilder.insertInto(keySpace, targetTable)
 					//					.value("seqNum", idx)

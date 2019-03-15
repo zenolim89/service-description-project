@@ -11,6 +11,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.OwnServiceList;
@@ -131,17 +133,39 @@ public class JSONSerializerTo {
 	
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray resDomainList (List<String> domainList) {
+	public JSONObject resDomainList (ResultSet resSet) {
 		
 		JSONArray resArr = new JSONArray();
+		JSONObject res = new JSONObject();
+		JSONObject resData = new JSONObject();
 		
-		for (String table : domainList) {
+		
+		List<Row> resList = resSet.all();
+		
+		for (Row domain : resList) {
 			
-			resArr.add(table);
+			resArr.add(domain.getString("domainname"));
 			
 		}
 		
-		return resArr;
+		resData.put("domainList", resArr);
+		
+		if (resArr.size() == 0 ) {
+			
+			res.put("resCode", "404");
+			res.put("resMsg", "도메인 정보가 없습니다");
+			res.put("resData", resData);
+			
+			return res;
+			
+		}
+		
+		res.put("resCode", "200");
+		res.put("resMsg", "성공");
+		res.put("resData", resData);
+		
+		return res;
+		
 		
 	}
 	

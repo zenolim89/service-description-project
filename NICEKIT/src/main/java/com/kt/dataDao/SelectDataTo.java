@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.ws.ResponseWrapper;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -88,27 +90,81 @@ public class SelectDataTo {
 
 		return resObj;
 	}
+	
 
-	public JSONArray selectDomainListToCommon() {
+	
 
-		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
+//	public JSONArray selectDomainListToCommon() {
+//		
+//		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
+//
+//		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
+//
+//		JSONArray arr = serializerTo.resDomainList(tableList);
+//
+//		cluster.close();
+//
+//		return arr;
+//	}
+	
 
-		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
+	public JSONObject selectDomainList() {
 
-		JSONArray arr = serializerTo.resDomainList(tableList);
-
-		cluster.close();
-
-		return arr;
-	}
-
-	public ResultSet getLastRowForDicList(String ksName, String tbName) {
-
-		Statement query = QueryBuilder.select().from(ksName, tbName);
+		Statement query = QueryBuilder.select().from("commonks", "domainlist");
 		ResultSet res = session.execute(query);
+		
+		JSONObject resObj = serializerTo.resDomainList(res);
 
+		return resObj;
+
+	}
+	
+	public Boolean isExistedItem (String keySpace, String table, String svcType) {
+		
+		Boolean res = null;
+		
+		Statement query = QueryBuilder.select().from(keySpace, table);
+		
+		ResultSet resSet = session.execute(query);
+		
+		List<Row> rowList = resSet.all();
+		
+		for(Row row : rowList) {
+			
+			if (row.getString("servicetype") == svcType) {
+				
+				res = true;
+				
+				return res;
+				
+			} 
+		}
+		
+		res = false;
+		
+		
 		return res;
-
+		
+	}
+	
+	public void selectServiceCode (String keySpace, String table, String svcType) {
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("servicetype", svcType))
+				.orderBy(QueryBuilder.desc("servicetype"))
+				.allowFiltering();
+		
+		ResultSet resSet = session.execute(query);
+		
+		List<Row> rowList = resSet.all();
+		
+		for(Row row : rowList) {
+			
+			System.out.println(row.getString("servicetype"));
+			
+		}
+		
+		
 	}
 
 	public ArrayList<String> selectIntentNameList(String ksName, String tableName) throws ParseException {

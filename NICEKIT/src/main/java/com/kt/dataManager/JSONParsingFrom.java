@@ -21,6 +21,7 @@ import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqDataForm;
+import com.kt.dataForms.ReqSvcCodeForm;
 
 public class JSONParsingFrom {
 
@@ -28,19 +29,31 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-
-
-	public JSONObject getDomainList () {
-
-		SelectDataTo selectTo = new SelectDataTo();
+	
+	public JSONObject parsingCreateDomain (String response) {
+		
+		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
-
-		JSONArray arr = selectTo.selectDomainListToCommon();
-
-		res.put("domains", arr);
-
+		
+		try {
+		
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			String dn = obj.get("domainName").toString();
+			
+			insertTo.insertDomainList(dn);
+			
+			res.put("resCode", "2001");
+			res.put("resMsg", "정상적으로 등록되었습니다");
+			
+		
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return res;
-
+		
 	}
 	
 
@@ -94,6 +107,35 @@ public class JSONParsingFrom {
 		return res;
 
 	}
+	
+	public JSONObject getServiceCodeTo (String response) {
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		JSONObject res = new JSONObject();
+		JSONSerializerTo jsonSerializerTo = new JSONSerializerTo();
+		
+		ReqSvcCodeForm form = new ReqSvcCodeForm();
+		
+		try {
+						
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			form.setDomainName(obj.get("domainName").toString());
+			form.setServiceDesc(obj.get("serviceDesc").toString());
+			form.setServiceName(obj.get("serviceName").toString());
+			form.setServiceType(obj.get("serviceType").toString());
+			
+			insertTo.insertDomainService(form);
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return res;
+		
+	}
 
 	public JSONObject convertIntentInfo (JSONArray intentInfo) {
 
@@ -111,7 +153,9 @@ public class JSONParsingFrom {
 
 
 	public JSONObject setAuth(String response) {
-		JSONObject res = null;
+		
+		JSONObject res = new JSONObject();
+		
 		try {
 			JSONObject jsonObj = (JSONObject) parser.parse(response);
 			// check ID/PW

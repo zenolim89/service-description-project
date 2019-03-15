@@ -32,12 +32,10 @@ public class SampleController {
 
 		sheet.setColumnWidth(0,  10000);
 		sheet.setColumnWidth(9,  10000);
-
-//		CellStyle style = this.createCellStype();
 		
 		sheet = this.createServiceDesc(sheet); //수신 받은 정보도 넘겨야 함
 		sheet = this.createHeaderInformation(sheet); // 수신받은 정보도 넘겨야 함
-
+//메소드
 
 
 
@@ -86,8 +84,9 @@ public class SampleController {
 		cell.setCellStyle(this.createCellStype());
 		
 		cell = row.createCell(1);
-		cell.setCellValue("설명");
+//		cell.setCellValue();
 		
+	
 		
 		
 		

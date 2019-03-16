@@ -108,6 +108,19 @@ public class JSONParsingFrom {
 
 	}
 	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 등록기로부터 서비스 명세를 수신 후 해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고
+	 *        서비스 코드 발급을 요청하기 전 등록기로 부터 수신 받은 데이터를 파싱하는 함수
+	 *        파싱 후 InsertDataTo로 파싱 결과를 전달하여 serviceCode를 수신 
+	 * @version	: 0.1
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: InsertDataTo.createServiceCodeNinsertService; JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
+
+	 * @param response (등록기로 받은 데이터, String 타입)
+	 * @return
+	 */
 	public JSONObject getServiceCodeTo (String response) {
 		
 		InsertDataTo insertTo = new InsertDataTo();
@@ -125,7 +138,21 @@ public class JSONParsingFrom {
 			form.setServiceName(obj.get("serviceName").toString());
 			form.setServiceType(obj.get("serviceType").toString());
 			
-			insertTo.insertDomainService(form);
+			String serviceCode = insertTo.createServiceCodeNinsertService(form);
+			
+			if (serviceCode == "409") {
+				
+				res = jsonSerializerTo.resConflict(serviceCode);
+				
+				return res;
+				
+			} else {
+				
+				res = jsonSerializerTo.resServiceCodeToCreate(serviceCode);
+				
+				return res;
+				
+			}
 			
 			
 		} catch (ParseException e) {

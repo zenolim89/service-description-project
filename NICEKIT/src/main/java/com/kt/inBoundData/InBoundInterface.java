@@ -138,7 +138,7 @@ public class InBoundInterface {
 				
 			} else if (row.getBool(0) == false) {
 				resObj.put("resCode", "409");
-				resObj.put("resMsg", "동일한 도메인 이름이 존재합니다");
+				resObj.put("resMsg", "동일한 규 이름이 존재합니다");
 			} else {
 				resObj.put("resCode", "400");
 				resObj.put("resMsg", "잘못된 접근 입니다.");
@@ -254,7 +254,7 @@ public class InBoundInterface {
 
 		} catch (Exception e) {
 
-			res.put("resCode", "4000");
+			res.put("resCode", "500");
 			res.put("resMsg", e.getMessage());
 
 			response = e.getMessage().toString();

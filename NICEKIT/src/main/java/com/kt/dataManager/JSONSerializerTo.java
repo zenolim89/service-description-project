@@ -109,6 +109,31 @@ public class JSONSerializerTo {
 		return resMsg;
 	}
 	
+	public JSONObject resConflict (String code) {
+		
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+		
+		obj.put("resCode", code);
+		obj.put("resMsg", "이미 동일한 항목의 서비스가 존재합니다");
+		obj.put("resData", arr);
+		
+		return obj;
+	}
+	
+	public JSONObject resServiceCodeToCreate(String code) {
+		
+		JSONObject obj = new JSONObject();
+		JSONObject subObj = new JSONObject();
+		
+		obj.put("resCode", "201");
+		obj.put("resMsg", "서비스 코드 발행 성공");
+		subObj.put("serviceCode", code);
+		obj.put("resData", subObj);
+		
+		return obj;
+	}
+	
 	
 	public JSONObject resDomanIntentNameList () throws ParseException {
 		

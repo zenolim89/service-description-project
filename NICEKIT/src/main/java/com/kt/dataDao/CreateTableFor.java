@@ -70,9 +70,10 @@ public class CreateTableFor {
 	public void createDomainServiceList () {
 		
 		CreateTable create = ((CreateTable) builder.createTable("commonks", "domainservicelist").ifNotExists())
-				.withPartitionKey("servicetype", DataTypes.TEXT)
-				.withPartitionKey("servicecode", DataTypes.INT)
+				.withPartitionKey("seqnum", DataTypes.INT)
 				.withClusteringColumn("domainname", DataTypes.TEXT)
+				.withColumn("servicetype", DataTypes.TEXT)
+				.withColumn("serviceCode", DataTypes.TEXT)
 				.withColumn("servicename", DataTypes.TEXT)
 				.withColumn("servicedesc", DataTypes.TEXT);
 		

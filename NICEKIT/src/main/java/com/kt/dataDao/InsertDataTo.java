@@ -12,6 +12,7 @@ import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
@@ -83,12 +84,33 @@ public class InsertDataTo {
 		
 	}
 	
-	public void insertDomainService (ReqSvcCodeForm form) {
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 서비스 코드 요청을 위한 서비스 간단 명세를 수신 후 해당 값을 기반으로 commonks 내 domainservicelist 테이블에 명세를 저장하고
+	 *        서비스 코드를 발급, 이때 발급되는 코드는 본 수신 명세와 함께 domainservicelist에 함께 저장된 후 코드 값을 리턴
+	 *        수행절차: (1) commonks 내 domainservicelist 테이블 존재여부 확인 후 존재하지 않을 경우 생성 (참고: CreateTableTo.createDomainServiceList()
+	 *                (2-1) domainservicelist 테이블에 동일한 서비스명을 가지는 Row가 있는지 확인 후 해당 값이 존재할 경우 serviceCode를 409로 리턴 
+	 *                (2-2) domainservicelist 테이블에 동일한 서비스명을 가지는 Row가 없을 경우 수신 받은 명세 값을 등록, 이때 seqnum은 domainservicelist
+	 *                      테이블의 전체 row size의 + 1로 정의되며, 서비스 코드 발급 규칙은 "도메인 이름_서비스타입_일련번호"로 정의
+	 *                      일련번호의 경우 int 타입으로 정의되며 1부터 시작
+	 *                
+	 * @version	: 0.1
+	 * @return 	: String code (409 또는 발행된 service code 값)
+	 * @throws 	: 
+	 * @see		: SelectDataTo.isExistedItem(); SelectDataTo.selectNumberOfRows
+
+	 * @param 
+	 * @return
+	 */
+	public String createServiceCodeNinsertService (ReqSvcCodeForm form) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
 		String keySpace = "commonks";
 		String table = "domainservicelist";
+		
+		String code;
 		
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
 		
@@ -98,28 +120,32 @@ public class InsertDataTo {
 			
 		}
 		
-		Boolean checkSvcType = selectTo.isExistedItem(keySpace, table, form.getServiceType());
+		Boolean checkItem = selectTo.isExistedItem(keySpace, table, "servicename", form.getServiceName());
 		
-		if (checkSvcType == false) {
+		if (checkItem == true) {
 			
-			int code = 0001;
+			code = "409";
 			
-			Statement query = QueryBuilder.insertInto(keySpace, table)
-					.value("servicetype", form.getServiceType())
-					.value("servicecode", code)
-					.value("domainname", form.getDomainName())
-					.value("servicedesc", form.getServiceDesc());
-			
-			session.execute(query);
+			return code;
 			
 		}
 		
-		selectTo.selectServiceCode(keySpace, table, form.getServiceType());
 		
+		int num = selectTo.selectNumberOfRows(keySpace, table) + 1;
 		
+		Statement query = QueryBuilder.insertInto(keySpace, table)
+				.value("seqnum", num)
+				.value("domainname", form.getDomainName())
+				.value("servicetype", form.getServiceType())
+				.value("servicecode", form.getDomainName() + "_" + form.getServiceType() + "_" + num)
+				.value("servicename", form.getServiceName())
+				.value("servicedesc", form.getServiceDesc());
 		
-				
+		session.execute(query);
 		
+		code = form.getDomainName() + "_" + form.getServiceType() + "_" + num;
+		
+		return code;
 		
 	}
 	

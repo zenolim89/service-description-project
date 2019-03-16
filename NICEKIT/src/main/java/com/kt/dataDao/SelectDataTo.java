@@ -19,6 +19,7 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.datastax.oss.driver.shaded.guava.common.math.Quantiles;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.DiscoveredServiceDESC;
@@ -119,7 +120,20 @@ public class SelectDataTo {
 
 	}
 	
-	public Boolean isExistedItem (String keySpace, String table, String svcType) {
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 요청하는 Item (i.e., 컬럼의 값)의 존재 유무를 확인하는 메소드  
+	 *        요청하는 Item 값이 존재할 경우 true를 반환하고, 존재하지 않을 경우 false를 반환 
+	 *                
+	 * @version	: 0.1
+	 * @return 	: Boolean
+	 * @throws 	: 
+	 * @see		: 
+
+	 * @param 
+	 * @return
+	 */
+	public Boolean isExistedItem (String keySpace, String table, String targetCn, String item) {
 		
 		Boolean res = null;
 		
@@ -131,7 +145,9 @@ public class SelectDataTo {
 		
 		for(Row row : rowList) {
 			
-			if (row.getString("servicetype") == svcType) {
+			System.out.println(row.getString(targetCn).toString());
+			
+			if ((row.getString(targetCn).toString()).equals(item)) {
 				
 				res = true;
 				
@@ -147,25 +163,56 @@ public class SelectDataTo {
 		
 	}
 	
-	public void selectServiceCode (String keySpace, String table, String svcType) {
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 검색 대상의 테이블의 전체 row 개수를 확인하기 위한 메소드 
+	 *        PartitionKey를 정의하기 위한 용도로 활용되며, int형의 전체 row 개수를 반환 (0: 값이 없음)
+	 *                
+	 * @version	: 
+	 * @return 	: 
+	 * @throws 	: 
+	 * @see		: 
+
+	 * @param 
+	 * @return
+	 */
+	
+	public int selectNumberOfRows (String keySpace, String table) {
 		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("servicetype", svcType))
-				.orderBy(QueryBuilder.desc("servicetype"))
-				.allowFiltering();
+		Statement query = QueryBuilder.select().from(keySpace, table);
 		
-		ResultSet resSet = session.execute(query);
+		ResultSet set = session.execute(query);
 		
-		List<Row> rowList = resSet.all();
+		List<Row> resRow = set.all();
 		
-		for(Row row : rowList) {
-			
-			System.out.println(row.getString("servicetype"));
-			
-		}
+		int allRow = resRow.size();
+		
+		return allRow;
 		
 		
 	}
+	
+	
+//	public ResultSet selectServiceCode (String keySpace, String table, String svcType, String domainname) {
+//		
+//		Statement query = QueryBuilder.select().from(keySpace, table)
+//				.where(QueryBuilder.eq("domainname", domainname))
+//				.and(QueryBuilder.eq("servicetype", svcType))
+//				.orderBy(QueryBuilder.desc("servicetype"))
+//				.allowFiltering();
+//		
+//		ResultSet resSet = session.execute(query);
+//		
+//		List<Row> rowList = resSet.all();
+//		
+//		for(Row row : rowList) {
+//			
+//			System.out.println(row.getString("servicetype"));
+//			
+//		}
+//		
+//		return resSet;
+//	}
 
 	public ArrayList<String> selectIntentNameList(String ksName, String tableName) throws ParseException {
 

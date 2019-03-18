@@ -2,6 +2,8 @@ package com.kt.inBoundData;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,14 +14,11 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONException;
-
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +35,8 @@ import com.kt.dataDao.SelectDataTo;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.util.UtilFile;
+
+import net.sf.json.JSONException;
 
 @RestController
 @RequestMapping("")
@@ -639,7 +640,7 @@ public class InBoundInterface {
 		*/
 		
 		//특정 파일
-		File file = new File(path + "/resources/template/" + vendorName + ".html");
+		File file = new File(path + File.separator +"resources" + File.separator + "template" + File.separator + vendorName + ".html");
 		
 		DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
 		//Resource resource = defaultResourceLoader.getResource(name);
@@ -658,15 +659,50 @@ public class InBoundInterface {
 
 	// request vendor generate
 	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
-	public JSONObject VendorGen(InputStream body) {
+	public JSONObject VendorGen(InputStream body, HttpServletRequest _request,
+			@RequestParam HashMap<String, Object> _paramMap) {
 
 		JSONObject res = new JSONObject();
 		JSONObject vendorObj = new JSONObject();
 
+		ServletContext context = _request.getSession().getServletContext();
+		String path = context.getRealPath("/");
+
+		String dirName = _paramMap.get("vendorName").toString();
+		String standardDirName = _paramMap.get("urlPath").toString();
+
+		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/";
+		
+		// 기존 디렉토리 File 객체
+		File orgFile = new File(path + File.separator + "resources" +File.separator + standardDirName);
+
+		// 신규 생성될 디렉토리 File 객체
+		File newDirFile = new File(path + File.separator + "resources" + File.separator + dirName);
+
+		System.out.println("#############################################");
+		System.out.println("orgFile : " + orgFile.getAbsolutePath());
+		System.out.println("#############################################");
+		System.out.println("newDirFile : " + newDirFile.getAbsolutePath());
+		System.out.println("#############################################");
+
+		if (!orgFile.exists()) {
+
+			res.put("resData", "원본 폴더가 존재하지 않습니다.");
+		} else if (newDirFile.exists()) {
+
+			res.put("resData", "기존에 폴더가 있습니다.");
+		}
+		// 기존 폴더 없을경우 신규 생성 후 파일 복사 진행.
+		else {
+
+			newDirFile.mkdir();
+			this.copyFile(orgFile, newDirFile);
+			res.put("resData", _urlPath + dirName);
+		}
+
 		res.put("resCode", "200");
 		res.put("resMsg", "성공");
-		vendorObj.put("", "");
-		res.put("resData", vendorObj);
+		// vendorObj.put("", "");
 
 		return res;
 	}
@@ -753,5 +789,40 @@ public class InBoundInterface {
 		res.put("resMsg", "성공");
 		res.put("resData", _resDataObj);
 		return res;
+	}
+	
+	public void copyFile(File sourceF, File targetF){
+		
+		File[] ff = sourceF.listFiles();
+		for (File file : ff) {
+			File temp = new File(targetF.getAbsolutePath() + File.separator + file.getName());
+			if(file.isDirectory()){
+				temp.mkdir();
+				this.copyFile(file, temp);
+			} else {
+				FileInputStream fis = null;
+				FileOutputStream fos = null;
+				try {
+					fis = new FileInputStream(file);
+					fos = new FileOutputStream(temp) ;
+					byte[] b = new byte[4096];
+					int cnt = 0;
+					while((cnt=fis.read(b)) != -1){
+						fos.write(b, 0, cnt);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally{
+					try {
+						fis.close();
+						fos.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
 	}
 }

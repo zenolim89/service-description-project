@@ -10,9 +10,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.SelectDataTo;
+<<<<<<< HEAD
+=======
+import com.kt.dataForms.KeyValueFormatForJSON;
+>>>>>>> refs/remotes/origin/master
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
@@ -105,6 +111,31 @@ public class JSONSerializerTo {
 		return resMsg;
 	}
 	
+	public JSONObject resConflict (String code) {
+		
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+		
+		obj.put("resCode", code);
+		obj.put("resMsg", "이미 동일한 항목의 서비스가 존재합니다");
+		obj.put("resData", arr);
+		
+		return obj;
+	}
+	
+	public JSONObject resServiceCodeToCreate(String code) {
+		
+		JSONObject obj = new JSONObject();
+		JSONObject subObj = new JSONObject();
+		
+		obj.put("resCode", "201");
+		obj.put("resMsg", "서비스 코드 발행 성공");
+		subObj.put("serviceCode", code);
+		obj.put("resData", subObj);
+		
+		return obj;
+	}
+	
 	
 	public JSONObject resDomanIntentNameList () throws ParseException {
 		
@@ -129,18 +160,43 @@ public class JSONSerializerTo {
 	
 	
 	@SuppressWarnings("unchecked")
-	public JSONArray resDomainList (List<String> domainList) {
+	public JSONObject resDomainList (ResultSet resSet) {
 		
 		JSONArray resArr = new JSONArray();
+		JSONObject res = new JSONObject();
+		JSONObject resData = new JSONObject();
 		
-		for (String table : domainList) {
+		
+		List<Row> resList = resSet.all();
+		
+		for (Row domain : resList) {
 			
-			resArr.add(table);
+			resArr.add(domain.getString("domainname"));
 			
 		}
 		
-		return resArr;
+		resData.put("domainList", resArr);
 		
+<<<<<<< HEAD
+=======
+		if (resArr.size() == 0 ) {
+			
+			res.put("resCode", "404");
+			res.put("resMsg", "도메인 정보가 없습니다");
+			res.put("resData", resData);
+			
+			return res;
+			
+		}
+		
+		res.put("resCode", "200");
+		res.put("resMsg", "성공");
+		res.put("resData", resData);
+		
+		return res;
+		
+		
+>>>>>>> refs/remotes/origin/master
 	}
 	
 	public JSONObject createJSONForIntentInfo (String intentName) {

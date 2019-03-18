@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.ws.ResponseWrapper;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +19,7 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.datastax.oss.driver.shaded.guava.common.math.Quantiles;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.DiscoveredServiceDESC;
@@ -88,28 +91,128 @@ public class SelectDataTo {
 
 		return resObj;
 	}
+	
 
-	public JSONArray selectDomainListToCommon() {
+	
 
-		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
+//	public JSONArray selectDomainListToCommon() {
+//		
+//		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
+//
+//		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
+//
+//		JSONArray arr = serializerTo.resDomainList(tableList);
+//
+//		cluster.close();
+//
+//		return arr;
+//	}
+	
 
-		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
+	public JSONObject selectDomainList() {
 
-		JSONArray arr = serializerTo.resDomainList(tableList);
-
-		cluster.close();
-
-		return arr;
-	}
-
-	public ResultSet getLastRowForDicList(String ksName, String tbName) {
-
-		Statement query = QueryBuilder.select().from(ksName, tbName);
+		Statement query = QueryBuilder.select().from("commonks", "domainlist");
 		ResultSet res = session.execute(query);
+		
+		JSONObject resObj = serializerTo.resDomainList(res);
 
-		return res;
+		return resObj;
 
 	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 요청하는 Item (i.e., 컬럼의 값)의 존재 유무를 확인하는 메소드  
+	 *        요청하는 Item 값이 존재할 경우 true를 반환하고, 존재하지 않을 경우 false를 반환 
+	 *                
+	 * @version	: 0.1
+	 * @return 	: Boolean
+	 * @throws 	: 
+	 * @see		: 
+
+	 * @param 
+	 * @return
+	 */
+	public Boolean isExistedItem (String keySpace, String table, String targetCn, String item) {
+		
+		Boolean res = null;
+		
+		Statement query = QueryBuilder.select().from(keySpace, table);
+		
+		ResultSet resSet = session.execute(query);
+		
+		List<Row> rowList = resSet.all();
+		
+		for(Row row : rowList) {
+			
+			System.out.println(row.getString(targetCn).toString());
+			
+			if ((row.getString(targetCn).toString()).equals(item)) {
+				
+				res = true;
+				
+				return res;
+				
+			} 
+		}
+		
+		res = false;
+		
+		
+		return res;
+		
+	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 검색 대상의 테이블의 전체 row 개수를 확인하기 위한 메소드 
+	 *        PartitionKey를 정의하기 위한 용도로 활용되며, int형의 전체 row 개수를 반환 (0: 값이 없음)
+	 *                
+	 * @version	: 
+	 * @return 	: 
+	 * @throws 	: 
+	 * @see		: 
+
+	 * @param 
+	 * @return
+	 */
+	
+	public int selectNumberOfRows (String keySpace, String table) {
+		
+		Statement query = QueryBuilder.select().from(keySpace, table);
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> resRow = set.all();
+		
+		int allRow = resRow.size();
+		
+		return allRow;
+		
+		
+	}
+	
+	
+//	public ResultSet selectServiceCode (String keySpace, String table, String svcType, String domainname) {
+//		
+//		Statement query = QueryBuilder.select().from(keySpace, table)
+//				.where(QueryBuilder.eq("domainname", domainname))
+//				.and(QueryBuilder.eq("servicetype", svcType))
+//				.orderBy(QueryBuilder.desc("servicetype"))
+//				.allowFiltering();
+//		
+//		ResultSet resSet = session.execute(query);
+//		
+//		List<Row> rowList = resSet.all();
+//		
+//		for(Row row : rowList) {
+//			
+//			System.out.println(row.getString("servicetype"));
+//			
+//		}
+//		
+//		return resSet;
+//	}
 
 	public ArrayList<String> selectIntentNameList(String ksName, String tableName) throws ParseException {
 

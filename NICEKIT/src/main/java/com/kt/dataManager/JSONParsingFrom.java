@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +21,7 @@ import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqDataForm;
+import com.kt.dataForms.ReqSvcCodeForm;
 
 public class JSONParsingFrom {
 
@@ -26,19 +29,31 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-
-
-	public JSONObject getDomainList () {
-
-		SelectDataTo selectTo = new SelectDataTo();
+	
+	public JSONObject parsingCreateDomain (String response) {
+		
+		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
-
-		JSONArray arr = selectTo.selectDomainListToCommon();
-
-		res.put("domains", arr);
-
+		
+		try {
+		
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			String dn = obj.get("domainName").toString();
+			
+			insertTo.insertDomainList(dn);
+			
+			res.put("resCode", "2001");
+			res.put("resMsg", "정상적으로 등록되었습니다");
+			
+		
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return res;
-
+		
 	}
 	
 
@@ -92,6 +107,62 @@ public class JSONParsingFrom {
 		return res;
 
 	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
+	 * desc	: 등록기로부터 서비스 명세를 수신 후 해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고
+	 *        서비스 코드 발급을 요청하기 전 등록기로 부터 수신 받은 데이터를 파싱하는 함수
+	 *        파싱 후 InsertDataTo로 파싱 결과를 전달하여 serviceCode를 수신 
+	 * @version	: 0.1
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: InsertDataTo.createServiceCodeNinsertService; JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
+
+	 * @param response (등록기로 받은 데이터, String 타입)
+	 * @return
+	 */
+	public JSONObject getServiceCodeTo (String response) {
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		JSONObject res = new JSONObject();
+		JSONSerializerTo jsonSerializerTo = new JSONSerializerTo();
+		
+		ReqSvcCodeForm form = new ReqSvcCodeForm();
+		
+		try {
+						
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			form.setDomainName(obj.get("domainName").toString());
+			form.setServiceDesc(obj.get("serviceDesc").toString());
+			form.setServiceName(obj.get("serviceName").toString());
+			form.setServiceType(obj.get("serviceType").toString());
+			
+			String serviceCode = insertTo.createServiceCodeNinsertService(form);
+			
+			if (serviceCode == "409") {
+				
+				res = jsonSerializerTo.resConflict(serviceCode);
+				
+				return res;
+				
+			} else {
+				
+				res = jsonSerializerTo.resServiceCodeToCreate(serviceCode);
+				
+				return res;
+				
+			}
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return res;
+		
+	}
 
 	public JSONObject convertIntentInfo (JSONArray intentInfo) {
 
@@ -109,7 +180,9 @@ public class JSONParsingFrom {
 
 
 	public JSONObject setAuth(String response) {
-		JSONObject res = null;
+		
+		JSONObject res = new JSONObject();
+		
 		try {
 			JSONObject jsonObj = (JSONObject) parser.parse(response);
 			// check ID/PW

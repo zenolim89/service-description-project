@@ -9,7 +9,7 @@ var statusCode = {
 		"501" : "파일 업로드 중입니다.",
 		"502" : "오류 수정 후 재업로드 바랍니다."
 };
-var status="500";
+var status = "500";
 
 // 어레이 버퍼를 처리한다 ( 오직 readAsArrayBuffer 데이터만 가능하다 )
 function fixdata(data) {
@@ -59,6 +59,8 @@ function handleFile(e) {
 			$("#first_sheet_output").html("");
 			$("#second_sheet_check").html("");
 			$("#second_sheet_output").html("");
+
+			console.log(JSON.stringify(workbook));
 			workbook.SheetNames.forEach(function(item, index, array) {
 
 				var json = XLSX.utils.sheet_to_json(workbook.Sheets[item]);
@@ -66,7 +68,10 @@ function handleFile(e) {
 // var html = XLSX.utils.sheet_to_html(workbook.Sheets[item]);
 // var formulae = XLSX.utils .sheet_to_formulae(workbook.Sheets[item]);
 
+				console.log(JSON.stringify(json));
+
 				if (index == 1) { // 첫번째 시트
+
 					var err = 0;
 					nullCHKIntentSheet(json).forEach(function(item, index, array) {
 						err++;
@@ -188,7 +193,7 @@ function setIntentSheet(json) { // 인텐트 정의
 		intentObj["ex"] = dicNames;
 		tempInfo.push(intentObj);
 	}
-	// console.log(JSON.stringify(tempInfo));
+	//console.log(JSON.stringify(tempInfo));
 }
 
 function getDicList(extra, dicjson) { // 어휘 정의
@@ -209,7 +214,7 @@ function getDicList(extra, dicjson) { // 어휘 정의
 		}
 		owndicList.push(dicObj);
 	}
-
+	//console.log(JSON.stringify(owndicList));
 	return owndicList;
 }
 

@@ -22,6 +22,7 @@ import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
 
@@ -51,6 +52,50 @@ public class InsertDataTo {
 		return table;
 
 	}
+	
+	public String insertVenderToIndexList (ReqCreateVender vender) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		String keySpace = "vendersvcks";
+		String table = "venderindexlist";
+		
+		String resCode;
+		
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if (res == null) {
+			
+			createTable.createTableForVenderList();
+		}
+		
+		Boolean existed = selectTo.isExistedItem(keySpace, table, "vendername", vender.getVender());
+		
+		if (existed == true) {
+			
+			resCode = "409";
+			
+			return resCode;
+			
+		} else {
+			
+			Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
+					.value("vendername", vender.getVender())
+					.value("domainname", vender.getDomainName())
+					.value("templatedicpath", vender.getTemplateUrl());
+			
+			session.execute(query);
+			
+			resCode = "201";
+			
+			return resCode;
+			
+			
+		}
+		
+	}
+	
+	
 	
 	public Boolean insertDomainList (String domainName) {
 		

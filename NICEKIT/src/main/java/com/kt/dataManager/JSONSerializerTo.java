@@ -199,9 +199,36 @@ public class JSONSerializerTo {
 			
 		}
 		
+	}
+	
+	public JSONObject resCreateVenderPath(String code, String path) {
 		
+		JSONObject res = new JSONObject();
+		
+		if (code == "409") {
+			
+			res = this.resConflict(code);
+			
+			return res;
+			
+		} else {
+			
+			JSONObject dataObj = new JSONObject();
+			
+			res.put("resCode", code);
+			res.put("resMsg", "성공");
+			
+			dataObj.put("urlPath", path);
+			
+			res.put("resData", dataObj);
+			
+			
+			return res;
+			
+		}
 		
 	}
+	
 
 	public JSONObject resConflict (String code) {
 

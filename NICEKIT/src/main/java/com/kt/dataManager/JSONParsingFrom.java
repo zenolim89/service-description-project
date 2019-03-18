@@ -56,6 +56,40 @@ public class JSONParsingFrom {
 		return res;
 
 	}
+	
+	public JSONObject parsingCreateVenderTemplate (String response, String path) {
+		
+		ReqCreateVender venderInfo = new ReqCreateVender();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		
+		JSONObject res = new JSONObject();
+		String resCode;
+				
+		try {
+			
+			JSONObject obj = (JSONObject) parser.parse(response);
+			
+			venderInfo.setDomainName(obj.get("domainName").toString());
+			venderInfo.setVender(obj.get("vender").toString());
+			venderInfo.setTemplateUrl(obj.get("urlPath").toString());
+			
+			resCode = insertTo.insertVenderToIndexList(venderInfo);
+			
+			res = serializerTo.resCreateVenderPath(resCode, path);
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return res;
+		
+		
+	}
 
 
 	public ArrayList<BaseDictionarySet> parsingIntentInfo (JSONArray arr) {

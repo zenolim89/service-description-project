@@ -137,8 +137,9 @@ public class InsertDataTo {
 				.value("seqnum", num)
 				.value("domainname", form.getDomainName())
 				.value("servicetype", form.getServiceType())
-				.value("servicecode", form.getDomainName() + "_" + form.getServiceType() + "_" + num)
+				.value("servicecode", form.getDomainName() + "_" + form.getInvokeType() + "_" + num)
 				.value("servicename", form.getServiceName())
+				.value("invoketype", form.getInvokeType())
 				.value("servicedesc", form.getServiceDesc());
 		
 		session.execute(query);

@@ -75,6 +75,7 @@ public class CreateTableFor {
 				.withColumn("servicetype", DataTypes.TEXT)
 				.withColumn("serviceCode", DataTypes.TEXT)
 				.withColumn("servicename", DataTypes.TEXT)
+				.withColumn("invoketype", DataTypes.TEXT)
 				.withColumn("servicedesc", DataTypes.TEXT);
 		
 		SimpleStatement query = new SimpleStatement(create.toString());

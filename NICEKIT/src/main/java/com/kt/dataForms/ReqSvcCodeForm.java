@@ -6,7 +6,16 @@ public class ReqSvcCodeForm {
 	String serviceType;
 	String serviceName;
 	String serviceDesc;
+	String invokeType;
 	
+	
+	public String getInvokeType () {
+		return invokeType;
+	}
+	
+	public void setInvokeType (String invokeType) {
+		this.invokeType = invokeType;
+	}
 	
 	public String getDomainName() {
 		return domainName;

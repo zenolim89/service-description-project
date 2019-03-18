@@ -593,22 +593,6 @@ public class InBoundInterface {
 		return res;
 	}
 
-	// request vendor template url
-	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
-	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName) {
-
-		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/" + vendorName;
-		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		vendorObj.put("urlPath", _urlPath);
-		res.put("resData", vendorObj);
-
-		return res;
-	}
-
 	// request spec list
 	@RequestMapping(value = "/getSpecLst", method = RequestMethod.GET)
 	public JSONObject getSpecLst(@RequestParam String domainName) {

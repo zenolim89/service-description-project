@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.TableMetadata;
@@ -17,6 +18,11 @@ import com.typesafe.config.ConfigException.Parse;
 
 import ch.qos.logback.core.pattern.parser.Parser;
 
+/**
+ * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 8:11:38]
+ * @version : 
+ * desc	:
+ */
 public class CreateTableFor {
 
 	ConnectToCanssandra connDB = new ConnectToCanssandra();
@@ -30,23 +36,71 @@ public class CreateTableFor {
 		cluster = connDB.getCluster();
 		session = cluster.connect();
 	}
-
-
+	
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 3:42:10]
-	 * desc	: 테이블 생성 메소드
-	 * 현재는 정의된 컬럼명으로 테이블을 생성하지만, 이후 동적으로 테이블 생성이 필요함
-	 * 예를 들면 기존 사업장을 기준으로 확장 하는 것등
-	 * @version	:0.1
+	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 9:32:43]
+	 * desc	: 카산드라에서 한글로 테이블 이름을 생성할 수 없어 Index 테이블과 동일한 개념의 테이블을 commonks에 생성
+	 * 		   이후, 등록기로부터 엑셀로 입력 받은 서비스 명세의 전체 내용이 입력 받았을 때, 해당 포멧 중 "specName"의 값을 기반으로
+	 *        현재 테이블에서 검색한 후 수신 받은 값의 protocolname을 추가함
+	 *        최종적으로 protocolname을 기반으로 domainks에 실제 spec table을 만듦
+	 * @version	:
 	 * @param	: 
-	 * @return 	: void 
+	 * @return 	: ResultSet 
 	 * @throws 	: 
 	 * @see		: 
-
-	 * @param ks(keySpace 이름)
-	 * @param id(도메인 아이디)
+	
+	 * @param ksName
+	 * @param tableName
+	 * @return
 	 */
-	public void createTableFor (String ksName, String tableName) {
+	public void createTableForSpecIndexList () {
+		
+		CreateTable create = ((CreateTable) builder.createTable("commonks", "specindexlist").ifNotExists())
+				.withPartitionKey("specname", DataTypes.TEXT)
+				.withColumn("protocolname", DataTypes.TEXT)
+				.withColumn("domainname", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
+		
+	}
+	
+	public void createDomainServiceList () {
+		
+		CreateTable create = ((CreateTable) builder.createTable("commonks", "domainservicelist").ifNotExists())
+				.withPartitionKey("seqnum", DataTypes.INT)
+				.withClusteringColumn("domainname", DataTypes.TEXT)
+				.withColumn("servicetype", DataTypes.TEXT)
+				.withColumn("serviceCode", DataTypes.TEXT)
+				.withColumn("servicename", DataTypes.TEXT)
+				.withColumn("invoketype", DataTypes.TEXT)
+				.withColumn("servicedesc", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
+		
+	}
+
+
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 8:11:42]
+	 * desc	: 등록기로부터 신규 규격 생성 시 신규 규격 테이블 생성; 실제 데이터는 입력되지 않음
+	 * @version	: 0.1
+	 * @param	: 
+	 * @return 	: ResultSet 
+	 * @throws 	: 
+	 * @see		: InBoundInterFace.setSpec()
+	
+	 * @param ksName
+	 * @param tableName
+	 * @return
+	 */
+	public ResultSet createTableForSpec (String ksName, String tableName) {
 
 		CreateTable create = ((CreateTable) builder.createTable(ksName, tableName).ifNotExists())
 				.withClusteringColumn("intentname", DataTypes.TEXT)
@@ -66,11 +120,25 @@ public class CreateTableFor {
 				.withColumn("dicList", DataTypes.TEXT);
 
 		SimpleStatement query = new SimpleStatement(create.toString());
-		session.execute(query);
-
-		cluster.close();
+		ResultSet resSet = session.execute(query);
+		
+		return resSet;
 
 	}
+	
+	public void createTableForDomain (String ksName, String tableName) {
+		
+		CreateTable create = ((CreateTable) builder.createTable(ksName, tableName ))
+				.withPartitionKey("domainname", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
+		
+	}
+	
+	
 
 
 	/**

@@ -1,0 +1,149 @@
+{
+	"ApiServerUrl": "http://cms.geniestore.co.kr",
+	"Services_comment": "1: idle, 2: shopbot, 3: timeslice, 4: product, 5: funar, 6: shopar, 7: interaction service menu, 8: coupon",
+	"Services": [1, 2, 3, 4, 5, 7, 8],
+	"face_dectect_min_size": -1,
+	"face_dectect_max_size": 860,
+	"Shopbot": {
+	    "precede_distance": 100,
+	    "move_min_distance": 50,
+	    "run_min_distance": 2,
+	    "product_pitch_min": -10,
+	    "product_pitch_max": 10,
+	    "left_yaw_min": -30,
+	    "left_yaw_max": 0,
+	    "right_yaw_min": 0,
+	    "right_yaw_max": 40,
+	    "move_speed": 2.0,
+	    "scale": 104,
+	    "head_pitch_min_value": 2,
+	    "body_yaw_min_value": 2,
+	    "walk_max_count": 3
+	},
+	"StreetAR": {
+	    "run_ratio": 3,
+	    "check_time": 5000
+	},
+	"TimeSlice": {
+	    "run_ratio": 0,
+	    "check_time": 5000
+	},
+	"FunAR": {
+	    "FunARTakePictureDelay": 0,
+	    "FunARResultDelay": 10,
+	    "FunARResultText": "와우! 잘 나왔네요! 매장안으로 들어오시면 지니봇이 안내 해드릴거에요",
+	    "FunARMakeQRCode": false,
+	    "FunARUseCertificationNumber": true,
+	    "FunARShopName": "kt 강남 애비뉴 매장에서",
+	    "ioit_enable": true,
+	    "ioit_scale": 2.0,
+	    "ioit_pos_x": 0.03,
+	    "ioit_pos_y": 0.5,
+	    "ioit_gesture": "icon_02"
+	},
+	"ShopAR": {
+	    "package": "com.kt.geniestore.item",
+	    "package_comment": "shop.ar",
+	    "main_activity": "com.kt.geniestore.item.MainActivity",
+	    "main_activity_comment": "shop.ar.UnityPlayerActivity",
+	    "check_time": 5000,
+	    "run_max_time": 30000
+	},
+	"WatchMe": {
+	    "method_comment": "1: in, 2: out, 3: delay",
+	    "method": 3,
+	    "delay_comment": "메소드가 3일 경우에만 사용",
+	    "delay": 2000,
+	    "delay_next_speak_comment": "발화 후 다음 발화까지 기다리는 시간",
+	    "delay_next_speak": 2000,
+	    "default_content":{
+            "unknown": "안녕하세요? 고객님! 강남 애비뉴 매장입니다.",
+            "male" : {
+                "10": "|color| 옷 입은 학생분! 요즘 핫한 스마트폰 구경하세요.",
+                "20": "|color| 옷 입은 멋쟁이 오빠! 잘나가는 최신제품 한번 보고 가세요.",
+                "30": "|color| 옷 입은 젊은 오빠! 딱 어울리는 신제품 구경하고 가세요.",
+                "40": "|color| 옷 입은 젊은 오빠! 이 동네 최저가 신제품 한번 보세요.",
+                "50": "|color| 옷 입으신 멋쟁이 신사분! 잠깐 여기서 쉬었다 가세요"
+            },
+            "female" : {
+                "10": "|color| 옷 학생분! 이 제품 놓치면 후회할꺼에요",
+                "20": "|color| 옷 예쁜 언니! 신상 스마트폰 한번 보고 가세요",
+                "30": "|color| 옷 젊은 언니! 언니한테 딱 맞는 상품 한번 보고 가실래요?",
+                "40": "|color| 옷 멋진 여성분! 이동네 최저가 상품 추천해 드려요.",
+                "50": "|color| 옷 고객님! 매장에서 잠시 쉬었다 가세요"
+            }
+        },
+        "schedule": [
+            {
+                "start": "13:10",
+                "end": "13:20",
+                "content": {
+                    "unknown": "안녕하세요? 고객님! 강남 애비뉴 매장입니다.",
+                    "male" : {
+                        "10": "|color| 옷 입은 학생분! 요즘 핫한 스마트폰 구경하세요.",
+                        "20": "|color| 옷 입은 멋쟁이 오빠! 잘나가는 최신제품 한번 보고 가세요.",
+                        "30": "|color| 옷 입은 젊은 오빠! 딱 어울리는 신제품 구경하고 가세요.",
+                        "40": "|color| 옷 입은 젊은 오빠! 이 동네 최저가 신제품 한번 보세요.",
+                        "50": "|color| 옷 입으신 멋쟁이 신사분! 잠깐 여기서 쉬었다 가세요"
+                    },
+                    "female" : {
+                        "10": "|color| 옷 학생분! 이 제품 놓치면 후회할꺼에요",
+                        "20": "|color| 옷 예쁜 언니! 신상 스마트폰 한번 보고 가세요",
+                        "30": "|color| 옷 젊은 언니! 언니한테 딱 맞는 상품 한번 보고 가실래요?",
+                        "40": "|color| 옷 멋진 여성분! 이동네 최저가 상품 추천해 드려요.",
+                        "50": "|color| 옷 고객님! 매장에서 잠시 쉬었다 가세요"
+                    }
+                }
+            },
+            {
+                "start": "13:30",
+                "end": "13:40",
+                "content": {
+                    "unknown": "안녕하세요? 고객님! 강남 애비뉴 매장입니다.",
+                    "male" : {
+                        "10": "|color| 옷 입은 학생분! 요즘 핫한 스마트폰 구경하세요.",
+                        "20": "|color| 옷 입은 멋쟁이 오빠! 잘나가는 최신제품 한번 보고 가세요.",
+                        "30": "|color| 옷 입은 젊은 오빠! 딱 어울리는 신제품 구경하고 가세요.",
+                        "40": "|color| 옷 입은 젊은 오빠! 이 동네 최저가 신제품 한번 보세요.",
+                        "50": "|color| 옷 입으신 멋쟁이 신사분! 잠깐 여기서 쉬었다 가세요"
+                    },
+                    "female" : {
+                        "10": "|color| 옷 학생분! 이 제품 놓치면 후회할꺼에요",
+                        "20": "|color| 옷 예쁜 언니! 신상 스마트폰 한번 보고 가세요",
+                        "30": "|color| 옷 젊은 언니! 언니한테 딱 맞는 상품 한번 보고 가실래요?",
+                        "40": "|color| 옷 멋진 여성분! 이동네 최저가 상품 추천해 드려요.",
+                        "50": "|color| 옷 고객님! 매장에서 잠시 쉬었다 가세요"
+                    }
+                }
+            }
+        ]
+	},
+	"InteractionServiceMenu": {
+	    "menu_time": 10000,
+	    "c2_move_width": 50,
+	    "menu": [
+            {
+                "ioit_x": 0.3,
+                "ioit_y": 0.4,
+                "ioit_animation": "icon_01"
+            },
+            {
+                "ioit_x": 0.5,
+                "ioit_y": 0.4,
+                "ioit_animation": "icon_02"
+            },
+            {
+                "ioit_x": 0.8,
+                "ioit_y": 0.4,
+                "ioit_animation": "icon_03"
+            }
+         ]
+	},
+	"Event": {
+	    "intro_time": 15000,
+	    "coupon_time_phase_1_comment": "매장안으로 들어오셔서 자세한 상담 받아보세요 멘트 전 시간",
+	    "coupon_time_phase_1": 5000,
+	    "coupon_time_phase_2_comment": "매장안으로 들어오셔서 자세한 상담 받아보세요 멘트 후 시간",
+	    "coupon_time_phase_2": 3000
+	}
+}

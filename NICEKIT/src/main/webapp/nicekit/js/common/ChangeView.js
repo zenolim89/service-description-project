@@ -116,5 +116,5 @@ function popup(url, w, h, name, option) {
 //페이지 전환
 function pageTrans(resCode, resUrl) {
 	if (resCode == "201")
-		location.href = "/NICEKIT/resources/template" + resUrl + ".html";
+		location.href = "resources/template" + resUrl + ".html";
 }

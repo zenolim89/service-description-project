@@ -6,18 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.spi.ErrorCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
-import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
-import com.kt.dataForms.KeyValueFormatForJSON;
+import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
+import com.kt.dataForms.KeyValueFormatForJSON;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
@@ -142,6 +141,65 @@ public class JSONSerializerTo {
 		
 		return resArr;
 		
+	}
+	
+	public JSONObject createJSONForIntentInfo (String intentName) {
+
+		SelectDataTo selectTo = new SelectDataTo();
+
+
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		JSONObject obj = new JSONObject();
+
+
+		String ksName = "commonks";
+		String targetTable = "intentInfo";
+
+		String reqIntentName = intentName;
+		String responseHTML ="";
+		ArrayList<BaseIntentInfoForm> resList;
+
+		try {
+
+			resList = selectTo.selectIntentInfo(ksName, targetTable, reqIntentName);
+
+			JSONArray list = new JSONArray();
+
+			for (BaseIntentInfoForm form : resList) {
+
+				ArrayList<BaseDictionarySet> dicList = parsingFrom.parsingIntentInfo(form.getArr());
+
+				JSONObject dicListObj = new JSONObject();
+				for (BaseDictionarySet set : dicList) {
+
+					JSONArray wordList = new JSONArray();
+
+
+
+					for (String word : set.getWordList()) {
+
+						wordList.add(word);
+					}
+
+					dicListObj.put("dicName", set.getDicName());
+					dicListObj.put("wordList", wordList);
+
+				}
+
+				list.add(dicListObj);
+				obj.put("dicList", list);
+
+			}
+
+		} catch (Exception e) {
+
+			e.getMessage();
+
+		}
+
+		System.out.println("[DEBUG 동적 HTML코드 (도메인 사전) 생성 결과]: \n" + responseHTML + "\n");
+		return obj;
+
 	}
 	
 	

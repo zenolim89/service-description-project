@@ -4,16 +4,34 @@
 <meta charset="utf-8">
 <title>KT_GigaGenie</title>
 <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
-<script type="text/javascript" src="./svcCommon/js/jq-lastest.js"></script>
-<script type="text/javascript" src="./svcCommon/js/swiper.js"></script>
-<script type="text/javascript" src="../../nicekit/js/interfaces/ServiceInterface.js"></script>
-<link rel="stylesheet" type="text/css" href="./svcCommon/css/gigagenie.css">
+<script type="text/javascript" src="nbware/js/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/js/xlsx/xlsx.full.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/js/Configuration.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/js/Utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/js/Connection.js" charset="utf-8"></script>
+<script type="text/javascript" src="nbware/js/ExcelParser.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="/svcCommon/js/swiper.js"></script>
+<script type="text/javascript" src="/svcCommon/js/jq-lastest.js"></script>
+<script type="text/javascript" src="nicekit/js/interfaces/ServiceInterface.js"></script>
+<script type="text/javascript" src="nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
+
+
+<link rel="stylesheet" type="text/css" href="/svcCommon/css/gigagenie.css">
+<script type="text/javascript">
+function initPage(){
+	  domainReqFunction();
+	  intentReqFunction();
+	 }
+window.onload=initPage();
+</script>
 </head>
-<body onload=init()>
+<body>
 	<div id="document" class="type-index" style="background-image: url(svcCommon/images/bg_main.jpg);">
 		<main id="contents-main">
 		<h1>
-			<img src="svcCommon/images/h1_logo.png" alt="">
+			<img src="/svcCommon/images/h1_logo.png" alt="">
 		</h1>
 		<div class="info-room">
 			<h2>스키빌리지 노스콘도 301호</h2>
@@ -23,7 +41,7 @@
 			</ul>
 		</div>
 		<div class="weather-api">
-			<i class="icon"><img src="svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">2</em>℃</span> <span
+			<i class="icon"><img src="/svcCommon/images/ic_weather_type01.png" alt=""></i> <span class="tmper-area"><em class="f-rb">2</em>℃</span> <span
 				class="day-date"
 			> 목요일<br> 2019.02.21
 			</span> <em class="time f-rb200">05:21</em> <span class="am-pm">오후</span>
@@ -38,50 +56,50 @@
 					<div class="swiper-wrapper">
 						<!-- Slides -->
 						<div class="swiper-slide" data-slidedesc="엔터테인먼트">
-							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="svcCommon/images/ic_menu_main02.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main02_big.png" alt="" class="big"
+							<a href="#" onclick="alert('test')"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main02.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main02_big.png" alt="" class="big"
 								>
 							</i> 엔터테인먼트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="이벤트">
-							<a href="./evt_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main05.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main05_big.png" alt="" class="big"
+							<a href="./evt_info.html"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main05.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main05_big.png" alt="" class="big"
 								>
 							</i> 이벤트
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="관광정보">
-							<a href="./tr_info.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main03.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main03_big.png" alt="" class="big"
+							<a href="./tr_info.html"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main03.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main03_big.png" alt="" class="big"
 								>
 							</i> 관광정보
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="체크아웃">
-							<a href="#checkout-popup" class="layer-pop-control"> <i class="icon"> <img src="svcCommon/images/ic_menu_main04.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main04_big.png" alt="" class="big"
+							<a href="#checkout-popup" class="layer-pop-control"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main04.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main04_big.png" alt="" class="big"
 								>
 							</i> 체크아웃
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="부대시설">
-							<a href="#" class="layer-pop-control"> <i class="icon"> <img src="svcCommon/images/ic_menu_main06.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main06_big.png" alt="" class="big"
+							<a href="#" class="layer-pop-control"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main06.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main06_big.png" alt="" class="big"
 								>
 							</i> 부대시설
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="웹캠">
-							<a href="./web_cam.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main07.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main07_big.png" alt="" class="big"
+							<a href="./web_cam.html"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main07.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main07_big.png" alt="" class="big"
 								>
 							</i> 웹캠
 							</a>
 						</div>
 						<div class="swiper-slide" data-slidedesc="객실용품">
-							<a href="./ame.html"> <i class="icon"> <img src="svcCommon/images/ic_menu_main01.png" alt=""> <img
-									src="svcCommon/images/ic_menu_main01_big.png" alt="" class="big"
+							<a href="./ame.html"> <i class="icon"> <img src="/svcCommon/images/ic_menu_main01.png" alt=""> <img
+									src="/svcCommon/images/ic_menu_main01_big.png" alt="" class="big"
 								>
 							</i> 객실용품
 							</a>
@@ -213,35 +231,37 @@ function initSlide() {
   return checkView;
 }
 initSlide();
+/*
 function setSlide() {
-  $('.menu-main').css({opacity:1})
-  var menuSwiper = new Swiper('.menu-main .swiper-container', {
-    slidesPerView: checkView,
-    spaceBetween: 18,
-    centeredSlides: true,
-    loop: true,
-  });
-  $('.menu-main .prev').on('click',function() {
-    menuSwiper.slidePrev();
-  })
-  $('.menu-main .next').on('click',function() {
-    menuSwiper.slideNext();
-  })
-  menuSwiper.on('slideChange', function () {
-    $('.placeholder').html($('.menu-main .swiper-slide').eq(menuSwiper.realIndex).data('slidedesc'));
-  });
-  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
-    slidesPerView: 1,
-    spaceBetween: 0,
-    direction: 'vertical',
-    loop: true,
-    height: 69,
-    autoplay: {
-      delay: 1000,
-    }
-  });
-}
-setTimeout(function() {setSlide()},10)
+	  $('.menu-main').css({opacity:1})
+	  var menuSwiper = new Swiper('.menu-main .swiper-container', {
+	    slidesPerView: checkView,
+	    spaceBetween: 18,
+	    centeredSlides: true,
+	    loop: true,
+	  });
+	  $('.menu-main .prev').on('click',function() {
+	    menuSwiper.slidePrev();
+	  })
+	  $('.menu-main .next').on('click',function() {
+	    menuSwiper.slideNext();
+	  })
+	  menuSwiper.on('slideChange', function () {
+	    $('.placeholder').html($('.menu-main .swiper-slide').eq(menuSwiper.realIndex).data('slidedesc'));
+	  });
+	  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+	    slidesPerView: 1,
+	    spaceBetween: 0,
+	    direction: 'vertical',
+	    loop: true,
+	    height: 69,
+	    autoplay: {
+	      delay: 1000,
+	    }
+	  });
+	}
+	setTimeout(function() {setSlide()},10)
+	*/
 </script>
 </body>
 </html>

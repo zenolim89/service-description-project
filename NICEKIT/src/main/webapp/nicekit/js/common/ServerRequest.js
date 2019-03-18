@@ -8,11 +8,11 @@ $.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
 	console.log('gigagenie.js loading...');
 });
 
-$.getScript('/NICEKIT/nicekit/js/common/RequestParam.js', function() {
+$.getScript('nicekit/js/common/RequestParam.js', function() {
 	console.log('RequestParam.js loading...');
 });
 
-$.getScript('/NICEKIT/nicekit/js/common/ChangeView.js', function() {
+$.getScript('nicekit/js/common/ChangeView.js', function() {
 	console.log('ChangeView.js loading...');
 });
 
@@ -354,7 +354,7 @@ function createXMLHttpIntentRegReq() {
  */
 function intentRegReqFunction(json) {
 	createXMLHttpIntentRegReq();
-	intentRegRequest.open('POST', '/NICEKIT/setDictionary');
+	intentRegRequest.open('POST', 'setDictionary');
 	intentRegRequest.setRequestHeader('Content-Type', 'application/json');
 	intentRegRequest.send(json);
 	console.log(json);
@@ -419,7 +419,7 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
+	SvcRequest.open('GET', 'reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
 				+ "=" + parameter + "&" + "name" + "=" + appId);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);

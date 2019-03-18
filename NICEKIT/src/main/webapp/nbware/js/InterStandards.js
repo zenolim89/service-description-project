@@ -5,7 +5,7 @@ $(document).ready(function() {
 	// 초기 설정
 	require.config({
 		paths : {
-			'vs' : '/NICEKIT/nbware/assets/js/monaco-editor/vs'
+			'vs' : 'nbware/assets/js/monaco-editor/vs'
 		}
 	});
 	controlUi("POST", "request");

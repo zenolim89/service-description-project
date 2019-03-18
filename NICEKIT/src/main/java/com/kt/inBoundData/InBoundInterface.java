@@ -3,28 +3,25 @@ package com.kt.inBoundData;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kt.dataDao.SelectDataTo;
-import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
+import com.kt.util.UtilFile;
 
 @RestController
 @RequestMapping("")
@@ -37,7 +34,25 @@ public class InBoundInterface {
 	@RequestMapping("/")
 	public ModelAndView index() {
 
-		ModelAndView mv = new ModelAndView("/index/index");
+		ModelAndView mv = new ModelAndView("/index/login");
+
+		return mv;
+		// return new ModelAndView("index");
+	}
+	
+	@RequestMapping("/step1")
+	public ModelAndView step1() {
+
+		ModelAndView mv = new ModelAndView("/index/step1");
+
+		return mv;
+		// return new ModelAndView("index");
+	}
+	
+	@RequestMapping("/step2")
+	public ModelAndView step2() {
+
+		ModelAndView mv = new ModelAndView("/index/step2");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -49,6 +64,26 @@ public class InBoundInterface {
 		ModelAndView mv = new ModelAndView("/template/main");
 
 		return mv;
+	}
+	
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+	public String uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
+            MultipartHttpServletRequest request){
+		
+		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
+        //System.out.println("RewardController reAddProCtrl reward : " + reward);
+        
+//      UtilFile 객체 생성
+        UtilFile utilFile = new UtilFile();
+        
+//      파일 업로드 결과값을 path로 받아온다(이미 fileUpload() 메소드에서 해당 경로에 업로드는 끝났음)
+        String uploadPath = utilFile.fileUpload(request, uploadFile);
+
+        //System.out.println("RewardController reAddProCtrl n : " + n);
+        System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
+        
+        return "redirect:listAll";
+
 	}
 
 	/**
@@ -66,7 +101,7 @@ public class InBoundInterface {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
+	@RequestMapping(value = "/reqService/", method = RequestMethod.GET)
 	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
 			@RequestParam String name) {
 
@@ -170,12 +205,12 @@ public class InBoundInterface {
 	}
 
 	// getDicInfo
-	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST, produces = "application/text; charset=utf8")
-	public String getDic(InputStream body) {
+	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST)
+	public JSONObject getDic(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
-		String res = null;
+		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 		try {
 			while ((bf = in.readLine()) != null) {

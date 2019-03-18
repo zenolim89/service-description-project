@@ -15,10 +15,7 @@ import com.datastax.driver.core.Row;
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.SelectDataTo;
-<<<<<<< HEAD
-=======
 import com.kt.dataForms.KeyValueFormatForJSON;
->>>>>>> refs/remotes/origin/master
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
@@ -177,8 +174,6 @@ public class JSONSerializerTo {
 		
 		resData.put("domainList", resArr);
 		
-<<<<<<< HEAD
-=======
 		if (resArr.size() == 0 ) {
 			
 			res.put("resCode", "404");
@@ -194,9 +189,7 @@ public class JSONSerializerTo {
 		res.put("resData", resData);
 		
 		return res;
-		
-		
->>>>>>> refs/remotes/origin/master
+
 	}
 	
 	public JSONObject createJSONForIntentInfo (String intentName) {

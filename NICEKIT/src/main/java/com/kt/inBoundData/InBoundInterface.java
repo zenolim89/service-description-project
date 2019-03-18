@@ -1,32 +1,25 @@
 package com.kt.inBoundData;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-<<<<<<< HEAD
-=======
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
->>>>>>> refs/remotes/origin/master
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONException;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-<<<<<<< HEAD
-=======
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
->>>>>>> refs/remotes/origin/master
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,19 +31,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.kt.dataDao.CreateTableFor;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
-<<<<<<< HEAD
 import com.kt.util.UtilFile;
-=======
-
-import io.netty.handler.codec.http.HttpResponse;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import net.sf.json.JSONException;
->>>>>>> refs/remotes/origin/master
 
 @RestController
 @RequestMapping("")
@@ -60,7 +45,7 @@ public class InBoundInterface {
 
 	// load index page
 	// see also SpringDispatcher-servlet.xml
-	@RequestMapping("/")
+	@RequestMapping("/login")
 	public ModelAndView index() {
 
 		ModelAndView mv = new ModelAndView("/index/login");
@@ -87,7 +72,6 @@ public class InBoundInterface {
 		// return new ModelAndView("index");
 	}
 
-<<<<<<< HEAD
 	@RequestMapping("/getPage")
 	public ModelAndView getPage() {
 
@@ -113,10 +97,8 @@ public class InBoundInterface {
         System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
         
         return "redirect:listAll";
+	}
 
-=======
-	
-	
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 7:14:13]
 	 * desc	: 등록기에서 도메인 추가 시 사용
@@ -152,8 +134,6 @@ public class InBoundInterface {
 		
 				
 		return resObj;
-		
->>>>>>> refs/remotes/origin/master
 	}
 	
 	/**
@@ -624,17 +604,55 @@ public class InBoundInterface {
 
 	// request vendor template url
 	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
-	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName) {
+	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName
+			,HttpServletRequest _request) throws IOException {
 
-		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/" + vendorName;
+		//String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/" + vendorName;
+		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/";
+		
 		JSONObject res = new JSONObject();
 		JSONObject vendorObj = new JSONObject();
-
+		
+		//디렉토리 순회용
+		//JSONArray vendorObjArray = new JSONArray();
+		
+		ServletContext context = _request.getSession().getServletContext();
+		
+		String path =context.getRealPath("/");
+		
+		//디렉토리 순회
+		/*
+		String dirPath = path + "/resources/template/" + vendorName;
+		
+		if( new File(dirPath).exists() ){
+			File[] fileList = new File(dirPath).listFiles();
+			
+			for( int i = 0 ; i < fileList.length ; i++){
+				
+				File file = fileList[i];
+				
+				vendorObjArray.add(_urlPath + file.getName());
+			}
+			
+			res.put("resData", vendorObjArray);
+		}
+		*/
+		
+		//특정 파일
+		File file = new File(path + "/resources/template/" + vendorName + ".html");
+		
+		DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+		//Resource resource = defaultResourceLoader.getResource(name);
+					
+		if( file.exists() ){
+					
+			vendorObj.put("urlPath", _urlPath + vendorName + ".html");
+			res.put("resData", vendorObj);
+		}
+		
 		res.put("resCode", "200");
 		res.put("resMsg", "성공");
-		vendorObj.put("urlPath", _urlPath);
-		res.put("resData", vendorObj);
-
+		//vendorObj.put("urlPath", _urlPath);
 		return res;
 	}
 

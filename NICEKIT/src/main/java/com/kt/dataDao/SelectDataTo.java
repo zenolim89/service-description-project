@@ -92,6 +92,66 @@ public class SelectDataTo {
 		return resObj;
 	}
 	
+	public List<Row> selectVenderlistInDomain (String domainName) {
+		
+		String keySpace = "vendersvcks";
+		String table = "venderlist";
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		
+		TableMetadata res = insertTo.checkExsitingTable(table, keySpace);
+		
+		if (res == null)
+		{
+			List<Row> reslist = null;
+			
+			return reslist;
+		}
+		
+		
+		Statement query = QueryBuilder.select().from("vendersvcks", "venderlist")
+				.where(QueryBuilder.eq("vendername", domainName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> reslist = set.all();
+		
+		return reslist;
+		
+	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 18. 오후 5:23:05]
+	 * desc	: 생성기의 요청에 따라 commonks에 저장된 speclist를 조회하는 메소스
+	 *        테이블 생성 유무에 따른 에러 메시지를 정의해야하는지 여부 추후 고려 필요
+	 * @version	:
+	 * @param	: 
+	 * @return 	: List<Row> 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param domainName
+	 * @return
+	 */
+	public List<Row> selectSpecList (String domainName) {
+		
+				
+		String keySpace = "commonks";
+		String table = "specindexlist";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("domainname", domainName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> resList = set.all();
+						
+		
+		return resList;
+	}
+	
 
 	
 

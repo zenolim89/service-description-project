@@ -67,6 +67,15 @@ public class CreateTableFor {
 		
 	}
 	
+	public void createTableForVenderList () {
+		
+		CreateTable create = ((CreateTable) builder.createTable("vendersvcks", "venderindexlist").ifNotExists())
+				.withPartitionKey("vendername", DataTypes.TEXT)
+				.withClusteringColumn("domainname", DataTypes.TEXT)
+				.withColumn("templatedicpath", DataTypes.TEXT);
+		
+	}
+	
 	public void createDomainServiceList () {
 		
 		CreateTable create = ((CreateTable) builder.createTable("commonks", "domainservicelist").ifNotExists())

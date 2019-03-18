@@ -21,6 +21,7 @@ import com.kt.dataForms.BaseExcelForm;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.ReqSvcCodeForm;
 
@@ -45,6 +46,37 @@ public class JSONParsingFrom {
 
 			res.put("resCode", "2001");
 			res.put("resMsg", "정상적으로 등록되었습니다");
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return res;
+
+	}
+
+	public JSONObject parsingCreateVenderTemplate(String response, String path) {
+
+		ReqCreateVender venderInfo = new ReqCreateVender();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+
+		InsertDataTo insertTo = new InsertDataTo();
+
+		JSONObject res = new JSONObject();
+		String resCode;
+
+		try {
+
+			JSONObject obj = (JSONObject) parser.parse(response);
+
+			venderInfo.setDomainName(obj.get("domainName").toString());
+			venderInfo.setVender(obj.get("vender").toString());
+			venderInfo.setTemplateUrl(obj.get("urlPath").toString());
+
+			resCode = insertTo.insertVenderToIndexList(venderInfo);
+
+			res = serializerTo.resCreateVenderPath(resCode, path);
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -114,6 +146,18 @@ public class JSONParsingFrom {
 	 * @throws :
 	 * @see : InsertDataTo.createServiceCodeNinsertService;
 	 *      JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
+	 *      >>>>>>> branch 'master' of
+	 *      https://github.com/zenolim89/service-description-project.git
+	 * 
+	 *      /**
+	 * @author : "Minwoo Ryu" [2019. 3. 16. 오 16:54:27] desc : 등록기로부터 서비스 명세를 수신 후
+	 *         해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고 서비스 코드 발급을 요청하기 전 등록기로
+	 *         부터 수신 받은 데이터를 파싱하는 함수 파싱 후 InsertDataTo로 파싱 결과를 전달하여 serviceCode를 수신
+	 * @version : 0.1
+	 * @return : JSONObject
+	 * @throws :
+	 * @see : InsertDataTo.createServiceCodeNinsertService;
+	 *      JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
 	 * 
 	 * @param response (등록기로 받은 데이터, String 타입)
 	 * @return
@@ -155,9 +199,6 @@ public class JSONParsingFrom {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return res;
-
 	}
 
 	public JSONObject convertIntentInfo(JSONArray intentInfo) {
@@ -402,7 +443,7 @@ public class JSONParsingFrom {
 					for (int dicList = 0; dicList < dicListArr.size(); dicList++) {
 						JSONObject dicListObj = (JSONObject) BaseExcelForm.getDicList().get(dicList);
 						dicStr += dicListObj.get("dicName").toString() + "  ";
-						//dicStr += dicListObj.get("wordList").toString().trim();
+						// dicStr += dicListObj.get("wordList").toString().trim();
 					}
 					System.out.println(dicStr);
 					BaseExcelForm.setDicInfo(dicStr);
@@ -414,11 +455,11 @@ public class JSONParsingFrom {
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
 			res.put("urlPath", "/resources/download/workbook.xlsx");
-			
+
 			CreateExcelForm ExcelForm = new CreateExcelForm(svcList, FilePath);
 			ExcelForm.createSheet();
 			ExcelForm.createExcelFile();
-			
+
 //			inserTo.insertVenderSvcTo(descList);
 
 		} catch (

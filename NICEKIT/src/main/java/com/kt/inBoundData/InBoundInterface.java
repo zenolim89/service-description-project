@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
@@ -60,33 +61,30 @@ public class InBoundInterface {
 		// return new ModelAndView("index");
 	}
 
-	
-	
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 7:14:13]
-	 * desc	: 등록기에서 도메인 추가 시 사용
-	 * @version	:
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 15. 오후 7:14:13] desc : 등록기에서 도메인 추가 시 사용
+	 * @version :
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param domainName
 	 * @return
 	 */
-	@RequestMapping(value = "/setDomain", method = RequestMethod.GET, produces="application/json; charset=UTF-8")
-	public JSONObject setDomain (@RequestParam String domainName) {
-				
+	@RequestMapping(value = "/setDomain", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+	public JSONObject setDomain(@RequestParam String domainName) {
+
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject resObj = new JSONObject();
-		
+
 		Boolean res = insertTo.insertDomainList(domainName);
-		
+
 		if (res == true) {
-			
+
 			resObj.put("resCode", "201");
 			resObj.put("resMsg", "성공");
-			
+
 		} else if (res == false) {
 			resObj.put("resCode", "409");
 			resObj.put("resMsg", "동일한 도메인 이름이 존재합니다");
@@ -94,48 +92,46 @@ public class InBoundInterface {
 			resObj.put("resCode", "400");
 			resObj.put("resMsg", "잘못된 접근 입니다.");
 		}
-		
-				
+
 		return resObj;
-		
+
 	}
-	
+
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 15. 오후 7:19:05]
-	 * desc	: 등록기에서 사용하는 규격 생성요청 응대 API; 먼저 도메인 이름으로 해당 도메인 이름이 도메인 리스트 테이블에 존재하는지 여부 확인 후
-	 *        신규 규격을 위한 테이블을 생성
-	 * @version	:
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 15. 오후 7:19:05] desc : 등록기에서 사용하는 규격 생성요청 응대
+	 *         API; 먼저 도메인 이름으로 해당 도메인 이름이 도메인 리스트 테이블에 존재하는지 여부 확인 후 신규 규격을 위한 테이블을
+	 *         생성
+	 * @version :
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param domainName
 	 * @param specName
 	 * @return
 	 */
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)
 	public JSONObject setSpec(@RequestParam String domainName, @RequestParam String specName) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
-		
+
 		JSONObject resObj = new JSONObject();
-		
+
 		String ks = "commonks";
-		
-		
+
 		ResultSet resSet = insertTo.insertSpecIndexTo(specName, domainName);
-		
+
 		List<Row> resList = resSet.all();
-				
-		for(Row row : resList) {
-			
+
+		for (Row row : resList) {
+
 			if (row.getBool(0) == true) {
-				
+
 				resObj.put("resCode", "201");
 				resObj.put("resMsg", "성공");
-				
+
 			} else if (row.getBool(0) == false) {
 				resObj.put("resCode", "409");
 				resObj.put("resMsg", "동일한 규 이름이 존재합니다");
@@ -143,13 +139,12 @@ public class InBoundInterface {
 				resObj.put("resCode", "400");
 				resObj.put("resMsg", "잘못된 접근 입니다.");
 			}
-			
-		}
-		
-		return resObj;
-						
-	}
 
+		}
+
+		return resObj;
+
+	}
 
 //	@RequestMapping(value = "/downloadSample", method = RequestMethod.POST)
 //	public Workbook downloadSample (InputStream body) {
@@ -179,9 +174,6 @@ public class InBoundInterface {
 //		return res;
 //
 //	}
-
-
-
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 2. 12. 오후 12:21:07] desc : 요청된 서비스를 처리하기 위한
@@ -235,10 +227,10 @@ public class InBoundInterface {
 		return mv;
 
 	}
-	
+
 	@RequestMapping(value = "/svcCode", method = RequestMethod.POST)
 	public JSONObject getServiceCode(InputStream body) {
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
@@ -263,7 +255,6 @@ public class InBoundInterface {
 
 		return res;
 
-		
 	}
 
 	// request domain list
@@ -331,8 +322,6 @@ public class InBoundInterface {
 		return res;
 
 	}
-	
-	
 
 	// getDicInfo
 	@RequestMapping(value = "/getDictionary", method = RequestMethod.POST)
@@ -549,23 +538,34 @@ public class InBoundInterface {
 			logger.debug("End putSomething");
 		}
 	}
-	
-	// request vendor list
+
 	@RequestMapping(value = "/xlsxDown", method = RequestMethod.POST)
-	public JSONObject xlsxDown() {
+	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
 
-		String[] _vendorList = { "오크밸리", "곤지암", "해비치", "대명" };
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
+		String FilePath = request.getRealPath("/resources/download/");
+		String bf = null;
+		String response = "";
 		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
 
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		vendorObj.put("vendorList", _vendorList);
-		res.put("resData", vendorObj);
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+
+			res = parsingFrom.setExcelForm(response, FilePath);
+		} catch (Exception e) {
+
+			res.put("code", "4000");
+			res.put("message", e.getMessage());
+			response = e.getMessage().toString();
+
+		}
 
 		return res;
 	}
-	
 
 	// request vendor list
 	@RequestMapping(value = "/getVendor", method = RequestMethod.GET)

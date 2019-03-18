@@ -17,6 +17,7 @@ import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseDictionarySet;
+import com.kt.dataForms.BaseExcelForm;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
@@ -29,39 +30,36 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-	
-	public JSONObject parsingCreateDomain (String response) {
-		
+	public JSONObject parsingCreateDomain(String response) {
+
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
-		
+
 		try {
-		
+
 			JSONObject obj = (JSONObject) parser.parse(response);
-			
+
 			String dn = obj.get("domainName").toString();
-			
+
 			insertTo.insertDomainList(dn);
-			
+
 			res.put("resCode", "2001");
 			res.put("resMsg", "정상적으로 등록되었습니다");
-			
-		
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return res;
-		
-	}
-	
 
-	public ArrayList<BaseDictionarySet> parsingIntentInfo (JSONArray arr) {
+		return res;
+
+	}
+
+	public ArrayList<BaseDictionarySet> parsingIntentInfo(JSONArray arr) {
 
 		ArrayList<BaseDictionarySet> dicList = new ArrayList<BaseDictionarySet>();
 
-		for (int i=0; i < arr.size(); i++) {
+		for (int i = 0; i < arr.size(); i++) {
 
 			BaseDictionarySet dicSet = new BaseDictionarySet();
 			JSONObject obj = (JSONObject) arr.get(i);
@@ -84,7 +82,6 @@ public class JSONParsingFrom {
 
 	}
 
-
 	// 현재는 full list를 주는 형태, 해당 부분을 이재동 박사 작업 내용이랑 선택에 의하여 호출하는 내용으로 변경 필요
 	public JSONObject getDictionaryList(String response) {
 
@@ -97,8 +94,8 @@ public class JSONParsingFrom {
 
 			String doName = obj.get("domainName").toString();
 
-			res = jsonSerializerTo.createJSONForIntentInfo(doName); 			// 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
-			
+			res = jsonSerializerTo.createJSONForIntentInfo(doName); // 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
+
 		} catch (ParseException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -107,68 +104,67 @@ public class JSONParsingFrom {
 		return res;
 
 	}
-	
-	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
-	 * desc	: 등록기로부터 서비스 명세를 수신 후 해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고
-	 *        서비스 코드 발급을 요청하기 전 등록기로 부터 수신 받은 데이터를 파싱하는 함수
-	 *        파싱 후 InsertDataTo로 파싱 결과를 전달하여 serviceCode를 수신 
-	 * @version	: 0.1
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: InsertDataTo.createServiceCodeNinsertService; JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
 
+	/**
+	 * @author : "Minwoo Ryu" [2019. 3. 16. 오 16:54:27] desc : 등록기로부터 서비스 명세를 수신 후
+	 *         해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고 서비스 코드 발급을 요청하기 전 등록기로
+	 *         부터 수신 받은 데이터를 파싱하는 함수 파싱 후 InsertDataTo로 파싱 결과를 전달하여 serviceCode를 수신
+	 * @version : 0.1
+	 * @return : JSONObject
+	 * @throws :
+	 * @see : InsertDataTo.createServiceCodeNinsertService;
+	 *      JSONSerializerTo.resConflict; JSONSerializerTo.reqServiceCodeToCreate
+	 * 
 	 * @param response (등록기로 받은 데이터, String 타입)
 	 * @return
 	 */
-	public JSONObject getServiceCodeTo (String response) {
-		
+	public JSONObject getServiceCodeTo(String response) {
+
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
 		JSONSerializerTo jsonSerializerTo = new JSONSerializerTo();
-		
+
 		ReqSvcCodeForm form = new ReqSvcCodeForm();
-		
+
 		try {
-						
+
 			JSONObject obj = (JSONObject) parser.parse(response);
-			
+
 			form.setDomainName(obj.get("domainName").toString());
 			form.setServiceDesc(obj.get("serviceDesc").toString());
 			form.setServiceName(obj.get("serviceName").toString());
 			form.setServiceType(obj.get("serviceType").toString());
-			
+
 			String serviceCode = insertTo.createServiceCodeNinsertService(form);
-			
+
 			if (serviceCode == "409") {
-				
+
 				res = jsonSerializerTo.resConflict(serviceCode);
-				
+
 				return res;
-				
+
 			} else {
-				
+
 				res = jsonSerializerTo.resServiceCodeToCreate(serviceCode);
-				
+
 				return res;
-				
+
 			}
-			
-			
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return res;
-		
+
 	}
 
-	public JSONObject convertIntentInfo (JSONArray intentInfo) {
+	public JSONObject convertIntentInfo(JSONArray intentInfo) {
 
 		JSONObject obj = new JSONObject();
 
-		for (int i=0; i < intentInfo.size(); i++) {
+		for (int i = 0; i < intentInfo.size(); i++) {
 
 			obj = (JSONObject) intentInfo.get(i);
 
@@ -178,11 +174,10 @@ public class JSONParsingFrom {
 
 	}
 
-
 	public JSONObject setAuth(String response) {
-		
+
 		JSONObject res = new JSONObject();
-		
+
 		try {
 			JSONObject jsonObj = (JSONObject) parser.parse(response);
 			// check ID/PW
@@ -196,21 +191,18 @@ public class JSONParsingFrom {
 		return res;
 	}
 
-
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 2. 7. 오전 10:35:27]
-	 * desc	: 도메인 사전 등록을 위한 Parser
-	 * @version	: 0.1
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-
+	 * @author : "Minwoo Ryu" [2019. 2. 7. 오전 10:35:27] desc : 도메인 사전 등록을 위한 Parser
+	 * @version : 0.1
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param response
 	 * @return
 	 */
-	public JSONObject setDomainDictionary (String response) {
-
+	public JSONObject setDomainDictionary(String response) {
 
 		InsertDataTo insertTo = new InsertDataTo();
 
@@ -219,14 +211,13 @@ public class JSONParsingFrom {
 		try {
 
 			ArrayList<BaseIntentInfoForm> dicList = new ArrayList<BaseIntentInfoForm>();
-			JSONArray arr = (JSONArray) parser.parse(response);	
+			JSONArray arr = (JSONArray) parser.parse(response);
 
-			for (int i =0; i < arr.size(); i++) {
+			for (int i = 0; i < arr.size(); i++) {
 
 				BaseIntentInfoForm dicForm = new BaseIntentInfoForm();
 
 				JSONObject obj = (JSONObject) arr.get(i);
-
 
 				// read last number of table and then add number
 
@@ -243,7 +234,6 @@ public class JSONParsingFrom {
 			res.put("resCode", "2001");
 			res.put("resMsg", "정상적으로 등록되었습니다");
 
-
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 
@@ -253,36 +243,30 @@ public class JSONParsingFrom {
 			e.printStackTrace();
 		}
 
-
 		return res;
-
 
 	}
 
-
-
-
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46]
-	 * desc	: 도메인 서비스 등록을 DB에 저장하기 위하여 클라이언트로 받은 JSON 데이터를 파싱하는 함수
-	 * @version	:0.1
-	 * @param	: response
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: BaseScvForm, InsertDataTo, ErrorCodeList
-
+	 * @author : "Minwoo Ryu" [2019. 2. 1. 오후 4:40:46] desc : 도메인 서비스 등록을 DB에 저장하기
+	 *         위하여 클라이언트로 받은 JSON 데이터를 파싱하는 함수
+	 * @version :0.1
+	 * @param : response
+	 * @return : JSONObject
+	 * @throws :
+	 * @see : BaseScvForm, InsertDataTo, ErrorCodeList
+	 * 
 	 * @param response
 	 * @return
 	 */
 	public JSONObject setDomainService(String response) {
 
-		BaseSvcForm resSvcDesc = new BaseSvcForm(); //domainservice form으로 변경 필요
+		BaseSvcForm resSvcDesc = new BaseSvcForm(); // domainservice form으로 변경 필요
 		InsertDataTo insData = new InsertDataTo();
 		ErrorCodeList error = new ErrorCodeList();
 
 		// need to define result value
 		JSONObject res = new JSONObject();
-
 
 		try {
 
@@ -294,7 +278,7 @@ public class JSONParsingFrom {
 			resSvcDesc.setInterfaceType(resObj.get("interfaceType").toString());
 			resSvcDesc.setHeaderInfo((JSONArray) resObj.get("headerInfo"));
 			resSvcDesc.setMethod(resObj.get("method").toString());
-			//			resSvcDesc.setProtType(resObj.get("protocolType").toString());
+			// resSvcDesc.setProtType(resObj.get("protocolType").toString());
 			resSvcDesc.setReqSpec((JSONArray) resObj.get("reqSpec"));
 			resSvcDesc.setReqStructure((JSONArray) resObj.get("reqStructure"));
 			resSvcDesc.setResSpec((JSONArray) resObj.get("resSpec"));
@@ -310,7 +294,6 @@ public class JSONParsingFrom {
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
 
-
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 
@@ -320,11 +303,10 @@ public class JSONParsingFrom {
 			e.printStackTrace();
 		}
 
-
 		return res;
 	}
 
-	public JSONObject setVenderService (String response) {
+	public JSONObject setVenderService(String response) {
 
 		ArrayList<BaseVenderSvcForm> descList = new ArrayList<BaseVenderSvcForm>();
 		InsertDataTo inserTo = new InsertDataTo();
@@ -365,18 +347,13 @@ public class JSONParsingFrom {
 
 				descList.add(resSvcDesc);
 			}
-			
+
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
-			
+
 			inserTo.insertVenderSvcTo(descList);
-			
-			
-			
-			
-			
-			
-		}catch (ParseException e) {
+
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 
 			res.put("resCode", "4000");
@@ -389,7 +366,70 @@ public class JSONParsingFrom {
 
 	}
 
+	public JSONObject setExcelForm(String response, String FilePath) {
 
+		ArrayList<BaseExcelForm> svcList = new ArrayList<BaseExcelForm>();
+		ErrorCodeList error = new ErrorCodeList();
+
+		// need to define result value
+		JSONObject res = new JSONObject();
+
+		try {
+
+			JSONObject obj = (JSONObject) parser.parse(response);
+			JSONArray arr = (JSONArray) obj.get("svcList");
+			System.out.println(arr);
+
+			for (int arrRow = 0; arrRow < arr.size(); arrRow++) {
+
+				BaseExcelForm BaseExcelForm = new BaseExcelForm();
+				JSONObject descObj = (JSONObject) arr.get(arrRow);
+
+				BaseExcelForm.setServiceName(descObj.get("serviceName").toString());
+				BaseExcelForm.setInvokeType(descObj.get("invokeType").toString());
+				BaseExcelForm.setServiceType(descObj.get("serviceType").toString());
+				BaseExcelForm.setServiceLink(descObj.get("serviceLink").toString());
+				BaseExcelForm.setServiceDesc(descObj.get("serviceDesc").toString());
+				BaseExcelForm.setServiceCode(descObj.get("serviceCode").toString());
+
+				if (descObj.containsKey("intentInfo")) {
+					BaseExcelForm.setIntentInfo((JSONArray) descObj.get("intentInfo"));
+					JSONObject intentInfoObj = (JSONObject) BaseExcelForm.getIntentInfo().get(0);
+					BaseExcelForm.setId(intentInfoObj.get("id").toString());
+					BaseExcelForm.setDicList((JSONArray) intentInfoObj.get("dicList"));
+					JSONArray dicListArr = (JSONArray) BaseExcelForm.getDicList();
+					String dicStr = "";
+					for (int dicList = 0; dicList < dicListArr.size(); dicList++) {
+						JSONObject dicListObj = (JSONObject) BaseExcelForm.getDicList().get(dicList);
+						dicStr += dicListObj.get("dicName").toString() + "  ";
+						//dicStr += dicListObj.get("wordList").toString().trim();
+					}
+					System.out.println(dicStr);
+					BaseExcelForm.setDicInfo(dicStr);
+				}
+
+				svcList.add(BaseExcelForm);
+			}
+
+			res.put("resCode", "2001");
+			res.put("resMsg", error.getErrorCodeList().get("2001"));
+			res.put("urlPath", "/resources/download/workbook.xlsx");
+			
+			CreateExcelForm ExcelForm = new CreateExcelForm(svcList, FilePath);
+			ExcelForm.createSheet();
+			ExcelForm.createExcelFile();
+			
+//			inserTo.insertVenderSvcTo(descList);
+
+		} catch (
+
+		ParseException e) {
+			// TODO Auto-generated catch block
+			res.put("resCode", "4000");
+			res.put("resMsg", e.getMessage());
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 }
-

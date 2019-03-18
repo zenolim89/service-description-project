@@ -20,6 +20,7 @@ import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.ReqSvcCodeForm;
 
@@ -29,33 +30,33 @@ public class JSONParsingFrom {
 	JSONSerializerTo serializer = new JSONSerializerTo();
 	HTMLSerializerTo htmlSerializer = new HTMLSerializerTo();
 
-	
+
 	public JSONObject parsingCreateDomain (String response) {
-		
+
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
-		
+
 		try {
-		
+
 			JSONObject obj = (JSONObject) parser.parse(response);
-			
+
 			String dn = obj.get("domainName").toString();
-			
+
 			insertTo.insertDomainList(dn);
-			
+
 			res.put("resCode", "2001");
 			res.put("resMsg", "정상적으로 등록되었습니다");
-			
-		
+
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return res;
-		
+
 	}
-	
+
 
 	public ArrayList<BaseDictionarySet> parsingIntentInfo (JSONArray arr) {
 
@@ -98,7 +99,7 @@ public class JSONParsingFrom {
 			String doName = obj.get("domainName").toString();
 
 			res = jsonSerializerTo.createJSONForIntentInfo(doName); 			// 현재는 도메인 이름을 받고 있으나 DB Select 시 반영하지 않음
-			
+
 		} catch (ParseException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -107,7 +108,7 @@ public class JSONParsingFrom {
 		return res;
 
 	}
-	
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
 	 * desc	: 등록기로부터 서비스 명세를 수신 후 해당 명세를 commonks 내의 domainservicelist 테이블에 저장하고
@@ -122,46 +123,46 @@ public class JSONParsingFrom {
 	 * @return
 	 */
 	public JSONObject getServiceCodeTo (String response) {
-		
+
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
 		JSONSerializerTo jsonSerializerTo = new JSONSerializerTo();
-		
+
 		ReqSvcCodeForm form = new ReqSvcCodeForm();
-		
+
 		try {
-						
+
 			JSONObject obj = (JSONObject) parser.parse(response);
-			
+
 			form.setDomainName(obj.get("domainName").toString());
 			form.setServiceDesc(obj.get("serviceDesc").toString());
 			form.setServiceName(obj.get("serviceName").toString());
 			form.setServiceType(obj.get("serviceType").toString());
-			
+
 			String serviceCode = insertTo.createServiceCodeNinsertService(form);
-			
+
 			if (serviceCode == "409") {
-				
+
 				res = jsonSerializerTo.resConflict(serviceCode);
-				
+
 				return res;
-				
+
 			} else {
-				
+
 				res = jsonSerializerTo.resServiceCodeToCreate(serviceCode);
-				
+
 				return res;
-				
+
 			}
-			
-			
+
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return res;
-		
+
 	}
 
 	public JSONObject convertIntentInfo (JSONArray intentInfo) {
@@ -180,9 +181,9 @@ public class JSONParsingFrom {
 
 
 	public JSONObject setAuth(String response) {
-		
+
 		JSONObject res = new JSONObject();
-		
+
 		try {
 			JSONObject jsonObj = (JSONObject) parser.parse(response);
 			// check ID/PW
@@ -258,8 +259,9 @@ public class JSONParsingFrom {
 
 
 	}
-
-
+	
+	
+	
 
 
 	/**
@@ -365,17 +367,17 @@ public class JSONParsingFrom {
 
 				descList.add(resSvcDesc);
 			}
-			
+
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
-			
+
 			inserTo.insertVenderSvcTo(descList);
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 		}catch (ParseException e) {
 			// TODO Auto-generated catch block
 

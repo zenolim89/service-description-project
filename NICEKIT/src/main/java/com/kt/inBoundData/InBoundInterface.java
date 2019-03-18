@@ -521,7 +521,7 @@ public class InBoundInterface {
 		}
 		return response;
 	}
-
+	
 	@RequestMapping(value = "/<add method name here>", method = RequestMethod.DELETE)
 	public void deleteSomething(@RequestBody String request,
 			@RequestParam(value = "version", required = false, defaultValue = "1") int version) {
@@ -549,9 +549,38 @@ public class InBoundInterface {
 			logger.debug("End putSomething");
 		}
 	}
+	
+	
 
 	// request vendor list
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 18. 오후 3:23:15]
+	 * desc	: 생성기로부터 사업장 리스트 요청 시 해당 동작을 수행하기 위한 API
+	 *        향후 NICE-KIT 플랫폼에서 개발지원과 운영을 분리할 경우 해당 API는 운영 부분으로 이관
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: JSONSerializerTo.resVenderList()
+	
+	 * @param domainName
+	 * @return
+	 */
 	@RequestMapping(value = "/getVendor", method = RequestMethod.GET)
+	public JSONObject getVenderList(@RequestParam String domainName ) {
+		
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		
+		String reqDomain = domainName;
+		
+		JSONObject res = serializerTo.resVenderList(reqDomain);
+		
+		return res;
+		
+	}
+	
+	
+	
 	public JSONObject getVendor() {
 
 		String[] _vendorList = { "오크밸리", "곤지암", "해비치", "대명" };
@@ -582,34 +611,16 @@ public class InBoundInterface {
 		return res;
 	}
 
-	// request vendor generate
-	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
-	public JSONObject VendorGen(InputStream body) {
-
-		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		vendorObj.put("", "");
-		res.put("resData", vendorObj);
-
-		return res;
-	}
-
+	
 	// request spec list
 	@RequestMapping(value = "/getSpecLst", method = RequestMethod.GET)
-	public JSONObject getSpecLst(@RequestParam("domainName") String domainName) {
+	public JSONObject getSpecLst(@RequestParam String domainName) {
 
-		String[] _specList = { "오크밸리", "곤지암", "해비치", "대명" };
 		JSONObject res = new JSONObject();
-		JSONObject specObj = new JSONObject();
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		specObj.put("specList", _specList);
-		res.put("resData", specObj);
-
+		JSONSerializerTo  serializerTo = new JSONSerializerTo();
+		
+		res = serializerTo.resSpecList(domainName);
+		
 		return res;
 	}
 

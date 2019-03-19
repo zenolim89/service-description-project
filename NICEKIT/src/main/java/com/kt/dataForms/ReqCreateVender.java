@@ -5,7 +5,16 @@ public class ReqCreateVender {
 	String vender;
 	String domainName;
 	String templateUrl;
+	String venderUrl;
 	
+	public String getVenderUrl () {
+		
+		return venderUrl;
+	}
+	
+	public void setVenderUrl (String url) {
+		this.venderUrl = url;
+	}
 	
 	public String getVender() {
 		return vender;

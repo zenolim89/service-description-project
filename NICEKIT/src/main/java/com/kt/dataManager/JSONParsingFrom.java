@@ -1,5 +1,6 @@
 package com.kt.dataManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -11,6 +12,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
@@ -24,6 +27,7 @@ import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.ReqSvcCodeForm;
+import com.typesafe.config.ConfigException.Parse;
 
 public class JSONParsingFrom {
 
@@ -56,9 +60,11 @@ public class JSONParsingFrom {
 
 	}
 
-	public JSONObject parsingCreateVenderTemplate(String response, String path) {
+	public JSONObject parsingCreateVenderTemplate(String response) {
 
 		ReqCreateVender venderInfo = new ReqCreateVender();
+		UITemplateController uiController = new UITemplateController();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 
 		InsertDataTo insertTo = new InsertDataTo();
@@ -70,13 +76,42 @@ public class JSONParsingFrom {
 
 			JSONObject obj = (JSONObject) parser.parse(response);
 
-			venderInfo.setDomainName(obj.get("domainName").toString());
-			venderInfo.setVender(obj.get("vender").toString());
-			venderInfo.setTemplateUrl(obj.get("urlPath").toString());
+			JSONObject resObj = uiController.createVenderDir(obj.get("vendor").toString(), obj.get("urlPath").toString());
 
-			resCode = insertTo.insertVenderToIndexList(venderInfo);
+			if (resObj.get("code").toString() == "409") {
 
-			res = serializerTo.resCreateVenderPath(resCode, path);
+				res = serializerTo.resConflict("409");
+
+				return res;
+
+			} else if (resObj.get("code").toString() == "400") {
+
+				res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
+
+				return res;
+
+			} else {
+				
+				String temPath = uiController.extractURL(resObj.get("temPath").toString());
+				String comPath = uiController.extractURL(resObj.get("comPath").toString());
+
+				venderInfo.setDomainName(obj.get("domainName").toString());
+				venderInfo.setVender(obj.get("vendor").toString());
+				venderInfo.setTemplateUrl(temPath);
+				venderInfo.setVenderUrl(comPath);
+
+
+				resCode = insertTo.insertVenderToIndexList(venderInfo);
+				
+				JSONObject server = parsingFrom.getServerInfo();
+
+				res = serializerTo.resCreateVenderPath(resCode, server.get("serverIp").toString()
+						+ ":" + server.get("port").toString() + comPath);
+
+			}
+
+
+
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -86,6 +121,44 @@ public class JSONParsingFrom {
 		return res;
 
 	}
+
+	public void parsingTemplateInfo (String templateName) {
+
+		InsertDataTo insertTo = new InsertDataTo();
+		
+		JSONObject obj = this.getServerInfo();
+
+		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName; 
+				
+		insertTo.insertTemplateinfo(templateName, finalPath);
+
+
+	}
+
+	public JSONObject getServerInfo () {
+
+		JSONObject obj = new JSONObject();
+
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes();
+
+		String serverIp = attr.getRequest().getServerName();
+		String port = Integer.toString(attr.getRequest().getServerPort());
+		String contextRoot = attr.getRequest().getContextPath();
+		
+		obj.put("port", port);
+		obj.put("serverIp", serverIp);
+		obj.put("context", contextRoot);
+		
+		
+		return obj;
+
+
+	}
+
+
+
+
 
 	public ArrayList<BaseDictionarySet> parsingIntentInfo(JSONArray arr) {
 

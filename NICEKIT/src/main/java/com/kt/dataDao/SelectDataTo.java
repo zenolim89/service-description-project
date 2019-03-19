@@ -21,6 +21,7 @@ import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.datastax.oss.driver.shaded.guava.common.math.Quantiles;
+import com.datastax.oss.protocol.internal.request.Query;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataManager.JSONSerializerTo;
@@ -92,10 +93,63 @@ public class SelectDataTo {
 		return resObj;
 	}
 	
+	public List<Row> selectGetSpecId (String specName) {
+		
+		String keySpace = "commonks";
+		String table ="specindexlist";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("specname", specName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> reslist = set.all();
+		
+		return reslist;
+		
+	}
+	
+	public List<Row> selectTemplate (String urlPath) {
+		
+		String keySpace = "commonks";
+		String table = "templateList";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("dirpath", urlPath))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> resList = set.all();
+		
+		return resList;
+	}
+	
+	public List<Row> selectUseTemplateofVendor (String vendorName) {
+		
+		String keySpace = "vendersvcks";
+		String table = "venderindexlist";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("vendername", vendorName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> resList = set.all();
+		
+		
+		return resList;
+		
+		
+		
+	}
+	
 	public List<Row> selectVenderlistInDomain (String domainName) {
 		
 		String keySpace = "vendersvcks";
-		String table = "venderlist";
+		String table = "venderindexlist";
 		
 		InsertDataTo insertTo = new InsertDataTo();
 		
@@ -109,8 +163,8 @@ public class SelectDataTo {
 		}
 		
 		
-		Statement query = QueryBuilder.select().from("vendersvcks", "venderlist")
-				.where(QueryBuilder.eq("vendername", domainName))
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("domainname", domainName))
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);

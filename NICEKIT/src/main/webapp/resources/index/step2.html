@@ -121,7 +121,7 @@
 						var dicName1 = dicList1[0].dicName;
 
 						//alert(wordList1);
-						$('#formDic').append("<input id='inputDicName' class='form-control'  value=" +dicName1+">");
+						$('#formDic').append("<input readonly='true' id='inputDicName' class='form-control'  value=" +dicName1+">");
 						for (var i = 0; i < wordList1.length ; i++) {
 
 							var option = $('<div class="form-check"> <label> <input type="checkbox" name="check" value="'+wordList1[ i ]+'"> <span class="label-text">'

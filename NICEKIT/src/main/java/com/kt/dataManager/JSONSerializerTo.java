@@ -11,8 +11,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.kt.dataDao.Account;
 import com.kt.dataDao.ErrorCodeList;
+import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.KeyValueFormatForJSON;
@@ -23,6 +26,62 @@ import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
 public class JSONSerializerTo {
+
+
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 18. 오후 3:24:25]
+	 * desc	: 생성기로부터 요청 받은 venderlist 값을 JSON return 규격에 맞춘 포멧을 생성
+	 *        이를 위하여 venderlist 값을 DB를 통하여 검색하기 위한 메소드를 호출
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: SelectDataTo.venderlistInDomain(String domainName)
+
+	 * @param domainName
+	 * @return
+	 */
+	public JSONObject resVenderList (String domainName) {
+
+		SelectDataTo selectTo = new SelectDataTo();
+
+		JSONObject resObj = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		List<Row> list = selectTo.selectVenderlistInDomain(domainName);
+
+		if (list == null) {
+			
+			resObj.put("resCode", "200");
+			resObj.put("resMsg", "등록된 사업장 정보가 없습니다");
+			dataObj.put("venderList", arr);
+
+			resObj.put("resData", dataObj);
+			
+			return resObj;
+
+		} else {
+
+			resObj.put("resCode", "200");
+			resObj.put("resMsg", "성공");
+
+			for (Row row : list) {
+
+				arr.add(row.getString("vendername"));
+			}
+
+			dataObj.put("venderList", arr);
+
+			resObj.put("resData", dataObj);
+
+			return resObj;
+
+		}
+
+
+
+	}
 
 
 	public JSONObject resultMsgforAuth(String id, String pw) {
@@ -51,100 +110,211 @@ public class JSONSerializerTo {
 
 		} else if (authPw.equals(pw)) {
 
-//			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
-//			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
-//
-//			if (ownList.size() <=0 ) {
-//
-//				resMsg.put("regiServiceInfo", null);
-//
-//			} else {
-//
-//				for (int i=0; i < ownList.size(); i++) {
-//
-//					JSONArray regiListInfo = new JSONArray();
-//					
-//
-//					if (ownList.get(i).getUserAuth().equals(id)) {
-//						
-//						userList.add(ownList.get(i));
-//
-//						for (int j=0; j< userList.size(); j++) {
-//
-//							JSONArray regiDialgoList = new JSONArray();
-//							JSONObject regiData = new JSONObject();
-//							
-//							JSONObject data = new JSONObject();
-//							ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
-//
-//							regiData.put("userAuth", userList.get(j).getUserAuth());
-//							regiData.put("interfaceType", userList.get(j).getInterfaceType());
-//							regiData.put("serviceCode", userList.get(j).getServiceCode());
-//							regiData.put("refAPI", userList.get(j).getRefAPI());
-//							regiData.put("intentName", userList.get(j).getIntentName());
-//							regiData.put("serviceDesc", userList.get(j).getServiceDesc());
-//							regiData.put("targetURL", userList.get(j).getTargetURL());
-//							regiData.put("method", userList.get(j).getMethod());
-//							regiData.put("dataType",userList.get(j).getDataType());
-//							regiData.put("dataDefinition", userList.get(j).getDataDefinition());
-//
-//							data = creator.createDataformatForJOSN(userList.get(j).getDataFormat());
-//							regiData.put("dataFormat", data);
-//							//dialog 
-//							regiData.put("refDialog", this.getDialog(userList.get(j), userList.get(j).getUserAuth()));
-//							regiListInfo.add(regiData);
-//						}
-//					}
-//					resMsg.put("regiServiceInfo", regiListInfo);
-//				}
-//
-//			}
-//			resMsg.put("resCode", errorList.getErrorCodeList().get("ok").toString());
-//			resMsg.put("ServiceNum", userList.size());
-//			resMsg.put("resMeg","총" + userList.size() + "개의 서비스가 등록되어 있습니다.");	
+			//			ArrayList<OwnServiceForm> ownList = OwnServiceList.getInstance().getOwnList();
+			//			ArrayList<OwnServiceForm> userList = new ArrayList<OwnServiceForm>();
+			//
+			//			if (ownList.size() <=0 ) {
+			//
+			//				resMsg.put("regiServiceInfo", null);
+			//
+			//			} else {
+			//
+			//				for (int i=0; i < ownList.size(); i++) {
+			//
+			//					JSONArray regiListInfo = new JSONArray();
+			//					
+			//
+			//					if (ownList.get(i).getUserAuth().equals(id)) {
+			//						
+			//						userList.add(ownList.get(i));
+			//
+			//						for (int j=0; j< userList.size(); j++) {
+			//
+			//							JSONArray regiDialgoList = new JSONArray();
+			//							JSONObject regiData = new JSONObject();
+			//							
+			//							JSONObject data = new JSONObject();
+			//							ThirdPartyDataFormatCreator creator = new ThirdPartyDataFormatCreator();
+			//
+			//							regiData.put("userAuth", userList.get(j).getUserAuth());
+			//							regiData.put("interfaceType", userList.get(j).getInterfaceType());
+			//							regiData.put("serviceCode", userList.get(j).getServiceCode());
+			//							regiData.put("refAPI", userList.get(j).getRefAPI());
+			//							regiData.put("intentName", userList.get(j).getIntentName());
+			//							regiData.put("serviceDesc", userList.get(j).getServiceDesc());
+			//							regiData.put("targetURL", userList.get(j).getTargetURL());
+			//							regiData.put("method", userList.get(j).getMethod());
+			//							regiData.put("dataType",userList.get(j).getDataType());
+			//							regiData.put("dataDefinition", userList.get(j).getDataDefinition());
+			//
+			//							data = creator.createDataformatForJOSN(userList.get(j).getDataFormat());
+			//							regiData.put("dataFormat", data);
+			//							//dialog 
+			//							regiData.put("refDialog", this.getDialog(userList.get(j), userList.get(j).getUserAuth()));
+			//							regiListInfo.add(regiData);
+			//						}
+			//					}
+			//					resMsg.put("regiServiceInfo", regiListInfo);
+			//				}
+			//
+			//			}
+			//			resMsg.put("resCode", errorList.getErrorCodeList().get("ok").toString());
+			//			resMsg.put("ServiceNum", userList.size());
+			//			resMsg.put("resMeg","총" + userList.size() + "개의 서비스가 등록되어 있습니다.");	
 		}
 
 		return resMsg;
 	}
 	
-	
-	public JSONObject resDomanIntentNameList () throws ParseException {
+	public JSONObject resSpecList (String domainName) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
+		JSONObject obj = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+		
+		List<Row> list = selectTo.selectSpecList(domainName);
+		
+		if (list == null) {
+			
+			obj.put("resCode", "404");
+			obj.put("resMsg", "요청하신 도메인에 사용가능한 규격이 없습니다");
+			obj.put("resData", arr);
+			
+			return obj;
+		} else {
+			
+			for(Row row : list) {
+				
+				arr.add(row.getString("specname"));
+			}
+			
+			obj.put("resCode", "200");
+			obj.put("resMSg", "성공");
+			dataObj.put("specList", arr);
+			obj.put("resData", dataObj);
+			
+			return obj;
+			
+		}
+		
+	}
+	
+	public JSONObject resCreateVenderPath(String code, String path) {
+		
+		JSONObject res = new JSONObject();
+		
+		if (code == "409") {
+			
+			res = this.resConflict(code);
+			
+			return res;
+			
+		} else {
+			
+			JSONObject dataObj = new JSONObject();
+			
+			res.put("resCode", code);
+			res.put("resMsg", "성공");
+			
+			dataObj.put("urlPath", path);
+			
+			res.put("resData", dataObj);
+			
+			
+			return res;
+			
+		}
+		
+	}
+	
+
+	public JSONObject resConflict (String code) {
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		obj.put("resCode", code);
+		obj.put("resMsg", "이미 동일한 항목의 서비스가 존재합니다");
+		obj.put("resData", arr);
+
+		return obj;
+	}
+
+	public JSONObject resServiceCodeToCreate(String code) {
+
+		JSONObject obj = new JSONObject();
+		JSONObject subObj = new JSONObject();
+
+		obj.put("resCode", "201");
+		obj.put("resMsg", "서비스 코드 발행 성공");
+		subObj.put("serviceCode", code);
+		obj.put("resData", subObj);
+
+		return obj;
+	}
+
+
+	public JSONObject resDomanIntentNameList () throws ParseException {
+
+		SelectDataTo selectTo = new SelectDataTo();
+
 		String ksName = "commonks";
 		String targetTable = "intentInfo";
-		
+
 		ArrayList<String> resList = selectTo.selectIntentNameList(ksName, targetTable);
 		JSONArray arr = new JSONArray();
 		JSONObject obj = new JSONObject();
-		
+
 		for (String name : resList) {
-			
+
 			arr.add(name);	
 		}
-		
+
 		obj.put("intentList", arr);
-		
+
 		return obj;
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
-	public JSONArray resDomainList (List<String> domainList) {
-		
+	public JSONObject resDomainList (ResultSet resSet) {
+
 		JSONArray resArr = new JSONArray();
-		
-		for (String table : domainList) {
-			
-			resArr.add(table);
-			
+		JSONObject res = new JSONObject();
+		JSONObject resData = new JSONObject();
+
+
+		List<Row> resList = resSet.all();
+
+		for (Row domain : resList) {
+
+			resArr.add(domain.getString("domainname"));
+
 		}
-		
-		return resArr;
-		
+
+		resData.put("domainList", resArr);
+
+		if (resArr.size() == 0 ) {
+
+			res.put("resCode", "404");
+			res.put("resMsg", "도메인 정보가 없습니다");
+			res.put("resData", resData);
+
+			return res;
+
+		}
+
+		res.put("resCode", "200");
+		res.put("resMsg", "성공");
+		res.put("resData", resData);
+
+		return res;
+
+
 	}
-	
+
 	public JSONObject createJSONForIntentInfo (String intentName) {
 
 		SelectDataTo selectTo = new SelectDataTo();
@@ -203,45 +373,45 @@ public class JSONSerializerTo {
 		return obj;
 
 	}
-	
-	
-	
+
+
+
 	public JSONArray getDialog (BaseSvcForm form, String userAuth) {
-		
+
 		// 기존 hash table에서 사전을 불러온 내용을
 		// DB에서 가지고 오는 내용으로 변경 필요
-		
-//		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
-//		
+
+		//		Hashtable<String, ArrayList<String>> tempList = new Hashtable<String, ArrayList<String>>();
+		//		
 		JSONArray resArr = new JSONArray();
-//		
-//		
-//		
-//		tempList = form.getRefDialog();
-//		
-//		Set <String> keys = tempList.keySet();
-//		
-//		Iterator<String> iter = keys.iterator();
-//		
-//		while (iter.hasNext()) {
-//			
-//			JSONObject tempObj = new JSONObject();
-//			
-//			String keyName = iter.next();
-//			ArrayList<String> tempValueList = tempList.get(keyName);
-//			JSONArray tempArr = new JSONArray();
-//			
-//			for (int i=0; i < tempValueList.size(); i++) {
-//				tempArr.add(tempValueList.get(i));
-//			}
-//			tempObj.put("dicName",  keyName);
-//			tempObj.put("word", tempArr);
-//			resArr.add(tempObj);
-//			
-//			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
-//			
-//		}
-		
+		//		
+		//		
+		//		
+		//		tempList = form.getRefDialog();
+		//		
+		//		Set <String> keys = tempList.keySet();
+		//		
+		//		Iterator<String> iter = keys.iterator();
+		//		
+		//		while (iter.hasNext()) {
+		//			
+		//			JSONObject tempObj = new JSONObject();
+		//			
+		//			String keyName = iter.next();
+		//			ArrayList<String> tempValueList = tempList.get(keyName);
+		//			JSONArray tempArr = new JSONArray();
+		//			
+		//			for (int i=0; i < tempValueList.size(); i++) {
+		//				tempArr.add(tempValueList.get(i));
+		//			}
+		//			tempObj.put("dicName",  keyName);
+		//			tempObj.put("word", tempArr);
+		//			resArr.add(tempObj);
+		//			
+		//			System.out.println("[DEBUG: 검색된 사용자 단어사전] 사전명 : " + keyName + " 단어: " + tempList.get(keyName));
+		//			
+		//		}
+
 		return resArr;
 	}
 
@@ -259,14 +429,14 @@ public class JSONSerializerTo {
 			JSONArray arr = (JSONArray) obj.get(curKeyName);
 
 			ArrayList<String> arrVar = new ArrayList<String>();
-			
+
 			for (int i=0; i < arr.size(); i++) {
-				
+
 				arrVar.add(arr.get(i).toString());
 			}
-			
+
 			tempList.put(curKeyName, arrVar);
-			
+
 			System.out.println("[DEBUG: 등록된 사용자 단어사전] 사전명: " + curKeyName + ", 단어: " + arrVar.toString());
 		}
 

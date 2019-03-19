@@ -141,7 +141,7 @@ public class CreateExcelForm {
 					dicWordInputCell.setCellStyle(lockedValueCellStyle());
 				}
 				int dicArrRow = 10;
-				for(int dicInfoRow = 0; dicInfoRow < excelForm.getDicList().size(); dicInfoRow++) {
+				for (int dicInfoRow = 0; dicInfoRow < excelForm.getDicList().size(); dicInfoRow++) {
 					JSONObject dicObj = (JSONObject) excelForm.getDicList().get(dicInfoRow);
 					Row dicListInputRow = sheet.createRow(dicArrRow);
 					Cell dicNameInputCell = dicListInputRow.createCell(0);
@@ -246,7 +246,7 @@ public class CreateExcelForm {
 		Row exampleRow = sheet.createRow(37);
 		exampleRow.setHeight((short) 2000);
 		Cell reqExampleFirstCell = exampleRow.createCell(0);
-		reqExampleFirstCell.setCellValue("Request Example");
+		reqExampleFirstCell.setCellValue("Request Example Input");
 		reqExampleFirstCell.setCellStyle(unLockedCellStyle());
 		Cell reqExampleLastCell = exampleRow.createCell(2);
 		reqExampleLastCell.setCellStyle(unLockedCellStyle());
@@ -293,7 +293,7 @@ public class CreateExcelForm {
 		Row exampleRow = sheet.createRow(47);
 		exampleRow.setHeight((short) 2000);
 		Cell respExampleFirstCell = exampleRow.createCell(0);
-		respExampleFirstCell.setCellValue("Response Example");
+		respExampleFirstCell.setCellValue("Response Example Input");
 		respExampleFirstCell.setCellStyle(unLockedCellStyle());
 		Cell respExampleLastCell = exampleRow.createCell(2);
 		respExampleLastCell.setCellStyle(unLockedCellStyle());

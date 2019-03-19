@@ -23,6 +23,7 @@ public class UtilFile {
                                         MultipartFile uploadFile) {
         String path = "";
         String fileName = "";
+        String temp = "";
         
         OutputStream out = null;
         PrintWriter printWriter = null;
@@ -63,6 +64,8 @@ public class UtilFile {
             System.out.println("UtilFile fileUpload out : " + out);
             
             out.write(bytes);
+            
+            temp = file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -78,7 +81,8 @@ public class UtilFile {
             }
         }
         
-        return path + fileName;
+        return temp;
+        //return path + fileName;
     }
     
 //  업로드 파일 저장 경로 얻는 메소드

@@ -33,6 +33,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
+import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.dataManager.UtilFile;
@@ -717,6 +718,10 @@ public class InBoundInterface {
 
 		// System.out.println("RewardController reAddProCtrl n : " + n);
 		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
+		
+		/* 업로드 엑셀파일 파서 */
+		ExcelService excelSvc = new ExcelService();
+		excelSvc.excelUpload(uploadPath);
 
 		return "redirect:listAll";
 	}

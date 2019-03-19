@@ -526,7 +526,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/xlsxDown", method = RequestMethod.POST)
 	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
-
+		
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 
 		String FilePath = request.getRealPath("/resources/download/");
@@ -721,146 +721,250 @@ public class InBoundInterface {
 		return "redirect:listAll";
 	}
 
-	// request vendor template url
+	
 	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
-	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName, HttpServletRequest _request)
-			throws IOException {
-
-		// String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/" +
-		// vendorName;
-		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/";
-
-		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
-
-		// 디렉토리 순회용
-		// JSONArray vendorObjArray = new JSONArray();
-
-		ServletContext context = _request.getSession().getServletContext();
-
-		String path = context.getRealPath("/");
-
-		// 디렉토리 순회
-		/*
-		 * String dirPath = path + "/resources/template/" + vendorName;
-		 * 
-		 * if( new File(dirPath).exists() ){ File[] fileList = new
-		 * File(dirPath).listFiles();
-		 * 
-		 * for( int i = 0 ; i < fileList.length ; i++){
-		 * 
-		 * File file = fileList[i];
-		 * 
-		 * vendorObjArray.add(_urlPath + file.getName()); }
-		 * 
-		 * res.put("resData", vendorObjArray); }
-		 */
-
-		// 특정 파일
-		File file = new File(path + File.separator + "resources" + File.separator + "template" + File.separator
-				+ vendorName + ".html");
-
-		DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-		// Resource resource = defaultResourceLoader.getResource(name);
-
-		if (file.exists()) {
-
-			vendorObj.put("urlPath", _urlPath + vendorName + ".html");
-			res.put("resData", vendorObj);
+	public JSONObject getVenderPage(@RequestParam String domainName, String vendorName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String templateUrl = null;
+		
+		List<Row> list = selectTo.selectUseTemplateofVendor(vendorName);
+		
+		if (list == null) {
+			
+			JSONObject res = serializerTo.resNotFoundTemplate("요청하신 사업자명을 통한 미리보기가 없습니다");
+			return res;
+			
 		}
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		// vendorObj.put("urlPath", _urlPath);
+		
+		for (Row row : list) {
+			
+			templateUrl = row.getString("templateuipath");
+			
+		}
+		
+		JSONObject server = parsingFrom.getServerInfo();
+		
+		String path = server.get("serverIP") + ":" + server.get("port") + templateUrl;
+		
+		JSONObject res = serializerTo.resPreView(path);
+		
 		return res;
+		
+		
 	}
+	
+	
+	// request vendor template url
+//	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
+//	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName, HttpServletRequest _request)
+//			throws IOException {
+//
+//		// String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/" +
+//		// vendorName;
+//		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/";
+//
+//		JSONObject res = new JSONObject();
+//		JSONObject vendorObj = new JSONObject();
+//
+//		// 디렉토리 순회용
+//		// JSONArray vendorObjArray = new JSONArray();
+//
+//		ServletContext context = _request.getSession().getServletContext();
+//
+//		String path = context.getRealPath("/");
+//
+//		// 디렉토리 순회
+//		/*
+//		 * String dirPath = path + "/resources/template/" + vendorName;
+//		 * 
+//		 * if( new File(dirPath).exists() ){ File[] fileList = new
+//		 * File(dirPath).listFiles();
+//		 * 
+//		 * for( int i = 0 ; i < fileList.length ; i++){
+//		 * 
+//		 * File file = fileList[i];
+//		 * 
+//		 * vendorObjArray.add(_urlPath + file.getName()); }
+//		 * 
+//		 * res.put("resData", vendorObjArray); }
+//		 */
+//
+//		// 특정 파일
+//		File file = new File(path + File.separator + "resources" + File.separator + "template" + File.separator
+//				+ vendorName + ".html");
+//
+//		DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+//		// Resource resource = defaultResourceLoader.getResource(name);
+//
+//		if (file.exists()) {
+//
+//			vendorObj.put("urlPath", _urlPath + vendorName + ".html");
+//			res.put("resData", vendorObj);
+//		}
+//
+//		res.put("resCode", "200");
+//		res.put("resMsg", "성공");
+//		// vendorObj.put("urlPath", _urlPath);
+//		return res;
+//	}
 
-	// request vendor generate
+	
+	
 	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
-	public JSONObject VendorGen(InputStream body, HttpServletRequest _request,
-			@RequestParam HashMap<String, Object> _paramMap) {
-
+	public JSONObject venderGen (InputStream body) {
+		
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String bf = null;
+		String response ="";
+		
 		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
-
-		ServletContext context = _request.getSession().getServletContext();
-		String path = context.getRealPath("/");
-
-		String dirName = _paramMap.get("vendorName").toString();
-		String standardDirName = _paramMap.get("urlPath").toString();
-
-		// 향후 return되는 경로
-		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/venders";
-
-		// 기존 디렉토리 File 객체
-//		File orgFile = new File(path + File.separator + "resources" + File.separator + "template" +File.separator + standardDirName);
-		File orgFile = new File(standardDirName); // parsing필요 --> resources 부터 사용
-		// 신규 생성될 디렉토리 File 객체
-		File newDirFile = new File(path + File.separator + "resources" + File.separator + dirName);
-
-		System.out.println("#############################################");
-		System.out.println("orgFile : " + orgFile.getAbsolutePath());
-		System.out.println("#############################################");
-		System.out.println("newDirFile : " + newDirFile.getAbsolutePath());
-		System.out.println("#############################################");
-
-		if (!orgFile.exists()) {
-
-			res.put("resData", "원본 폴더가 존재하지 않습니다.");
-
-			// 생성하고자하는 directory가 있는 경우 (vendername 일치한 폴더 이미 존재)
-		} else if (newDirFile.exists()) {
-
-			res.put("resData", "기존에 폴더가 있습니다.");
-		}
-		// 기존 폴더 없을경우 신규 생성 후 파일 복사 진행.
-		else {
-
-			newDirFile.mkdir();
-			this.copyFile(orgFile, newDirFile); // 복사
-			res.put("resData", _urlPath + dirName);
-		}
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		// vendorObj.put("", "");
-
-		return res;
-	}
-
-	public void copyFile(File sourceF, File targetF) {
-
-		File[] ff = sourceF.listFiles();
-		for (File file : ff) {
-			File temp = new File(targetF.getAbsolutePath() + File.separator + file.getName());
-			if (file.isDirectory()) {
-				temp.mkdir();
-				this.copyFile(file, temp);
-			} else {
-				FileInputStream fis = null;
-				FileOutputStream fos = null;
-				try {
-					fis = new FileInputStream(file);
-					fos = new FileOutputStream(temp);
-					byte[] b = new byte[4096];
-					int cnt = 0;
-					while ((cnt = fis.read(b)) != -1) {
-						fos.write(b, 0, cnt);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					try {
-						fis.close();
-						fos.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		
+		try {
+			while ((bf = in.readLine()) != null ) {
+				
+				response += bf;
+				
 			}
+			
+			
+			res = parsingFrom.parsingCreateVenderTemplate(response);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		return res;
+		
+		
+		
 	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 19. 오후 2:33:25]
+	 * desc	: 향후 템플릿 업로드 기능에 따라 POST로 변환 처리 필요
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param body
+	 * @return
+	 */
+	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
+	public JSONObject setTemplate (@RequestParam String templateName) {
+		
+		JSONObject res = new JSONObject();
+
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		parsingFrom.parsingTemplateInfo(templateName);
+		
+		return res;
+		
+	}
+	
+	
+	
+//	// request vendor generate
+//	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
+//	public JSONObject VendorGen(InputStream body, HttpServletRequest _request,
+//			@RequestParam HashMap<String, Object> _paramMap) {
+//
+//		JSONObject res = new JSONObject();
+//		JSONObject vendorObj = new JSONObject();
+//
+//		ServletContext context = _request.getSession().getServletContext();
+//		String path = context.getRealPath("/");
+//
+//		String dirName = _paramMap.get("vendorName").toString();
+//		String standardDirName = _paramMap.get("urlPath").toString();
+//
+//		// 향후 return되는 경로
+//		String _urlPath = "http://222.107.124.9:8080/NICEKIT/resources/venders";
+//
+//		// 기존 디렉토리 File 객체
+//		File orgFile = new File(path + File.separator + "resources" + File.separator + "template" +File.separator + standardDirName);
+//		
+//		System.out.println(path + File.separator + "resources" + File.separator + "template" +File.separator + standardDirName);
+//		
+////		File orgFile = new File(standardDirName); // parsing필요 --> resources 부터 사용
+//		// 신규 생성될 디렉토리 File 객체
+//		File newDirFile = new File(path + File.separator + "resources" + File.separator + dirName);
+//
+//		System.out.println("#############################################");
+//		System.out.println("orgFile : " + orgFile.getAbsolutePath());
+//		System.out.println("#############################################");
+//		System.out.println("newDirFile : " + newDirFile.getAbsolutePath());
+//		System.out.println("#############################################");
+//
+//		if (!orgFile.exists()) {
+//
+//			res.put("resData", "원본 폴더가 존재하지 않습니다.");
+//
+//			// 생성하고자하는 directory가 있는 경우 (vendername 일치한 폴더 이미 존재)
+//		} else if (newDirFile.exists()) {
+//
+//			res.put("resData", "기존에 폴더가 있습니다.");
+//		}
+//		// 기존 폴더 없을경우 신규 생성 후 파일 복사 진행.
+//		else {
+//
+//			newDirFile.mkdir();
+//			this.copyFile(orgFile, newDirFile); // 복사
+//			res.put("resData", _urlPath + dirName);
+//		}
+//
+//		res.put("resCode", "200");
+//		res.put("resMsg", "성공");
+//		// vendorObj.put("", "");
+//
+//		return res;
+//	}
+
+//	public void copyFile(File sourceF, File targetF) {
+//
+//		File[] ff = sourceF.listFiles();
+//		for (File file : ff) {
+//			File temp = new File(targetF.getAbsolutePath() + File.separator + file.getName());
+//			if (file.isDirectory()) {
+//				temp.mkdir();
+//				this.copyFile(file, temp);
+//			} else {
+//				FileInputStream fis = null;
+//				FileOutputStream fos = null;
+//				try {
+//					fis = new FileInputStream(file);
+//					fos = new FileOutputStream(temp);
+//					byte[] b = new byte[4096];
+//					int cnt = 0;
+//					while ((cnt = fis.read(b)) != -1) {
+//						fos.write(b, 0, cnt);
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				} finally {
+//					try {
+//						fis.close();
+//						fos.close();
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//
+//				}
+//			}
+//		}
+//	}
 
 }

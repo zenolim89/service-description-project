@@ -115,12 +115,14 @@ public class InsertDataTo {
 		String keySpace = "vendersvcks";
 		String table = null;
 		
-		List<Row> list = selectTo.selectGetSpecId(specName); //엑셀 객체에서 "specName" 객체 값을 arg로
+//		List<Row> list = selectTo.selectGetSpecId(specName); //엑셀 객체에서 "specName" 객체 값을 arg로
 		
-		for (Row row : list) {
-			
-			table = row.getString("specid");
-		}
+//		for (Row row : list) {
+//			
+//			table = row.getString("specid");
+//		}
+		
+		
 		
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
 		

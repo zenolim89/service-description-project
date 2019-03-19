@@ -7,21 +7,22 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <title>/nicekit_step2</title>
-
 <!-- Bootstrap core CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<script src="/nicekit/js/ie10-viewport-bug-workaround.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="/NICEKIT/nicekit/js/ie10-viewport-bug-workaround.js"></script>
 <!-- Custom styles for this template -->
-<link href="/nicekit/css/dashboard.css" rel="stylesheet">
+<link href="/NICEKIT/nicekit/css/dashboard.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/NICEKIT/nbware/assets/css/popup.css" />
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
-<script type="text/javascript" src="/nbware/js/xlsx/xlsx.full.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
-<script type="text/javascript" src="/nbware/js/Configuration.js" charset="utf-8"></script>
-<script type="text/javascript" src="/nbware/js/Utils.js" charset="utf-8"></script>
-<script type="text/javascript" src="/nbware/js/Connection.js" charset="utf-8"></script>
-<script type="text/javascript" src="/nbware/js/ExcelParser.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/NICEKIT/nbware/js/xlsx/xlsx.full.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Configuration.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Connection.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/ExcelParser.js" charset="utf-8"></script>
+
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -31,8 +32,8 @@
     <![endif]-->
 </head>
 <script>
-	//var host = "http://localhost:8080"
-	var host = "http://222.107.124.9:8080/NICEKIT";
+	var host = "http://localhost:8080/NICEKIT"
+	//var host = "http://222.107.124.9:8080/NICEKIT";
 
 	//$(document).ready(function() { alert("로딩 완료555"); });
 
@@ -352,19 +353,14 @@
 		});
 	});
 </script>
-
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">KT AI B2B Service</a>		
+				<a class="navbar-brand" href="#">KT AI B2B Service</a>
 			</div>
 		</div>
 	</nav>
@@ -373,12 +369,10 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
-					<li class="active"><a href="#">오크밸리 규격 <span
-							class="sr-only">(current)</span></a></li>
+					<li class="active"><a href="#">오크밸리 규격 <span class="sr-only">(current)</span></a></li>
 				</ul>
-				
-				<ul class="nav nav_sidebar" style="position:absolute; bottom:20px">
-					<button id="buttonIntentRgt" class="btn btn-lg btn-primary btn-block" onclick="popup('resources/index/sheet.html',800,500,'팝업','scroll'); return false;"> 인텐트/어휘 등록</button>
+				<ul class="nav nav_sidebar" style="position: absolute; bottom: 20px">
+					<button id="buttonIntentRgt" class="btn btn-lg btn-primary btn-block" onclick="popup('resources/index/sheet.html',800,500,'팝업','scroll'); return false;">인텐트/어휘 등록</button>
 				</ul>
 			</div>
 		</div>
@@ -386,16 +380,10 @@
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<div style="padding: 10px">
 				<ul class="nav nav-tabs">
-
-					<li class="active" id="tab1li"><a data-toggle="tab" id="tab1">서비스
-							등록</a></li>
-
+					<li class="active" id="tab1li"><a data-toggle="tab" id="tab1">서비스 등록</a></li>
 					<li id="tab2li"><a data-toggle="tab" id="tab2">서비스 관리</a></li>
-
 				</ul>
-
 				<div class="tab-content" style="padding: 20px">
-
 					<div class="ab-pane active" id="tab1">
 						<div class="table-responsive">
 							<table class="table table-striped">
@@ -421,14 +409,11 @@
 									</tr>
 									<tr>
 										<td class="col-xs-6 col-sm-2">서비스 코드</td>
-										<td class="col-xs-6 col-sm-4"><input readonly="true"
-											id="inputServiceCode" class="form-control"
-											placeholder="서비스 코드 자동 생성"></td>
+										<td class="col-xs-6 col-sm-4"><input readonly="true" id="inputServiceCode" class="form-control" placeholder="서비스 코드 자동 생성"></td>
 									</tr>
 									<tr>
 										<td class="col-xs-6 col-sm-2">인텐트 명</td>
-										<td class="col-xs-6 col-sm-4"><select id='selectIntent'
-											class="form-control">
+										<td class="col-xs-6 col-sm-4"><select id='selectIntent' class="form-control">
 												<option value="" selected disabled>인텐트 선택</option>
 										</select>
 									</tr>
@@ -445,17 +430,15 @@
 					</div>
 				</div>
 			</div>
-
 			<button id="addItmBtn" class="btn btn-success" style="float: right">항목추가</button>
-
 		</div>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<h2 class="sub-header">서비스 명세 리스트</h2>
-			<div style="text-align:right;">
+			<div style="text-align: right;">
 				<button class='btn' id='buttonDownload'>양식 다운</button>
 				<button class='btn' style="margin-left: 30px" id='buttonRgt'>규격 등록</button>
-				<form id="formUpload" name="frm" enctype="multipart/form-data" style="width:30px" method="post">
-				<input id='inputUpload' type="file" name="uploadFile">
+				<form id="formUpload" name="frm" enctype="multipart/form-data" style="width: 30px" method="post">
+					<input id='inputUpload' type="file" name="uploadFile">
 				</form>
 			</div>
 			<div style="padding: 10px">
@@ -496,6 +479,6 @@
 				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 </body>
 </html>

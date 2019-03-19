@@ -1,37 +1,24 @@
 package com.kt.dataForms;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 public class BaseExcelForm {
 
-	String domainName;
-	String domainId;
-	String specName;
+	String domainName; // 도메인명
+	String domainId; // 도메인아이디
+	String specName; // 규격명
 
-	String serviceName;
-	String invokeType;
-	String serviceType;
-	String serviceLink;
-	String serviceDesc;
-	String serviceCode;
-	String id;
-	String dicInfo;
-	JSONArray svcList;
-	JSONArray intentInfo;
-	JSONArray dicList;
-	JSONArray wordList;
-
-	public String getDicInfo() {
-		return dicInfo;
-	}
-
-	public void setDicInfo(String dicInfo) {
-		this.dicInfo = dicInfo;
-	}
+	String serviceName; // 서비스명
+	String invokeType; // 인보크타입
+	String serviceType; // 서비스타입
+	String serviceLink; // 연결링크
+	String serviceDesc; // 서비스개요
+	String serviceCode; // 서비스 코드
+	String id; // 인텐트 아이디
+	JSONArray svcList; // 서비스 리스트
+	JSONArray intentInfo; // 인텐트 정보
+	JSONArray dicList; // 사전 리스트
+	JSONArray wordList; // 어휘 리스트
 
 	public String getDomainName() {
 		return domainName;

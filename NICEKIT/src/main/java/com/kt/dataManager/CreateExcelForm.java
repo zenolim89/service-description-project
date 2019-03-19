@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,276 +23,349 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import com.kt.dataForms.BaseExcelForm;
 
 public class CreateExcelForm {
-	String FilePath;
-	public HSSFWorkbook workbook = new HSSFWorkbook();
+	String realPath;
+	String filePath;
+	String fileName;
+	HSSFWorkbook workbook;
 	ArrayList<BaseExcelForm> svcList;
 
-	public CreateExcelForm() {
-
+	public CreateExcelForm(ArrayList<BaseExcelForm> svcList, String realPath, String filePath, String fileName) {
+		this.workbook = new HSSFWorkbook();
+		this.svcList = svcList;
+		this.realPath = realPath;
+		this.filePath = filePath;
+		this.fileName = fileName;
 	}
 
-	public CreateExcelForm(ArrayList<BaseExcelForm> _svcList, String _FilePath) {
-		this.svcList = _svcList;
-		this.FilePath = _FilePath + "/workbook.xlsx";
-	}
-
-	public void createSheet() {
-		for (int i = 0; i < this.svcList.size(); i++) {
-			HSSFSheet sheet = this.workbook.createSheet(this.svcList.get(i).getServiceName());
+	public JSONObject createSheet() {
+		for (int arrIndex = 0; arrIndex < this.svcList.size(); arrIndex++) {
+			HSSFSheet sheet = this.workbook.createSheet(this.svcList.get(arrIndex).getServiceName());
 			sheet.protectSheet("password");
 			sheet.setColumnWidth(0, 40 * 256);
 			sheet.setColumnWidth(1, 40 * 256);
 			sheet.setColumnWidth(2, 40 * 256);
-			createServiceDesc(sheet, svcList.get(i));
-			ReqProtocolForm(sheet, svcList.get(i));
-			RespProtocolForm(sheet, svcList.get(i));
+			writeServiceDescForm(sheet, svcList.get(arrIndex));
+			writeHeaderProtocolForm(sheet, svcList.get(arrIndex));
+			writeReqProtocolForm(sheet, svcList.get(arrIndex));
+			writeRespProtocolForm(sheet, svcList.get(arrIndex));
 		}
+		return createExcelFile();
 	}
 
-	public void createServiceDesc(HSSFSheet sheet, BaseExcelForm excelForm) {
-		for (int i = 0; i < 6; i++) {
-			if (i == 0) {
-				Row row = sheet.createRow(i);
+	public void writeServiceDescForm(HSSFSheet sheet, BaseExcelForm excelForm) {
+		for (int svcDataRow = 0; svcDataRow < 6; svcDataRow++) {
+			if (svcDataRow == 0) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("serviceName");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getServiceName());
-				valueCell.setCellStyle(LockedValueCellStyle());
-			} else if (i == 1) {
-				Row row = sheet.createRow(i);
+				valueCell.setCellStyle(lockedValueCellStyle());
+			} else if (svcDataRow == 1) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("invokeType");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getInvokeType());
-				valueCell.setCellStyle(LockedValueCellStyle());
-			} else if (i == 2) {
-				Row row = sheet.createRow(i);
+				valueCell.setCellStyle(lockedValueCellStyle());
+			} else if (svcDataRow == 2) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("serviceType");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getServiceType());
-				valueCell.setCellStyle(LockedValueCellStyle());
-			} else if (i == 3) {
-				Row row = sheet.createRow(i);
+				valueCell.setCellStyle(lockedValueCellStyle());
+			} else if (svcDataRow == 3) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("serviceLink");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getServiceLink());
-				valueCell.setCellStyle(LockedValueCellStyle());
-			} else if (i == 4) {
-				Row row = sheet.createRow(i);
+				valueCell.setCellStyle(lockedValueCellStyle());
+			} else if (svcDataRow == 4) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("serviceDesc");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getServiceDesc());
-				valueCell.setCellStyle(LockedValueCellStyle());
-			} else if (i == 5) {
-				Row row = sheet.createRow(i);
+				valueCell.setCellStyle(lockedValueCellStyle());
+			} else if (svcDataRow == 5) {
+				Row row = sheet.createRow(svcDataRow);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("serviceCode");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
 				valueCell.setCellValue(excelForm.getServiceCode());
-				valueCell.setCellStyle(LockedValueCellStyle());
+				valueCell.setCellStyle(lockedValueCellStyle());
 			}
 			if (excelForm.getIntentInfo() != null) {
 				Row row = sheet.createRow(6);
 				Cell keyCell = row.createCell(0);
 				keyCell.setCellValue("intentInfo");
-				keyCell.setCellStyle(LockedKeyCellStyle());
+				keyCell.setCellStyle(lockedKeyCellStyle());
 				Cell valueCell = row.createCell(1);
-				valueCell.setCellValue(excelForm.getDicInfo());
-				valueCell.setCellStyle(LockedValueCellStyle());
+				valueCell.setCellValue(excelForm.getId());
+				valueCell.setCellStyle(lockedValueCellStyle());
+
+				Row titleRow = sheet.createRow(8);
+				Cell titleCell = titleRow.createCell(0);
+				titleCell.setCellValue("dicList");
+				titleCell.setCellStyle(lockedKeyCellStyle());
+
+				Row dicListRow = sheet.createRow(9);
+				Cell dicNameCell = dicListRow.createCell(0);
+				dicNameCell.setCellValue("dicName");
+				dicNameCell.setCellStyle(lockedKeyCellStyle());
+				Cell dicWordListCell = dicListRow.createCell(1);
+				dicWordListCell.setCellValue("wordList");
+				dicWordListCell.setCellStyle(lockedKeyCellStyle());
+
+				for (int dicArrRow = 10; dicArrRow < 15; dicArrRow++) {
+					Row dicListInputRow = sheet.createRow(dicArrRow);
+					Cell dicNameInputCell = dicListInputRow.createCell(0);
+					dicNameInputCell.setCellValue("dicName");
+					dicNameInputCell.setCellStyle(lockedValueCellStyle());
+					Cell dicWordInputCell = dicListInputRow.createCell(1);
+					dicWordInputCell.setCellValue("wordList");
+					dicWordInputCell.setCellStyle(lockedValueCellStyle());
+				}
+				int dicArrRow = 10;
+				for(int dicInfoRow = 0; dicInfoRow < excelForm.getDicList().size(); dicInfoRow++) {
+					JSONObject dicObj = (JSONObject) excelForm.getDicList().get(dicInfoRow);
+					Row dicListInputRow = sheet.createRow(dicArrRow);
+					Cell dicNameInputCell = dicListInputRow.createCell(0);
+					dicNameInputCell.setCellValue(dicObj.get("dicName").toString());
+					dicNameInputCell.setCellStyle(lockedValueCellStyle());
+					Cell dicWordInputCell = dicListInputRow.createCell(1);
+					dicWordInputCell.setCellValue(dicObj.get("wordList").toString().trim());
+					dicWordInputCell.setCellStyle(lockedValueCellStyle());
+					dicArrRow++;
+				}
 			}
-			Row row = sheet.createRow(7);
-			Cell keyCell = row.createCell(0);
-			keyCell.setCellValue("전송방식");
-			keyCell.setCellStyle(LockedKeyCellStyle());
-			Cell valueCell = row.createCell(1);
-			valueCell.setCellValue("전송방식 선택");
-			valueCell.setCellStyle(UnLockedCellStyle());
-			sheet.addValidationData(transDropDownList(7, 1, 7, 1));
 		}
 	}
 
-	public void ReqProtocolForm(HSSFSheet sheet, BaseExcelForm excelForm) {
-		Row headRow = sheet.createRow(9);
-		Cell titleCell = headRow.createCell(0);
+	public void writeHeaderProtocolForm(HSSFSheet sheet, BaseExcelForm excelForm) {
+		Row methodRow = sheet.createRow(16);
+		Cell methodCell = methodRow.createCell(0);
+		methodCell.setCellValue("transMethod");
+		methodCell.setCellStyle(lockedKeyCellStyle());
+		Cell methodInputCell = methodRow.createCell(1);
+		methodInputCell.setCellValue("전송방식 선택");
+		methodInputCell.setCellStyle(unLockedCellStyle());
+		sheet.addValidationData(methodDropDownList(methodRow.getRowNum(), methodInputCell.getColumnIndex(),
+				methodRow.getRowNum(), methodInputCell.getColumnIndex()));
+
+		for (int arrUrl = 18; arrUrl < 20; arrUrl++) {
+			Row urlRow = sheet.createRow(arrUrl);
+			Cell urlCell = urlRow.createCell(0);
+			urlCell.setCellValue((arrUrl == 18) ? "comURL" : "testURL");
+			urlCell.setCellStyle(lockedKeyCellStyle());
+			Cell urlInputCell = urlRow.createCell(1);
+			urlInputCell.setCellValue("http://");
+			urlInputCell.setCellStyle(unLockedCellStyle());
+		}
+
+		Row titleRow = sheet.createRow(21);
+		Cell titleCell = titleRow.createCell(0);
+		titleCell.setCellValue("Header");
+		titleCell.setCellStyle(lockedKeyCellStyle());
+
+		Row headerRow = sheet.createRow(22);
+		Cell headerKey = headerRow.createCell(0);
+		headerKey.setCellValue("Parameter");
+		headerKey.setCellStyle(lockedKeyCellStyle());
+		Cell headerValue = headerRow.createCell(1);
+		headerValue.setCellValue("Value");
+		headerValue.setCellStyle(lockedKeyCellStyle());
+		Cell headerNote = headerRow.createCell(2);
+		headerNote.setCellValue("Note");
+		headerNote.setCellStyle(lockedKeyCellStyle());
+
+		for (int headerDataRow = 23; headerDataRow < 28; headerDataRow++) {
+			Row specInputRow = sheet.createRow(headerDataRow);
+			Cell keyCell = specInputRow.createCell(0);
+			keyCell.setCellValue("Parameter");
+			keyCell.setCellStyle(unLockedCellStyle());
+			Cell selectCell = specInputRow.createCell(1);
+			selectCell.setCellValue("Value");
+			selectCell.setCellStyle(unLockedCellStyle());
+			Cell noteCell = specInputRow.createCell(2);
+			noteCell.setCellValue("Note");
+			noteCell.setCellStyle(unLockedCellStyle());
+		}
+	}
+
+	public void writeReqProtocolForm(HSSFSheet sheet, BaseExcelForm excelForm) {
+		Row titleRow = sheet.createRow(29);
+		Cell titleCell = titleRow.createCell(0);
 		titleCell.setCellValue("Request Param");
-		titleCell.setCellStyle(LockedKeyCellStyle());
+		titleCell.setCellStyle(lockedKeyCellStyle());
 
-		Row specRow = sheet.createRow(10);
-		Cell specKey = specRow.createCell(0);
+		Row reqSpecRow = sheet.createRow(30);
+		Cell specKey = reqSpecRow.createCell(0);
 		specKey.setCellValue("Parameter");
-		specKey.setCellStyle(LockedKeyCellStyle());
-		Cell specValue = specRow.createCell(1);
+		specKey.setCellStyle(lockedKeyCellStyle());
+		Cell specValue = reqSpecRow.createCell(1);
 		specValue.setCellValue("Value");
-		specValue.setCellStyle(LockedKeyCellStyle());
-		Cell specNote = specRow.createCell(2);
+		specValue.setCellStyle(lockedKeyCellStyle());
+		Cell specNote = reqSpecRow.createCell(2);
 		specNote.setCellValue("Note");
-		specNote.setCellStyle(LockedKeyCellStyle());
+		specNote.setCellStyle(lockedKeyCellStyle());
 
-		for (int i = 11; i < 16; i++) {
-			Row selectrow = sheet.createRow(i);
-			Cell keycell = selectrow.createCell(0);
-			keycell.setCellValue("Parameter");
-			keycell.setCellStyle(UnLockedTempCellStyle());
-			Cell selectcell = selectrow.createCell(1);
-			selectcell.setCellValue("Spec 선택");
-			selectcell.setCellStyle(UnLockedTempCellStyle());
-			Cell notecell = selectrow.createCell(2);
-			notecell.setCellValue("Note");
-			notecell.setCellStyle(UnLockedTempCellStyle());
+		for (int specDataRow = 31; specDataRow < 36; specDataRow++) {
+			Row specInputRow = sheet.createRow(specDataRow);
+			Cell keyCell = specInputRow.createCell(0);
+			keyCell.setCellValue("Parameter");
+			keyCell.setCellStyle(unLockedCellStyle());
+			Cell selectCell = specInputRow.createCell(1);
+			selectCell.setCellValue("Spec 선택");
+			selectCell.setCellStyle(unLockedCellStyle());
+			Cell noteCell = specInputRow.createCell(2);
+			noteCell.setCellValue("Note");
+			noteCell.setCellStyle(unLockedCellStyle());
 		}
-		sheet.addValidationData(specDropDownList(11, 1, 16, 1));
+		sheet.addValidationData(specDropDownList(31, 1, 36, 1));
 
-		Row reqTitleRow = sheet.createRow(16);
-		Cell reqCell = reqTitleRow.createCell(0);
-		reqCell.setCellValue("Request Example");
-		reqCell.setCellStyle(LockedKeyCellStyle());
+		Row exampleTitleRow = sheet.createRow(36);
+		Cell exampleTitleCell = exampleTitleRow.createCell(0);
+		exampleTitleCell.setCellValue("Request Example");
+		exampleTitleCell.setCellStyle(lockedKeyCellStyle());
 
-		Row exampleRow = sheet.createRow(17);
+		Row exampleRow = sheet.createRow(37);
 		exampleRow.setHeight((short) 2000);
-		Cell reqExCell = exampleRow.createCell(0);
-		reqExCell.setCellValue("Request Example");
-		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(), 0, 2));
-		reqExCell.setCellStyle(UnLockedTempCellStyle());
+		Cell reqExampleFirstCell = exampleRow.createCell(0);
+		reqExampleFirstCell.setCellValue("Request Example");
+		reqExampleFirstCell.setCellStyle(unLockedCellStyle());
+		Cell reqExampleLastCell = exampleRow.createCell(2);
+		reqExampleLastCell.setCellStyle(unLockedCellStyle());
+		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(),
+				reqExampleFirstCell.getColumnIndex(), reqExampleLastCell.getColumnIndex()));
 	}
 
-	public void RespProtocolForm(HSSFSheet sheet, BaseExcelForm excelForm) {
-		Row headRow = sheet.createRow(19);
-		Cell titleCell = headRow.createCell(0);
+	public void writeRespProtocolForm(HSSFSheet sheet, BaseExcelForm excelForm) {
+		Row titleRow = sheet.createRow(39);
+		Cell titleCell = titleRow.createCell(0);
 		titleCell.setCellValue("Response Param");
-		titleCell.setCellStyle(LockedKeyCellStyle());
+		titleCell.setCellStyle(lockedKeyCellStyle());
 
-		Row specRow = sheet.createRow(20);
-		Cell specKey = specRow.createCell(0);
+		Row respSpecRow = sheet.createRow(40);
+		Cell specKey = respSpecRow.createCell(0);
 		specKey.setCellValue("Parameter");
-		specKey.setCellStyle(LockedKeyCellStyle());
-		Cell specValue = specRow.createCell(1);
+		specKey.setCellStyle(lockedKeyCellStyle());
+		Cell specValue = respSpecRow.createCell(1);
 		specValue.setCellValue("Value");
-		specValue.setCellStyle(LockedKeyCellStyle());
-		Cell specNote = specRow.createCell(2);
+		specValue.setCellStyle(lockedKeyCellStyle());
+		Cell specNote = respSpecRow.createCell(2);
 		specNote.setCellValue("Note");
-		specNote.setCellStyle(LockedKeyCellStyle());
+		specNote.setCellStyle(lockedKeyCellStyle());
 
-		for (int i = 21; i < 26; i++) {
-			Row selectrow = sheet.createRow(i);
-			Cell keycell = selectrow.createCell(0);
-			keycell.setCellValue("Parameter");
-			keycell.setCellStyle(UnLockedTempCellStyle());
-			Cell selectcell = selectrow.createCell(1);
-			selectcell.setCellValue("Spec 선택");
-			selectcell.setCellStyle(UnLockedTempCellStyle());
-			Cell notecell = selectrow.createCell(2);
-			notecell.setCellValue("Note");
-			notecell.setCellStyle(UnLockedTempCellStyle());
+		for (int specDataRow = 41; specDataRow < 46; specDataRow++) {
+			Row specInputRow = sheet.createRow(specDataRow);
+			Cell keyCell = specInputRow.createCell(0);
+			keyCell.setCellValue("Parameter");
+			keyCell.setCellStyle(unLockedCellStyle());
+			Cell selectCell = specInputRow.createCell(1);
+			selectCell.setCellValue("Spec 선택");
+			selectCell.setCellStyle(unLockedCellStyle());
+			Cell noteCell = specInputRow.createCell(2);
+			noteCell.setCellValue("Note");
+			noteCell.setCellStyle(unLockedCellStyle());
 		}
-		sheet.addValidationData(specDropDownList(21, 1, 26, 1));
+		sheet.addValidationData(specDropDownList(41, 1, 46, 1));
 
-		Row reqTitleRow = sheet.createRow(26);
-		Cell reqCell = reqTitleRow.createCell(0);
-		reqCell.setCellValue("Response Example");
-		reqCell.setCellStyle(LockedKeyCellStyle());
+		Row exampleTitleRow = sheet.createRow(46);
+		Cell exampleTileCell = exampleTitleRow.createCell(0);
+		exampleTileCell.setCellValue("Response Example");
+		exampleTileCell.setCellStyle(lockedKeyCellStyle());
 
-		Row exampleRow = sheet.createRow(27);
+		Row exampleRow = sheet.createRow(47);
 		exampleRow.setHeight((short) 2000);
-		Cell reqExCell = exampleRow.createCell(0);
-		reqExCell.setCellValue("Response Example");
+		Cell respExampleFirstCell = exampleRow.createCell(0);
+		respExampleFirstCell.setCellValue("Response Example");
+		respExampleFirstCell.setCellStyle(unLockedCellStyle());
+		Cell respExampleLastCell = exampleRow.createCell(2);
+		respExampleLastCell.setCellStyle(unLockedCellStyle());
 		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(), 0, 2));
-		reqExCell.setCellStyle(UnLockedTempCellStyle());
 	}
 
-	public HSSFCellStyle LockedKeyCellStyle() {
-		HSSFCellStyle LockedKeyCellStyle = workbook.createCellStyle();
+	public HSSFCellStyle lockedKeyCellStyle() {
+		HSSFCellStyle lockedKeyCellStyle = workbook.createCellStyle();
 		HSSFFont fontStyle = workbook.createFont();
-		fontStyle.setColor(IndexedColors.LIGHT_YELLOW.getIndex());
+		fontStyle.setColor(IndexedColors.GOLD.getIndex());
 		fontStyle.setBold(true);
-		LockedKeyCellStyle.setFont(fontStyle);
-		LockedKeyCellStyle.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
-		LockedKeyCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		LockedKeyCellStyle.setAlignment(HorizontalAlignment.LEFT);
-		LockedKeyCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		LockedKeyCellStyle.setBorderTop(BorderStyle.DASHED);
-		LockedKeyCellStyle.setTopBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedKeyCellStyle.setBorderBottom(BorderStyle.DASHED);
-		LockedKeyCellStyle.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedKeyCellStyle.setBorderLeft(BorderStyle.DASHED);
-		LockedKeyCellStyle.setLeftBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedKeyCellStyle.setBorderRight(BorderStyle.DASHED);
-		LockedKeyCellStyle.setRightBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		return LockedKeyCellStyle;
+		lockedKeyCellStyle.setFont(fontStyle);
+		lockedKeyCellStyle.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+		lockedKeyCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		lockedKeyCellStyle.setAlignment(HorizontalAlignment.LEFT);
+		lockedKeyCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		lockedKeyCellStyle.setBorderTop(BorderStyle.DASHED);
+		lockedKeyCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		lockedKeyCellStyle.setBorderBottom(BorderStyle.DASHED);
+		lockedKeyCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		lockedKeyCellStyle.setBorderLeft(BorderStyle.DASHED);
+		lockedKeyCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		lockedKeyCellStyle.setBorderRight(BorderStyle.DASHED);
+		lockedKeyCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		return lockedKeyCellStyle;
 	}
 
-	public HSSFCellStyle LockedValueCellStyle() {
-		HSSFCellStyle LockedValueCellStyle = workbook.createCellStyle();
-		LockedValueCellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-		LockedValueCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		LockedValueCellStyle.setAlignment(HorizontalAlignment.LEFT);
-		LockedValueCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		LockedValueCellStyle.setBorderTop(BorderStyle.DASHED);
-		LockedValueCellStyle.setTopBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedValueCellStyle.setBorderBottom(BorderStyle.DASHED);
-		LockedValueCellStyle.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedValueCellStyle.setBorderLeft(BorderStyle.DASHED);
-		LockedValueCellStyle.setLeftBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		LockedValueCellStyle.setBorderRight(BorderStyle.DASHED);
-		LockedValueCellStyle.setRightBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		return LockedValueCellStyle;
-	}
-
-	public HSSFCellStyle UnLockedCellStyle() {
-		HSSFCellStyle UnLockedCellStyle = workbook.createCellStyle();
-		UnLockedCellStyle.setLocked(false);
-		UnLockedCellStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-		UnLockedCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		UnLockedCellStyle.setAlignment(HorizontalAlignment.LEFT);
-		UnLockedCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		UnLockedCellStyle.setBorderTop(BorderStyle.DASHED);
-		UnLockedCellStyle.setTopBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedCellStyle.setBorderBottom(BorderStyle.DASHED);
-		UnLockedCellStyle.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedCellStyle.setBorderLeft(BorderStyle.DASHED);
-		UnLockedCellStyle.setLeftBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedCellStyle.setBorderRight(BorderStyle.DASHED);
-		UnLockedCellStyle.setRightBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		return UnLockedCellStyle;
-	}
-
-	public HSSFCellStyle UnLockedTempCellStyle() {
-		HSSFCellStyle UnLockedTempCellStyle = workbook.createCellStyle();
-		UnLockedTempCellStyle.setLocked(false);
+	public HSSFCellStyle lockedValueCellStyle() {
+		HSSFCellStyle lockedValueCellStyle = workbook.createCellStyle();
 		HSSFFont fontStyle = workbook.createFont();
-		fontStyle.setColor(IndexedColors.GREY_40_PERCENT.getIndex());
+		fontStyle.setColor(IndexedColors.BLACK.getIndex());
+		lockedValueCellStyle.setFont(fontStyle);
+		lockedValueCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		lockedValueCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		lockedValueCellStyle.setAlignment(HorizontalAlignment.LEFT);
+		lockedValueCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		lockedValueCellStyle.setBorderTop(BorderStyle.DASHED);
+		lockedValueCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		lockedValueCellStyle.setBorderBottom(BorderStyle.DASHED);
+		lockedValueCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		lockedValueCellStyle.setBorderLeft(BorderStyle.DASHED);
+		lockedValueCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		lockedValueCellStyle.setBorderRight(BorderStyle.DASHED);
+		lockedValueCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		return lockedValueCellStyle;
+	}
+
+	public HSSFCellStyle unLockedCellStyle() {
+		HSSFCellStyle unLockedCellStyle = workbook.createCellStyle();
+		unLockedCellStyle.setLocked(false);
+		HSSFFont fontStyle = workbook.createFont();
+		fontStyle.setColor(IndexedColors.BLACK.getIndex());
 		fontStyle.setItalic(true);
-		UnLockedTempCellStyle.setFont(fontStyle);
-		UnLockedTempCellStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-		UnLockedTempCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		UnLockedTempCellStyle.setAlignment(HorizontalAlignment.LEFT);
-		UnLockedTempCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		UnLockedTempCellStyle.setBorderTop(BorderStyle.DASHED);
-		UnLockedTempCellStyle.setTopBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedTempCellStyle.setBorderBottom(BorderStyle.DASHED);
-		UnLockedTempCellStyle.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedTempCellStyle.setBorderLeft(BorderStyle.DASHED);
-		UnLockedTempCellStyle.setLeftBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		UnLockedTempCellStyle.setBorderRight(BorderStyle.DASHED);
-		UnLockedTempCellStyle.setRightBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		return UnLockedTempCellStyle;
+		unLockedCellStyle.setFont(fontStyle);
+		unLockedCellStyle.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
+		unLockedCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		unLockedCellStyle.setAlignment(HorizontalAlignment.LEFT);
+		unLockedCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		unLockedCellStyle.setBorderTop(BorderStyle.DASHED);
+		unLockedCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		unLockedCellStyle.setBorderBottom(BorderStyle.DASHED);
+		unLockedCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		unLockedCellStyle.setBorderLeft(BorderStyle.DASHED);
+		unLockedCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		unLockedCellStyle.setBorderRight(BorderStyle.DASHED);
+		unLockedCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		return unLockedCellStyle;
 	}
 
 	public HSSFDataValidation specDropDownList(int firstRow, int firstCol, int lastRow, int lastCol) {
 		// 드롭다운 박스 값 지정
-		String[] strFormula = new String[] { "고정값", "설정값", "발화 어휘" };
+		String[] strFormula = new String[] { "고정 값", "설정 값", "발화 어휘" };
 		// 드롭다운 박스 범위 지정
 		CellRangeAddressList addressList = new CellRangeAddressList();
 		addressList.addCellRangeAddress(firstRow, firstCol, lastRow, lastCol);
@@ -305,12 +379,12 @@ public class CreateExcelForm {
 		dataValidation.setSuppressDropDownArrow(false);
 		// 오류메시지 생성. 형식에 맞지 않는 데이터 입력시 createErrorBox(String title,String text)
 		dataValidation.createErrorBox("No Input, Select Only", "리스트 항목을 선택해 주세요");
-		dataValidation.createPromptBox("Descrioption", "규격 Spec을 선택");
+		dataValidation.createPromptBox("Descrioption", "변수 타입을 선택");
 		dataValidation.setErrorStyle(HSSFDataValidation.ErrorStyle.STOP);
 		return dataValidation;
 	}
-	
-	public HSSFDataValidation transDropDownList(int firstRow, int firstCol, int lastRow, int lastCol) {
+
+	public HSSFDataValidation methodDropDownList(int firstRow, int firstCol, int lastRow, int lastCol) {
 		// 드롭다운 박스 값 지정
 		String[] strFormula = new String[] { "GET", "POST" };
 		// 드롭다운 박스 범위 지정
@@ -331,21 +405,32 @@ public class CreateExcelForm {
 		return dataValidation;
 	}
 
-	public void createExcelFile() {
-		System.out.println(FilePath);
+	public JSONObject createExcelFile() {
+		JSONObject res = new JSONObject();
+		HashMap<String, String> resData = new HashMap<String, String>();
 		try {
-			FileOutputStream fileOut = new FileOutputStream(FilePath);
+			FileOutputStream fileOut = new FileOutputStream(this.realPath + this.fileName + ".xls");
 			this.workbook.write(fileOut);
 			fileOut.close();
 			this.workbook.close();
-			System.out.println("===== 파일 생성 성공 ====");
+			resData.put("urlPath", this.filePath + this.fileName + ".xls");
+			res.put("resCode", "2001");
+			res.put("resMsg", "성공");
+			res.put("resData", resData);
 		} catch (FileNotFoundException e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			res.put("resCode", "5000");
+			res.put("resMsg", e.toString());
+			res.put("resData", "");
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			res.put("resCode", "5000");
+			res.put("resMsg", e.toString());
+			res.put("resData", "");
 		}
+		return res;
 	}
 
 }

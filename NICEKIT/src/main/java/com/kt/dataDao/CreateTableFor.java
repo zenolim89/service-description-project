@@ -56,8 +56,8 @@ public class CreateTableFor {
 	public void createTableForSpecIndexList () {
 		
 		CreateTable create = ((CreateTable) builder.createTable("commonks", "specindexlist").ifNotExists())
-				.withPartitionKey("specname", DataTypes.TEXT)
-				.withColumn("protocolname", DataTypes.TEXT)
+				.withPartitionKey("sepcid", DataTypes.TEXT)
+				.withColumn("specname", DataTypes.TEXT)
 				.withColumn("domainname", DataTypes.TEXT);
 		
 		SimpleStatement query = new SimpleStatement(create.toString());
@@ -67,12 +67,33 @@ public class CreateTableFor {
 		
 	}
 	
+	public void createTableForTemplateList () {
+		
+		CreateTable create = ((CreateTable) builder.createTable("commonks", "templateList").ifNotExists())
+				.withPartitionKey("templatename", DataTypes.TEXT)
+				.withColumn("dirpath", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
+		
+		
+		
+	}
+	
 	public void createTableForVenderList () {
 		
 		CreateTable create = ((CreateTable) builder.createTable("vendersvcks", "venderindexlist").ifNotExists())
 				.withPartitionKey("vendername", DataTypes.TEXT)
 				.withClusteringColumn("domainname", DataTypes.TEXT)
-				.withColumn("templatedicpath", DataTypes.TEXT);
+				.withColumn("templateuipath", DataTypes.TEXT)
+				.withColumn("commercialuipath", DataTypes.TEXT);
+		
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+		
+		cluster.close();
 		
 	}
 	
@@ -115,6 +136,8 @@ public class CreateTableFor {
 				.withClusteringColumn("intentname", DataTypes.TEXT)
 				.withColumn("domainname", DataTypes.TEXT)
 				.withColumn("domainid", DataTypes.TEXT)
+				.withColumn("invoketype", DataTypes.TEXT)
+				.withColumn("servicelink", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)
 				.withColumn("testURL", DataTypes.TEXT)

@@ -52,13 +52,13 @@ public class JSONSerializerTo {
 		List<Row> list = selectTo.selectVenderlistInDomain(domainName);
 
 		if (list == null) {
-			
+
 			resObj.put("resCode", "200");
 			resObj.put("resMsg", "등록된 사업장 정보가 없습니다");
-			dataObj.put("venderList", arr);
+			dataObj.put("vendorList", arr);
 
 			resObj.put("resData", dataObj);
-			
+
 			return resObj;
 
 		} else {
@@ -71,7 +71,7 @@ public class JSONSerializerTo {
 				arr.add(row.getString("vendername"));
 			}
 
-			dataObj.put("venderList", arr);
+			dataObj.put("vendorList", arr);
 
 			resObj.put("resData", dataObj);
 
@@ -81,6 +81,45 @@ public class JSONSerializerTo {
 
 
 
+	}
+
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 19. 오전 11:49:47]
+	 * desc	: response JOSN 객체를 만들기 위한 상위 DESCRIPTION. 모든 response는 
+	 * 해당 메소드 호출을 통하여 값을 정의하고, resData JOSN 객체를 추가하여 반환
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+
+	 * @param code
+	 * @param msg
+	 * @return
+	 */
+	public JSONObject resDescription(String code, String msg) {
+
+		JSONObject obj = new JSONObject();
+
+		obj.put("resCode", code);
+		obj.put("resMsg", msg);
+
+
+		return obj;
+
+
+	}
+
+	public JSONObject resNotFoundTemplate(String msg) {
+
+		JSONObject res = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		res = this.resDescription("400", msg );
+		res.put("resData", arr);
+
+		return res;
 	}
 
 
@@ -165,70 +204,73 @@ public class JSONSerializerTo {
 
 		return resMsg;
 	}
-	
+
 	public JSONObject resSpecList (String domainName) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		JSONObject obj = new JSONObject();
 		JSONObject dataObj = new JSONObject();
 		JSONArray arr = new JSONArray();
-		
+
 		List<Row> list = selectTo.selectSpecList(domainName);
-		
+
 		if (list == null) {
-			
+
 			obj.put("resCode", "404");
 			obj.put("resMsg", "요청하신 도메인에 사용가능한 규격이 없습니다");
 			obj.put("resData", arr);
-			
+
 			return obj;
 		} else {
-			
+
 			for(Row row : list) {
-				
+
 				arr.add(row.getString("specname"));
 			}
-			
+
 			obj.put("resCode", "200");
 			obj.put("resMSg", "성공");
 			dataObj.put("specList", arr);
 			obj.put("resData", dataObj);
-			
+
 			return obj;
-			
+
 		}
-		
+
 	}
-	
+
 	public JSONObject resCreateVenderPath(String code, String path) {
-		
+
 		JSONObject res = new JSONObject();
-		
-		if (code == "409") {
-			
-			res = this.resConflict(code);
-			
-			return res;
-			
-		} else {
-			
-			JSONObject dataObj = new JSONObject();
-			
-			res.put("resCode", code);
-			res.put("resMsg", "성공");
-			
-			dataObj.put("urlPath", path);
-			
-			res.put("resData", dataObj);
-			
-			
-			return res;
-			
-		}
-		
+
+
+
+		JSONObject dataObj = new JSONObject();
+
+		res.put("resCode", code);
+		res.put("resMsg", "성공");
+
+		dataObj.put("urlPath", path);
+
+		res.put("resData", dataObj);
+
+
+		return res;
+
+
+
 	}
 	
+	public JSONObject resPreView (String path) {
+		
+		JSONObject obj = this.resDescription("200", "성공");
+		
+		obj.put("resData", path);
+		
+		return obj;
+	}
+
 
 	public JSONObject resConflict (String code) {
 

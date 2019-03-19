@@ -77,8 +77,7 @@ function domainRespProcess() {
 	if (DomainRequest.readyState == 4 && DomainRequest.status == 200) {
 		console.log("[도메인 리스트] \n" + "Detail : " + DomainRequest.responseText);
 		var domainObj = JSON.parse(DomainRequest.responseText);
-		var domainList = domainObj.domains;
-		addDomainList(domainList);
+		addDomainList(domainObj['resData']['domainList']);
 	}
 }
 

@@ -108,7 +108,7 @@ public class InsertDataTo {
 	 * @see		: 
 	
 	 */
-	public void insetServiceDesc () {
+	/*public void insetServiceDesc () {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
@@ -143,7 +143,7 @@ public class InsertDataTo {
 				
 		
 		
-	}
+	}*/
 	
 	public void insertTemplateinfo (String name, String path) {
 		

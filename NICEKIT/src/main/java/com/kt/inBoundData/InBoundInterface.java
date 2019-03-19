@@ -33,6 +33,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
+import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.dataManager.UtilFile;
@@ -528,27 +529,23 @@ public class InBoundInterface {
 	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
 		
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-
-		String FilePath = request.getRealPath("/resources/download/");
+		String filePath = "/resources/download";
+		String realPath = request.getSession().getServletContext().getRealPath(filePath);
 		String bf = null;
 		String response = "";
 		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-
+		
 		try {
 			while ((bf = in.readLine()) != null) {
 				response += bf;
 			}
-
-			res = parsingFrom.setExcelForm(response, FilePath);
+			res = parsingFrom.setExcelForm(response, realPath, filePath);
 		} catch (Exception e) {
-
 			res.put("code", "4000");
 			res.put("message", e.getMessage());
 			response = e.getMessage().toString();
-
 		}
-
 		return res;
 	}
 
@@ -568,28 +565,9 @@ public class InBoundInterface {
 	 */
 	@RequestMapping(value = "/getVendor", method = RequestMethod.GET)
 	public JSONObject getVenderList(@RequestParam String domainName) {
-
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-
 		String reqDomain = domainName;
-
 		JSONObject res = serializerTo.resVenderList(reqDomain);
-
-		return res;
-
-	}
-
-	public JSONObject getVendor() {
-
-		String[] _vendorList = { "오크밸리", "곤지암", "해비치", "대명" };
-		JSONObject res = new JSONObject();
-		JSONObject vendorObj = new JSONObject();
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		vendorObj.put("vendorList", _vendorList);
-		res.put("resData", vendorObj);
-
 		return res;
 	}
 
@@ -717,6 +695,10 @@ public class InBoundInterface {
 
 		// System.out.println("RewardController reAddProCtrl n : " + n);
 		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
+		
+		/* 업로드 엑셀파일 파서 */
+		ExcelService excelSvc = new ExcelService();
+		excelSvc.excelUpload(uploadPath);
 
 		return "redirect:listAll";
 	}

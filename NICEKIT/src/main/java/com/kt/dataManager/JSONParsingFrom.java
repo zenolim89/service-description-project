@@ -473,7 +473,6 @@ public class JSONParsingFrom {
 
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
-
 			e.printStackTrace();
 		}
 
@@ -481,64 +480,33 @@ public class JSONParsingFrom {
 
 	}
 
-	public JSONObject setExcelForm(String response, String FilePath) {
-
+	public JSONObject setExcelForm(String response, String realPath, String filePath) {
 		ArrayList<BaseExcelForm> svcList = new ArrayList<BaseExcelForm>();
-		ErrorCodeList error = new ErrorCodeList();
-
-		// need to define result value
 		JSONObject res = new JSONObject();
-
 		try {
-
 			JSONObject obj = (JSONObject) parser.parse(response);
+			String fileName = "/" + obj.get("specName").toString();
 			JSONArray arr = (JSONArray) obj.get("svcList");
-			System.out.println(arr);
-
 			for (int arrRow = 0; arrRow < arr.size(); arrRow++) {
-
 				BaseExcelForm BaseExcelForm = new BaseExcelForm();
 				JSONObject descObj = (JSONObject) arr.get(arrRow);
-
 				BaseExcelForm.setServiceName(descObj.get("serviceName").toString());
 				BaseExcelForm.setInvokeType(descObj.get("invokeType").toString());
 				BaseExcelForm.setServiceType(descObj.get("serviceType").toString());
 				BaseExcelForm.setServiceLink(descObj.get("serviceLink").toString());
 				BaseExcelForm.setServiceDesc(descObj.get("serviceDesc").toString());
 				BaseExcelForm.setServiceCode(descObj.get("serviceCode").toString());
-
 				if (descObj.containsKey("intentInfo")) {
 					BaseExcelForm.setIntentInfo((JSONArray) descObj.get("intentInfo"));
 					JSONObject intentInfoObj = (JSONObject) BaseExcelForm.getIntentInfo().get(0);
 					BaseExcelForm.setId(intentInfoObj.get("id").toString());
 					BaseExcelForm.setDicList((JSONArray) intentInfoObj.get("dicList"));
-					JSONArray dicListArr = (JSONArray) BaseExcelForm.getDicList();
-					String dicStr = "";
-					for (int dicList = 0; dicList < dicListArr.size(); dicList++) {
-						JSONObject dicListObj = (JSONObject) BaseExcelForm.getDicList().get(dicList);
-						dicStr += dicListObj.get("dicName").toString() + "  ";
-						// dicStr += dicListObj.get("wordList").toString().trim();
-					}
-					System.out.println(dicStr);
-					BaseExcelForm.setDicInfo(dicStr);
 				}
-
 				svcList.add(BaseExcelForm);
 			}
-
-			res.put("resCode", "2001");
-			res.put("resMsg", error.getErrorCodeList().get("2001"));
-			res.put("urlPath", "/resources/download/workbook.xlsx");
-
-			CreateExcelForm ExcelForm = new CreateExcelForm(svcList, FilePath);
-			ExcelForm.createSheet();
-			ExcelForm.createExcelFile();
-
-			//			inserTo.insertVenderSvcTo(descList);
-
-		} catch (
-
-				ParseException e) {
+			CreateExcelForm createExcelForm = new CreateExcelForm(svcList, realPath, filePath, fileName);
+			res = createExcelForm.createSheet();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());

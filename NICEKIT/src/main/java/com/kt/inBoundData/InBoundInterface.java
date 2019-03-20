@@ -725,7 +725,7 @@ public class InBoundInterface {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String path = server.get("serverIp") + ":" + server.get("port") + templateUrl;
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
 		
 		JSONObject res = serializerTo.resPreView(path);
 						
@@ -760,7 +760,7 @@ public class InBoundInterface {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String path = server.get("serverIp") + ":" + server.get("port") + templateUrl;
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
 						
 		JSONObject res = serializerTo.resPreView(path);
 		

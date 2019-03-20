@@ -248,6 +248,8 @@ public class CreateExcelForm {
 		Cell reqExampleFirstCell = exampleRow.createCell(0);
 		reqExampleFirstCell.setCellValue("Request Example Input");
 		reqExampleFirstCell.setCellStyle(unLockedCellStyle());
+		Cell reqExampleCell = exampleRow.createCell(1);
+		reqExampleCell.setCellStyle(unLockedCellStyle());
 		Cell reqExampleLastCell = exampleRow.createCell(2);
 		reqExampleLastCell.setCellStyle(unLockedCellStyle());
 		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(),
@@ -295,9 +297,12 @@ public class CreateExcelForm {
 		Cell respExampleFirstCell = exampleRow.createCell(0);
 		respExampleFirstCell.setCellValue("Response Example Input");
 		respExampleFirstCell.setCellStyle(unLockedCellStyle());
+		Cell respExampleCell = exampleRow.createCell(1);
+		respExampleCell.setCellStyle(unLockedCellStyle());
 		Cell respExampleLastCell = exampleRow.createCell(2);
 		respExampleLastCell.setCellStyle(unLockedCellStyle());
-		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(), 0, 2));
+		sheet.addMergedRegion(new CellRangeAddress(exampleRow.getRowNum(), exampleRow.getRowNum(),
+				respExampleFirstCell.getColumnIndex(), respExampleLastCell.getColumnIndex()));
 	}
 
 	public HSSFCellStyle lockedKeyCellStyle() {

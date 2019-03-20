@@ -22,6 +22,7 @@ import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
@@ -359,14 +360,40 @@ public class InsertDataTo {
 			session.execute(query);
 
 		}
-
-
 		cluster.close();
-
-
-
-
-
 	}
+	
+	
+	/**
+	 * @author	: "SERA"
+	 * @param key
+	 * @param list
+	 */
+	public void insertExcelData(String key, List<ExcelUploadForm> list) {
+		
+		String keySpace = key;
+		String targetTable = "Excel";
+		
+		TableMetadata res = this.checkExsitingTable(targetTable, keySpace);
+		
+		Statement query;
+		
+		if(res == null) {
+			createTable.createTableForSpec(keySpace, targetTable);
+		}
+		
+		for(ExcelUploadForm data:list) {
+			query = QueryBuilder.insertInto(keySpace, targetTable)
+					.value("", data.getServiceName())
+					.value("", data.getServiceCode())
+					.value("", data.getReqEx());
+			
+			session.execute(query);
+		}
+		cluster.close();
+	}
+	
+	
+
 
 }

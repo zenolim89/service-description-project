@@ -56,7 +56,7 @@ public class CreateTableFor {
 	public void createTableForSpecIndexList () {
 		
 		CreateTable create = ((CreateTable) builder.createTable("commonks", "specindexlist").ifNotExists())
-				.withPartitionKey("sepcid", DataTypes.TEXT)
+				.withPartitionKey("specid", DataTypes.TEXT)
 				.withColumn("specname", DataTypes.TEXT)
 				.withColumn("domainname", DataTypes.TEXT);
 		

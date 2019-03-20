@@ -303,18 +303,19 @@ public class InsertDataTo {
 
 
 			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-					.value("sepcid", domainName + "-" + Integer.toString(num))
+					.value("specid", domainName + "-" + Integer.toString(num))
 					.value("specname", specName)
 					.value("domainname", domainName);
 
 			session.execute(query);
-			cluster.close();
+			
 
 			JSONSerializerTo serializerTo = new JSONSerializerTo();
 
 			JSONObject obj = serializerTo.resSuccess();
 
-
+			cluster.close();
+			
 			return obj;
 		}
 

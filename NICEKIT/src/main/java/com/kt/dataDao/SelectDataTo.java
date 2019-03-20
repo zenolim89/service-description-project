@@ -318,8 +318,6 @@ public List<Row> selectTemplatePreView (String templateName) {
 		
 		ResultSet resSet = session.execute(query);
 		
-		cluster.close();
-		
 		List<Row> rowList = resSet.all();
 		
 		for(Row row : rowList) {
@@ -361,7 +359,7 @@ public List<Row> selectTemplatePreView (String templateName) {
 		Statement query = QueryBuilder.select().from(keySpace, table);
 		
 		ResultSet set = session.execute(query);
-		cluster.close();
+		
 		
 		List<Row> resRow = set.all();
 		

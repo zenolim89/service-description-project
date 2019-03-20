@@ -22,6 +22,7 @@ import com.kt.dataForms.KeyValueFormatForJSON;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
+import com.kt.dataForms.GetSpecInfoDataForm;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
@@ -109,6 +110,29 @@ public class JSONSerializerTo {
 
 
 	}
+	
+	public JSONObject resSpecInfo (String domainName, String specName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		GetSpecInfoDataForm form = new GetSpecInfoDataForm();
+		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		JSONObject obj = new JSONObject();
+		
+		try {
+			
+			form = tool.resSpecData(specName);
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		
+	}
+	
+	
+	
 
 	public JSONObject resNotFoundTemplate(String msg) {
 

@@ -497,6 +497,7 @@ public class InsertDataTo {
 			query = QueryBuilder.insertInto(keySpace, table)
 					.value("intentname", data.getIntentInfo())
 					.value("domainname", data.getDomainName())
+					.value("servicedesc", data.getServiceDesc())
 					.value("servicename", data.getServiceName())
 					.value("domainid", data.getDomainId())
 					.value("specname", data.getSpecName())

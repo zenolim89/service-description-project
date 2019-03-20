@@ -578,74 +578,86 @@ public class InBoundInterface {
 		
 	}
 	
-
-	// request spec info
-	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
-	public JSONObject getSpecInfo(@RequestParam("specName") String specName) throws JSONException {
-
+	@RequestMapping(value ="geSpceInfo", method = RequestMethod.GET)
+	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
+		
 		JSONObject res = new JSONObject();
-
-		JSONArray _dicListArr = new JSONArray();
-		JSONObject _dicListObj = new JSONObject();
-		_dicListObj.put("dicName", "실시간웹캠명");
-		String[] _word = { "A슬로프", "B슬로프", "H슬로프", "스키장전경" };
-		_dicListObj.put("wordList", _word);
-		_dicListArr.add(_dicListObj);
-
-		JSONArray _intentInfoArr = new JSONArray();
-		JSONObject _intentInfotObj = new JSONObject();
-		_intentInfotObj.put("id", "HotelWebCam");
-		_intentInfotObj.put("dicList", _dicListArr);
-		_intentInfoArr.add(_intentInfotObj);
-
-		JSONObject _svcListObj = new JSONObject();
-		_svcListObj.put("serviceName", "웹캠");
-		_svcListObj.put("serviceType", "voice");
-		_svcListObj.put("serviceDesc", "슬로프에 설치된 실시간웹캠 영상보기");
-		_svcListObj.put("serviceCode", "REWCAM0143");
-		_svcListObj.put("intentInfo", _intentInfoArr);
-
-		JSONArray _dicListArr2 = new JSONArray();
-		JSONObject _dicListObj2 = new JSONObject();
-		_dicListObj2.put("dicName", "식음업장명");
-		String[] _word2 = { "사우스가림", "오크카페", "셀프바베큐", "BHC치킨" };
-		_dicListObj2.put("wordList", _word2);
-
-		JSONObject _dicListObj22 = new JSONObject();
-		_dicListObj22.put("dicName", "레저스포츠명");
-		String[] _word22 = { "수영장", "사우나", "피트니스" };
-		_dicListObj22.put("wordList", _word22);
-
-		_dicListArr2.add(_dicListObj2);
-		_dicListArr2.add(_dicListObj22);
-
-		JSONArray _intentInfoArr2 = new JSONArray();
-		JSONObject _intentInfotObj2 = new JSONObject();
-		_intentInfotObj2.put("id", "HotelViewPage");
-		_intentInfotObj2.put("dicList", _dicListArr2);
-		_intentInfoArr2.add(_intentInfotObj2);
-
-		JSONObject _svcListObj2 = new JSONObject();
-		_svcListObj2.put("serviceName", "부대시설");
-		_svcListObj2.put("serviceType", "voice");
-		_svcListObj2.put("serviceDesc", "사업장 내 부대시설 정보 조회");
-		_svcListObj2.put("serviceCode", "REVIEW0145");
-		_svcListObj2.put("intentInfo", _intentInfoArr2);
-
-		JSONArray _svcListArr = new JSONArray();
-		_svcListArr.add(_svcListObj);
-		_svcListArr.add(_svcListObj2);
-
-		JSONObject _specDescObj = new JSONObject();
-		_specDescObj.put("svcList", _svcListArr);
-		JSONObject _resDataObj = new JSONObject();
-		_resDataObj.put("specDesc", _specDescObj);
-
-		res.put("resCode", "200");
-		res.put("resMsg", "성공");
-		res.put("resData", _resDataObj);
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		
+		res = serializerTo.resSpecInfo(domainName, specName);
+		
 		return res;
+		
 	}
+	
+
+//	// request spec info
+//	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
+//	public JSONObject getSpecInfo(@RequestParam("specName") String specName) throws JSONException {
+//
+//		JSONObject res = new JSONObject();
+//
+//		JSONArray _dicListArr = new JSONArray();
+//		JSONObject _dicListObj = new JSONObject();
+//		_dicListObj.put("dicName", "실시간웹캠명");
+//		String[] _word = { "A슬로프", "B슬로프", "H슬로프", "스키장전경" };
+//		_dicListObj.put("wordList", _word);
+//		_dicListArr.add(_dicListObj);
+//
+//		JSONArray _intentInfoArr = new JSONArray();
+//		JSONObject _intentInfotObj = new JSONObject();
+//		_intentInfotObj.put("id", "HotelWebCam");
+//		_intentInfotObj.put("dicList", _dicListArr);
+//		_intentInfoArr.add(_intentInfotObj);
+//
+//		JSONObject _svcListObj = new JSONObject();
+//		_svcListObj.put("serviceName", "웹캠");
+//		_svcListObj.put("serviceType", "voice");
+//		_svcListObj.put("serviceDesc", "슬로프에 설치된 실시간웹캠 영상보기");
+//		_svcListObj.put("serviceCode", "REWCAM0143");
+//		_svcListObj.put("intentInfo", _intentInfoArr);
+//
+//		JSONArray _dicListArr2 = new JSONArray();
+//		JSONObject _dicListObj2 = new JSONObject();
+//		_dicListObj2.put("dicName", "식음업장명");
+//		String[] _word2 = { "사우스가림", "오크카페", "셀프바베큐", "BHC치킨" };
+//		_dicListObj2.put("wordList", _word2);
+//
+//		JSONObject _dicListObj22 = new JSONObject();
+//		_dicListObj22.put("dicName", "레저스포츠명");
+//		String[] _word22 = { "수영장", "사우나", "피트니스" };
+//		_dicListObj22.put("wordList", _word22);
+//
+//		_dicListArr2.add(_dicListObj2);
+//		_dicListArr2.add(_dicListObj22);
+//
+//		JSONArray _intentInfoArr2 = new JSONArray();
+//		JSONObject _intentInfotObj2 = new JSONObject();
+//		_intentInfotObj2.put("id", "HotelViewPage");
+//		_intentInfotObj2.put("dicList", _dicListArr2);
+//		_intentInfoArr2.add(_intentInfotObj2);
+//
+//		JSONObject _svcListObj2 = new JSONObject();
+//		_svcListObj2.put("serviceName", "부대시설");
+//		_svcListObj2.put("serviceType", "voice");
+//		_svcListObj2.put("serviceDesc", "사업장 내 부대시설 정보 조회");
+//		_svcListObj2.put("serviceCode", "REVIEW0145");
+//		_svcListObj2.put("intentInfo", _intentInfoArr2);
+//
+//		JSONArray _svcListArr = new JSONArray();
+//		_svcListArr.add(_svcListObj);
+//		_svcListArr.add(_svcListObj2);
+//
+//		JSONObject _specDescObj = new JSONObject();
+//		_specDescObj.put("svcList", _svcListArr);
+//		JSONObject _resDataObj = new JSONObject();
+//		_resDataObj.put("specDesc", _specDescObj);
+//
+//		res.put("resCode", "200");
+//		res.put("resMsg", "성공");
+//		res.put("resData", _resDataObj);
+//		return res;
+//	}
 
 	// load index page
 	// see also SpringDispatcher-servlet.xml

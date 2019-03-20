@@ -95,6 +95,23 @@ public class SelectDataTo {
 		return resObj;
 	}
 	
+	public List<Row> selectGetSpecInfo (String table) {
+		
+		String keySpace = "vendersvcks";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table);
+		
+		ResultSet set = session.execute(query);
+		
+		cluster.close();
+		
+		List<Row> resList = set.all();
+		
+		return resList;
+		
+	}
+	
+	
 	public List<Row> selectGetSpecId (String specName) {
 		
 		String keySpace = "commonks";

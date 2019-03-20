@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.cassandra.locator.SeedProvider;
+import org.apache.cassandra.streaming.StreamEvent.SessionCompleteEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -72,18 +73,20 @@ public class InsertDataTo {
 		
 		Boolean existed = selectTo.isExistedItem(keySpace, table, "vendername", vender.getVender());
 		
-		if (existed == true) {
-			
-			resCode = "409";
-			
-			return resCode;
-			
-		} else {
+//		템플릿 복사 단계에서 중복 디렉토리 추출함
+//		if (existed == true) {
+//			
+//			resCode = "409";
+//			
+//			return resCode;
+//			
+//		} else {
 			
 			Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
 					.value("vendername", vender.getVender())
 					.value("domainname", vender.getDomainName())
-					.value("templatedicpath", vender.getTemplateUrl());
+					.value("templateuipath", vender.getTemplateUrl())
+					.value("commercialuipath", vender.getVenderUrl());
 			
 			session.execute(query);
 			
@@ -92,8 +95,75 @@ public class InsertDataTo {
 			return resCode;
 			
 			
+//		}
+		
+	}
+	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 19. 오후 5:21:03]
+	 * desc	: 엑셀에서 파싱한 값을 본 메소드를 통하여 테이블에 저장
+	 * @version	:
+	 * @param	: 
+	 * @return 	: void 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 */
+	/*public void insetServiceDesc () {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		String keySpace = "vendersvcks";
+		String table = null;
+		
+//		List<Row> list = selectTo.selectGetSpecId(specName); //엑셀 객체에서 "specName" 객체 값을 arg로
+		
+//		for (Row row : list) {
+//			
+//			table = row.getString("specid");
+//		}
+		
+		
+		
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if (res == null) {
+			
+			createTable.createTableForSpec(keySpace, table);
 		}
 		
+		//insert문 시작
+		
+		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
+				.value("", ""); // 앞의 값은 table의 attribute 명, 뒤의 값은 입력 값
+				
+		
+		session.execute(query);
+				
+				
+				
+		
+		
+	}*/
+	
+	public void insertTemplateinfo (String name, String path) {
+		
+		String keySpace = "commonks";
+		String table = "templateList";
+		
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if (res == null) {
+			
+			createTable.createTableForTemplateList();
+			
+		}
+		
+		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
+				.value("templatename", name)
+				.value("dirpath", path);
+		
+		session.execute(query);
 	}
 	
 	
@@ -198,16 +268,24 @@ public class InsertDataTo {
 	
 	public ResultSet insertSpecIndexTo (String specName, String domainName) {
 		
+		SelectDataTo selectTo = new SelectDataTo();
+		
 		String keySpace = "commonks";
 		String tableName = "specindexList";
+		
 		
 		TableMetadata res = this.checkExsitingTable(tableName, keySpace);
 		
 		if (res == null) {
+			
 			createTable.createTableForSpecIndexList();
 		}
 		
+		int num = selectTo.selectNumberOfRows(keySpace, tableName);
+		
+		
 		Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
+				.value("sepcid", domainName + Integer.toString(num))
 				.value("specname", specName)
 				.value("domainname", domainName);
 				

@@ -44,6 +44,7 @@ public class SelectDataTo {
 		Statement query = QueryBuilder.select().from(keySpace, name).where(QueryBuilder.eq("intentname", intentName))
 				.allowFiltering();
 		ResultSet set = session.execute(query);
+		
 
 		List<Row> rowList = set.all();
 
@@ -88,7 +89,8 @@ public class SelectDataTo {
 			e.printStackTrace();
 
 		}
-		;
+		
+		cluster.close();
 
 		return resObj;
 	}
@@ -103,6 +105,7 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> reslist = set.all();
 		
@@ -120,12 +123,29 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> resList = set.all();
 		
 		return resList;
 	}
 	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오전 11:47:47]
+	 * desc	: TemplateList와 venderindexlist에 하나의 select로 구현하기 위하여
+	 * keySpace와 table 이름을 inbound에서 하드코딩으로 처리하였음
+	 * 데모가 끝나고 변경해야함
+	 * @version	:
+	 * @param	: 
+	 * @return 	: List<Row> 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param vendorName
+	 * @param tableName
+	 * @param keySpace
+	 * @return
+	 */
 	public List<Row> selectUseTemplateofVendor (String vendorName) {
 		
 		String keySpace = "vendersvcks";
@@ -134,17 +154,39 @@ public class SelectDataTo {
 		Statement query = QueryBuilder.select().from(keySpace, table)
 				.where(QueryBuilder.eq("vendername", vendorName))
 				.allowFiltering();
+
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> resList = set.all();
 		
 		
 		return resList;
-		
-		
-		
+				
 	}
+	
+public List<Row> selectTemplatePreView (String templateName) {
+		
+		String keySpace = "commonks";
+		String table = "templatelist";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("templatename", templateName))
+				.allowFiltering();
+
+		
+		ResultSet set = session.execute(query);
+		cluster.close();
+		
+		List<Row> resList = set.all();
+		
+		
+		return resList;
+				
+	}
+	
+	
 	
 	public List<Row> selectVenderlistInDomain (String domainName) {
 		
@@ -168,6 +210,7 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> reslist = set.all();
 		
@@ -199,11 +242,30 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> resList = set.all();
 						
 		
 		return resList;
+	}
+	
+	public List<Row> selectTemplateList (String domainName) {
+		
+		String keySpace = "commonks";
+		String table = "templatelist";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("domainname", domainName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		cluster.close();
+		
+		List<Row> resList = set.all();
+		
+		return resList;
+		
 	}
 	
 
@@ -227,6 +289,7 @@ public class SelectDataTo {
 
 		Statement query = QueryBuilder.select().from("commonks", "domainlist");
 		ResultSet res = session.execute(query);
+		cluster.close();
 		
 		JSONObject resObj = serializerTo.resDomainList(res);
 
@@ -297,6 +360,7 @@ public class SelectDataTo {
 		
 		ResultSet set = session.execute(query);
 		
+		
 		List<Row> resRow = set.all();
 		
 		int allRow = resRow.size();
@@ -334,6 +398,8 @@ public class SelectDataTo {
 
 		Statement query = QueryBuilder.select().from(ksName, tableName);
 		ResultSet res = session.execute(query);
+		
+		cluster.close();
 
 		List<Row> resList = res.all();
 
@@ -360,6 +426,8 @@ public class SelectDataTo {
 				.where(QueryBuilder.eq("intentname", intentName));
 
 		ResultSet res = session.execute(query);
+		
+		cluster.close();
 
 		List<Row> resList = res.all();
 

@@ -106,28 +106,11 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
 
-		JSONObject resObj = new JSONObject();
+		
 
 		String ks = "commonks";
 
-		ResultSet resSet = insertTo.insertSpecIndexTo(specName, domainName);
-
-		List<Row> resList = resSet.all();
-
-		for (Row row : resList) {
-			if (row.getBool(0) == true) {
-
-				resObj.put("resCode", "201");
-				resObj.put("resMsg", "성공");
-
-			} else if (row.getBool(0) == false) {
-				resObj.put("resCode", "409");
-				resObj.put("resMsg", "동일한 규 이름이 존재합니다");
-			} else {
-				resObj.put("resCode", "400");
-				resObj.put("resMsg", "잘못된 접근 입니다.");
-			}
-		}
+		JSONObject resObj = insertTo.insertSpecIndexTo(specName, domainName);
 
 		return resObj;
 
@@ -582,6 +565,19 @@ public class InBoundInterface {
 
 		return res;
 	}
+	
+	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
+	public JSONObject getTemplateList(@RequestParam String domainName) {
+		
+		JSONObject res = new JSONObject();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		
+		res = serializerTo.resTemplateList(domainName);
+		
+		return res;
+		
+	}
+	
 
 	// request spec info
 	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
@@ -728,19 +724,54 @@ public class InBoundInterface {
 		for (Row row : list) {
 			
 			templateUrl = row.getString("templateuipath");
-			
 		}
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String path = server.get("serverIP") + ":" + server.get("port") + templateUrl;
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
 		
+		JSONObject res = serializerTo.resPreView(path);
+						
+		return res;
+		
+	}
+	
+	
+	@RequestMapping(value ="/getTemplatePage", method = RequestMethod.GET)
+	public JSONObject getTemplatePage(@RequestParam String domainName, String templateName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String templateUrl = null;
+		
+		List<Row> list = selectTo.selectTemplatePreView(templateName);
+		
+		if (list == null) {
+			
+			JSONObject res = serializerTo.resNotFoundTemplate("요청하신 템플릿 미리보기가 없습니다");
+			return res;
+			
+		}
+		
+		for (Row row : list) {
+			
+			templateUrl = row.getString("dirpath");
+						
+		}
+		
+		JSONObject server = parsingFrom.getServerInfo();
+		
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
+						
 		JSONObject res = serializerTo.resPreView(path);
 		
 		return res;
 		
-		
 	}
+	
+	
 	
 	
 	// request vendor template url
@@ -847,13 +878,13 @@ public class InBoundInterface {
 	 * @return
 	 */
 	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
-	public JSONObject setTemplate (@RequestParam String templateName) {
+	public JSONObject setTemplate (@RequestParam String templateName, String domainName) {
 		
 		JSONObject res = new JSONObject();
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		
-		parsingFrom.parsingTemplateInfo(templateName);
+		parsingFrom.parsingTemplateInfo(templateName, domainName);
 		
 		return res;
 		

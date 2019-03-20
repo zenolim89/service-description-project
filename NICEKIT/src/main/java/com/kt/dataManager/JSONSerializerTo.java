@@ -121,6 +121,21 @@ public class JSONSerializerTo {
 
 		return res;
 	}
+	
+	public JSONObject resBadRequest() {
+		
+		JSONObject res = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		res = this.resDescription("400", "잘못된 요청" );
+		res.put("resData", arr);
+
+		return res;
+		
+		
+	}
+	
 
 
 	public JSONObject resultMsgforAuth(String id, String pw) {
@@ -239,6 +254,44 @@ public class JSONSerializerTo {
 		}
 
 	}
+	
+	
+	public JSONObject resTemplateList (String domainName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+		
+		List<Row> list = selectTo.selectTemplateList(domainName);
+		
+		if (list == null) {
+			
+			JSONObject res = this.resDescription("404", "사용가능한 UI 템플릿이 없습니다");
+			
+			res.put("resData", arr);
+			
+			return res;
+			
+		} else {
+			
+			for (Row row : list) {
+				
+				arr.add(row.getString("templatename"));
+				
+			}
+			
+			JSONObject res = this.resDescription("200", "성공");
+			
+			dataObj.put("templateList", arr);
+			res.put("resData", dataObj);
+			
+			
+			return res;
+		}
+		
+		
+	}
+	
 
 	public JSONObject resCreateVenderPath(String code, String path) {
 
@@ -272,15 +325,25 @@ public class JSONSerializerTo {
 	}
 
 
-	public JSONObject resConflict (String code) {
+	public JSONObject resConflict (String code, String msg) {
 
 		JSONObject obj = new JSONObject();
 		JSONArray arr = new JSONArray();
 
 		obj.put("resCode", code);
-		obj.put("resMsg", "이미 동일한 항목의 서비스가 존재합니다");
+		obj.put("resMsg", msg);
 		obj.put("resData", arr);
 
+		return obj;
+	}
+	
+	public JSONObject resSuccess () {
+		
+		JSONObject obj = new JSONObject();
+		
+		obj.put("resCode", "200");
+		obj.put("resMsg", "성공");
+		
 		return obj;
 	}
 

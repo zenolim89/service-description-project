@@ -33,6 +33,19 @@ public class UITemplateController {
 		
 		}
 	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오후 1:55:40]
+	 * desc	: 아래 리턴 규격 JSON이 아닌 다른 형태로 전달 방법 고민
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param venderName
+	 * @param urlPath
+	 * @return
+	 */
 	public JSONObject createVenderDir (String venderName, String urlPath) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
@@ -41,9 +54,7 @@ public class UITemplateController {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String resPathHeader = server.get("serverIp").toString() + ":" 
-		+ server.get("port").toString() 
-		+ server.get("context").toString()
+		String resPathHeader = server.get("context").toString()
 		+ "/resources/venders/";
 				
 		String templateName = null;
@@ -116,6 +127,8 @@ public class UITemplateController {
 			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+
+			
 		}
 		
 		return extractPath;

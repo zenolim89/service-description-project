@@ -28,6 +28,7 @@ import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
+import com.kt.dataManager.JSONSerializerTo;
 
 public class InsertDataTo {
 
@@ -54,52 +55,54 @@ public class InsertDataTo {
 
 		return table;
 
+
 	}
-	
+
 	public String insertVenderToIndexList (ReqCreateVender vender) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		String keySpace = "vendersvcks";
 		String table = "venderindexlist";
-		
+
 		String resCode;
-		
+
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForVenderList();
 		}
-		
+
 		Boolean existed = selectTo.isExistedItem(keySpace, table, "vendername", vender.getVender());
-		
-//		템플릿 복사 단계에서 중복 디렉토리 추출함
-//		if (existed == true) {
-//			
-//			resCode = "409";
-//			
-//			return resCode;
-//			
-//		} else {
-			
-			Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
-					.value("vendername", vender.getVender())
-					.value("domainname", vender.getDomainName())
-					.value("templateuipath", vender.getTemplateUrl())
-					.value("commercialuipath", vender.getVenderUrl());
-			
-			session.execute(query);
-			
-			resCode = "201";
-			
-			return resCode;
-			
-			
-//		}
-		
+
+		//		템플릿 복사 단계에서 중복 디렉토리 추출함
+		//		if (existed == true) {
+		//			
+		//			resCode = "409";
+		//			
+		//			return resCode;
+		//			
+		//		} else {
+
+		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
+				.value("vendername", vender.getVender())
+				.value("domainname", vender.getDomainName())
+				.value("templateuipath", vender.getTemplateUrl())
+				.value("commercialuipath", vender.getVenderUrl());
+
+		session.execute(query);
+		cluster.close();
+
+		resCode = "201";
+
+		return resCode;
+
+
+		//		}
+
 	}
-	
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 3. 19. 오후 5:21:03]
 	 * desc	: 엑셀에서 파싱한 값을 본 메소드를 통하여 테이블에 저장
@@ -108,100 +111,103 @@ public class InsertDataTo {
 	 * @return 	: void 
 	 * @throws 	: 
 	 * @see		: 
-	
+
 	 */
 	/*public void insetServiceDesc () {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		String keySpace = "vendersvcks";
 		String table = null;
-		
+
 //		List<Row> list = selectTo.selectGetSpecId(specName); //엑셀 객체에서 "specName" 객체 값을 arg로
-		
+
 //		for (Row row : list) {
 //			
 //			table = row.getString("specid");
 //		}
-		
-		
-		
+
+
+
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForSpec(keySpace, table);
 		}
-		
+
 		//insert문 시작
-		
+
 		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
 				.value("", ""); // 앞의 값은 table의 attribute 명, 뒤의 값은 입력 값
-				
-		
+
+
 		session.execute(query);
-				
-				
-				
-		
-		
+
+
+
+
+
 	}*/
-	
-	public void insertTemplateinfo (String name, String path) {
-		
+
+	public void insertTemplateinfo (String template, String path, String domain) {
+
 		String keySpace = "commonks";
-		String table = "templateList";
-		
+		String table = "templatelist";
+
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForTemplateList();
-			
+
 		}
-		
+
 		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
-				.value("templatename", name)
+				.value("domainname", domain)
+				.value("templatename", template)
 				.value("dirpath", path);
-		
+
 		session.execute(query);
+		cluster.close();
 	}
-	
-	
-	
+
+
+
 	public Boolean insertDomainList (String domainName) {
-		
-		
+
+
 		String keySpace = "commonks";
 		String tableName = "domainlist";
 		Boolean response = null;
-		
+
 		TableMetadata res = this.checkExsitingTable(tableName, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForDomain(keySpace, tableName);
-			
+
 		}
-		
+
 		Statement query = QueryBuilder.insertInto(keySpace, tableName)
 				.value("domainname", domainName).ifNotExists();
-		
+
 		ResultSet resSet = session.execute(query);
-		
+		cluster.close();
+
 		List<Row> resList = resSet.all();
-		
+
 		for(Row row : resList) {
-			
+
 			response = row.getBool(0);
-		
+
 		}
-		
+
 		return response;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
 	 * desc	: 서비스 코드 요청을 위한 서비스 간단 명세를 수신 후 해당 값을 기반으로 commonks 내 domainservicelist 테이블에 명세를 저장하고
@@ -221,35 +227,35 @@ public class InsertDataTo {
 	 * @return
 	 */
 	public String createServiceCodeNinsertService (ReqSvcCodeForm form) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		String keySpace = "commonks";
 		String table = "domainservicelist";
-		
+
 		String code;
-		
+
 		TableMetadata res = this.checkExsitingTable(table, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createDomainServiceList();
-			
+
 		}
-		
+
 		Boolean checkItem = selectTo.isExistedItem(keySpace, table, "servicename", form.getServiceName());
-		
+
 		if (checkItem == true) {
-			
+
 			code = "409";
-			
+
 			return code;
-			
+
 		}
-		
-		
+
+
 		int num = selectTo.selectNumberOfRows(keySpace, table) + 1;
-		
+
 		Statement query = QueryBuilder.insertInto(keySpace, table)
 				.value("seqnum", num)
 				.value("domainname", form.getDomainName())
@@ -258,46 +264,63 @@ public class InsertDataTo {
 				.value("servicename", form.getServiceName())
 				.value("invoketype", form.getInvokeType())
 				.value("servicedesc", form.getServiceDesc());
-		
+
 		session.execute(query);
-		
+		cluster.close();
+
 		code = form.getDomainName() + "_" + form.getServiceType() + "_" + num;
-		
+
 		return code;
-		
+
 	}
-	
-	public ResultSet insertSpecIndexTo (String specName, String domainName) {
-		
+
+	public JSONObject insertSpecIndexTo (String specName, String domainName) {
+
 		SelectDataTo selectTo = new SelectDataTo();
-		
+
 		String keySpace = "commonks";
 		String tableName = "specindexList";
-		
-		
+
+
 		TableMetadata res = this.checkExsitingTable(tableName, keySpace);
-		
+
 		if (res == null) {
-			
+
 			createTable.createTableForSpecIndexList();
 		}
-		
-		int num = selectTo.selectNumberOfRows(keySpace, tableName);
-		
-		
-		Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-				.value("sepcid", domainName + Integer.toString(num))
-				.value("specname", specName)
-				.value("domainname", domainName);
-				
-		
-		
-		
-		ResultSet resSet = session.execute(query);
-		
-		return resSet;
 
-		
+		Boolean existed = selectTo.isExistedItem(keySpace, tableName, "specname", specName);
+
+		if (existed) {
+
+			JSONSerializerTo serializerTo = new JSONSerializerTo();
+
+			JSONObject obj = serializerTo.resConflict("409", "요청하신 규격이 이미 등록되어 있습니다");
+
+			return obj;
+
+		} else {
+
+			int num = selectTo.selectNumberOfRows(keySpace, tableName) + 1;
+
+
+			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
+					.value("specid", domainName + "-" + Integer.toString(num))
+					.value("specname", specName)
+					.value("domainname", domainName);
+
+			session.execute(query);
+			
+
+			JSONSerializerTo serializerTo = new JSONSerializerTo();
+
+			JSONObject obj = serializerTo.resSuccess();
+
+			cluster.close();
+			
+			return obj;
+		}
+
 	}
 
 
@@ -321,11 +344,11 @@ public class InsertDataTo {
 
 		TableMetadata res = this.checkExsitingTable(desc.getDomainName(), keySpace);
 
-//		if (res == null) {
-//
-//			createTable.createTableFor(keySpace, desc.getDomainName());
-//
-//		}
+		//		if (res == null) {
+		//
+		//			createTable.createTableFor(keySpace, desc.getDomainName());
+		//
+		//		}
 
 		JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
 
@@ -346,8 +369,8 @@ public class InsertDataTo {
 				.value("dicList", obj.get("dicList").toString()).ifNotExists();
 
 		ResultSet resSet = session.execute(query);
+		cluster.close();
 
-		System.out.println(resSet.toString());
 	}
 
 	public void insertVenderSvcTo (ArrayList<BaseVenderSvcForm> descList) {
@@ -360,11 +383,11 @@ public class InsertDataTo {
 
 			TableMetadata res = this.checkExsitingTable(desc.getDomainId(), keySpace);
 
-//			if (res == null) {
-//
-//				createTable.createTableFor(keySpace, desc.getDomainId());
-//
-//			}
+			//			if (res == null) {
+			//
+			//				createTable.createTableFor(keySpace, desc.getDomainId());
+			//
+			//			}
 
 			JSONObject obj = parseringFrom.convertIntentInfo(desc.getIntentInfo());
 
@@ -389,8 +412,7 @@ public class InsertDataTo {
 					.value("dicList", obj.get("dicList").toString()).ifNotExists();
 
 			ResultSet resSet = session.execute(query);
-
-			System.out.println(resSet.toString());
+			cluster.close();
 		}
 
 
@@ -437,6 +459,7 @@ public class InsertDataTo {
 					.value("dicList", data.getArr().toString());
 
 			session.execute(query);
+			
 
 		}
 		cluster.close();

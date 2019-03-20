@@ -462,9 +462,22 @@ public class InsertDataTo {
 		
 		for(ExcelUploadForm data:list) {
 			query = QueryBuilder.insertInto(keySpace, targetTable)
-					.value("", data.getServiceName())
-					.value("", data.getServiceCode())
-					.value("", data.getReqEx());
+					.value("intentname", data.getIntentInfo())
+					.value("domainname", null)
+					.value("domainid", null)
+					.value("invoketype", data.getInvokeType())
+					.value("servicelink", data.getServiceLink())
+					.value("servicecode", data.getServiceCode())
+					.value("commURL", data.getCommonURL())
+					.value("testURL", data.getTestURL())
+					.value("method", data.getTransMethod())
+					.value("datatype", data.getDataType())
+					.value("servicetype", data.getServiceType())
+					.value("requestformat", data.getReqEx())
+					.value("requestspec", null)
+					.value("responseFormat", data.getResEx())
+					.value("responsespec", null)
+					.value("dicList", null);
 			
 			session.execute(query);
 		}

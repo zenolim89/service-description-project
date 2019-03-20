@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import com.kt.dataDao.InsertDataTo;
 import com.kt.dataForms.ExcelUploadForm;
 
 import net.sf.json.JSONArray;
@@ -33,6 +34,9 @@ public class ExcelService {
 		
 		JSONArray jsonList = new JSONArray();
 		jsonList.add(list);
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		insertTo.insertExcelData("key", list);
 		
 		System.out.println(jsonList.toString());
 		

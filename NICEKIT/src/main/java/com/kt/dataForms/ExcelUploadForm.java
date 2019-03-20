@@ -12,6 +12,8 @@ public class ExcelUploadForm {
 	private String serviceDesc;
 	private String serviceCode;
 	
+	private String dataType;
+	
 	private String intentInfo;
 	private String transMethod;
 	
@@ -142,6 +144,12 @@ public class ExcelUploadForm {
 	}
 	public void setDicList(List<DicParam> dicList) {
 		this.dicList = dicList;
+	}
+	public String getDataType() {
+		return dataType;
+	}
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
 	}
 	
 	

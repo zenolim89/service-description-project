@@ -12,7 +12,7 @@
 	<entry key="api.port">8080</entry>
 	<entry key="server.context">/NICEKIT</entry>
 	<entry key="api.context">/api</entry>
-	<entry key="template.context">/resources</entry>
+	<entry key="template.context">/resources/template</entry>
 	
 	<!-- ========================================= -->
 	<!-- Api Result Message -->

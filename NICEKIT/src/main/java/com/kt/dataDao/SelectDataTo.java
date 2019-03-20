@@ -105,6 +105,7 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
+		cluster.close();
 		
 		List<Row> reslist = set.all();
 		

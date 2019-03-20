@@ -305,11 +305,12 @@ public class InsertDataTo {
 
 
 			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-					.value("specid", domainName + "-" + Integer.toString(num))
+					.value("specid", domainName + "_" + Integer.toString(num))
 					.value("specname", specName)
 					.value("domainname", domainName);
 
 			session.execute(query);
+			 
 			
 
 			JSONSerializerTo serializerTo = new JSONSerializerTo();

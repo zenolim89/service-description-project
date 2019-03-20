@@ -3,7 +3,15 @@ package com.kt.dataForms;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 public class ExcelUploadForm {
+	
+	private String domainName;
+	private String domainId;
+	private String specName;
+	private String dataType;
+	
 	
 	private String serviceName;
 	private String invokeType;
@@ -11,8 +19,6 @@ public class ExcelUploadForm {
 	private String serviceLink;
 	private String serviceDesc;
 	private String serviceCode;
-	
-	private String dataType;
 	
 	private String intentInfo;
 	private String transMethod;
@@ -29,8 +35,29 @@ public class ExcelUploadForm {
 
 	private List<HttpParam> resParam;
 	private String resEx;
+
 	
 	
+	
+	
+	public String getDomainName() {
+		return domainName;
+	}
+	public void setDomainName(String domainName) {
+		this.domainName = domainName;
+	}
+	public String getDomainId() {
+		return domainId;
+	}
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
+	}
+	public String getSpecName() {
+		return specName;
+	}
+	public void setSpecName(String specName) {
+		this.specName = specName;
+	}
 	public String getServiceName() {
 		return serviceName;
 	}
@@ -153,6 +180,30 @@ public class ExcelUploadForm {
 	}
 	
 	
+	public String getToJsonFormatDicList() {
+		JSONArray jsonList = new JSONArray();
+		jsonList.add(dicList);
+		return jsonList.toString();
+	}	
+	
+	public String getToJsonFormatHeader() {
+		JSONArray jsonList = new JSONArray();
+		jsonList.add(header);
+		return jsonList.toString();
+	}
+	
+	public String getToJsonFormatReqParam() {
+		JSONArray jsonList = new JSONArray();
+		jsonList.add(reqParam);
+		return jsonList.toString();
+	}
+	
+	public String getToJsonFormatResParam() {
+		JSONArray jsonList = new JSONArray();
+		jsonList.add(resParam);
+		return jsonList.toString();
+	}
+
 	
 
 }

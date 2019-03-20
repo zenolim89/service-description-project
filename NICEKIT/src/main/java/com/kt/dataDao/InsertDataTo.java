@@ -17,6 +17,7 @@ import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.internal.core.cql.ResultSets;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
@@ -443,41 +444,52 @@ public class InsertDataTo {
 	
 	
 	/**
-	 * @author	: "SERA"
+	 * @author SERA
 	 * @param key
 	 * @param list
 	 */
-	public void insertExcelData(String key, List<ExcelUploadForm> list) {
+	public void insertExcelData(List<ExcelUploadForm> dataList, String specName) {
 		
-		String keySpace = key;
-		String targetTable = "Excel";
+		SelectDataTo selectTo = new SelectDataTo();
 		
-		TableMetadata res = this.checkExsitingTable(targetTable, keySpace);
+		String keySpace  = "vendersvcks";
+		String table = null;
 		
-		Statement query;
+		List<Row> list = selectTo.selectGetSpecId(specName);
 		
-		if(res == null) {
-			createTable.createTableForSpec(keySpace, targetTable);
+		for(Row row : list) {
+			table = row.getString("specid");
 		}
 		
-		for(ExcelUploadForm data:list) {
-			query = QueryBuilder.insertInto(keySpace, targetTable)
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if(res == null) {
+			createTable.createTableForSpec(keySpace, table);
+		}
+
+		Statement query;
+
+		for(ExcelUploadForm data:dataList) {
+			query = QueryBuilder.insertInto(keySpace, table)
 					.value("intentname", data.getIntentInfo())
-					.value("domainname", null)
-					.value("domainid", null)
+					.value("domainname", data.getDomainName())
+					.value("servicename", data.getServiceName())
+					.value("domainid", data.getDomainId())
+					.value("specname", data.getSpecName())
 					.value("invoketype", data.getInvokeType())
 					.value("servicelink", data.getServiceLink())
 					.value("servicecode", data.getServiceCode())
+					.value("headerinfo", data.getToJsonFormatHeader())
 					.value("commURL", data.getCommonURL())
 					.value("testURL", data.getTestURL())
 					.value("method", data.getTransMethod())
 					.value("datatype", data.getDataType())
 					.value("servicetype", data.getServiceType())
 					.value("requestformat", data.getReqEx())
-					.value("requestspec", null)
+					.value("requestspec", data.getToJsonFormatReqParam())
 					.value("responseFormat", data.getResEx())
-					.value("responsespec", null)
-					.value("dicList", null);
+					.value("responsespec", data.getToJsonFormatResParam())
+					.value("dicList", data.getToJsonFormatDicList());
 			
 			session.execute(query);
 		}

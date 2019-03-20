@@ -22,7 +22,7 @@ public class ExcelService {
 //		
 //	}
 	
-	public void excelUpload(String filePath) {
+	public void excelUpload(String filePath, String domainName, String domainId, String specName) {
 		
 		ExcelReadOption option = new ExcelReadOption();
 		
@@ -30,14 +30,13 @@ public class ExcelService {
 		option.setFilePath(filePath);
 		
 		/* 엑셀 데이터 파싱 */
-		List<ExcelUploadForm> list = ExcelRead.read(option);
+		List<ExcelUploadForm> list = ExcelRead.read(option, domainName, domainId, specName);
+		
+		InsertDataTo insertTo = new InsertDataTo();
+		insertTo.insertExcelData(list, specName);
 		
 		JSONArray jsonList = new JSONArray();
 		jsonList.add(list);
-		
-		InsertDataTo insertTo = new InsertDataTo();
-		insertTo.insertExcelData("key", list);
-		
 		System.out.println(jsonList.toString());
 		
 	}

@@ -17,7 +17,7 @@ import com.kt.dataForms.DicParam;
 
 public class ExcelRead {
 
-	public static List<ExcelUploadForm> read(ExcelReadOption excelReadOption) {
+	public static List<ExcelUploadForm> read(ExcelReadOption excelReadOption, String domainName, String domainId, String specName) {
 
 		/* 엑셀 파일 읽기 */
 		Workbook wb = ExcelFileType.getWorkbook(excelReadOption.getFilePath());
@@ -31,14 +31,16 @@ public class ExcelRead {
 
 		/* 객체 바인딩 */
 		for (int i = 0; i < sheetCnt; i++) {
-			Sheet sheet = wb.getSheetAt(i);
 
+			Sheet sheet = wb.getSheetAt(i);
 			System.out.println("Sheet 이름: " + wb.getSheetName(i));
 
-			Map<String, CellReference> format = new HashMap<String, CellReference>();
 			
 			int endRows = sheet.getPhysicalNumberOfRows();
-						
+			System.out.println("END ROWS: " + endRows);
+			
+			Map<String, CellReference> format = new HashMap<String, CellReference>();
+
 			Row row = null;
 			Cell cell = null;
 			
@@ -66,26 +68,22 @@ public class ExcelRead {
 						break;
 				case "Request Example":
 				case "Response Example":
-					format.put(key, new CellReference(j + 1, 0));
-					break;
-
+						format.put(key, new CellReference(j + 1, 0));
+						break;
 				case "dicList":
 				case "Header":
 				case "Request Param":
 				case "Response Param":
-					format.put(key, new CellReference(j + 2, 0));
-					break;
-
+						format.put(key, new CellReference(j + 2, 0));
+						break;
 				default:
 					break;
 				}
 			}
 			
-			for(String key : format.keySet()) {
-				
-				 System.out.println( String.format("키 : %s, 값 : %s", key, format.get(key)) );
-			}
-
+//			for(String key : format.keySet()) {
+//				 System.out.println( String.format("키 : %s, 값 : %s", key, format.get(key)) );
+//			}
 			
 			ExcelUploadForm form = new ExcelUploadForm();
 			
@@ -96,10 +94,21 @@ public class ExcelRead {
 			form.setServiceLink(cellReader(sheet, format.get("serviceLink")));
 			form.setServiceDesc(cellReader(sheet, format.get("serviceDesc")));
 			form.setServiceCode(cellReader(sheet, format.get("serviceCode")));
-			form.setIntentInfo(cellReader(sheet, format.get("intentInfo")));
 			form.setTransMethod(cellReader(sheet, format.get("transMethod")));
 			form.setCommonURL(cellReader(sheet, format.get("commonURL")));
 			form.setTestURL(cellReader(sheet, format.get("testURL")));
+
+			// Intent 정보
+			if(format.get("intentInfo") != null) form.setIntentInfo(cellReader(sheet, format.get("intentInfo")));
+			if(format.get("dicList") != null) form.setDicList(bindDicParam(sheet, format.get("dicList")));
+			
+			//도메인 및 스펙 네임
+			form.setDomainId(domainId);
+			form.setDomainName(domainName);
+			form.setSpecName(specName);
+			
+			//TODO SERA 임시 고정값
+			form.setDataType("JSON");
 			
 			//Header 파라메터 파싱
 			form.setHeader(bindHttpParam(sheet, format.get("Header"), format.get("Request Param")));
@@ -112,9 +121,6 @@ public class ExcelRead {
 			form.setResParam(bindHttpParam(sheet, format.get("Response Param"), format.get("Response Example")));
 			form.setResEx(cellReader(sheet, format.get("Response Example")));
 
-			if(format.get("dicList") != null) {
-				form.setDicList(bindDicParam(sheet, format.get("dicList")));
-			}
 			data.add(form);
 			
 		}
@@ -137,42 +143,40 @@ public class ExcelRead {
 
 	public static List<HttpParam> bindHttpParam(Sheet sheet, CellReference start, CellReference end) {
 		
-		
 		List<HttpParam> reqParams = new ArrayList<HttpParam>();
-
 		
 		for (int j = 0; j < 5; j++) {
-			HttpParam param = new HttpParam();
+			
 			Row row = sheet.getRow(start.getRow() + j);
 			if (row == null) continue;
 			
-			param.setParameter(ExcelCellRef.getValue(row.getCell(0)));
-			param.setValue(ExcelCellRef.getValue(row.getCell(1)));
-			param.setNote(ExcelCellRef.getValue(row.getCell(2)));
-			
-			reqParams.add(param);
+			if(!ExcelCellRef.getValue(row.getCell(0)).equals("Parameter")) {
+				HttpParam param = new HttpParam();
+				param.setParameter(ExcelCellRef.getValue(row.getCell(0)));
+				param.setValue(ExcelCellRef.getValue(row.getCell(1)));
+				param.setNote(ExcelCellRef.getValue(row.getCell(2)));
+				reqParams.add(param);
+			}
 		}
-
 		return reqParams;
 	}
 
 	public static List<DicParam> bindDicParam(Sheet sheet, CellReference start) {
 		
-		
 		List<DicParam> reqParams = new ArrayList<DicParam>();
-
 		
 		for (int j = 0; j < 5; j++) {
-			DicParam param = new DicParam();
+			
 			Row row = sheet.getRow(start.getRow() + j);
 			if (row == null) continue;
 			
-			param.setDicName(ExcelCellRef.getValue(row.getCell(0)));
-			param.setWordList(ExcelCellRef.getValue(row.getCell(1)));
-			
-			reqParams.add(param);
+			if(!ExcelCellRef.getValue(row.getCell(0)).equals("dicName")) {
+				DicParam param = new DicParam();
+				param.setDicName(ExcelCellRef.getValue(row.getCell(0)));
+				param.setWordList(ExcelCellRef.getValue(row.getCell(1)));
+				reqParams.add(param);
+			}
 		}
-
 		return reqParams;
 	}
 }

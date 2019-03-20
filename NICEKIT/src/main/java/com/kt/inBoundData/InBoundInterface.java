@@ -721,19 +721,54 @@ public class InBoundInterface {
 		for (Row row : list) {
 			
 			templateUrl = row.getString("templateuipath");
+		}
+		
+		JSONObject server = parsingFrom.getServerInfo();
+		
+		String path = server.get("serverIp") + ":" + server.get("port") + templateUrl;
+		
+		JSONObject res = serializerTo.resPreView(path);
+						
+		return res;
+		
+	}
+	
+	
+	@RequestMapping(value ="/getTemplatePage", method = RequestMethod.GET)
+	public JSONObject getTemplatePage(@RequestParam String domainName, String templateName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		
+		String templateUrl = null;
+		
+		List<Row> list = selectTo.selectTemplatePreView(templateName);
+		
+		if (list == null) {
 			
+			JSONObject res = serializerTo.resNotFoundTemplate("요청하신 템플릿 미리보기가 없습니다");
+			return res;
+			
+		}
+		
+		for (Row row : list) {
+			
+			templateUrl = row.getString("dirpath");
+						
 		}
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
 		String path = server.get("serverIP") + ":" + server.get("port") + templateUrl;
-		
+						
 		JSONObject res = serializerTo.resPreView(path);
 		
 		return res;
 		
-		
 	}
+	
+	
 	
 	
 	// request vendor template url

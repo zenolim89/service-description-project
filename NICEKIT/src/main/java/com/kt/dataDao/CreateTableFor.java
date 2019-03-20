@@ -156,6 +156,7 @@ public class CreateTableFor {
 
 		SimpleStatement query = new SimpleStatement(create.toString());
 		ResultSet resSet = session.execute(query);
+		cluster.close();
 		
 		return resSet;
 

@@ -121,6 +121,21 @@ public class JSONSerializerTo {
 
 		return res;
 	}
+	
+	public JSONObject resBadRequest() {
+		
+		JSONObject res = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		res = this.resDescription("400", "잘못된 요청" );
+		res.put("resData", arr);
+
+		return res;
+		
+		
+	}
+	
 
 
 	public JSONObject resultMsgforAuth(String id, String pw) {

@@ -60,6 +60,18 @@ public class JSONParsingFrom {
 
 	}
 
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오후 1:56:45]
+	 * desc	: 리턴값들 억지로 만들어서 던지는 것 같음. 데모 이후 방법론 정의해서 다시 만들 필요 있음
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param response
+	 * @return
+	 */
 	public JSONObject parsingCreateVenderTemplate(String response) {
 
 		ReqCreateVender venderInfo = new ReqCreateVender();
@@ -75,7 +87,7 @@ public class JSONParsingFrom {
 		try {
 
 			JSONObject obj = (JSONObject) parser.parse(response);
-
+  
 			JSONObject resObj = uiController.createVenderDir(obj.get("vendor").toString(), obj.get("urlPath").toString());
 
 			if (resObj.get("code").toString() == "409") {
@@ -91,26 +103,29 @@ public class JSONParsingFrom {
 				return res;
 
 			} else {
-				
+
 				String temPath = uiController.extractURL(resObj.get("temPath").toString());
-				String comPath = uiController.extractURL(resObj.get("comPath").toString());
+				//				String comPath = uiController.extractURL(resObj.get("comPath").toString());
+
+
+
 
 				venderInfo.setDomainName(obj.get("domainName").toString());
 				venderInfo.setVender(obj.get("vendor").toString());
 				venderInfo.setTemplateUrl(temPath);
-				venderInfo.setVenderUrl(comPath);
+				//					venderInfo.setVenderUrl(comPath);
+				venderInfo.setVenderUrl(resObj.get("comPath").toString());
+
 
 
 				resCode = insertTo.insertVenderToIndexList(venderInfo);
-				
+
 				JSONObject server = parsingFrom.getServerInfo();
 
 				res = serializerTo.resCreateVenderPath(resCode, server.get("serverIp").toString()
-						+ ":" + server.get("port").toString() + comPath);
+						+ ":" + server.get("port").toString() + resObj.get("comPath").toString());
 
 			}
-
-
 
 
 		} catch (ParseException e) {
@@ -125,16 +140,27 @@ public class JSONParsingFrom {
 	public void parsingTemplateInfo (String templateName, String domainName) {
 
 		InsertDataTo insertTo = new InsertDataTo();
-		
+
 		JSONObject obj = this.getServerInfo();
 
 		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName; 
-				
+
 		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
 
 
 	}
 
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오후 1:55:21]
+	 * desc	: 현재는 데이터를 JSON으로 만들고 있는데 향후 데이터 폼으로 변경 필요
+	 * @version	:
+	 * @param	: 
+	 * @return 	: JSONObject 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @return
+	 */
 	public JSONObject getServerInfo () {
 
 		JSONObject obj = new JSONObject();
@@ -145,12 +171,12 @@ public class JSONParsingFrom {
 		String serverIp = attr.getRequest().getServerName();
 		String port = Integer.toString(attr.getRequest().getServerPort());
 		String contextRoot = attr.getRequest().getContextPath();
-		
+
 		obj.put("port", port);
 		obj.put("serverIp", serverIp);
 		obj.put("context", contextRoot);
-		
-		
+
+
 		return obj;
 
 

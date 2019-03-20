@@ -71,6 +71,7 @@ public class CreateTableFor {
 		
 		CreateTable create = ((CreateTable) builder.createTable("commonks", "templateList").ifNotExists())
 				.withPartitionKey("templatename", DataTypes.TEXT)
+				.withClusteringColumn("domainname", DataTypes.TEXT)
 				.withColumn("dirpath", DataTypes.TEXT);
 		
 		SimpleStatement query = new SimpleStatement(create.toString());
@@ -135,16 +136,18 @@ public class CreateTableFor {
 		CreateTable create = ((CreateTable) builder.createTable(ksName, tableName).ifNotExists())
 				.withClusteringColumn("intentname", DataTypes.TEXT)
 				.withColumn("domainname", DataTypes.TEXT)
+				.withColumn("servicename", DataTypes.TEXT)
 				.withColumn("domainid", DataTypes.TEXT)
+				.withColumn("specname", DataTypes.TEXT)
 				.withColumn("invoketype", DataTypes.TEXT)
 				.withColumn("servicelink", DataTypes.TEXT)
 				.withPartitionKey("servicecode", DataTypes.TEXT)
+				.withColumn("headerinfo", DataTypes.TEXT)
 				.withColumn("commURL", DataTypes.TEXT)
 				.withColumn("testURL", DataTypes.TEXT)
 				.withColumn("method", DataTypes.TEXT)
 				.withColumn("datatype", DataTypes.TEXT)
 				.withColumn("servicetype", DataTypes.TEXT)
-				.withColumn("tourl", DataTypes.TEXT)
 				.withColumn("requestformat", DataTypes.TEXT)
 				.withColumn("requestspec", DataTypes.TEXT)
 				.withColumn("responseFormat", DataTypes.TEXT)

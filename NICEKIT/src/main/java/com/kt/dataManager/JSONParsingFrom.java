@@ -80,7 +80,7 @@ public class JSONParsingFrom {
 
 			if (resObj.get("code").toString() == "409") {
 
-				res = serializerTo.resConflict("409");
+				res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
 
 				return res;
 
@@ -122,7 +122,7 @@ public class JSONParsingFrom {
 
 	}
 
-	public void parsingTemplateInfo (String templateName) {
+	public void parsingTemplateInfo (String templateName, String domainName) {
 
 		InsertDataTo insertTo = new InsertDataTo();
 		
@@ -130,7 +130,7 @@ public class JSONParsingFrom {
 
 		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName; 
 				
-		insertTo.insertTemplateinfo(templateName, finalPath);
+		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
 
 
 	}
@@ -256,7 +256,7 @@ public class JSONParsingFrom {
 
 			if (serviceCode == "409") {
 
-				res = jsonSerializerTo.resConflict(serviceCode);
+				res = jsonSerializerTo.resConflict(serviceCode, "이미 동일한 항목의 서비스가 존재합니다");
 
 				return res;
 

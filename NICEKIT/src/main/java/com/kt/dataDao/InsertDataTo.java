@@ -26,6 +26,7 @@ import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
+import com.kt.dataManager.JSONSerializerTo;
 
 public class InsertDataTo {
 
@@ -145,7 +146,7 @@ public class InsertDataTo {
 		
 	}*/
 	
-	public void insertTemplateinfo (String name, String path) {
+	public void insertTemplateinfo (String template, String path, String domain) {
 		
 		String keySpace = "commonks";
 		String table = "templateList";
@@ -159,7 +160,8 @@ public class InsertDataTo {
 		}
 		
 		Statement query = QueryBuilder.insertInto(keySpace, table).ifNotExists()
-				.value("templatename", name)
+				.value("domainname", domain)
+				.value("templatename", template)
 				.value("dirpath", path);
 		
 		session.execute(query);
@@ -265,7 +267,7 @@ public class InsertDataTo {
 		
 	}
 	
-	public ResultSet insertSpecIndexTo (String specName, String domainName) {
+	public JSONObject insertSpecIndexTo (String specName, String domainName) {
 		
 		SelectDataTo selectTo = new SelectDataTo();
 		
@@ -280,22 +282,36 @@ public class InsertDataTo {
 			createTable.createTableForSpecIndexList();
 		}
 		
-		int num = selectTo.selectNumberOfRows(keySpace, tableName);
+		Boolean existed = selectTo.isExistedItem(keySpace, tableName, "specname", specName);
 		
-		
-		Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-				.value("sepcid", domainName + Integer.toString(num))
-				.value("specname", specName)
-				.value("domainname", domainName);
+		if (existed) {
+			
+			JSONSerializerTo serializerTo = new JSONSerializerTo();
+			
+			JSONObject obj = serializerTo.resConflict("409", "요청하신 규격이 이미 등록되어 있습니다");
+			
+			return obj;
+			
+		} else {
+			
+			int num = selectTo.selectNumberOfRows(keySpace, tableName) + 1;
+			
+			
+			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
+					.value("sepcid", domainName + "-" + Integer.toString(num))
+					.value("specname", specName)
+					.value("domainname", domainName);
+			
+			session.execute(query);
+								
+			JSONSerializerTo serializerTo = new JSONSerializerTo();
+			
+			JSONObject obj = serializerTo.resSuccess();
+			
+			
+			return obj;
+		}
 				
-		
-		
-		
-		ResultSet resSet = session.execute(query);
-		
-		return resSet;
-
-		
 	}
 
 

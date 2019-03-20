@@ -106,28 +106,11 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
 
-		JSONObject resObj = new JSONObject();
+		
 
 		String ks = "commonks";
 
-		ResultSet resSet = insertTo.insertSpecIndexTo(specName, domainName);
-
-		List<Row> resList = resSet.all();
-
-		for (Row row : resList) {
-			if (row.getBool(0) == true) {
-
-				resObj.put("resCode", "201");
-				resObj.put("resMsg", "성공");
-
-			} else if (row.getBool(0) == false) {
-				resObj.put("resCode", "409");
-				resObj.put("resMsg", "동일한 규 이름이 존재합니다");
-			} else {
-				resObj.put("resCode", "400");
-				resObj.put("resMsg", "잘못된 접근 입니다.");
-			}
-		}
+		JSONObject resObj = insertTo.insertSpecIndexTo(specName, domainName);
 
 		return resObj;
 
@@ -582,6 +565,19 @@ public class InBoundInterface {
 
 		return res;
 	}
+	
+	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
+	public JSONObject getTemplateList(@RequestParam String domainName) {
+		
+		JSONObject res = new JSONObject();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		
+		res = serializerTo.resTemplateList(domainName);
+		
+		return res;
+		
+	}
+	
 
 	// request spec info
 	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
@@ -844,13 +840,13 @@ public class InBoundInterface {
 	 * @return
 	 */
 	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
-	public JSONObject setTemplate (@RequestParam String templateName) {
+	public JSONObject setTemplate (@RequestParam String templateName, String domainName) {
 		
 		JSONObject res = new JSONObject();
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		
-		parsingFrom.parsingTemplateInfo(templateName);
+		parsingFrom.parsingTemplateInfo(templateName, domainName);
 		
 		return res;
 		

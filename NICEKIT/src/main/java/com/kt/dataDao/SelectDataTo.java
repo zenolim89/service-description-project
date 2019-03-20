@@ -206,6 +206,23 @@ public class SelectDataTo {
 		return resList;
 	}
 	
+	public List<Row> selectTemplateList (String domainName) {
+		
+		String keySpace = "dommonks";
+		String table = "templateList";
+		
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.eq("domainname", domainName))
+				.allowFiltering();
+		
+		ResultSet set = session.execute(query);
+		
+		List<Row> resList = set.all();
+		
+		return resList;
+		
+	}
+	
 
 	
 

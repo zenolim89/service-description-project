@@ -340,7 +340,7 @@
             var formData = new FormData(form);
 			
             $.ajax({
-                  url: 'http://localhost:8080/fileUpload',
+                  url: 'http://localhost:8080/NICEKIT/fileUpload',
                           processData: false,
                           contentType: false,
                           data: formData,
@@ -536,6 +536,9 @@
 				<button class='btn' id='buttonDownload'>양식 다운</button>
 				<button class='btn' style="margin-left: 30px" id='buttonRgt'>규격 등록</button>
 				<form id="formUpload" name="frm" enctype="multipart/form-data" style="width: 30px" method="post">
+					<input type="hidden" name="domainName" value="resort">
+					<input type="hidden" name="domainId" value="resort0001">
+					<input type="hidden" name=specName value="오크밸리">
 					<input id='inputUpload' type="file" name="uploadFile">
 				</form>
 			</div>

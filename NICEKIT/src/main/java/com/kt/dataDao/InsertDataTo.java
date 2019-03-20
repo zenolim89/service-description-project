@@ -17,12 +17,14 @@ import com.datastax.driver.core.SimpleStatement;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.internal.core.cql.ResultSets;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
+import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ReqCreateVender;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
@@ -303,18 +305,19 @@ public class InsertDataTo {
 
 
 			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-					.value("sepcid", domainName + "-" + Integer.toString(num))
+					.value("specid", domainName + "-" + Integer.toString(num))
 					.value("specname", specName)
 					.value("domainname", domainName);
 
 			session.execute(query);
-			cluster.close();
+			
 
 			JSONSerializerTo serializerTo = new JSONSerializerTo();
 
 			JSONObject obj = serializerTo.resSuccess();
 
-
+			cluster.close();
+			
 			return obj;
 		}
 
@@ -459,14 +462,64 @@ public class InsertDataTo {
 			
 
 		}
-
-
 		cluster.close();
-
-
-
-
-
 	}
+	
+	
+	/**
+	 * @author SERA
+	 * @param key
+	 * @param list
+	 */
+	public void insertExcelData(List<ExcelUploadForm> dataList, String specName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		String keySpace  = "vendersvcks";
+		String table = null;
+		
+		List<Row> list = selectTo.selectGetSpecId(specName);
+		
+		for(Row row : list) {
+			table = row.getString("specid");
+		}
+		
+		TableMetadata res = this.checkExsitingTable(table, keySpace);
+		
+		if(res == null) {
+			createTable.createTableForSpec(keySpace, table);
+		}
+
+		Statement query;
+
+		for(ExcelUploadForm data:dataList) {
+			query = QueryBuilder.insertInto(keySpace, table)
+					.value("intentname", data.getIntentInfo())
+					.value("domainname", data.getDomainName())
+					.value("servicename", data.getServiceName())
+					.value("domainid", data.getDomainId())
+					.value("specname", data.getSpecName())
+					.value("invoketype", data.getInvokeType())
+					.value("servicelink", data.getServiceLink())
+					.value("servicecode", data.getServiceCode())
+					.value("headerinfo", data.getToJsonFormatHeader())
+					.value("commURL", data.getCommonURL())
+					.value("testURL", data.getTestURL())
+					.value("method", data.getTransMethod())
+					.value("datatype", data.getDataType())
+					.value("servicetype", data.getServiceType())
+					.value("requestformat", data.getReqEx())
+					.value("requestspec", data.getToJsonFormatReqParam())
+					.value("responseFormat", data.getResEx())
+					.value("responsespec", data.getToJsonFormatResParam())
+					.value("dicList", data.getToJsonFormatDicList());
+			
+			session.execute(query);
+		}
+		cluster.close();
+	}
+	
+	
+
 
 }

@@ -678,7 +678,10 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	public String uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
-			MultipartHttpServletRequest request) {
+			MultipartHttpServletRequest request,
+			@RequestParam String domainName,
+			@RequestParam String domainId,
+			@RequestParam String specName) {
 
 		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
 		// System.out.println("RewardController reAddProCtrl reward : " + reward);
@@ -694,7 +697,7 @@ public class InBoundInterface {
 		
 		/* 업로드 엑셀파일 파서 */
 		ExcelService excelSvc = new ExcelService();
-		excelSvc.excelUpload(uploadPath);
+		excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
 
 		return "redirect:listAll";
 	}
@@ -725,7 +728,7 @@ public class InBoundInterface {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String path = server.get("serverIp") + ":" + server.get("port") + templateUrl;
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
 		
 		JSONObject res = serializerTo.resPreView(path);
 						
@@ -760,7 +763,7 @@ public class InBoundInterface {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String path = server.get("serverIp") + ":" + server.get("port") + templateUrl;
+		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
 						
 		JSONObject res = serializerTo.resPreView(path);
 		

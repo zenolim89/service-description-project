@@ -13,9 +13,9 @@
 		<servlet-name>SpringDispatcher</servlet-name>
 		<url-pattern>/*</url-pattern>
 		<url-pattern>/index.html</url-pattern>
+
 	</servlet-mapping>
 	<filter>
-
 		<filter-name>encoding</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>
@@ -32,8 +32,6 @@
 		<servlet-name>SpringDispatcher</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
-
-
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 		<welcome-file>index.html</welcome-file>

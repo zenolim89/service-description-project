@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.tool.web.exception.UploadException;
 import com.kt.tool.web.model.RequestFileUploadVo;
 import com.kt.tool.web.model.ResponseVo;
 import com.kt.tool.web.service.FileService;
@@ -53,13 +52,25 @@ public class FileController {
 	@RequestMapping(value="/upload/file", method = { RequestMethod.POST }, headers = "Content-Type=multipart/form-data")
 	public ResponseVo uploadFile(@Valid RequestFileUploadVo params, BindingResult bindingResult, HttpServletRequest request) {
 		
-		int rst = fileService.uploadFile(request, params.getDomain(), params.getWorkplace(), params.getPath(), params.getFile());
-		if (rst == 1);
-		else {
-			throw new UploadException(HttpStatus.UNAUTHORIZED, "Upload Failed");
+		ResponseVo vo = new ResponseVo();
+		
+		int rst = 0;
+		try {
+			rst = fileService.uploadFile(request, params.getDomain(), params.getWorkplace(), params.getPath(), params.getFile());
+			if (rst == 1);
+			else {
+				vo.setCode(401);
+				vo.setMessage("Upload Failed");
+				return vo;
+			}
+		}
+		catch (Exception ex) {
+			log.error("{}", ex);
+			vo.setCode(401);
+			vo.setMessage(ex.getMessage());
+			return vo;
 		}
 		
-		ResponseVo vo = new ResponseVo();
 		int code = Integer.parseInt(null != HttpStatus.OK ? HttpStatus.OK.toString() : "200");
 		vo.setCode(code);
 		vo.setMessage(utils.getResultMessage(String.valueOf(code)));
@@ -79,13 +90,24 @@ public class FileController {
 	@RequestMapping(value="/update/file", method = { RequestMethod.POST }, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseVo updateFile(@Valid RequestFileUploadVo params, BindingResult bindingResult, HttpServletRequest request) {
 		
-		int rst = fileService.updateFile(request, params.getDomain(), params.getWorkplace(), params.getPath(), params.getFilename(), params.getContent());
-		if (rst == 1);
-		else {
-			throw new UploadException(HttpStatus.UNAUTHORIZED, "File Update Failed");
+		ResponseVo vo = new ResponseVo();
+		int rst = 0;
+		try {
+			rst = fileService.updateFile(request, params.getDomain(), params.getWorkplace(), params.getPath(), params.getFilename(), params.getContent());
+			if (rst == 1);
+			else {
+				vo.setCode(401);
+				vo.setMessage("File Update Failed");
+				return vo;
+			}
+		}
+		catch (Exception ex) {
+			log.error("{}", ex);
+			vo.setCode(401);
+			vo.setMessage(ex.getMessage());
+			return vo;
 		}
 		
-		ResponseVo vo = new ResponseVo();
 		int code = Integer.parseInt(null != HttpStatus.OK ? HttpStatus.OK.toString() : "200");
 		vo.setCode(code);
 		vo.setMessage(utils.getResultMessage(String.valueOf(code)));

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.tools.DiagnosticListener;
+
 import org.apache.log4j.spi.ErrorCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,6 +24,7 @@ import com.kt.dataForms.KeyValueFormatForJSON;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
+import com.kt.dataForms.GetSpecInfoDataForm;
 import com.kt.dataForms.ReqDataForm;
 import com.kt.dataForms.SubValueArrKeyValeTypeFormat;
 
@@ -109,6 +112,72 @@ public class JSONSerializerTo {
 
 
 	}
+	
+	// return value 만들어야 함 2019.03.20
+	public JSONObject resSpecInfo (String domainName, String specName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
+		
+		ArrayList<GetSpecInfoDataForm> list = new ArrayList<GetSpecInfoDataForm>();
+		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		
+		JSONObject res = new JSONObject();
+		JSONObject resData = new JSONObject();
+		JSONObject specDesc = new JSONObject();
+		JSONArray svcList = new JSONArray();
+		
+		
+		try {
+			
+			res = this.resDescription("200", "도메인 목록 조회 성공");
+			
+			list = tool.resSpecData(specName);
+			//spec
+			
+			for(GetSpecInfoDataForm form : list) {
+				
+				JSONObject desc = new JSONObject();
+				JSONObject intentInfoObj = new JSONObject();
+				JSONArray intentInfoArr = new JSONArray();
+				
+				
+				desc.put("serviceName", form.getServiceName());
+				desc.put("invokeType", form.getInvokeType());
+				desc.put("serviceType", form.getServiceType());
+				desc.put("serviceLink", form.getServiceLink());
+				desc.put("serviceDesc", form.getServiceDesc());
+				desc.put("serviceCode", form.getServiceCode());
+				
+				JSONArray dicList = form.getWordList();
+				
+				intentInfoObj.put("id", form.getIntenName());
+				intentInfoObj.put("dicList", dicList);
+				intentInfoArr.add(intentInfoObj);
+				
+				desc.put("intentInfo", intentInfoArr);
+				
+				svcList.add(desc);
+				
+				
+			}
+			
+			specDesc.put("specDesc", svcList);
+			res.put("resData", specDesc);
+			
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+				
+		return res;
+		
+	}
+	
+	
+	
 
 	public JSONObject resNotFoundTemplate(String msg) {
 

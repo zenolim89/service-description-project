@@ -54,8 +54,8 @@ public class UITemplateController {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String resPathHeader = server.get("context").toString()
-		+ "/resources/venders/";
+		String resPathHeader = "http://" + server.get("context").toString()
+		+ "/resources/vendors/";
 				
 		String templateName = null;
 		String dn = venderName;
@@ -76,7 +76,7 @@ public class UITemplateController {
 		String realPath = this.getAttribute();
 		
 		File sourceFile = new File (realPath + File.separator + "resources" + File.separator + "template" + File.separator + templateName);
-		File targetFile = new File (realPath + File.separator + "resources" + File.separator + "venders" + File.separator + dn);
+		File targetFile = new File (realPath + File.separator + "resources" + File.separator + "vendors" + File.separator + dn);
 		
 		
 		System.out.println((!sourceFile.exists()));

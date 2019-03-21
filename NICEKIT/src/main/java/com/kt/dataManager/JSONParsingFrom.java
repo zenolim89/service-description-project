@@ -88,7 +88,7 @@ public class JSONParsingFrom {
 
 			JSONObject obj = (JSONObject) parser.parse(response);
   
-			JSONObject resObj = uiController.createVenderDir(obj.get("vendor").toString(), obj.get("urlPath").toString());
+			JSONObject resObj = uiController.createVenderDir(obj.get("vendorName").toString(), obj.get("urlPath").toString());
 
 			if (resObj.get("code").toString() == "409") {
 
@@ -111,7 +111,7 @@ public class JSONParsingFrom {
 
 
 				venderInfo.setDomainName(obj.get("domainName").toString());
-				venderInfo.setVender(obj.get("vendor").toString());
+				venderInfo.setVender(obj.get("vendorName").toString());
 				venderInfo.setTemplateUrl(temPath);
 				//					venderInfo.setVenderUrl(comPath);
 				venderInfo.setVenderUrl(resObj.get("comPath").toString());

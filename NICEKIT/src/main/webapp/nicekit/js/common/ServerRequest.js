@@ -444,3 +444,49 @@ function svcRespProcess() {
 		sendTTS(resMsg, resCode, resUrl);
 	}
 }
+
+function setReqDataforXls() {
+	var reqData = new Object();
+	var svcList = new Array();
+
+	reqData["domainId"] = "RSRT001";
+	reqData["domainName"] = "resort";
+	reqData["specName"] = "오크밸리";
+
+	$('#tableServiceBody').each(function() {
+
+		var tr = $(this).children();
+		tr.each(function() {
+			var svcObj = new Object();
+			var td = $(this).children();
+			svcObj["serviceName"] = td.eq(1).text();
+			svcObj["invokeType"] = td.eq(2).text();
+			svcObj["serviceType"] = td.eq(3).text();
+			svcObj["serviceLink"] = "resources/template/serviceName.html";
+			svcObj["serviceDesc"] = td.eq(4).text();
+			svcObj["serviceCode"] = td.eq(5).text();
+
+			var wordList = new Array();
+			var wordSplit = td.eq(8).text().split(',');
+			for ( var i in wordSplit)
+				wordList.push(wordSplit[i]);
+
+			var dicObj = new Object();
+			dicObj["dicName"] = td.eq(7).text();
+			dicObj["wordList"] = wordList;
+			var dicList = new Array();
+			dicList.push(dicObj);
+			var intentObj = new Object();
+			intentObj["id"] = td.eq(6).text();
+			intentObj["dicList"] = dicList;
+
+			var intentInfo = new Array();
+			intentInfo.push(intentObj);
+			svcObj["intentInfo"] = intentInfo;
+			svcList.push(svcObj);
+		});
+	});
+	reqData["svcList"] = svcList;
+	console.log(JSON.stringify(reqData));
+	return JSON.stringify(reqData);
+}

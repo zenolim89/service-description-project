@@ -575,6 +575,7 @@ public class Utils {
 			return rst;
 		}
 		
+		BufferedWriter bw = null;
 		try {
 			File file = new File(filePath);
 			if (!file.exists()) {
@@ -582,7 +583,7 @@ public class Utils {
 				return rst;
 			}
 			
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			bw = new BufferedWriter(new FileWriter(file));
 			bw.write(text);
 			bw.close();
 			
@@ -592,7 +593,17 @@ public class Utils {
 			ex.getStackTrace();
 			log.error("{}", ex);
 			rst = -1;
-			return rst;
+		}
+		finally {
+			if (null != bw) {
+				try {
+					bw.close();
+				}
+				catch (Exception ex) {
+					ex.getStackTrace();
+					log.error("{}", ex);
+				}
+			}
 		}
 		
 		return rst;

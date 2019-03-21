@@ -305,11 +305,12 @@ public class InsertDataTo {
 
 
 			Statement query = QueryBuilder.insertInto(keySpace, tableName).ifNotExists()
-					.value("specid", domainName + "-" + Integer.toString(num))
+					.value("specid", domainName + "_" + Integer.toString(num))
 					.value("specname", specName)
 					.value("domainname", domainName);
 
 			session.execute(query);
+			 
 			
 
 			JSONSerializerTo serializerTo = new JSONSerializerTo();
@@ -496,6 +497,7 @@ public class InsertDataTo {
 			query = QueryBuilder.insertInto(keySpace, table)
 					.value("intentname", data.getIntentInfo())
 					.value("domainname", data.getDomainName())
+					.value("servicedesc", data.getServiceDesc())
 					.value("servicename", data.getServiceName())
 					.value("domainid", data.getDomainId())
 					.value("specname", data.getSpecName())

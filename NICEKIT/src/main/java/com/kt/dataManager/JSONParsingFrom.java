@@ -143,7 +143,7 @@ public class JSONParsingFrom {
 
 		JSONObject obj = this.getServerInfo();
 
-		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName; 
+		String finalPath = obj.get("context").toString() + "/WEB-INF/resources/template/" + templateName; 
 
 		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
 

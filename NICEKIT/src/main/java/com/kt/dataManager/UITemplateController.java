@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.apache.http.protocol.RequestConnControl;
 import org.json.simple.JSONObject;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,7 +22,9 @@ public class UITemplateController {
 	
 		
 	public String getAttribute () {
+
 		
+				
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes();
 		String realPath = attr.getRequest().getRealPath("/");
@@ -28,6 +32,8 @@ public class UITemplateController {
 //				.getContextPath();
 		
 //		contextPath = contextPath.getClass().getResource("/").getPath();
+		
+		System.out.println(realPath);
 		
 		return realPath;
 		
@@ -55,7 +61,7 @@ public class UITemplateController {
 		JSONObject server = parsingFrom.getServerInfo();
 		
 		String resPathHeader = server.get("context").toString()
-		+ "/resources/vendors/";
+		+ "/WEB-INF/resources/vendors/";
 				
 		String templateName = null;
 		String dn = venderName;
@@ -75,8 +81,11 @@ public class UITemplateController {
 		
 		String realPath = this.getAttribute();
 		
-		File sourceFile = new File (realPath + File.separator + "resources" + File.separator + "template" + File.separator + templateName);
-		File targetFile = new File (realPath + File.separator + "resources" + File.separator + "vendors" + File.separator + dn);
+		File sourceFile = new File (realPath + File.separator + "WEB-INF" + File.separator + "resources" + File.separator + "template" + File.separator + templateName);
+		
+		System.out.println("AAAA" + sourcePath);
+		
+		File targetFile = new File (realPath + File.separator + "WEB-INF" + File.separator + "resources" + File.separator + "vendors" + File.separator + dn);
 		
 		
 		System.out.println((!sourceFile.exists()));

@@ -136,6 +136,7 @@ public class CreateTableFor {
 		CreateTable create = ((CreateTable) builder.createTable(ksName, tableName).ifNotExists())
 				.withColumn("intentname", DataTypes.TEXT)
 				.withColumn("domainname", DataTypes.TEXT)
+				.withColumn("servicedesc", DataTypes.TEXT)
 				.withColumn("servicename", DataTypes.TEXT)
 				.withColumn("domainid", DataTypes.TEXT)
 				.withColumn("specname", DataTypes.TEXT)

@@ -111,6 +111,7 @@ public class JSONSerializerTo {
 
 	}
 	
+	// return value 만들어야 함 2019.03.20
 	public JSONObject resSpecInfo (String domainName, String specName) {
 		
 		SelectDataTo selectTo = new SelectDataTo();

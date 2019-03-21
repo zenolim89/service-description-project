@@ -11,32 +11,21 @@
         http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-	<!-- <context:component-scan
-		base-package="com.kt" /> -->
-		
-		<!-- NBWare 추가 -->
-		<context:component-scan base-package="com.kt, com.kt.tool.web"></context:component-scan>
-		
+	<!-- <context:component-scan base-package="com.kt" /> -->
+
+	<!-- NBWare 추가 -->
+	<context:component-scan
+		base-package="com.kt, com.kt.tool.web"></context:component-scan>
+
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 
-<!-- 뷰 이름과 View 객체간의 매핑 정보를 저장하기 위해 자원 파일을 사용한다. -->
+	<!-- 뷰 이름과 View 객체간의 매핑 정보를 저장하기 위해 자원 파일을 사용한다. -->
 	<bean id="beanNameViewResolver"
 		class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<property name="order" value="0" />
 	</bean>
 
-	<!-- 뷰 이름으로부터 jsp나 Tiles 연동을 위한 View 객체를 리턴한다. -->
-<!-- 	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/resources" />
-		<property name="suffix" value=".html" />
-		<property name="order" value="1" />
-	</bean>
- -->
- 
 	<!-- 뷰 이름으로부터 jsp나 Tiles 연동을 위한 View 객체를 리턴한다. -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -45,26 +34,32 @@
 		<property name="prefix" value="/WEB-INF/resources/" />
 		<property name="suffix" value=".html" />
 		<property name="order" value="1" />
-	</bean>	
-	<!--NBWare Add  -->
-	<import resource="classpath:/configuration/spring-tool-config.xml"/>
-	
-	
-	<!--  <mvc:resources mapping="/svcCommon/**" location="/resources/template/svcCommon/" /> -->
-	<mvc:resources mapping="/common/**" location="/WEB-INF/resources/template/common/" cache-period="0" />
-	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" cache-period="0" />
-	
+	</bean>
+	<!--NBWare Add -->
+	<import
+		resource="classpath:/configuration/spring-tool-config.xml" />
+
+
+	<mvc:resources mapping="/common/**"
+		location="/WEB-INF/resources/template/common/" cache-period="0" />
+	<mvc:resources mapping="/resources/**"
+		location="/WEB-INF/resources/" cache-period="0" />
+	<!--NBWare Add -->
+	<import
+		resource="classpath:/configuration/spring-tool-config.xml" />
+
 	<mvc:resources mapping="/nicekit/**" location="/nicekit/" />
 	<mvc:resources mapping="/nbware/**" location="/nbware/" />
 
 	<bean id="jsonView"
 		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
 
-<!-- MultipartResolver -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="100000000"/>
-        <property name="maxInMemorySize" value="100000000"/>
-    </bean>
+	<!-- MultipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000000" />
+		<property name="maxInMemorySize" value="100000000" />
+	</bean>
 
 
 </beans>

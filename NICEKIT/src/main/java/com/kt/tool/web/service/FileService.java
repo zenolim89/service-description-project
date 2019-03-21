@@ -6,14 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileService {
 
-	int uploadFile(HttpServletRequest request, String uploadType, String domain, String workplace, MultipartFile file);
+	int uploadFile(HttpServletRequest request, String uploadType, String domain, String workplace, MultipartFile file) throws Exception;
 
-	int uploadResource(HttpServletRequest request, String uploadType, String domain, String workplace, String string, MultipartFile file);
-
-	int uploadZip(HttpServletRequest request, String uploadType, String domain, String workplace, String path, MultipartFile file);
-
-	int uploadAnyFile(HttpServletRequest request, String uploadType, String domain, String workplace, String path, MultipartFile file);
-
-	int updateFile(HttpServletRequest request, String domain, String workplace, String path, String filename, String content);
+	int updateFile(HttpServletRequest request, String domain, String workplace, String path, String filename, String content) throws Exception;
 
 }

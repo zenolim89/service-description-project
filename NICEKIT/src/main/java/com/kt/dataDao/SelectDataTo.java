@@ -95,11 +95,26 @@ public class SelectDataTo {
 		return resObj;
 	}
 	
+	/**
+	 * @author	: "Minwoo Ryu" [2019. 3. 21. 오후 2:27:18]
+	 * desc	: "voice", "touch", "remocon" 타입안에 속하는 서비스 명세만 불러옴
+	 * @version	:
+	 * @param	: 
+	 * @return 	: List<Row> 
+	 * @throws 	: 
+	 * @see		: 
+	
+	 * @param table
+	 * @return
+	 */
 	public List<Row> selectGetSpecInfo (String table) {
 		
 		String keySpace = "vendersvcks";
 		
-		Statement query = QueryBuilder.select().from(keySpace, table);
+		Statement query = QueryBuilder.select().from(keySpace, table)
+				.where(QueryBuilder.in("invoketype", "voice", "touch", "remocon"))
+				.allowFiltering();
+				
 		
 		ResultSet set = session.execute(query);
 		
@@ -122,7 +137,7 @@ public class SelectDataTo {
 				.allowFiltering();
 		
 		ResultSet set = session.execute(query);
-		cluster.close();
+		
 		
 		List<Row> reslist = set.all();
 		

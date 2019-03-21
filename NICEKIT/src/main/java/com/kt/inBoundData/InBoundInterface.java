@@ -578,7 +578,7 @@ public class InBoundInterface {
 		
 	}
 	
-	@RequestMapping(value ="geSpceInfo", method = RequestMethod.GET)
+	@RequestMapping(value ="/getSpecInfo", method = RequestMethod.GET)
 	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
 		
 		JSONObject res = new JSONObject();

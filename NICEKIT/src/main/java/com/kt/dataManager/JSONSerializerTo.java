@@ -113,11 +113,14 @@ public class JSONSerializerTo {
 	
 	// return value 만들어야 함 2019.03.20
 	public JSONObject resSpecInfo (String domainName, String specName) {
-		JSONObject res = new JSONObject();
+		
 		SelectDataTo selectTo = new SelectDataTo();
 		GetSpecInfoDataForm form = new GetSpecInfoDataForm();
 		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		
+		JSONObject res = new JSONObject();
 		JSONObject obj = new JSONObject();
+		
 		
 		try {
 			

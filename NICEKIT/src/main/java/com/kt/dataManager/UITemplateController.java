@@ -54,7 +54,7 @@ public class UITemplateController {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String resPathHeader = "http://" + server.get("context").toString()
+		String resPathHeader = server.get("context").toString()
 		+ "/resources/vendors/";
 				
 		String templateName = null;

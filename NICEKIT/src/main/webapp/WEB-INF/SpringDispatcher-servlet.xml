@@ -40,7 +40,8 @@
 	<import resource="classpath:/configuration/spring-tool-config.xml"/>
 	
 	
-	<mvc:resources mapping="/svcCommon/**" location="/resources/template/svcCommon/" />
+	<!--  <mvc:resources mapping="/svcCommon/**" location="/resources/template/svcCommon/" /> -->
+		<mvc:resources mapping="/common/**" location="/resources/template/common/" />
 	<mvc:resources mapping="/nicekit/**" location="/nicekit/" />
 	<mvc:resources mapping="/nbware/**" location="/nbware/" />
 

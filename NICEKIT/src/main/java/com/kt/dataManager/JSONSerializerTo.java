@@ -112,7 +112,7 @@ public class JSONSerializerTo {
 	}
 	
 	public JSONObject resSpecInfo (String domainName, String specName) {
-		
+		JSONObject res = new JSONObject();
 		SelectDataTo selectTo = new SelectDataTo();
 		GetSpecInfoDataForm form = new GetSpecInfoDataForm();
 		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
@@ -127,6 +127,7 @@ public class JSONSerializerTo {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
+		return res;
 		
 		
 	}

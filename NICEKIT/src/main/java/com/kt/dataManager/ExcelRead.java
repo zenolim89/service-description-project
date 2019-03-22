@@ -35,9 +35,9 @@ public class ExcelRead {
 			Sheet sheet = wb.getSheetAt(i);
 			System.out.println("Sheet 이름: " + wb.getSheetName(i));
 
+			//System.out.println(String.format("LastRowNum: %d, PhysicalNumberOfRow: %d", sheet.getLastRowNum(), sheet.getPhysicalNumberOfRows()));
 			
-			//int endRows = sheet.getPhysicalNumberOfRows();
-			int endRows = 50;			// TODO SERA 임시 
+			int endRows = sheet.getLastRowNum();
 			System.out.println("END ROWS: " + endRows);
 			
 			Map<String, CellReference> format = new HashMap<String, CellReference>();

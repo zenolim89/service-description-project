@@ -516,7 +516,7 @@ public class InBoundInterface {
 	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
 		
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		String filePath = "/resources/download";
+		String filePath = "/WEB-INF/resources/download";
 		String realPath = request.getSession().getServletContext().getRealPath(filePath);
 		String bf = null;
 		String response = "";

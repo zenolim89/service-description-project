@@ -560,7 +560,9 @@ var localhost = "";
 		</div>
 		<!-- 대쉬보드 영역 -->
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<div style="padding: 10px">
+
+			<!-- 임시 START  -->
+<!-- 			<div style="padding: 10px">
 				<ul class="nav nav-tabs">
 					<li class="active" id="tab1li"><a data-toggle="tab" id="tab1">서비스 등록</a></li>
 					<li id="tab2li"><a data-toggle="tab" id="tab2">서비스 관리</a></li>
@@ -576,7 +578,7 @@ var localhost = "";
 									</tr>
 									<tr>
 										<td class="col-xs-6 col-sm-2">인보크 타입</td>
-										<!-- invokeType key값 -->
+										invokeType key값
 										<td class="col-xs-6 col-sm-4"><select id="selectInvokeType" class="form-control">
 												<option value="" selected disabled>인보크 타입 선택</option>
 												<option value="system">시스템간 연동(초기 설정)</option>
@@ -587,7 +589,7 @@ var localhost = "";
 									</tr>
 									<tr>
 										<td class="col-xs-6 col-sm-2">서비스 타입</td>
-										<!-- invokeType key값 -->
+										invokeType key값
 										<td class="col-xs-6 col-sm-4"><select id="selectServiceType" class="form-control">
 												<option value="" selected disabled>서비스 타입 선택</option>
 												<option value="CheckSvcWithPage">조회성 서비스(페이지 전환)</option>
@@ -628,15 +630,18 @@ var localhost = "";
 						</div>
 					</div>
 				</div>
-			</div>
-			<button id='buttonDownload' class='btn btn-success' style="float: right">양식 다운</button>
-			<button id="addItmBtn" class="btn btn-success" style="margin-right: 10px; float: right">항목 추가</button>
+			</div> -->
+			<!-- 임시 END  -->
+			
+
+			<!-- <button id="addItmBtn" class="btn btn-success" style="margin-right: 10px; float: right">항목 추가</button> -->
 		</div>
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<h2 class="sub-header">서비스 명세 리스트</h2>
-			<button class='btn btn-primary' id='buttonRgt' style="float: right">규격 등록</button>
+			<button class='btn btn-primary' id='buttonRgt' style="float: right; margin-left: 15px;">규격 등록</button>
+			<button id='buttonDownload' class='btn btn-success' style="float: right">양식 다운</button> 
 			<form id="formUpload" name="frm" class="form-inline" enctype="multipart/form-data" style="width: 500px;" method="post">
-				<input id='inputUpload' type="file" name="uploadFile">
+				<input id='inputUpload' type="file" name="uploadFile" class="custom-file-input">
 			</form>
 			<div style="padding: 10px">
 				<div class="table-responsive">

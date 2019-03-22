@@ -22,7 +22,7 @@ public class ExcelService {
 //		
 //	}
 	
-	public void excelUpload(String filePath, String domainName, String domainId, String specName) {
+	public List<ExcelUploadForm> excelUpload(String filePath, String domainName, String domainId, String specName) {
 		
 		ExcelReadOption option = new ExcelReadOption();
 		
@@ -35,9 +35,11 @@ public class ExcelService {
 		InsertDataTo insertTo = new InsertDataTo();
 		insertTo.insertExcelData(list, specName);
 		
-		JSONArray jsonList = new JSONArray();
-		jsonList.add(list);
-		System.out.println(jsonList.toString());
+//		JSONArray jsonList = new JSONArray();
+//		jsonList.add(list);
+//		System.out.println(jsonList.toString());
+
+		return list;
 		
 	}
 

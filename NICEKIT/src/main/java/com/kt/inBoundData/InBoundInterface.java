@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,8 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
+import com.kt.dataForms.ExcelUploadForm;
+import com.kt.dataForms.ResFileUpload;
 import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
@@ -689,7 +692,7 @@ public class InBoundInterface {
 	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-	public String uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
+	public List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
 			MultipartHttpServletRequest request,
 			@RequestParam String domainName,
 			@RequestParam String domainId,
@@ -709,9 +712,17 @@ public class InBoundInterface {
 		
 		/* 업로드 엑셀파일 파서 */
 		ExcelService excelSvc = new ExcelService();
-		excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
+		List<ExcelUploadForm> list = excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
 
-		return "redirect:listAll";
+		List<ResFileUpload> result = new ArrayList<ResFileUpload>();
+		for(ExcelUploadForm e : list) {
+			ResFileUpload res = new ResFileUpload();
+			res.setServiceName(e.getServiceName());
+			res.setServiceCode(e.getServiceCode());
+			res.setServiceDesc(e.getServiceDesc());
+			result.add(res);
+		}
+		return result;
 	}
 
 	

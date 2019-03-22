@@ -60,8 +60,10 @@ public class UITemplateController {
 		
 		JSONObject server = parsingFrom.getServerInfo();
 		
-		String resPathHeader = server.get("context").toString()
-		+ "/WEB-INF/resources/vendors/";
+		String realComPath = server.get("context").toString()
+		+ "/resources/vendors/";
+		
+		
 				
 		String templateName = null;
 		String dn = venderName;
@@ -83,7 +85,7 @@ public class UITemplateController {
 		
 		File sourceFile = new File (realPath + File.separator + "WEB-INF" + File.separator + "resources" + File.separator + "template" + File.separator + templateName);
 		
-		System.out.println("AAAA" + sourcePath);
+		System.out.println("AAAA" + realPath + File.separator + "WEB-INF" + File.separator + "resources" + File.separator + "template" + File.separator + templateName);
 		
 		File targetFile = new File (realPath + File.separator + "WEB-INF" + File.separator + "resources" + File.separator + "vendors" + File.separator + dn);
 		
@@ -107,10 +109,10 @@ public class UITemplateController {
 			targetFile.mkdirs();
 			this.copyTemplate(sourceFile, targetFile);
 			
-			resPathHeader = resPathHeader + dn;
+			realComPath = realComPath + dn;
 			
 			obj.put("code", "201");
-			obj.put("comPath", resPathHeader);
+			obj.put("comPath", realComPath);
 			obj.put("temPath", urlPath);
 			
 			return obj;

@@ -53,7 +53,6 @@ public class InBoundInterface {
 	// see also SpringDispatcher-servlet.xml
 	@RequestMapping("/")
 	public ModelAndView index() {
-
 		ModelAndView mv = new ModelAndView("/index/index");
 
 		return mv;

@@ -122,7 +122,7 @@ public class JSONParsingFrom {
 
 				JSONObject server = parsingFrom.getServerInfo();
 
-				res = serializerTo.resCreateVenderPath(resCode, server.get("serverIp").toString()
+				res = serializerTo.resCreateVenderPath(resCode, "http://" + server.get("serverIp").toString()
 						+ ":" + server.get("port").toString() + resObj.get("comPath").toString());
 
 			}

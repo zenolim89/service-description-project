@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ko" class="ko">
 <head>
@@ -34,10 +33,8 @@
         $(document).ready(function () {
             // 사업장 목록 모두 삭제
             $(".service_list li").remove();
-
             // 템플릿 모두 삭제
             $(".templete_list li").remove();
-
             // 도메인 목록 조회
             getDomainList(function(domains) {
                 var firstBtn = null;
@@ -52,19 +49,15 @@
                     console.log(btn);
                     btn.parent().css("display", "block");
                 }
-
                 // 도메인 목록 초기화
                 initDomain();
-
                 // 첫번째 도메인 선택
                 firstBtn.click();
-
                 // firstBtn.addClass("active");
                 // var domain = firstBtn.attr("data-domain");
                 // selectDomain(domain);
             });
         });
-
         function initTemplateList() {
             // $(".templete_list li a.btn_select").on("click", function(e){
             //     e.preventDefault();
@@ -79,7 +72,6 @@
             //
             // });
         }
-
         /**
          * 사업장 목록에 클릭 이벤트 연결
          */
@@ -90,7 +82,6 @@
                 $(this).addClass("active");
             });
         }
-
         /**
          * 도메인 목록에 클릭이벤트 연결
          */
@@ -101,14 +92,11 @@
                 $(".domain_tab li button").removeClass("active");
                 $(".service_list li button").removeClass("active");
                 $(this).addClass("active");
-
-
                 // 해당 도메인 선택 작업
                 var domainName = $(this).attr("data-domain");
                 selectDomain(domainName);
             });
         }
-
         /**
          * 도메인 선택 작업
          * @param domain
@@ -116,13 +104,10 @@
         function selectDomain(domain) {
             // 사업장 목록 모두 삭제
             $(".service_list li").remove();
-
             // 템플릿 모두 삭제
             $(".templete_list li").remove();
-
             $("button.domain").removeClass("active");
             $("button.domain." + domain).addClass("active");
-
             // 사업장 목록 조회
             getVendorList(domain, function(vendorList) {
                 // if(vendorList.length == 0) {
@@ -131,7 +116,6 @@
                 console.log(vendorList);
                 for(var i = 0; i < vendorList.length; i++) {
                     var vendor = vendorList[i];
-
                     var elem = $(
                         "<li>\n" +
                         "  <button type=\"menu\">\n" +
@@ -143,17 +127,14 @@
                     elem.find("button").attr("data-domain", domain);
                     $(".service_list ul").append(elem);
                 }
-
                 // 사업장 목록 초기화
                 initVendorList();
             });
-
             // 템플릿 목록 조회
             getTemplateList(domain, function(templateList) {
                 console.log(templateList);
                 for(var i = 0; i < templateList.length; i++) {
                     var template = templateList[i];
-
                     var elem = $(
                         "<li>\n" +
                         "  <div class=\"img\"><img src=\"assets/images/sample/320x175_01.jpg\" alt=\" \"></div>\n" +
@@ -179,12 +160,10 @@
                     });
                     $(".templete_list ul").append(elem);
                 }
-
                 // 템플릿 목록 초기화
                 initTemplateList();
             });
         }
-
         /**
          * 편집모드 진입
          */
@@ -201,7 +180,6 @@
                 window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
             });
         }
-
         /**
          * 프리뷰 모드 진입
          */

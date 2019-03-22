@@ -21,12 +21,12 @@ public class ExcelUploadForm {
 	private String serviceCode;
 	
 	private String intentInfo;
+	private List<DicParam> dicList;
+
 	private String transMethod;
 	
 	private String CommonURL;
 	private String testURL;
-	
-	private List<DicParam> dicList;
 	
 	private List<HttpParam> header;
 	
@@ -203,7 +203,20 @@ public class ExcelUploadForm {
 		jsonList.add(resParam);
 		return jsonList.toString();
 	}
-
 	
+	/**
+	 * 다음 데이터가 하나라도 없는 경우 return false, 모두 있는 경우 return true
+	 * 	- transMethod, CommonURL, testURL, reqEx, resEx
+	 * - header, reqParam, resParam
+	 * @return
+	 */
+	public Boolean isRegistered() {
+		if(transMethod.isEmpty() || CommonURL.isEmpty() || testURL.isEmpty() || reqEx.isEmpty() || resEx.isEmpty()) return false;
+		if(header.isEmpty() || header == null) return false;
+		if(reqParam.isEmpty() || reqParam == null) return false;
+		if(resParam.isEmpty() || resParam == null) return false;
+				
+		return true; 
+	}
 
 }

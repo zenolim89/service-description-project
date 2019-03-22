@@ -44,7 +44,7 @@ public class UtilFile {
             System.out.println("UtilFile fileUpload fileName : " + fileName);
             System.out.println("UtilFile fileUpload uploadPath : " + path);
             
-            File file = new File(uploadPath + File.separator + "resources" +File.separator + "upload" + File.separator);
+            File file = new File(uploadPath + File.separator + "WEB-INF" + File.separator + "resources" +File.separator + "upload" + File.separator);
             
 //          파일명이 중복으로 존재할 경우
             if (fileName != null && !fileName.equals("")) {

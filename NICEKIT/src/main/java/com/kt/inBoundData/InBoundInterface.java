@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -34,6 +35,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
+import com.kt.dataForms.DicParam;
 import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ResFileUpload;
 import com.kt.dataManager.ExcelService;
@@ -691,7 +693,7 @@ public class InBoundInterface {
 	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-	public List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
+	public @ResponseBody List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
 			MultipartHttpServletRequest request,
 			@RequestParam String domainName,
 			@RequestParam String domainId,
@@ -719,6 +721,28 @@ public class InBoundInterface {
 			res.setServiceName(e.getServiceName());
 			res.setServiceCode(e.getServiceCode());
 			res.setServiceDesc(e.getServiceDesc());
+			res.setServiceType(e.getServiceType());
+			res.setInvokeType(e.getInvokeType());
+			res.setIntentName(e.getIntentInfo());
+			res.setIsRegistered(e.isRegistered());
+			
+			/* dicNameList, wordList 매핑 */
+			if(e.getDicList() != null) {
+				StringBuilder sbDic = new StringBuilder();
+				StringBuilder sbWord = new StringBuilder();
+				
+				List<DicParam> dicList = e.getDicList();
+				for(DicParam item : dicList) {
+					if(sbDic.length() > 0) sbDic.append("<br>");
+					if(sbWord.length() > 0) sbWord.append("<br>");
+					
+					sbDic.append(item.getDicName());
+					sbWord.append(item.getWordList());
+				}
+				res.setDicNameList(sbDic.toString());
+				res.setWordList(sbWord.toString());
+			}
+			
 			result.add(res);
 		}
 		return result;

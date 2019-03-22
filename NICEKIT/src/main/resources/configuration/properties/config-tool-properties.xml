@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
 <properties>
 	<comment>AI_Service_Tool configuration</comment>
-	
+
 	<!-- ========================================= -->
 	<!-- Api Info -->
 	<!-- ========================================= -->
@@ -13,7 +13,7 @@
 	<entry key="server.context">/NICEKIT</entry>
 	<entry key="api.context">/api</entry>
 	<entry key="template.context">/resources/template</entry>
-	
+
 	<!-- ========================================= -->
 	<!-- Api Result Message -->
 	<!-- ========================================= -->
@@ -24,12 +24,12 @@
 	<!-- ========================================= -->
 	<!-- Upload File -->
 	<!-- ========================================= -->
-	
+
 	<entry key="upload.file.resources.flag">true</entry> <!-- 아래의 소스를 변경하면, false로 필요 -->
-	<entry key="upload.file.external.path">/WEB-INF/resources</entry> <!-- 서버의 절대 주소로 변경 -->
+	<entry key="upload.file.resources.path">/WEB-INF/resources</entry>  <!-- 서버의 절대 주소로 변경 -->
 	<entry key="upload.file.extension">json,zip,html,png,jpg,gif,bmp,css,js</entry>
 	<entry key="upload.file.size">40000000</entry>
-	
+
 	<entry key="zip.file.extension">zip</entry>
 	<entry key="images.file.extension">png,jpg,gif,bmp</entry>
 	<entry key="template.file.extension">html</entry>

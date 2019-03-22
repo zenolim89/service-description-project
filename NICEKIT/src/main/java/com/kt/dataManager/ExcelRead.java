@@ -36,7 +36,8 @@ public class ExcelRead {
 			System.out.println("Sheet 이름: " + wb.getSheetName(i));
 
 			
-			int endRows = sheet.getPhysicalNumberOfRows();
+			//int endRows = sheet.getPhysicalNumberOfRows();
+			int endRows = 50;			// TODO SERA 임시 
 			System.out.println("END ROWS: " + endRows);
 			
 			Map<String, CellReference> format = new HashMap<String, CellReference>();
@@ -81,10 +82,10 @@ public class ExcelRead {
 				}
 			}
 			
-//			for(String key : format.keySet()) {
-//				 System.out.println( String.format("키 : %s, 값 : %s", key, format.get(key)) );
-//			}
-			
+//			 for(String key : format.keySet()) { 
+//				 System.out.println(String.format("키 : %s, 값 : %s", key, format.get(key)) );
+//				 }
+			 			
 			ExcelUploadForm form = new ExcelUploadForm();
 			
 			// 기본 정보 

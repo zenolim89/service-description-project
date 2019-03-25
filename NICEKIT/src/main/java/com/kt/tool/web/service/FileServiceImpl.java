@@ -1,6 +1,8 @@
+
 package com.kt.tool.web.service;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,15 +54,19 @@ public class FileServiceImpl implements FileService {
 	
 	@Override
 	public int uploadFile(HttpServletRequest request, String domain, String workplace, String path, MultipartFile file) throws Exception {
-		log.debug("domain : {}", domain);
-		log.debug("workplace : {}", workplace);
-		log.debug("path : {}", path);
-		log.debug("file : {}", file);
+		domain = !StringUtils.isEmpty(domain) ? URLDecoder.decode(domain, "UTF-8") : "";
+		workplace = !StringUtils.isEmpty(workplace) ? URLDecoder.decode(workplace, "UTF-8") : "";
+		path = !StringUtils.isEmpty(path) ? URLDecoder.decode(path, "UTF-8") : "";
+		
+		log.info("domain : {}", domain);
+		log.info("workplace : {}", workplace);
+		log.info("path : {}", path);
+		log.info("file : {}", file);
 		
 		int rst = 0;
 		if (!StringUtils.isEmpty(file) && !file.isEmpty()) {
 			String extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-			log.debug("upload.extName : {}", extName);
+			log.info("upload.extName : {}", extName);
 			
 			if (!StringUtils.isEmpty(domain) || !StringUtils.isEmpty(workplace));
 			else {
@@ -80,7 +86,7 @@ public class FileServiceImpl implements FileService {
 			}
 			
 			String uploadType = utils.getUploadType(extName);
-			log.debug("uploadType : {}", uploadType);
+			log.info("uploadType : {}", uploadType);
 			
 			switch(uploadType) {
 				case "json":
@@ -113,12 +119,9 @@ public class FileServiceImpl implements FileService {
 	private int uploadJsonProc(HttpServletRequest request, String domain, String workplace, String path, MultipartFile file) {
 		int rst = 0;
 		try {
-			domain = !StringUtils.isEmpty(domain) ? domain : "";
-			workplace = !StringUtils.isEmpty(workplace) ? workplace : "";
-			path = !StringUtils.isEmpty(path) ? path : "";
 			String uploadTargetPath = String.format("%s/%s/%s/%s", resourcesUploadFlag ? uploadResourcesDir : uploadExternalDir, domain, workplace, path);
 			uploadTargetPath = resourcesUploadFlag ? servletContext.getRealPath(uploadTargetPath) : uploadTargetPath;
-			log.debug("uploadTargetPath : {}", uploadTargetPath);
+			log.info("uploadTargetPath : {}", uploadTargetPath);
 			
 			File targetDir = new File(uploadTargetPath);
 			if (!targetDir.exists()) {
@@ -126,7 +129,7 @@ public class FileServiceImpl implements FileService {
 			}
 			
 			String sourceFile = String.format("%s/%s", uploadTargetPath, file.getOriginalFilename());
-			log.debug("sourceFile : {}", sourceFile);
+			log.info("sourceFile : {}", sourceFile);
 			
 			byte[] bytes = file.getBytes();
 			Path targetPath = Paths.get(sourceFile);
@@ -146,12 +149,9 @@ public class FileServiceImpl implements FileService {
 	private int uploadHtmlProc(HttpServletRequest request, String domain, String workplace, String path, MultipartFile file) {
 		int rst = 0;
 		try {
-			domain = !StringUtils.isEmpty(domain) ? domain : "";
-			workplace = !StringUtils.isEmpty(workplace) ? workplace : "";
-			path = !StringUtils.isEmpty(path) ? path : "";
 			String uploadTargetPath = String.format("%s/%s/%s/%s", resourcesUploadFlag ? uploadResourcesDir : uploadExternalDir, domain, workplace, path);
 			uploadTargetPath = resourcesUploadFlag ? servletContext.getRealPath(uploadTargetPath) : uploadTargetPath;
-			log.debug("uploadTargetPath : {}", uploadTargetPath);
+			log.info("uploadTargetPath : {}", uploadTargetPath);
 			
 			File targetDir = new File(uploadTargetPath);
 			if (!targetDir.exists()) {
@@ -159,7 +159,7 @@ public class FileServiceImpl implements FileService {
 			}
 			
 			String sourceFile = String.format("%s/%s", uploadTargetPath, file.getOriginalFilename());
-			log.debug("sourceFile : {}", sourceFile);
+			log.info("sourceFile : {}", sourceFile);
 			
 			byte[] bytes = file.getBytes();
 			Path targetPath = Paths.get(sourceFile);
@@ -179,12 +179,9 @@ public class FileServiceImpl implements FileService {
 	private int uploadResourceProc(HttpServletRequest request, String domain, String workplace, String path, MultipartFile file) {
 		int rst = 0;
 		try {
-			domain = !StringUtils.isEmpty(domain) ? domain : "";
-			workplace = !StringUtils.isEmpty(workplace) ? workplace : "";
-			path = !StringUtils.isEmpty(path) ? path : "";
 			String uploadTargetPath = String.format("%s/%s/%s/%s", resourcesUploadFlag ? uploadResourcesDir : uploadExternalDir, domain, workplace, path);
 			uploadTargetPath = resourcesUploadFlag ? servletContext.getRealPath(uploadTargetPath) : uploadTargetPath;
-			log.debug("uploadTargetPath : {}", uploadTargetPath);
+			log.info("uploadTargetPath : {}", uploadTargetPath);
 			
 			File targetDir = new File(uploadTargetPath);
 			if (!targetDir.exists()) {
@@ -192,7 +189,7 @@ public class FileServiceImpl implements FileService {
 			}
 			
 			String sourceFile = String.format("%s/%s", uploadTargetPath, file.getOriginalFilename());
-			log.debug("sourceFile : {}", sourceFile);
+			log.info("sourceFile : {}", sourceFile);
 			
 			byte[] bytes = file.getBytes();
 			Path targetPath = Paths.get(sourceFile);
@@ -212,12 +209,9 @@ public class FileServiceImpl implements FileService {
 	private int uploadZipProc(HttpServletRequest request, String domain, String workplace, String path, MultipartFile file) {
 		int rst = 0;
 		try {
-			domain = !StringUtils.isEmpty(domain) ? domain : "";
-			workplace = !StringUtils.isEmpty(workplace) ? workplace : "";
-			path = !StringUtils.isEmpty(path) ? path : "";
 			String uploadTargetPath = String.format("%s/%s/%s/%s", resourcesUploadFlag ? uploadResourcesDir : uploadExternalDir, domain, workplace, path);
 			uploadTargetPath = resourcesUploadFlag ? servletContext.getRealPath(uploadTargetPath) : uploadTargetPath;
-			log.debug("uploadTargetPath : {}", uploadTargetPath);
+			log.info("uploadTargetPath : {}", uploadTargetPath);
 			
 			File targetDir = new File(uploadTargetPath);
 			if (!targetDir.exists()) {
@@ -225,7 +219,7 @@ public class FileServiceImpl implements FileService {
 			}
 			
 			String sourceFile = String.format("%s/%s", uploadTargetPath, file.getOriginalFilename());
-			log.debug("sourceFile : {}", sourceFile);
+			log.info("sourceFile : {}", sourceFile);
 			
 			byte[] bytes = file.getBytes();
 			Path targetPath = Paths.get(sourceFile);
@@ -243,7 +237,7 @@ public class FileServiceImpl implements FileService {
 			finally {
 				// zip 파일 삭제
 				boolean isDel = utils.deleteDirectory(new File(sourceFile));
-				log.debug("isDel : {}", isDel);
+				log.info("isDel : {}", isDel);
 			}
 			
 			rst = 1;
@@ -259,11 +253,15 @@ public class FileServiceImpl implements FileService {
 	
 	@Override
 	public int updateFile(HttpServletRequest request, String domain, String workplace, String path, String filename, String content) throws Exception {
-		log.debug("domain : {}", domain);
-		log.debug("workplace : {}", workplace);
-		log.debug("path : {}", path);
-		log.debug("filename : {}", filename);
-		log.debug("content : {}", content);
+		domain = !StringUtils.isEmpty(domain) ? URLDecoder.decode(domain, "UTF-8") : "";
+		workplace = !StringUtils.isEmpty(workplace) ? URLDecoder.decode(workplace, "UTF-8") : "";
+		path = !StringUtils.isEmpty(path) ? URLDecoder.decode(path, "UTF-8") : "";
+		
+		log.info("domain : {}", domain);
+		log.info("workplace : {}", workplace);
+		log.info("path : {}", path);
+		log.info("filename : {}", filename);
+		// log.info("content : {}", content);
 		
 		int rst = 0;
 		if (!StringUtils.isEmpty(domain) || !StringUtils.isEmpty(workplace));
@@ -281,12 +279,9 @@ public class FileServiceImpl implements FileService {
 			throw new Exception("Require parameter [content]");
 		}
 		
-		domain = !StringUtils.isEmpty(domain) ? domain : "";
-		workplace = !StringUtils.isEmpty(workplace) ? workplace : "";
-		path = !StringUtils.isEmpty(path) ? path : "";
 		String uploadTargetPath = String.format("%s/%s/%s/%s", resourcesUploadFlag ? uploadResourcesDir : uploadExternalDir, domain, workplace, path);
 		uploadTargetPath = resourcesUploadFlag ? servletContext.getRealPath(uploadTargetPath) : uploadTargetPath;
-		log.debug("uploadTargetPath : {}", uploadTargetPath);
+		log.info("uploadTargetPath : {}", uploadTargetPath);
 		
 		File targetDir = new File(uploadTargetPath);
 		if (!targetDir.exists()) {
@@ -294,23 +289,25 @@ public class FileServiceImpl implements FileService {
 		}
 		
 		String sourceFile = String.format("%s/%s", uploadTargetPath, filename);
-		log.debug("sourceFile : {}", sourceFile);
+		log.info("sourceFile : {}", sourceFile);
 		
 		File f = new File(sourceFile);
 		if (!f.exists()) {
 			throw new Exception("File Not Exists");
 		}
 		
-		rst = utils.updateFile(sourceFile, content);
-		if (rst >= 0);
+		boolean isUpd = utils.updateFile(sourceFile, content);
+		log.info("sourceFile : {}", sourceFile);
+		if (isUpd);
 		else {
 			throw new Exception("File Update Failed");
 		}
-		log.debug("rst : {}", rst);
+		log.info("rst : {}", rst);
 		
 		rst = 1;
 		
 		return rst;
 	}
-
+	
 }
+

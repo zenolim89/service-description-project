@@ -40,6 +40,7 @@
     </style>
     <script>
         var domain;
+        var vendor;
         var templatePath;
 
         var param = location.hash.substr(1);
@@ -51,6 +52,8 @@
                 domain = p[1];
             } else if(p[0] == 'path') {
                 templatePath = p[1];
+            } else if(p[0] == 'vendor') {
+                vendor = p[1];
             }
         }
 
@@ -126,6 +129,11 @@
                 <fieldset>
                     <legend>서비스 사업장 명 입력</legend>
                     <input type="text" name="newVendorName" class="comText" placeholder="서비스 사업장 명을 입력 해주세요">
+                    <select class="comText">
+                        <option>규격을 선택해 주세요.</option>
+                        <option>오크밸리</option>
+                        <option>야놀자</option>
+                    </select>
                 </fieldset>
             </form>
         </div>
@@ -146,7 +154,7 @@
     <div class="popup_body created" style="display: none;">
         <p class="tit"><strong>“<span class="newVendorName">오크벨리</span>”</strong> 서비스 사업장 생성을 완료 하였습니다.</p>
         <div class="pbtns">
-            <button class="btn wfull btn_confirm btn_close">확인</button>
+            <button class="btn wfull btn_confirm btn_close" onclick="window.location='domain.html';">확인</button>
         </div>
     </div>
     <!-- 3단계 : 완료 끝 -->
@@ -181,12 +189,13 @@
         popup.find(".popup_body").css("display", "none");
         popup.find(".popup_body.creating").css("display", "block");
 
-        createVendor(newVendorName, templatePath, function(data) {
-            if(data.resCode == "200") {
+        createVendor(domain, newVendorName, templatePath, function(data) {
+            if(data.resCode == "200" || data.resCode == "201") {
                 // 생성 성공
                 popup.find(".popup_body").css("display", "none");
                 popup.find(".popup_body.created").css("display", "block");
             } else {
+                alert(data.resMsg);
                 // 생성 실패
                 popup.close();
             }
@@ -194,8 +203,7 @@
     }
 </script>
 
-
-
+</body>
 
 
 </html>

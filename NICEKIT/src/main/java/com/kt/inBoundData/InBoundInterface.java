@@ -691,6 +691,15 @@ public class InBoundInterface {
 		return mv;
 		// return new ModelAndView("index");
 	}
+	
+	@RequestMapping("/step3")
+	public ModelAndView step3() {
+
+		ModelAndView mv = new ModelAndView("/index/step3");
+
+		return mv;
+		// return new ModelAndView("index");
+	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	public @ResponseBody List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,

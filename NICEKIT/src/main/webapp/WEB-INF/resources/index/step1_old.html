@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>NICEKIT_step1</title>
+
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="nicekit/js/ie10-viewport-bug-workaround.js"></script>
+<!-- Custom styles for this template -->
+<link href="nicekit/css/dashboard.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<script>
+	//$(document).ready(function() { alert("로딩 완료555"); });
+	$(function() {
+		$("#tab2").click(function() {
+			$('#tab1li').attr('class','');
+			$('#tab2li').attr('class','active');
+			
+			$('#divTab1').hide();
+			$('#divTab2').show();
+		});
+		
+		$("#tab1").click(function() {
+			$('#tab2li').attr('class','');
+			$('#tab1li').attr('class','active');
+			
+			$('#divTab2').hide();
+			$('#divTab1').show();
+		});
+		$("#addItmBtn").click(function(){
+			
+			if( !($("#inputFormat").val().length > 0)){
+				
+				alert('규격명을 입력해주세요');
+				
+			}
+			else{
+				
+				alert('규격명을 입력하였습니다. 진행합니다.');
+				
+				$(location).attr('href', 'http://localhost:8080/NICEKIT/step2');
+			}
+		});
+		
+		$('#imgHotel').click(function(){
+			
+			alert('서비스 준비 중 입니다.');
+			
+		});
+		
+		$('#imgHospital').click(function(){
+			
+			alert('서비스 준비 중 입니다.');
+			
+		});
+		
+		$('#imgShop').click(function(){
+			
+			alert('서비스 준비 중 입니다.');
+			
+		});
+		
+	});
+</script>
+
+<body>
+
+	<h1 class="page-header">● 도메인 선택</h1>
+	<div class="row placeholders">
+		<div class="col-xs-6 col-sm-3 placeholder">
+			<img id="imgHotel" class="img-responsive" alt="200x200" src="nicekit/img/hotel.png"
+				data-holder-rendered="true" style="border-radius: 0%;">
+			<h4>호텔</h4>
+		</div>
+		<div class="col-xs-6 col-sm-3 placeholder">
+			<img id="imgResort" class="img-responsive" alt="200x200"
+				src="nicekit/img/resort.png" data-holder-rendered="true"
+				style="border-radius: 0%; border:5px solid gold;">
+			<h4>리조트</h4>
+		</div>
+		<div class="col-xs-6 col-sm-3 placeholder">
+			<img id="imgHospital" class="img-responsive" alt="200x200"
+				src="nicekit/img/hospital.png" data-holder-rendered="true"
+				style="border-radius: 0%;">
+			<h4>병원</h4>
+		</div>
+		<div class="col-xs-6 col-sm-3 placeholder">
+			<img id="imgShop" class="img-responsive" alt="200x200" src="nicekit/img/shop.png"
+				data-holder-rendered="true" style="border-radius: 0%;">
+			<h4>상점</h4>
+		</div>
+	</div>
+
+	<h2 class="sub-header">● 규격등록</h2>
+	<div style="padding: 10px">
+		<ul class="nav nav-tabs">
+
+			<li class="active" id="tab1li"><a data-toggle="tab" id="tab1">신규 규격 등록</a></li>
+
+			<li id="tab2li"><a data-toggle="tab" id="tab2">기존 규격 수정</a></li>
+
+		</ul>
+
+		<div class="tab-content" style="padding: 20px">
+
+			<div class="ab-pane active" id="divTab1">
+
+				<form class="navbar-form navbar-left" onsubmit="return false;">
+				<div class="form-group">
+				<input id="inputFormat" type="text" placeholder="규격입력" class="form-control" style="width:300px">
+				<button id="addItmBtn" class="btn btn-success">항목 추가</button>
+				</div>
+				</form>
+			</div>
+
+			<div class="tab-pane" id="divTab2">
+
+				<p>menu1 부분입니다.</p>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

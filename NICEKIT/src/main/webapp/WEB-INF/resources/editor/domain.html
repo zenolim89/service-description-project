@@ -1,0 +1,355 @@
+
+<!doctype html>
+<html lang="ko" class="ko">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ko"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=1240"/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <title>KT Giga Genie AI B2B</title>
+
+
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon"/>
+    <link type="text/css" rel="stylesheet" href="../assets/css/notosans_kr.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/css/jquery-ui-1.10.4.min.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="../assets/css/contents.css" />
+
+    <script type="text/javascript" src="../assets/vendor/jquery/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../assets/vendor/jquery/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="../assets/vendor/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../assets/vendor/jquery/jquery-bpopup/jquery.bpopup.min.js"></script>
+    <script type="text/javascript" src="../assets/vendor/jquery/jquery.placeholder.min.js"></script>
+    <script type="text/javascript" src="../assets/vendor/slick/slick.min.js"></script>
+    <script type="text/javascript" src="../assets/js/ui.js"></script>
+
+    <script src="../assets/js/api.js"></script>
+    <!--<script src="assets/js/editor.js"></script>-->
+    <!--<script src="assets/js/parser.js"></script>-->
+
+    <script>
+        $(document).ready(function () {
+            // 사업장 목록 모두 삭제
+            $(".service_list li").remove();
+
+            // 템플릿 모두 삭제
+            $(".templete_list li").remove();
+
+            // 도메인 목록 조회
+            getDomainList(function(domains) {
+                var firstBtn = null;
+                // 도메인 목록 추가
+                for(var i = 0; i < domains.length; i++) {
+                    var d = domains[i];
+                    var btn = $("button." + d);
+                    btn.attr("data-domain", d);
+                    if(firstBtn == null) {
+                        firstBtn = btn;
+                    }
+                    console.log(btn);
+                    btn.parent().css("display", "block");
+                }
+
+                // 도메인 목록 초기화
+                initDomain();
+
+                // 첫번째 도메인 선택
+                firstBtn.click();
+
+                // firstBtn.addClass("active");
+                // var domain = firstBtn.attr("data-domain");
+                // selectDomain(domain);
+            });
+        });
+
+        function initTemplateList() {
+            // $(".templete_list li a.btn_select").on("click", function(e){
+            //     e.preventDefault();
+            //     if($(this).parents("li").hasClass("active")){
+            //         $(this).parents("li").removeClass("active");
+            //     }
+            //     else
+            //     {
+            //         $(".templete_list li").removeClass("active");
+            //         $(this).parents("li").addClass("active");
+            //     }
+            //
+            // });
+        }
+
+        /**
+         * 사업장 목록에 클릭 이벤트 연결
+         */
+        function initVendorList() {
+            $(".service_list li button").on("click", function(e){
+                e.preventDefault();
+                $(".service_list li button").removeClass("active");
+                $(this).addClass("active");
+            });
+        }
+
+        /**
+         * 도메인 목록에 클릭이벤트 연결
+         */
+        function initDomain() {
+            // 도메인 클릭 이벤트 연결
+            $(".domain_tab li button").on("click", function(e){
+                e.preventDefault();
+                $(".domain_tab li button").removeClass("active");
+                $(".service_list li button").removeClass("active");
+                $(this).addClass("active");
+
+
+                // 해당 도메인 선택 작업
+                var domainName = $(this).attr("data-domain");
+                selectDomain(domainName);
+            });
+        }
+
+        /**
+         * 도메인 선택 작업
+         * @param domain
+         */
+        function selectDomain(domain) {
+            // 사업장 목록 모두 삭제
+            $(".service_list li").remove();
+
+            // 템플릿 모두 삭제
+            $(".templete_list li").remove();
+
+            $("button.domain").removeClass("active");
+            $("button.domain." + domain).addClass("active");
+
+            // 사업장 목록 조회
+            getVendorList(domain, function(vendorList) {
+                // if(vendorList.length == 0) {
+                //     vendorList.push("오크밸리");
+                // }
+                console.log(vendorList);
+                for(var i = 0; i < vendorList.length; i++) {
+                    var vendor = vendorList[i];
+
+                    var elem = $(
+                        "<li>\n" +
+                        "  <button type=\"menu\">\n" +
+                        "    <p class=\"name\">오크벨리</p>\n" +
+                        "  </button>\n" +
+                        "</li>");
+                    elem.find(".name").text(vendor);
+                    elem.find("button").attr("data-name", vendor);
+                    elem.find("button").attr("data-domain", domain);
+                    $(".service_list ul").append(elem);
+                }
+
+                // 사업장 목록 초기화
+                initVendorList();
+            });
+
+            // 템플릿 목록 조회
+            getTemplateList(domain, function(templateList) {
+                console.log(templateList);
+                for(var i = 0; i < templateList.length; i++) {
+                    var template = templateList[i];
+
+                    var elem = $(
+                        "<li>\n" +
+                        "  <div class=\"img\"><img src=\"../assets/images/sample/320x175_01.jpg\" alt=\" \"></div>\n" +
+                        "  <a href=\"#\" class=\"btn_select name\"><em>템플릿 선택</em></a>\n" +
+                        "  <a href=\"#\" class=\"btn_view\"><em>미리보기</em></a>\n" +
+                        "</li>");
+                    elem.find(".name em").text(template);
+                    elem.attr("data-name", template);
+                    elem.attr("data-domain", domain);
+                    elem.find("a.btn_view").attr("data-domain", domain);
+                    elem.find("a.btn_view").attr("data-template", template);
+                    elem.find("a.btn_view").click(function() {
+                        var domain = $(this).attr("data-domain");
+                        var template = $(this).attr("data-template");
+                        // 템플릿 미리보기 클릭
+                        getTemplateDetail(domain, template, function(path) {
+                            console.log(path);
+                            // 템플릿 프리뷰로 이동
+                            var previewPath = "preview.html#domain=" + domain + "&path=" + encodeURIComponent(path);
+                            console.log(previewPath);
+                            window.location = previewPath;
+                        });
+                    });
+                    $(".templete_list ul").append(elem);
+                }
+
+                // 템플릿 목록 초기화
+                initTemplateList();
+            });
+        }
+
+        /**
+         * 편집모드 진입
+         */
+        function edit() {
+            var sel = $(".service_list li button.active");
+            if(sel.length <= 0) {
+                alert("사업장을 선택해주세요.");
+                return;
+            }
+            var vendor = sel.attr("data-name");
+            var domain = sel.attr("data-domain");
+            // getVendorDetail(vendor);
+            getVendorDetail(domain, vendor, function(path) {
+                window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
+            });
+        }
+
+        /**
+         * 프리뷰 모드 진입
+         */
+        function preview() {
+            var sel = $(".service_list li button.active");
+            if(sel.length <= 0) {
+                alert("사업장을 선택해주세요.");
+                return;
+            }
+            var vendor = sel.attr("data-name");
+            var domain = sel.attr("data-domain");
+            getVendorDetail(domain, vendor, function(path) {
+                window.location = "preview.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
+            });
+        }
+    </script>
+</head>
+
+<body class="comBg page">
+
+<div id="skipToContent">
+    <a href="#header">대메뉴 바로가기</a>
+    <a href="#content">본문 바로가기</a>
+</div><!-- skipToContent -->
+
+<div class="wrap">
+
+    <div class="areas">
+
+        <div class="header" id="header">
+            <section class="title_section">
+                <article class="title_area">
+                    <h1 class="title"><a href="#"><img src="../assets/images/common/title.png" alt="What money"/></a></h1>
+                </article>
+            </section><!-- title_section -->
+
+            <section class="spot_section">
+                <div class="sec">
+                    <ul class="spot">
+                        <li><a href="#">Admin</a></li>
+                        <li><a href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </section><!-- spot_section -->
+        </div><!-- header -->
+
+        <div class="container">
+            <div class="content" id="content">
+                <section class="page_section">
+                    <article class="page_top">
+                        <div class="page_title"><!-- 배경 -->
+                            <div class="tsec">
+                                <h2 class="title">AI B2B 서비스 사업장 Dashboard</h2>
+                            </div>
+                        </div>
+                    </article><!-- sub_top -->
+                    <article class="sec_domain">
+                        <h3 class="domain_title">도메인 선택</h3>
+                        <ul class="domain_tab">
+                            <li style="display:none;">
+                                <button class="domain hotel" type="menu"><!-- 선택된 메뉴의 buttton에 active 클래스 추가 -->
+                                    <div class="icons">
+                                        <div class="img on"><img src="../assets/images/icons/icon_d_01_on.png" alt=""></div>
+                                        <div class="img off"><img src="../assets/images/icons/icon_d_01_off.png" alt=""></div>
+                                    </div>
+                                    <p class="tit">호텔</p>
+                                    <!--<p class="code">(H04321)</p>-->
+                                </button>
+                            </li>
+                            <li style="display:none;">
+                                <button class="domain resort" type="menu">
+                                    <div class="icons">
+                                        <div class="img on"><img src="../assets/images/icons/icon_d_02_on.png" alt=""></div>
+                                        <div class="img off"><img src="../assets/images/icons/icon_d_02_off.png" alt=""></div>
+                                    </div>
+                                    <p class="tit">리조트</p>
+                                    <!--<p class="code">(R873928)</p>-->
+                                </button>
+                            </li>
+                            <li style="display:none;">
+                                <button class="domain shop" type="menu">
+                                    <div class="icons">
+                                        <div class="img on"><img src="../assets/images/icons/icon_d_03_on.png" alt=""></div>
+                                        <div class="img off"><img src="../assets/images/icons/icon_d_03_off.png" alt=""></div>
+                                    </div>
+                                    <p class="tit">매장</p>
+                                    <!--<p class="code">(HP34522)</p>-->
+                                </button>
+                            </li>
+                        </ul>
+                    </article>
+                    <article class="sec">
+                        <p class="sec_title">템플릿선택</p>
+                        <div class="templete_list">
+                            <ul class="list">
+                                <li>
+                                    <div class="img"><img src="../assets/images/sample/320x175_01.jpg" alt=" "></div>
+                                    <a href="#" class="btn_select"><em>템플릿 선택</em></a>
+                                    <a href="#" class="btn_view"><em>미리보기</em></a>
+                                </li>
+                                <li>
+                                    <div class="img"><img src="../assets/images/sample/320x175_01.jpg" alt=" "></div>
+                                    <a href="#" class="btn_select"><em>템플릿 선택</em></a>
+                                    <a href="#" class="btn_view"><em>미리보기</em></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="sec">
+                        <div class="form form_search form_center">
+                            <form method="get" action="">
+                                <fieldset>
+                                    <legend>검색폼</legend>
+                                    <div class="site_search">
+                                        <label for="inp_search" class="mr7">서비스 계약 사업장</label>
+                                        <input class="txt_search mr2" type="text" name="" value="" placeholder="검색어를 입력하세요" title="검색어를 입력하세요" id="inp_search" />
+                                        <button type="submit" class="btn_search"><em>검색</em></button><!-- 활성화 Class : on -->
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="service_list">
+                            <ul class="clearfix">
+                                <li>
+                                    <button type="menu">
+                                        <p class="name">오크벨리</p>
+                                        <p class="code">(R23424353)</p>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="menu">
+                                        <p class="name">신라호텔 리조트</p>
+                                        <p class="code">(R23424352)</p>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div><!-- service_list -->
+                        <div class="cbtns">
+                            <a href="#" onclick="edit(); return false;" class="btn"><em>편집</em></a>
+                            <a href="#" onclick="preview(); return false;" class="btn"><em>미리보기(등록)</em></a>
+                        </div>
+                    </article>
+                </section>
+            </div><!-- content -->
+        </div><!-- container -->
+
+    </div><!-- areas -->
+</div><!-- wrap -->
+
+</body>
+</html>

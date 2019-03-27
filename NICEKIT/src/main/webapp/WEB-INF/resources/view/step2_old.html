@@ -1,0 +1,703 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<title>/nicekit_step2</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="/NICEKIT/nicekit/js/ie10-viewport-bug-workaround.js"></script>
+<!-- Custom styles for this template -->
+<link href="/NICEKIT/nicekit/css/dashboard.css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/NICEKIT/nbware/assets/css/popup.css" />
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/NICEKIT/nicekit/js/common/ChangeView.js" type="text/javascript"></script>
+<!--
+<script type="text/javascript" src="/NICEKIT/nicekit/js/common/ServerRequest.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/NICEKIT/nbware/js/xlsx/xlsx.full.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/assets/js/monaco-editor/vs/loader.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Configuration.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Utils.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/Connection.js" charset="utf-8"></script>
+<script type="text/javascript" src="/NICEKIT/nbware/js/ExcelParser.js" charset="utf-8"></script> 
+ -->
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<script>
+var localhost = "";
+	//var localhost = "http://127.0.0.1:8080/NICEKIT";
+	//var host = "http://222.107.124.9:8080/NICEKIT";
+
+	//$(document).ready(function() { alert("로딩 완료555"); });
+
+	$(document).ready(function() {
+
+		$.ajax({
+			url : './getIntentList' // 요청 할 주소
+			,
+			async : true // false 일 경우 동기 요청으로 변경
+			,
+			type : 'GET' // GET, PUT
+			,
+			dataType : 'text' // xml, json, script, html
+			,
+			beforeSend : function(jqXHR) {
+			} // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단
+			,
+			success : function(response) {
+
+				//var tempJson = '{"intentList": ["문의사항 (HotelHelp)","어메니티 신청 (HotelAmenityItem)","정보화면 보기 (HotelViewPage)","주변정보 (HotelTourInfo)","웹캠화면 보기 (HotelWebCam)","체크아웃 (HotelCheckout)"]}';
+
+				var obj = JSON.parse(response);
+
+				var intentList = obj.intentList;
+
+				for (var i = 0; i < intentList.length; i++) {
+
+					var option = $("<option>" + intentList[i] + "</option>");
+
+					$('#selectIntent').append(option);
+				}
+			} // 요청 완료 시
+			,
+			error : function(jqXHR) {
+			} // 요청 실패.
+			,
+			complete : function(jqXHR) {
+
+			} // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+		});
+
+		//chgword("HotelAmenityItem");
+
+	});
+
+	function chgword(intent) {
+
+		var requestJson = new Object();
+
+		requestJson.domainName = intent;
+
+		var jsonData = JSON.stringify(requestJson);
+
+		//alert(jsonData);
+
+		$.ajax({
+					url : './getDictionary' // 요청 할 주소
+					,
+					async : true // false 일 경우 동기 요청으로 변경
+					,
+					type : 'POST' // GET, PUT
+					,
+					data : jsonData,
+					dataType : 'JSON' // xml, json, script, html
+					,
+					contentType : 'application/json;charset=UTF-8',
+					headers : {
+						"Content-Type" : "application/json"
+					},
+					beforeSend : function(jqXHR) {
+					} // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단
+					,
+					success : function(response) {
+
+						$('#formDic').empty();
+						$('#formWord').empty();
+						
+						//alert(response);
+						
+						//var obj = $.parseJSON(response);
+
+						var dicList1 = response.dicList;
+						
+						var wordList1 = dicList1[0].wordList;
+
+						var dicName1 = dicList1[0].dicName;
+
+						//alert(wordList1);
+						$('#formDic').append("<input readonly='true' id='inputDicName' class='form-control'  value=" +dicName1+">");
+						for (var i = 0; i < wordList1.length ; i++) {
+
+							var option = $(' <label class="checkbox-inline"><input type="checkbox" name="check" value="'+wordList1[ i ]+'"> <span class="label-text">'
+									+ wordList1[i] + '</span></label>');
+
+							$('#formWord').append(option);
+						}
+					} // 요청 완료 시
+					,
+					error : function(jqXHR) {
+
+					} // 요청 실패.
+					,
+					complete : function(jqXHR) {
+
+						/*
+						var tempJson = '{"intentList": ["문의사항 (HotelHelp)","어메니티 신청 (HotelAmenityItem)","정보화면 보기 (HotelViewPage)","주변정보 (HotelTourInfo)","웹캠화면 보기 (HotelWebCam)","체크아웃 (HotelCheckout)"]}';
+
+						var obj = JSON.parse(tempJson);
+
+						var intentList = obj.intentList;
+
+						for (var i = 0; i < intentList.length; i++) {
+
+							var option = $('<div class="form-check"> <label> <input type="checkbox" name="check" value="'+ i +'"> <span class="label-text">'
+									+ intentList[i] + '</span></label></div>');
+
+							$('#formWord').append(option);
+						}
+						*/
+					} // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+				});
+
+	}
+	
+	function tableReorder(){
+		
+		$('#tableServiceBody').each(function(){
+			
+			var tr = $(this).children();
+			var row = 0;
+
+			tr.each(function(j){
+				
+				var td = $(this).children();
+				td.eq(0).text(j+1);
+				
+			});
+				
+		});
+	}
+
+	function setReqDataforXls(){
+		var reqData = new Object();
+		var svcList = new Array();
+
+		reqData["domainId"]= "RSRT001";
+		reqData[ "domainName"]= "resort";
+		reqData["specName"]= "오크밸리";
+		   
+		$('#tableServiceBody').each(function(){
+			
+			var tr = $(this).children();
+			tr.each(function(){
+				var svcObj = new Object();
+				var td = $(this).children();
+				svcObj["serviceName"] = td.eq(1).text();
+				svcObj["invokeType"] = td.eq(2).text();
+				svcObj["serviceType"] = td.eq(3).text();
+				svcObj["serviceLink"] = "resources/template/serviceName.html";
+				svcObj["serviceDesc"] = td.eq(4).text();
+				svcObj["serviceCode"] = td.eq(5).text();				
+				
+				var wordList = new Array();
+				var wordSplit = td.eq(8).text().split(',');
+			    for ( var i in wordSplit ) 
+						wordList.push(wordSplit[i]);
+
+				var dicObj = new Object();
+				dicObj["dicName"] = td.eq(7).text();
+				dicObj["wordList"] = wordList;
+				var dicList = new Array();
+				dicList.push(dicObj);
+				var intentObj = new Object();
+				intentObj["id"] = td.eq(6).text();
+				intentObj["dicList"] = dicList;
+
+				var intentInfo = new Array();
+				intentInfo.push(intentObj);
+				svcObj["intentInfo"] = intentInfo;				
+				svcList.push(svcObj);
+			});
+		});
+		reqData["svcList"]= svcList;
+		console.log(JSON.stringify(reqData));
+		return JSON.stringify(reqData);
+	}
+	
+	function rgtStart(obj){
+		
+		alert('등록을 진행합니다.');
+		
+		$(obj).attr('src', '/NICEKIT/nicekit/img/check_yes.png');
+	}
+	
+	function testStart(obj){
+		
+		alert('테스트를 진행합니다.');
+		
+		$(obj).attr('src', '/NICEKIT/nicekit/img/check_yes.png');
+	}
+	
+	function deleteRow(obj){
+		
+		if( confirm("해당 서비스규격을 삭제하시겠습니까 ?") > 0){
+			$(obj).parent().parent().remove();
+			
+			tableReorder();
+		}
+	}
+	
+	function rgtClear(){
+		
+		$('#inputServiceName').val('');
+		$('#selectInvokeType option:eq(0)').prop("selected",true);
+		$('#selectServiceType option:eq(0)').prop("selected",true);
+		$('#intputServiceDesc').val('');
+		$('#selectIntent option:eq(0)').prop("selected",true);
+		
+		//$("#selectServiceType option:selected").val('');
+		//$("#selectIntent option:selected").val('');
+		
+		$('input[name=check]:checked').each(function(){
+			$(this).prop("checked", false);
+		});
+		$('#formDic').empty();
+		$('#formWord').empty();
+		
+	}
+
+	$(function() {
+		$("#tab2").click(function() {
+
+			alert('서비스 준비 중 입니다.');
+		});
+
+		$("#addItmBtn").click(function() {
+
+			var serviceName = $('#inputServiceName').val();
+			var invokeType =  $("#selectInvokeType option:selected").val();
+			var serviceType =  $("#selectServiceType option:selected").val();
+			var serviceLink = "resources/template/serviceName.html";
+			var serviceDesc = $('#intputServiceDesc').val();
+			var serviceCode = Math.floor(Math.random()*(999999-100000+1)) + 100000;
+			
+			var intentName = $("#selectIntent option:selected").val();
+			var dicName = $('#inputDicName').val();
+			
+			var wordList = new Array();
+			var v = 0;
+			
+			$('input[name=check]:checked').each(function(){
+				wordList[v++] = $(this).val();
+			});
+
+			console.log('serviceName : ' + serviceName);
+			console.log('invokeType :' + invokeType);
+			console.log('serviceType : ' + serviceType);
+			console.log('serviceLink :' + serviceLink);
+			console.log('serviceDesc :' + serviceDesc);
+			console.log('serviceCode :' + serviceCode);
+			console.log('intentName : ' + intentName);
+			console.log('dicName : ' + dicName);
+			console.log('wordList : ' + wordList);
+			
+			if( !(serviceName.length > 0)){
+				
+				alert('서비스 명을 입력해주세요.');
+			}
+			else if( !(serviceDesc.length > 0)){
+				
+				alert('서비스 개요를 입력해주세요.');
+			}
+
+			else if(!(serviceType.length > 0)){
+				
+				alert('서비스 타입을 선택해주세요.');
+			}
+			else if(!(invokeType.length > 0)){
+			
+				alert('인보크 타입을 선택해주세요.');
+			}
+			else if(!(intentName.length > 0)){
+				
+				alert('인텐트 명을 선택해주세요.');
+			}
+			else if(!(wordList.length > 0)){
+				
+				alert('어휘를 1개 이상 선택 해주세요.');
+			}
+			else{
+				
+				var itm = '';
+				itm += "<tr>";
+				itm += '<td column="seq" style="text-align: center; vertical-align: middle;">';
+				itm += 0;
+				itm += '</td>';
+				
+				itm += '<td column="serviceName" style="text-align: center; vertical-align: middle;">';
+				itm += serviceName;
+				itm += '</td>';
+
+				itm += '<td column="invokeType" style="text-align: center; vertical-align: middle;">';
+				itm += invokeType;
+				itm += '</td>';
+				
+				itm += '<td column="serviceType" style="text-align: center; vertical-align: middle;">';
+				itm += serviceType;
+				itm += '</td>';
+
+				itm += '<td column="serviceDesc" style="text-align: center; vertical-align: middle; font: 10px;">';
+				itm += serviceDesc;
+				itm += '</td>';
+				
+				itm += '<td column="serviceCode" style="text-align: center; vertical-align: middle; font: 10px;">';
+				itm += serviceCode;
+				itm += '</td>';
+
+				itm += '<td column="intentName" style="text-align: center; vertical-align: middle; font: 10px;">';
+				itm += intentName;
+				itm += '</td>';
+
+				itm += '<td column="dicName" style="text-align: center; vertical-align: middle; font: 10px;">';
+				itm += dicName;
+				itm += '</td>';
+
+				itm += '<td column="wordList" style="text-align: center; vertical-align: middle; font: 10px;">';
+				itm += wordList;
+				itm += '</td>';
+				
+				itm += '<td column="serviceRgt" style="text-align: center; vertical-align: middle;"><img id="rgtIcon" src="/NICEKIT/nicekit/img/check_no.png" onclick="rgtStart(this);">';
+				itm += '</td>';
+				
+				itm += '<td column="serviceTest" style="text-align: center; vertical-align: middle;"><img id="testIcon" src="/NICEKIT/nicekit/img/check_no.png" onclick="testStart(this);">';
+				itm += '</td>';
+				itm += '</td>';
+				
+				itm += '<td column="serviceDel" style="text-align: center; vertical-align: middle;"><img id="delIcon" src="/NICEKIT/nicekit/img/delete.png" onclick="deleteRow(this);">';
+				itm += '</td>';
+
+				$('#tableServiceBody').append(itm);
+				
+				tableReorder();
+				rgtClear();
+			}
+		});
+		
+		$('#buttonRgt').click(function(){
+			
+			//$('#inputUpload').click();
+			
+			//$('#formUpload').attr('action', 'http://localhost:8080/fileUpload');
+			//$('#formUpload').submit();
+			
+			var form = $('#formUpload')[0];
+			var formData = new FormData(form);
+            console.log( "파일경로 : " + form.uploadFile.value);
+            
+            if(form.uploadFile.value == ""){
+            	alert('파일을 선택해 주세요.');
+            	return false;
+            }
+            
+            formData.append('domainName', 'resort');
+            formData.append('domainId', 'resort0001');
+            formData.append('specName', '오크밸리');
+            
+            $('#tableServiceBody').empty();
+            
+            $.ajax({
+                  url: './fileUpload',
+                          processData: false,
+                          contentType: false,
+                          data: formData,
+                          type: 'POST',
+                          success: function(data){
+                        	  
+                        	  
+                        	  
+                        	  $.each(data, function( index, value ) {
+			                         console.log( index + " : " + data[index].serviceName );
+			                         console.log( index + " : " + data[index].isRegistered );
+			                         
+			         				var itm = '';
+			        				itm += "<tr>";
+			        				itm += '<td column="seq" style="text-align: center; vertical-align: middle;">';
+			        				itm += index + 1;
+			        				itm += '</td>';
+			        				
+			        				itm += '<td column="serviceName" style="text-align: center; vertical-align: middle;">';
+			        				itm += data[index].serviceName;
+			        				itm += '</td>';
+
+			        				itm += '<td column="invokeType" style="text-align: center; vertical-align: middle;">';
+			        				itm +=  data[index].invokeType;
+			        				itm += '</td>';
+			        				
+			        				itm += '<td column="serviceType" style="text-align: center; vertical-align: middle;">';
+			        				itm += data[index].serviceType;
+			        				itm += '</td>';
+
+			        				itm += '<td column="serviceDesc" style="text-align: center; vertical-align: middle; font: 10px;">';
+			        				itm += data[index].serviceDesc;
+			        				itm += '</td>';
+			        				
+			        				itm += '<td column="serviceCode" style="text-align: center; vertical-align: middle; font: 10px;">';
+			        				itm += data[index].serviceCode ;
+			        				itm += '</td>';
+
+			        				itm += '<td column="intentName" style="text-align: center; vertical-align: middle; font: 10px;">';
+			        				if(data[index].intentName == null) itm += "-" ;
+			        				else itm += data[index].intentName ;
+			        				itm += '</td>';
+
+			        				itm += '<td column="dicName" style="text-align: center; vertical-align: middle; font: 10px;">';
+			        				if(data[index].dicNameList == null) itm += "-" ;
+			        				else itm += data[index].dicNameList ;
+			        				itm += '</td>';
+
+			        				itm += '<td column="wordList" style="text-align: center; vertical-align: middle; font: 10px;">';
+			        				if(data[index].wordList == null) itm += "-" ;
+			        				else itm += data[index].wordList ;
+			        				itm += '</td>';
+			        				
+			        				if(data[index].isRegistered) itm += '<td column="serviceRgt" style="text-align: center; vertical-align: middle;"><img id="rgtIcon" src="/NICEKIT/nicekit/img/check_yes.png" onclick="rgtStart(this);">';
+			        				else itm += '<td column="serviceRgt" style="text-align: center; vertical-align: middle;"><img id="rgtIcon" src="/NICEKIT/nicekit/img/check_no.png" onclick="rgtStart(this);">';
+			        				itm += '</td>';
+			        				
+			        				itm += '<td column="serviceTest" style="text-align: center; vertical-align: middle;"><img id="testIcon" src="/NICEKIT/nicekit/img/check_no.png" onclick="testStart(this);">';
+			        				itm += '</td>';
+			        				itm += '</td>';
+			        				
+			        				itm += '<td column="serviceDel" style="text-align: center; vertical-align: middle;"><img id="delIcon" src="/NICEKIT/nicekit/img/delete.png" onclick="deleteRow(this);">';
+			        				itm += '</td>';
+
+			        				$('#tableServiceBody').append(itm);
+			            		 });
+                          }
+                  });			
+			//tableReorder();
+		});
+
+		$('#selectIntent').change(function(){
+			
+			//chgword("HotelAmenityItem");
+			//alert($(this).val());
+			
+			var name = $(this).val();
+			
+			var nameStart = name.split('(');
+			var nameEnd = nameStart[1].split(')');
+			
+			chgword(nameEnd[0]);
+			
+		});
+		
+		$('#buttonIntentRgt').click(function(){
+		});
+		
+		$('#buttonDownload').click(function(){
+	
+			var jsonData = setReqDataforXls();
+			
+			$.ajax({
+				url : './xlsxDown' // 요청 할 주소
+				,
+				async : true // false 일 경우 동기 요청으로 변경
+				,
+				type : 'POST' // GET, PUT
+				,
+				data : jsonData,
+				dataType : 'JSON' // xml, json, script, html
+				,
+				contentType : 'application/json;charset=UTF-8',
+				headers : {
+					"Content-Type" : "application/json"
+				},
+				beforeSend : function(jqXHR) {
+				} // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단
+				,
+				success : function(response) {
+					console.log(response);
+					var resData = response.resData;
+					console.log(resData);
+				
+					var urlPath = resData.urlPath;
+
+					window.open("./"+urlPath, '_blank');  		
+				} // 요청 완료 시
+				,
+				error : function(jqXHR) {
+
+				} // 요청 실패.
+				,
+				complete : function(jqXHR) {
+				} // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+		});
+	});
+</script>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">KT AI B2B Service</a>
+			</div>
+		</div>
+	</nav>
+	<!-- 본문영역 -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+					<li class="active"><a href="#">오크밸리 규격 <span class="sr-only">(current)</span></a></li>
+				</ul>
+				<ul class="nav nav_sidebar" style="position: absolute; bottom: 20px">
+					<button id="buttonIntentRgt" class="btn btn-lg btn-primary btn-block" onclick="popup('resources/index/sheet.html',800,500,'팝업','scroll'); return false;">인텐트/어휘 등록</button>
+				</ul>
+			</div>
+		</div>
+		<!-- 대쉬보드 영역 -->
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+			<!-- 임시 START  -->
+<!-- 			<div style="padding: 10px">
+				<ul class="nav nav-tabs">
+					<li class="active" id="tab1li"><a data-toggle="tab" id="tab1">서비스 등록</a></li>
+					<li id="tab2li"><a data-toggle="tab" id="tab2">서비스 관리</a></li>
+				</ul>
+				<div class="tab-content" style="padding: 20px">
+					<div class="ab-pane active" id="tab1">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td class="col-xs-6 col-sm-2">서비스 명</td>
+										<td class="col-xs-6 col-sm-4"><input id="inputServiceName" class="form-control" placeholder="서비스 명"></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">인보크 타입</td>
+										invokeType key값
+										<td class="col-xs-6 col-sm-4"><select id="selectInvokeType" class="form-control">
+												<option value="" selected disabled>인보크 타입 선택</option>
+												<option value="system">시스템간 연동(초기 설정)</option>
+												<option value="voice">서비스 연동(발화)</option>
+												<option value="touch">서비스 연동(터치)</option>
+												<option value="remocon">서비스 연동(리모컨)</option>
+										</select></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">서비스 타입</td>
+										invokeType key값
+										<td class="col-xs-6 col-sm-4"><select id="selectServiceType" class="form-control">
+												<option value="" selected disabled>서비스 타입 선택</option>
+												<option value="CheckSvcWithPage">조회성 서비스(페이지 전환)</option>
+												<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
+												<option value="ControlSvcWithPage">제어성 서비스(페이지 전환)</option>
+												<option value="ControlSvcWithPopup">제어성 서비스(팝업 표출)</option>
+												<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
+												<option value="InitSvcWithBackground">초기설정(백그라운드)</option>
+										</select></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">서비스 개요</td>
+										<td class="col-xs-6 col-sm-4"><input id="intputServiceDesc" class="form-control" placeholder="서비스 개요"></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">서비스 코드</td>
+										<td class="col-xs-6 col-sm-4"><input readonly="true" id="inputServiceCode" class="form-control" placeholder="서비스 코드 자동 생성"></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">인텐트 명</td>
+										<td class="col-xs-6 col-sm-4"><select id='selectIntent' class="form-control">
+												<option value="" selected disabled>인텐트 선택</option>
+										</select>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">사전명</td>
+										<td class="col-xs-6 col-sm-4" id="formDic"></td>
+									</tr>
+									<tr>
+										<td class="col-xs-6 col-sm-2">어휘 선택</td>
+										<td class="col-xs-6 col-sm-4">
+											<div class="checkbox">
+												<form id="formWord"></form>
+											</div>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<!-- 임시 END  -->
+			
+
+			<!-- <button id="addItmBtn" class="btn btn-success" style="margin-right: 10px; float: right">항목 추가</button> -->
+		</div>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h2 class="sub-header">서비스 명세 리스트</h2>
+			<button class='btn btn-primary' id='buttonRgt' style="float: right; margin-left: 15px;">규격 등록</button>
+			<button id='buttonDownload' class='btn btn-success' style="float: right">양식 다운</button> 
+			<form id="formUpload" name="frm" class="form-inline" enctype="multipart/form-data" style="width: 500px;" method="post">
+				<input id='inputUpload' type="file" name="uploadFile" class="custom-file-input">
+			</form>
+			
+			
+			
+			<div style="padding: 10px">
+				<div class="table-responsive">
+					<table id="tableService" class="table table-condensed">
+						<thead>
+							<tr>
+								<td style="text-align: center; font-weight: bold; font: 10px;">구분</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">서비스명</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">인보크 타입</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">서비스 타입</td>
+								<!-- 								<td style="text-align: center">서비스 링크</td> -->
+								<td style="text-align: center; font-weight: bold; font: 10px;">서비스개요</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">서비스 코드</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">인텐트 명</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">사전 명</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">어휘</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">규격등록</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">테스트</td>
+								<td style="text-align: center; font-weight: bold; font: 10px;">삭제</td>
+							</tr>
+						</thead>
+						<tbody id='tableServiceBody'>
+							<!-- 
+							<tr>
+								<td column='seq' style="text-align: center; vertical-align: middle;">1</td>
+								<td column='serviceCode' style="text-align: center; vertical-align: middle;">서비스
+									코드</td>
+								<td column='serviceName' style="text-align: center; vertical-align: middle;">서비스명</td>
+								<td column='serviceInfo' style="text-align: center; vertical-align: middle;">서비스개요</td>
+								<td column='serviceType' style="text-align: center; vertical-align: middle;">연동
+									타입</td>
+								<td column='serviceRgt' style="text-align: center; vertical-align: middle;"><img
+									src="/nicekit/img/check_no.png"></td>
+								<td column='serviceTest' style="text-align: center; vertical-align: middle;"><img
+									src="/nicekit/img/check_yes.png"></td>
+								<td column='serviceDel' style="text-align: center; vertical-align: middle;"><img
+									src="/nicekit/img/delete.png"></td>
+							</tr>
+							 -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

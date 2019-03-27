@@ -6,58 +6,13 @@
   <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
   <script src="common/js/jq-lastest.js"></script>
   <script src="common/js/swiper.js"></script>
-  <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
 </head>
 <body>
-<script>
-	//$(document).ready(function() { alert("로딩 완료555"); });
-
-	$(function() {
-		
-		var array = new Array();
-		
-		array[0] = '객실용품';
-		array[1] = '욕실용품';
-		//array[2] = '린넨용품';
-		array[3] = '침구류';
-		array[4] = '침구류2';
-		
-		
-		$("[name='icon']").each(function(index, item) {
-
-			
-			var i = 0;
-			
-			for( var i = 0 ; i < array.length ; i++){
-				
-				var targetId = new String($(this).attr('id'));
-				
-				if( (array[i] == targetId)){
-					break;
-				}
-				
-			}
-			
-			if( i == array.length){
-			
-				console.log($(this).attr('id'));
-				//console.log($(this).children().attr('id'));
-				$(this).remove();
-				
-			}
-
-			
-			//console.log($(this).attr('id'));
-		});
-
-	});
-	
-</script>
 
 <div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
   <section id="contents">
-    <h1 class="type-txt" >객실용품</h1>
+    <h1 class="type-txt">객실용품</h1>
 	<p class="desc-title">필요하신 사항을 선택해주세요.</p>
     <div class="weather-api">
       <i class="icon"><img src="common/images/ic_weather_type01.png" alt=""></i>
@@ -74,7 +29,7 @@
 		<div class="swiper-container">
 			<div class="swiper-wrapper">
 				<!-- Slides -->
-				<!-- <div class="swiper-slide" id="객실용품" name="icon">
+				<div class="swiper-slide">
 					<a href="#">
 						<i class="icon">
 							<img src="common/images/ic_ame01.png" alt="">
@@ -83,7 +38,7 @@
 						객실용품
 					</a>
 				</div>
-				<div class="swiper-slide" id="욕실용품" name="icon">
+				<div class="swiper-slide">
 					<a href="#">
 						<i class="icon">
 							<img src="common/images/ic_ame02.png" alt="">
@@ -92,7 +47,7 @@
 						욕실용품
 					</a>
 				</div>
-				<div class="swiper-slide" id="린넨용품" name="icon">
+				<div class="swiper-slide">
 					<a href="#">
 						<i class="icon">
 							<img src="common/images/ic_ame03.png" alt="">
@@ -100,8 +55,8 @@
 						</i>
 						린넨용품
 					</a>
-				</div> -->
-				<div class="swiper-slide" id="침구류" name="icon">
+				</div>
+				<div class="swiper-slide">
 					<a href="#">
 						<i class="icon">
 							<img src="common/images/ic_ame04.png" alt="">

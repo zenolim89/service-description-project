@@ -1,9 +1,11 @@
 package com.kt.dataManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.datastax.driver.core.Row;
+import com.kt.dataConverter.HtmlConverter;
 import com.kt.dataDao.SelectDataTo;
 
 public class UITemplateController {
@@ -149,6 +152,8 @@ public class UITemplateController {
 	
 	public void copyTemplate(File sourceFile, File targetFile) {
 		
+		HtmlConverter htmlConverter = new HtmlConverter();
+		
 		File[] fileList = sourceFile.listFiles();
 		
 		for (File file : fileList ) {
@@ -163,11 +168,19 @@ public class UITemplateController {
 								
 			} else {
 				
+				//주석대상 1)
 				FileInputStream fileIn = null;
+				//InputStream fileIn = null;
+				
 				FileOutputStream fileOut = null;
 				
 				try {
 					
+					//DB처리 이후에 해당 리스트 이곳에 대입
+					//처리 후 주석대상 1), 2), 3) 번 주석처리 필요
+					//fileIn = new ByteArrayInputStream(htmlConverter.removeItm(file, "UTF-8", _selectorMap, _itmMap),"UTF-8");
+					
+					//주석대상 2)
 					fileIn = new FileInputStream(file);
 					fileOut = new FileOutputStream(temp);
 					
@@ -188,6 +201,7 @@ public class UITemplateController {
 					
 					try {
 						
+						//주석대상 3)
 						fileIn.close();
 						fileOut.close();
 						

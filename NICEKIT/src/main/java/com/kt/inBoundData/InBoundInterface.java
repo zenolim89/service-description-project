@@ -516,7 +516,7 @@ public class InBoundInterface {
 	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
 		
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		String filePath = "/WEB-INF/resources/download";
+		String filePath = "/resources/download";
 		String realPath = request.getSession().getServletContext().getRealPath(filePath);
 		String bf = null;
 		String response = "";
@@ -668,7 +668,7 @@ public class InBoundInterface {
 	@RequestMapping("/login")
 	public ModelAndView login() {
 
-		ModelAndView mv = new ModelAndView("/view/login");
+		ModelAndView mv = new ModelAndView("/index/login");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -677,7 +677,7 @@ public class InBoundInterface {
 	@RequestMapping("/step1")
 	public ModelAndView step1() {
 
-		ModelAndView mv = new ModelAndView("/view/step1");
+		ModelAndView mv = new ModelAndView("/index/step1");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -686,35 +686,7 @@ public class InBoundInterface {
 	@RequestMapping("/step2")
 	public ModelAndView step2() {
 
-		ModelAndView mv = new ModelAndView("/view/step2");
-
-		return mv;
-		// return new ModelAndView("index");
-	}
-	
-	@RequestMapping("/step3")
-	public ModelAndView step3() {
-
-		ModelAndView mv = new ModelAndView("/view/step3");
-
-		return mv;
-		// return new ModelAndView("index");
-	}
-	
-	
-	@RequestMapping("/editor/login")
-	public ModelAndView editorLogin() {
-
-		ModelAndView mv = new ModelAndView("/editor/login");
-
-		return mv;
-		// return new ModelAndView("index");
-	}
-	
-	@RequestMapping("/editor/reqLogin")
-	public ModelAndView reqLogin() {
-
-		ModelAndView mv = new ModelAndView("/editor/domain");
+		ModelAndView mv = new ModelAndView("/index/step2");
 
 		return mv;
 		// return new ModelAndView("index");

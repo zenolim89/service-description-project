@@ -44,10 +44,6 @@
 		location="/WEB-INF/resources/template/common/" cache-period="0" />
 	<mvc:resources mapping="/resources/**"
 		location="/WEB-INF/resources/" cache-period="0" />
-	<mvc:resources mapping="/assets/**"
-		location="/WEB-INF/resources/assets/" cache-period="0" />
-	<mvc:resources mapping="/editor/**"
-		location="/WEB-INF/resources/editor/" cache-period="0" />	
 	<!--NBWare Add -->
 	<import
 		resource="classpath:/configuration/spring-tool-config.xml" />

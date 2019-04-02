@@ -1,4 +1,3 @@
-
 package com.kt.tool.web.util;
 
 import java.io.BufferedReader;
@@ -9,9 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import org.slf4j.Logger;
@@ -99,19 +96,6 @@ public class Utils {
 	
 	public boolean isNotEmpty(Object s) {
 		return !isEmpty(s);
-	}
-	
-	/**
-	 * 
-	 * @param pattern
-	 * @return
-	 */
-	public String getCurrTime(String pattern) {
-		
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat dateHeader = new SimpleDateFormat(pattern);
-
-		return dateHeader.format(cal.getTime());
 	}
 	
 	/**
@@ -563,13 +547,6 @@ public class Utils {
 			finally {
 				try {
 					if (null != fis) fis.close();
-				}
-				catch (Exception e) {
-					e.getStackTrace();
-					log.error("{}", e);
-				}
-				
-				try {
 					if (null != fos) fos.close();
 				}
 				catch (Exception e) {
@@ -589,12 +566,12 @@ public class Utils {
 	 * @param text
 	 * @return
 	 */
-	public boolean updateFile(String filePath, String text) {
-		boolean rst = false;
+	public int updateFile(String filePath, String text) {
+		int rst = 0;
 		
 		if (!StringUtils.isEmpty(filePath) && !StringUtils.isEmpty(text));
 		else {
-			rst = false;
+			rst = -1;
 			return rst;
 		}
 		
@@ -602,7 +579,7 @@ public class Utils {
 		try {
 			File file = new File(filePath);
 			if (!file.exists()) {
-				rst = false;
+				rst = -1;
 				return rst;
 			}
 			
@@ -610,12 +587,12 @@ public class Utils {
 			bw.write(text);
 			bw.close();
 			
-			rst = true;
+			rst = 1;
 		}
 		catch (Exception ex) {
 			ex.getStackTrace();
 			log.error("{}", ex);
-			rst = false;
+			rst = -1;
 		}
 		finally {
 			if (null != bw) {
@@ -633,4 +610,3 @@ public class Utils {
 	}
 	
 }
-

@@ -1,0 +1,150 @@
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>REGISTER - STEP1</title>
+
+    <link type="text/css" rel="stylesheet" href="./assets/css/notosans_kr.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/jquery-ui-1.10.4.min.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/contents.css" />
+
+    <script type="text/javascript" src="./assets/vendor/jquery/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./assets/vendor/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./assets/vendor/jquery/jquery.placeholder.min.js"></script>
+	<script type="text/javascript" src="./assets/js/common/ui.js"></script>
+	<script src="./assets/js/register/step1.js"></script>
+</head>
+
+<body class="comBg page">
+	<div class="wrap">
+	    <div class="areas">
+			<div class="header" id="header">
+            	<section class="title_section">
+                	<article class="title_area">
+                    	<h1 class="title"><a href="#"><img src="./assets/images/common/title.png" alt="What money"/></a></h1>
+                	</article>
+            	</section><!-- title_section -->
+				<section class="spot_section">
+                	<div class="sec">
+                    	<ul class="spot">
+                        	<li><a href="login.html">Logout</a></li>
+                    	</ul>
+                	</div>
+            	</section><!-- spot_section -->
+        	</div><!-- header -->
+        	
+        	 <div class="container">
+        	 	<div class="content" id="content">
+        	 		<section class="page_section">
+        	 			<article class="page_top">
+	        	 			<div class="page_title"><!-- 배경 -->
+	                            <div class="tsec">
+	                                <h2 class="title">AI B2B 서비스 사업장 등록</h2>
+	                            </div>
+	                        </div>
+        	 			</article><!-- page_top -->
+        	 			<article class="sec_domain">
+        	 				<h3 class="domain_title">도메인 선택</h3>
+        	 				<ul class="domain_tab">
+        	 					<li>
+                                	<button class="domain resort" type="menu">
+                                    	<div class="icons">
+                                        	<div class="img on"><img src="./assets/images/icons/icon_d_02_on.png" alt=""></div>
+                                         	<div class="img off"><img src="assets/images/icons/icon_d_02_off.png" alt=""></div>
+	                                   	</div>
+                                    	<p class="tit">리조트</p>
+									</button>
+                            	</li>
+        	 					<li>
+        	 						<button class="domain hotel" type="menu"><!-- 선택된 메뉴의 buttton에 active 클래스 추가 -->
+                                    	<div class="icons">
+                                        	<div class="img on"><img src="./assets/images/icons/icon_d_01_on.png" alt=""></div>
+                                         	<div class="img off"><img src="./assets/images/icons/icon_d_01_off.png" alt=""></div>
+                                    	</div>
+                                    	<p class="tit">호텔</p>
+                                	</button>
+        	 					</li>
+                            	<li>
+                                	<button class="domain shop" type="menu">
+                                    	<div class="icons">
+                                        	<div class="img on"><img src="./assets/images/icons/icon_d_03_on.png" alt=""></div>
+	                                         	<div class="img off"><img src="assets/images/icons/icon_d_03_off.png" alt=""></div>
+ 		                                   	</div>
+                                    	<p class="tit">매장</p>
+                                	</button>
+                            	</li>
+        	 				</ul>
+        	 			</article><!-- sec_domain -->
+        	 			<article class="sec">
+	        	 			<div class="form form_search form_center" style="padding-top: 75px;">
+	                            <form method="get" onsubmit="return false;">
+	                                <fieldset>
+	                                    <legend>검색폼</legend>
+	                                    <div class="site_search">
+	                                        <label for="inputFormat" class="mr7">신규 규격 등록</label>
+	                                        <input class="txt_search mr2" type="text" name="" value="" placeholder="규격입력" title="규격입력" id="inputFormat" />
+	                                        <button id="addItmBtn" class="btn_search"><em>항목 추가</em></button>
+	                                    </div>
+	                                </fieldset>
+	                            </form>
+	                        </div>
+        	 			</article><!-- sec -->
+        	 		</section>
+        	 	</div><!-- content -->
+        	 </div><!-- container -->
+    	</div>
+    </div>
+</body>
+
+<script>
+	/**
+	 * Document Ready 
+	 */
+	$(document).ready(function () {
+
+		var domains = ["resort", "hotel", "shop"]
+		var firstBtn = null;
+		
+		for(var i = 0; i < domains.length; i++) 
+		{
+			var d = domains[i];
+            var btn = $("button." + d);
+            btn.attr("data-domain", d);
+            
+            if(firstBtn == null) {	firstBtn = btn;}
+            
+            console.log(btn);
+            btn.parent().css("display", "block");
+         }
+		
+        	initDomain();			// 도메인 목록 초기화
+        	firstBtn.click();		// 첫번째 도메인 선택
+        	
+        });
+
+	/**
+	 * 이벤트 등록 
+	 */
+	 $(function(){
+		 	/* 버튼 이벤트 등록 */
+			 $("#addItmBtn").click(function(){
+	     		if( !($("#inputFormat").val().length > 0)){ alert('규격명을 입력해주세요'); }
+	     		else
+	     		{
+	     			alert('규격명을 입력하였습니다. 진행합니다.');
+	     			$(location).attr('href', 'http://localhost:8080/NICEKIT/step2');
+	     		}
+	     	});
+		}); 
+
+</script>
+
+</html>

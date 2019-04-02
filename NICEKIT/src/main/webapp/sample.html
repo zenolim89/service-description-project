@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta
+	http-equiv="Content-Type"
+	Content="text/html; charset=utf-8"
+/>
+<meta
+	name="viewport"
+	content="height=1080, width=1920, user-scalable=no"
+/>
+<script
+	type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+></script>
+<style type="text/css">
+body {
+	background-color: rgb(255, 255, 255);
+}
+
+h1 {
+	color: rgb(51, 14, 138);
+}
+
+#Menu {
+	position: fixed;
+	width: 100%;
+	top: 200px;
+	text-align: center;
+	color: black;
+	font-size: 40pt;
+	align-content: center;
+}
+</style>
+<script
+	type="text/javascript"
+	src="http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js"
+></script>
+<script type="text/javascript">
+
+function init() {
+	var options = {};
+	options.keytype = "GBOXDEVM";
+	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+	gigagenie.init(options, function(result_cd, result_msg, extra) {
+		if (result_cd == 200) {
+			$("#output").append("<font color='red'>[DEBUG] init : Init Success</font><br>");
+			settings();
+		}
+	});
+}
+
+function settings() {
+	/*
+	 * function setKwsVoiceRecv(options,callback) options 은 다음과 같이 설정한다.
+	 * options.flag : number, mandatory 로 다음의 값을 가진다.
+	 * options.flag=0 : OTV  채널실행으로 변경 
+	 * options.flag=1 : ContainerApp 에서 음성선택번호 및 확인/취소 수신 
+	 * result_cd에 다음의 값이 전달된다. 
+	 * 200 : 성공 500: 시스템 에러 Extra는 null이다.
+	 */
+	var keyoptions = {};
+	keyoptions.flag = 1;
+	gigagenie.voice.setKwsVoiceRecv(keyoptions, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			$("#output").append(
+						"<font color='red'>[DEBUG] setKwsVoiceRecv : KWS Success</font><br>");
+		}
+	});
+
+	/*
+	 * 기가지니의 Keyword Spotting(예: 기가지니) 이후 발화된 내용중에서 App 에서 전달받고자 하는 단어를 설정한다. 
+	 * 음성인식 결과는 대화SDK를 거치지 않고 이벤트 수신을 통해 전달한다. 
+	 * 권한을 가진 appid만 호출 가능하다. 
+	 * ※ 설정한 단어가 첫번째 단어로 인식될 때만 이벤트로 전달한다. 
+	 * 예: [‘정답’] 으로 등록했을 경우 ‘정답 1번’은 수신, ‘1번 정답’은 수신 안됨
+	 * gigagenie.voice.setVoiceFilter options 은 다음과 같이 설정한다. 
+	 * options.keyword : String Array, Mandatory 로 Keyword를 설정한다.
+	 */
+	var filteroptions = {};
+	filteroptions.keyword = [ '정답', '힌트' ];
+	gigagenie.voice.setVoiceFilter(filteroptions, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			$("#output").append(
+						"<font color='red'>[DEBUG] setVoiceFilter : Filter Success</font><br>");
+		}
+	});
+
+	/*
+	 * extra.key : 키 코드 값 
+	 * ◀ : “prev” 
+	 * ▶ : “next” : 
+	*	 * : “asterisk”
+	*  # :  “sharp”
+	 */
+	gigagenie.media.onRemoteKeyEvent = function(extra) {
+		$("#output").append(
+					"<font color='red'>[DEBUG] onRemoteKeyEvent : " + extra.key + "</font><br>");
+	}
+
+	/*
+	 * window(전역) onkeydown 이벤트
+	 */
+	window.onkeydown = function() {
+		$("#output").append(
+					"<font color='red'>[DEBUG] onKeyDown : " + event.keyCode + "</font><br>");
+	}
+}
+
+/*
+ * 콜백은 function callback(extra) 로 구현해야 하며 extra 에는 actioncode 와 actionpath 및 parameter 가 전달된다. 
+ * actioncode : 발화 Intent 와 동일 
+ * actionpath : 등록한 이동 Path
+ * voiceid : 화자인식된 ContainerID 값(인식 안된 경우 “UNKNOWN”, 화자식별등록이 안되어 있으면 “NONE” 전달)
+ * uword : 발화한 문구 
+ * parameter : 대화서버에서 전달하는 parameter JSON 값 
+ * onActionEvent 콜백이 정의되지 않으면 해당 actionpath 로 자동 이동한다.
+ */
+gigagenie.voice.onActionEvent = function(extra) {
+	var sentence = extra.uword; // 발화 문장
+	switch (extra.actioncode) {
+		case 'HotelAmenityItem':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		case 'HotelCheckout':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		case 'HotelHelp':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		case 'HotelViewPage':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		case 'HotelWebCam':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		case 'HotelTourInfo':
+			$("#output").append(
+						"<font color='red'>[DEBUG] onActionEvent : "
+									+ JSON.stringify(extra.parameter) + "</font><br>");
+			// next action
+			break;
+		default:
+			break;
+	}
+}
+
+/*
+ * 사용자에게 음성 안내 후 음성 인식을 한다.
+ *  TTS 출력 중에 stopTTS를 수신하면 TTS와 음성인식 모두 종료된다. 
+ * 음성인식이 진행되면 해당 음성인식을 종료할 수 없다. (Timeout으로 처리) 
+ * options.mode=2 : 확인에 대한 음성인식을 수행한다.
+ * 음성인식결과는 undefined 로 넘겨지며 이후 onVoiceCommand 로 확인에 대한 인식 결과인 “confirm”, “cancel”을 전달한다. 
+ * 확인으로 해석되지 않는 경우 결과값이 전달되지 않는다. 
+ * 확인 취소는 다음의 발화에 의해 해석된다. 
+ * 확인 : “확인”, “그래”, “응” 으로 발화한 경우이다. 
+ * 취소: “취소”, “아니”, “아니요”로 발화한 경우이다. 
+ * 번호 선택에 대한  음성인식결과는 undefined으로 넘겨지며 이후 onSelectedNumber에 인식된 번호를 전달된다. 
+ * 번호가 인식되지 않으면 결과값이 전달되지 않는다. 번호는 1-6번까지만 전달된다.
+ */
+function getVoiceText() {
+	options = {};
+	options.voicemsg = "확인 하셨나요?";
+	options.mode = 2;
+	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
+		$("#output").append(
+					"<font color='red'>[DEBUG] getVoiceText : " + JSON.stringify(extra.voicetext)
+								+ "</font><br>");
+	});
+};
+
+/*
+ * 다음페이지, 이전페이지등 음성 명령 코드를 수신한다. 
+ * event 는 다음의 음성명령에 대해서 Text 로 전달한다.
+ * 확인, 취소 발화의 경우 getVoiceText 의 mode=2에 대한 응답을 전달한다. 
+ * 다음페이지: nextPage 
+ * 이전페이지: prevPage 
+ * 다음으로: naviNext 
+ * 이전으로: naviPrev 
+ * 확인:confirm 
+ * 취소:cancel
+ */
+gigagenie.voice.onVoiceCommand = function(event) {
+	switch (event) {
+		case 'nextPage':
+			$("#output")
+						.append(
+									"<font color='red'>[DEBUG] onVoiceCommand :  navigate next page</font><br>");
+			break;
+		case 'prevPage':
+			$("#output")
+						.append(
+									"<font color='red'>[DEBUG] onVoiceCommand :  navigate prev page</font><br>");
+			break;
+		case 'naviNext':
+			$("#output")
+						.append(
+									"<font color='red'>[DEBUG] onVoiceCommand :  navigate navi next</font><br>");
+			break;
+		case 'naviPrev':
+			$("#output")
+						.append(
+									"<font color='red'>[DEBUG] onVoiceCommand :  navigate navi prev</font><br>");
+			break;
+		case 'confirm':
+			$("#output").append("<font color='red'>[DEBUG] onVoiceCommand :  confirm</font><br>");
+			break;
+		case 'cancel':
+			$("#output").append("<font color='red'>[DEBUG] onVoiceCommand :  cancel<br>");
+			break;
+		default:
+			break;
+	}
+};
+
+/*
+ * 음성 선택번호 수신 설정 API 호출에 따라 사용자가 KWS 이후 발화한 번호 정보를 전달한다. 
+ * 번호는 1-6번까지만 인식 가능하다.
+ * gigagenie.voice.onSelectedIndex 콜백을 구현해야 하며  event 는 선택된 숫자가 넘겨진다.
+ */
+gigagenie.voice.onSelectedIndex = function(event) {
+	switch (event) {
+		case 1:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 1번 선택</font><br>");
+			break;
+		case 2:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 2번 선택</font><br>");
+			break;
+		case 3:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 3번 선택</font><br>");
+			break;
+		case 4:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 4번 선택</font><br>");
+			break;
+		case 5:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 5번 선택</font><br>");
+			break;
+		case 6:
+			$("#output").append("<font color='red'>[DEBUG] onSelectedIndex : 6번 선택</font><br>");
+			break;
+		default:
+			break;
+	}
+};
+
+/*
+ * 등록된 Keyword에 대한 수신 Event 이다. 
+ * Keyword는 Keyword 설정 API를 통해 등록된 값이다. 
+ * 권한을 가진 appid만 호출 가능하다. 
+ * gigagenie.voice.onVoiceFilterMsg 콜백을 구현해야 하며 message에는 Keyword를 포함한 음성 인식 Text가 전달된다. 
+ * message : 음성 인식 Text
+ */
+gigagenie.voice.onVoiceFilterMsg = function(message) {
+	$("#output").append(
+				"<font color='red'>[DEBUG] onVoiceFilterMsg : Received Text is " + message
+							+ "</font><br>");
+}
+
+/*
+ * 음성명령(종료, 닫기 발화에 따른)과, 리모컨 나가기 키 클릭시 서비스 종료 이벤트를 전달한다. 
+ * onRequestClose 콜백에서 종료 처리를 할 경우 마지막에 gigagenie.voice.svcFinished 를 호출
+ */
+gigagenie.voice.onRequestClose = function() {
+	options = {};
+	$("#output").append(
+				"<font color='red'>[DEBUG] onRequestClose : Close</font><br>");
+	//gigagenie.voice.svcFinished(options, function(result_cd, result_msg, extra) {});
+}
+</script>
+</head>
+<body onload=init()>
+	<h1>GiGA Genie Developers Service SDK Test</h1>
+	<input
+		type='button'
+		value='getVoiceText'
+		class='btn'
+		onclick='getVoiceText()'
+	>
+	<br>
+	<br>
+	<div
+		style='width: 95%; border: 1px solid gray; padding: 10px; font-weight: 10;'
+		id='output'
+	></div>
+</body>
+</html>

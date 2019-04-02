@@ -1,0 +1,71 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title>KT GiGA Genie AI B2B</title>
+    
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon"/>
+    <link type="text/css" rel="stylesheet" href="./assets/css/notosans_kr.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/jquery-ui-1.10.4.min.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="./assets/css/contents.css" />
+
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="nicekit/js/ie10-viewport-bug-workaround.js"></script>
+	<script src="./assets/js/register/login.js"></script>
+</head>
+
+ <body class="comBg login">
+	<div class="wrap">
+		<div class="areas">
+			<div class="container">
+				<section class="login_area">
+                    <article class="login_sec login">
+                        <p class="title"><strong>AI B2B Service</strong> - Register</p>
+                        <div class="login_form">
+                                <fieldset>
+                                    <legend>로그인 폼</legend>
+                                    <ul class="fields">
+                                        <li>
+                                            <label for="inp_id">ID</label>
+                                            <input type="text" class="comText" placeholder="ID" title="input ID" id="inputID">
+                                        </li>
+                                        <li>
+                                            <label for="inp_pw">PW</label>
+                                            <input type="password" class="comText" placeholder="Password" title="input Password" id="inputPassword">
+                                        </li>
+                                    </ul>
+                                    <div class="cbtns">
+                                        <button class="btn_login" id="login_button"><em>LOGIN</em></button>
+                                    </div>
+                                </fieldset>
+                        </div><!-- login_form -->
+                    </article>
+               	</section>
+			</div><!-- container -->
+		</div><!-- areas -->					 
+	</div><!-- wrap -->
+</body>
+
+<script>
+	/**
+	 * 이벤트 등록 
+	 */
+	 $(function(){
+		$("#login_button").click(function(){
+			
+			var id = $('#inputID').val();
+			var pw = $('#inputPassword').val();
+			
+			login(id, pw);
+	
+		});
+	}); 
+</script></html>

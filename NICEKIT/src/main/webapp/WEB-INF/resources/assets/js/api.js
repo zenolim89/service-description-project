@@ -1,5 +1,6 @@
 //var server = "http://222.107.124.9:8080/NICEKIT/";
 var server = "/NICEKIT/";
+
 /**
  * 도메인 목록 조회
  * @param cb
@@ -56,8 +57,8 @@ function getVendorDetail(domain, vendor, cb) {
  * @param cb
  */
 function createVendor(domain, newVendorName, fromTemplatePath, cb) {
-    $.post(server + "VendorGen", {domainName:domain, venderName:newVendorName, urlPath:fromTemplatePath}, function(data) {
-        console.log(data);
+    $.post(server + "VendorGen", {domainName:domain, vendorName:newVendorName, urlPath:fromTemplatePath}, function(data) {
+        console.log(JSON.stringify(data));
         cb(data);
     });
 }
@@ -69,7 +70,7 @@ function createVendor(domain, newVendorName, fromTemplatePath, cb) {
  */
 function getTemplateList(domain, cb) {
     $.get(server + "getTemplate", {domainName: domain}, function(data) {
-        console.log(data);
+        console.log(JSON.stringify(data));
         if(data.resCode == "200") {
             cb(data.resData.templateList);
         } else {
@@ -103,7 +104,12 @@ function getTemplateDetail(domain, template, cb) {
  * @param content
  */
 function updatePage(domain, vendor, filename, content) {
+    domain = "template";
+    // domain = "resources/template/";
+    // vendor = vendor + "/";
+    console.log(vendor);
     $.post(server + "api/update/file", {domain:domain, workplace:vendor, filename:filename, content:content}, function (data) {
+    // $.post(server + "api/update/file", {workplace:vendor, filename:filename, content:content}, function (data) {
         console.log(data);
     });
 }

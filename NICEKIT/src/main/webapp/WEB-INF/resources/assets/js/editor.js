@@ -203,6 +203,26 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
+        case "link_text2":
+            // 편집 컴포넌트
+            var com = _getComponentTemplate(info);
+            // 이름
+            com.find(".name").text(info.name);
+
+            // 서비스명
+            com.find(".text").val(info.service_name);
+
+            // com.find(".link").val(info.service_name);
+
+            // 기존 텍스트
+            // _connectInputText(info.id, com.find(".text"));
+
+            // 링크 연결
+            // _connectInputLink(info.id, com.find(".link"));
+
+            // 편집 컴포넌트 추가
+            _addComponent(info.section, com);
+            break;
         case "hover_image_text":
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
@@ -214,6 +234,20 @@ function addComponents(info) {
             _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
             // 텍스트 인풋 연결
             _connectInputText(info.id_text, com.find(".text"));
+
+            ////////////////////////////////////////////////
+            com.find(".btn_plus.btn_spec").click(function() {
+                $(".w_menus2 .editor").html("");
+                var name = com.find(".text").val();
+                addComponents({"name": info.name,
+                    "type": "link_text2",
+                    "service_name": name,
+                    "section": "w_menus2",
+                    "id": "nolink"});
+                return false;
+            });
+            ////////////////////////////////////////////////
+
 
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);

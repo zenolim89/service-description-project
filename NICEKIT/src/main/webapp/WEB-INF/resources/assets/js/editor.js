@@ -223,6 +223,31 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
+        case "link_text3":
+            // 편집 컴포넌트
+            var com = _getComponentTemplate(info);
+            // 이름
+            com.find(".name").text(info.name);
+
+            // 서비스명
+            com.find(".text").val(info.service_name);
+            
+            com.find(".service_type_select").val(info.service_type);
+            
+            com.find(".conn_link").val(info.conn_link);
+
+            // com.find(".link").val(info.service_name);
+
+            // 기존 텍스트
+            // _connectInputText(info.id, com.find(".text"));
+
+            // 링크 연결
+            // _connectInputLink(info.id, com.find(".link"));
+
+            // 편집 컴포넌트 추가
+            _addComponent(info.section, com);
+            break;
+            
         case "hover_image_text":
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
@@ -234,6 +259,7 @@ function addComponents(info) {
             _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
             // 텍스트 인풋 연결
             _connectInputText(info.id_text, com.find(".text"));
+            
 
             ////////////////////////////////////////////////
             com.find(".btn_plus.btn_spec").click(function() {
@@ -252,6 +278,43 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
+        
+        case "sub_hover_image_text":
+            // 편집 컴포넌트
+            var com = _getComponentTemplate(info);
+            // 이름
+            com.find(".name").text(info.name);
+
+            // 파일 연결
+            _connectInputFile(info.id_normal, com.find(".file_normal"), com.find(".img_normal"));
+            _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
+            // 텍스트 인풋 연결
+            _connectInputText(info.id_text, com.find(".text"));
+            _connectInputHidden(info.id_service_type, com.find(".service_type"))
+            _connectInputHidden(info.id_conn_link, com.find(".conn_link"))
+
+            ////////////////////////////////////////////////
+            com.find(".btn_plus.btn_spec").click(function() {
+                $(".w_menus2 .editor").html("");
+                var name = com.find(".text").val();
+                var service_type = com.find(".service_type").val();
+                var conn_link = com.find(".conn_link").val();
+                addComponents({"name": info.name,
+                    "type": "link_text3",
+                    "service_name": name,
+                    "service_type": service_type,
+                    "conn_link": conn_link,
+                    "section": "w_menus2",
+                    "id": "nolink"});
+                return false;
+            });
+            ////////////////////////////////////////////////
+
+
+            // 편집 컴포넌트 추가
+            _addComponent(info.section, com);
+            break;        
+        
         case "image_text_link":
         case "image_text_popup":
             // 편집 컴포넌트
@@ -336,6 +399,12 @@ function _connectInputText(id, compElem) {
         var text = compElem.val();
         applyTextToPreview(id, text);
     });
+}
+
+function _connectInputHidden(id, compElem) {
+    // 기존 텍스트
+    var oldText = curPageObj.find("#" + id).val();
+    compElem.val(oldText);
 }
 
 /**

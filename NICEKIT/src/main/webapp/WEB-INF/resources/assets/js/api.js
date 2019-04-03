@@ -57,7 +57,8 @@ function getVendorDetail(domain, vendor, cb) {
  * @param cb
  */
 function createVendor(domain, newVendorName, fromTemplatePath, cb) {
-    $.post(server + "VendorGen", {domainName:domain, vendorName:newVendorName, urlPath:fromTemplatePath}, function(data) {
+    var reqParam = {domainName:domain, vendorName:newVendorName, urlPath:fromTemplatePath};
+	$.post(server + "VendorGen", JSON.stringify(reqParam), function(data) {
         console.log(JSON.stringify(data));
         cb(data);
     });

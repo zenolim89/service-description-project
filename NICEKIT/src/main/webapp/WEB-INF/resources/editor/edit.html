@@ -61,6 +61,7 @@
         console.log(templatePath);
         // templatePath = "../template";
         $(document).ready(function () {
+        	console.log("SERA: "+templatePath);
             init(domain, vendor, templatePath + "/");
         });
     </script>
@@ -222,6 +223,7 @@
 
         // 기능변경 - (객실용품) 서비스 기능 열기
         $(".btn_plus").on("click", function(e){
+        	console.log("SERA: ");
             e.preventDefault();
             var title = $(this).parents(".box").find(".t").text();
             $(".service_area").find(".s_title").text("("+title+") 서비스 기능")
@@ -818,33 +820,103 @@
         </div>
     </div>
 
-    <div class="comp link_text2">
-        <div class="box form_line" style="height:270px;">
-            <div class="t_area">
-                <p class="t name">이름</p>
-            </div>
-            <span class="inp_box">
-                <label>서비스명</label>
-                <input type="text" class="comText text" placeholder="명칭" />
-                <label>연결링크</label>
-                <!--<input type="text" class="comText link" placeholder="연결할 페이지" />-->
-                <select class="comText link">
-                    <option>연결링크를 선택해주세요.</option>
-                    <option>부대시설</option>
-                    <option>웹캠</option>
-                    <option>객실용품</option>
-                    <option>엔터테인먼트</option>
-                    <option>이벤트</option>
-                    <option>관광정보</option>
-                    <option>체크아웃</option>
-                </select>
-            </span>
-            <div class="b_area">
-                <a href="#" onclick="return false;" class="btn_confirm"><em>서버 URL 변경</em></a>
-            </div>
-        </div>
-    </div>
+		<div class="comp link_text2">
+			<div class="box form_line" style="weiht: 350px; height: 350px;">
+				<div class="t_area">
+					<p class="t name">이름</p>
+				</div>
+				<span class="inp_box"> <label>서비스명</label> <input type="text" class="comText text" placeholder="명칭" /> 
+				<label>서비스타입</label>
+				 <select class="comText link">
+						<option>서비스 타입을 선택해주세요.</option>
+						<option value="CheckSvcWithPage">조회성 서비스(페이지 전환)</option>
+						<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
+						<option value="ControlSvcWithPage">제어성 서비스(페이지 전환)</option>
+						<option value="ControlSvcWithPopup">제어성 서비스(팝업 표출)</option>
+						<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
+				</select> 
+				<label>연결링크</label> <!--<input type="text" class="comText link" placeholder="연결할 페이지" />--> 
+				<select class="comText link">
+						<option>연결 링크를 선택해주세요.</option>
+						<option>부대시설</option>
+						<option>웹캠</option>
+						<option>객실용품</option>
+						<option>엔터테인먼트</option>
+						<option>이벤트</option>
+						<option>관광정보</option>
+						<option>체크아웃</option>
+				</select>
+				</span>
+				<div class="b_area">
+					<a href="#" onclick="return false;" class="btn_confirm"><em>+ 기능변경</em></a>
+				</div>
+			</div>
+		</div>
 
+		<!-- Tab 객실용품  페이지 -->
+		<div class="comp link_text3">
+			<div class="box form_line" style="weiht: 350px; height: 350px;">
+				<div class="t_area">
+					<p class="t name">이름</p>
+				</div>
+				<span class="inp_box"> 
+					<label>서비스명</label>
+					<input type="text" class="comText text" placeholder="명칭" /> 
+					<label>서비스타입</label> 
+					<select class="comText link service_type_select">
+						<option>서비스 타입을 선택해주세요.</option>
+						<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
+						<option value="ControlSvcWithPopup">제어성 서비스(팝업 표출)</option>
+						<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
+					</select> 
+					<label>연결링크</label>
+					<input type="text" class="comText link conn_link" placeholder="연결할 페이지" />
+				</span>
+				<div class="b_area">
+					<a href="#" onclick="return false;" class="btn_confirm"><em>+ 기능변경</em></a>
+				</div>
+			</div>
+		</div>
+		
+		<!--sub_hover_image_text 형식(이미지 normal, over 와 text)-->
+		<div class="comp sub_hover_image_text">
+			<div class="box ml0">
+				<div class="t_area">
+					<p class="t name">부대시설</p>
+				</div>
+				<div class="icon_box icon_off">
+					<label class="comFile"> <input type="file" class="hidFile file_normal" title="파일 선택">
+					<!-- disabled : disabled -->
+						<div class="img">
+							<img class="img_normal" src="../assets/images/icons/icon_s_01_off.png" alt=" ">
+						</div>
+						<p>
+							<b>버튼 Normal</b> : 102x102 사이즈
+						</p>
+					</label>
+				</div>
+				<div class="icon_box icon_on">
+					<label class="comFile"> <input type="file" class="hidFile file_hover" title="파일 선택">
+					<!-- disabled : disabled -->
+						<div class="img">
+							<img class="img_hover" src="../assets/images/icons/icon_s_01_on.png" alt=" ">
+						</div>
+						<p>
+							<b>버튼 Over</b> : 150x150 사이즈
+						</p>
+					</label>
+				</div>
+				<span class="inp_box">
+					<input type="text" class="comText text" placeholder="명칭" style="margin: 0 auto; display: block; margin-bottom: 5px;" />
+					<input type="hidden" class="service_type"/>
+					<input type="hidden" class="conn_link"/>
+				</span>
+				<div class="b_area">
+					<a href="#" class="btn_plus btn_spec"><em>+ 기능변경</em></a>
+				</div>
+			</div>
+		</div>
+		
     <!--hover_image_text 형식(이미지 normal, over 와 text)-->
     <div class="comp hover_image_text">
         <div class="box ml0">

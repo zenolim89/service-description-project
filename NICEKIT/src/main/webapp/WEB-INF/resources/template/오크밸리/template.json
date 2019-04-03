@@ -114,83 +114,101 @@
       "components": [
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img1_normal",
           "id_hover": "img1_hover",
           "id_text": "txt1",
+          "id_service_type": "service_type1",
+          "id_conn_link": "conn_link1",
           "id_link": "lnk1"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img2_normal",
           "id_hover": "img2_hover",
           "id_text": "txt2",
+          "id_service_type": "service_type2",
+          "id_conn_link": "conn_link2",
           "id_link": "lnk2"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img3_normal",
           "id_hover": "img3_hover",
           "id_text": "txt3",
+          "id_service_type": "service_type3",
+          "id_conn_link": "conn_link3",
           "id_link": "lnk3"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img4_normal",
           "id_hover": "img4_hover",
           "id_text": "txt4",
+           "id_service_type": "service_type4",
+          "id_conn_link": "conn_link4",
           "id_link": "lnk4"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img5_normal",
           "id_hover": "img5_hover",
           "id_text": "txt5",
+          "id_service_type": "service_type5",
+          "id_conn_link": "conn_link5",
           "id_link": "lnk5"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img6_normal",
           "id_hover": "img6_hover",
           "id_text": "txt6",
+          "id_service_type": "service_type6",
+          "id_conn_link": "conn_link6",
           "id_link": "lnk6"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img7_normal",
           "id_hover": "img7_hover",
           "id_text": "txt7",
+          "id_service_type": "service_type7",
+          "id_conn_link": "conn_link7",
           "id_link": "lnk7"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img8_normal",
           "id_hover": "img8_hover",
           "id_text": "txt8",
+          "id_service_type": "service_type8",
+          "id_conn_link": "conn_link8",
           "id_link": "lnk8"
         },
         {
           "name": "버튼",
-          "type": "hover_image_text",
+          "type": "sub_hover_image_text",
           "section": "s_menus",
           "id_normal": "img9_normal",
           "id_hover": "img9_hover",
           "id_text": "txt9",
+          "id_service_type": "service_type9",
+          "id_conn_link": "conn_link9",
           "id_link": "lnk9"
         }
       ]
@@ -289,7 +307,7 @@
         },
         {
           "name": "link1",
-          "type": "image_text_link",
+          "type": "image_text_popup",
           "section": "s2_menus",
           "title_text": "관광지명",
           "title_link": "URL",
@@ -300,7 +318,7 @@
         },
         {
           "name": "cam2",
-          "type": "image_text_link",
+          "type": "image_text_popup",
           "section": "s2_menus",
           "title_text": "관광지명",
           "title_link": "URL",
@@ -311,7 +329,7 @@
         },
         {
           "name": "cam3",
-          "type": "image_text_link",
+          "type": "image_text_popup",
           "section": "s2_menus",
           "title_text": "관광지명",
           "title_link": "URL",
@@ -322,7 +340,7 @@
         },
         {
           "name": "cam4",
-          "type": "image_text_link",
+          "type": "image_text_popup",
           "section": "s2_menus",
           "title_text": "관광지명",
           "title_link": "URL",

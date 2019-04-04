@@ -55,7 +55,7 @@ public class InBoundInterface {
 	// see also SpringDispatcher-servlet.xml
 	@RequestMapping("/")
 	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("/index/index");
+		ModelAndView mv = new ModelAndView("/view/index");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -668,7 +668,26 @@ public class InBoundInterface {
 	@RequestMapping("/login")
 	public ModelAndView login() {
 
-		ModelAndView mv = new ModelAndView("/index/login");
+		ModelAndView mv = new ModelAndView("/view/login");
+
+		return mv;
+		// return new ModelAndView("index");
+	}
+	
+	@RequestMapping("/editor/login")
+	public ModelAndView editorLogin() {
+
+		ModelAndView mv = new ModelAndView("/editor/login");
+
+		return mv;
+		// return new ModelAndView("index");
+	}
+	
+	
+	@RequestMapping("/editor/reqLogin")
+	public ModelAndView editorReqLogin() {
+
+		ModelAndView mv = new ModelAndView("/editor/domain");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -677,7 +696,7 @@ public class InBoundInterface {
 	@RequestMapping("/step1")
 	public ModelAndView step1() {
 
-		ModelAndView mv = new ModelAndView("/index/step1");
+		ModelAndView mv = new ModelAndView("/view/step1");
 
 		return mv;
 		// return new ModelAndView("index");
@@ -686,7 +705,7 @@ public class InBoundInterface {
 	@RequestMapping("/step2")
 	public ModelAndView step2() {
 
-		ModelAndView mv = new ModelAndView("/index/step2");
+		ModelAndView mv = new ModelAndView("/view/step2");
 
 		return mv;
 		// return new ModelAndView("index");

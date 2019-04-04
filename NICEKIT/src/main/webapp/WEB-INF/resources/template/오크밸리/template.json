@@ -48,6 +48,8 @@
           "id_normal": "facility_normal",
           "id_hover": "facility_hover",
           "id_text": "facility_text",
+          "id_service_type": "facility_service_type",
+          "id_conn_link": "facility_conn_link",
           "id_link": "facility_link"
         },
         {
@@ -57,6 +59,8 @@
           "id_normal": "webcam_normal",
           "id_hover": "webcam_hover",
           "id_text": "webcam_text",
+          "id_service_type": "webcam_service_type",
+          "id_conn_link": "webcam_conn_link",
           "id_link": "webcam_link"
         },
         {
@@ -66,6 +70,8 @@
           "id_normal": "goods_normal",
           "id_hover": "goods_hover",
           "id_text": "goods_text",
+          "id_service_type": "goods_service_type",
+          "id_conn_link": "goods_conn_link",
           "id_link": "goods_link"
         },
         {
@@ -75,6 +81,8 @@
           "id_normal": "ent_normal",
           "id_hover": "ent_hover",
           "id_text": "ent_text",
+          "id_service_type": "ent_service_type",
+          "id_conn_link": "ent_conn_link",
           "id_link": "ent_link"
         },
         {
@@ -84,6 +92,8 @@
           "id_normal": "event_normal",
           "id_hover": "event_hover",
           "id_text": "event_text",
+          "id_service_type": "event_service_type",
+          "id_conn_link": "event_conn_link",
           "id_link": "event_link"
         },
         {
@@ -93,6 +103,8 @@
           "id_normal": "tour_normal",
           "id_hover": "tour_hover",
           "id_text": "tour_text",
+          "id_service_type": "tour_service_type",
+          "id_conn_link": "tour_conn_link",
           "id_link": "tour_link"
         },
         {
@@ -102,6 +114,8 @@
           "id_normal": "checkout_normal",
           "id_hover": "checkout_hover",
           "id_text": "checkout_text",
+          "id_service_type": "checkout_service_type",
+          "id_conn_link": "checkout_conn_link",
           "id_link": "checkout_link"
         }
       ]

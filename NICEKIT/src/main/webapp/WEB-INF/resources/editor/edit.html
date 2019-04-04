@@ -827,7 +827,7 @@
 				</div>
 				<span class="inp_box"> <label>서비스명</label> <input type="text" class="comText text" placeholder="명칭" /> 
 				<label>서비스타입</label>
-				 <select class="comText link">
+				 <select class="comText link service_type_select">
 						<option>서비스 타입을 선택해주세요.</option>
 						<option value="CheckSvcWithPage">조회성 서비스(페이지 전환)</option>
 						<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
@@ -836,7 +836,7 @@
 						<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
 				</select> 
 				<label>연결링크</label> <!--<input type="text" class="comText link" placeholder="연결할 페이지" />--> 
-				<select class="comText link">
+				<select class="comText link conn_link_select">
 						<option>연결 링크를 선택해주세요.</option>
 						<option>부대시설</option>
 						<option>웹캠</option>
@@ -944,6 +944,8 @@
             <span class="inp_box">
                 <!--<label>명칭</label>-->
                 <input type="text" class="comText text" placeholder="명칭" style="margin: 0 auto; display: block;margin-bottom: 5px;" />
+				<input type="hidden" class="service_type"/>
+				<input type="hidden" class="conn_link"/>
             </span>
             <div class="b_area">
                 <a href="#" class="btn_plus btn_spec"><em>+ 기능변경</em></a>

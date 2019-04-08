@@ -110,8 +110,6 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
 
-		
-
 		String ks = "commonks";
 
 		JSONObject resObj = insertTo.insertSpecIndexTo(specName, domainName);
@@ -514,7 +512,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/xlsxDown", method = RequestMethod.POST)
 	public JSONObject xlsxDown(InputStream body, HttpServletRequest request) {
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String filePath = "/resources/download";
 		String realPath = request.getSession().getServletContext().getRealPath(filePath);
@@ -522,7 +520,7 @@ public class InBoundInterface {
 		String response = "";
 		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		
+
 		try {
 			while ((bf = in.readLine()) != null) {
 				response += bf;
@@ -569,31 +567,30 @@ public class InBoundInterface {
 
 		return res;
 	}
-	
+
 	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
 	public JSONObject getTemplateList(@RequestParam String domainName) {
-		
+
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		
+
 		res = serializerTo.resTemplateList(domainName);
-		
+
 		return res;
-		
+
 	}
-	
-	@RequestMapping(value ="/getSpecInfo", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
 	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
-		
+
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		
+
 		res = serializerTo.resSpecInfo(domainName, specName);
-		
+
 		return res;
-		
+
 	}
-	
 
 //	// request spec info
 //	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
@@ -673,7 +670,7 @@ public class InBoundInterface {
 		return mv;
 		// return new ModelAndView("index");
 	}
-	
+
 	@RequestMapping("/editor/login")
 	public ModelAndView editorLogin() {
 
@@ -682,8 +679,7 @@ public class InBoundInterface {
 		return mv;
 		// return new ModelAndView("index");
 	}
-	
-	
+
 	@RequestMapping("/editor/reqLogin")
 	public ModelAndView editorReqLogin() {
 
@@ -713,9 +709,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	public @ResponseBody List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
-			MultipartHttpServletRequest request,
-			@RequestParam String domainName,
-			@RequestParam String domainId,
+			MultipartHttpServletRequest request, @RequestParam String domainName, @RequestParam String domainId,
 			@RequestParam String specName) {
 
 		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
@@ -729,13 +723,13 @@ public class InBoundInterface {
 
 		// System.out.println("RewardController reAddProCtrl n : " + n);
 		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
-		
+
 		/* 업로드 엑셀파일 파서 */
 		ExcelService excelSvc = new ExcelService();
 		List<ExcelUploadForm> list = excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
 
 		List<ResFileUpload> result = new ArrayList<ResFileUpload>();
-		for(ExcelUploadForm e : list) {
+		for (ExcelUploadForm e : list) {
 			ResFileUpload res = new ResFileUpload();
 			res.setServiceName(e.getServiceName());
 			res.setServiceCode(e.getServiceCode());
@@ -744,101 +738,98 @@ public class InBoundInterface {
 			res.setInvokeType(e.getInvokeType());
 			res.setIntentName(e.getIntentInfo());
 			res.setIsRegistered(e.isRegistered());
-			
+
 			/* dicNameList, wordList 매핑 */
-			if(e.getDicList() != null) {
+			if (e.getDicList() != null) {
 				StringBuilder sbDic = new StringBuilder();
 				StringBuilder sbWord = new StringBuilder();
-				
+
 				List<DicParam> dicList = e.getDicList();
-				for(DicParam item : dicList) {
-					if(sbDic.length() > 0) sbDic.append("<br>");
-					if(sbWord.length() > 0) sbWord.append("<br>");
-					
+				for (DicParam item : dicList) {
+					if (sbDic.length() > 0)
+						sbDic.append("<br>");
+					if (sbWord.length() > 0)
+						sbWord.append("<br>");
+
 					sbDic.append(item.getDicName());
 					sbWord.append(item.getWordList());
 				}
 				res.setDicNameList(sbDic.toString());
 				res.setWordList(sbWord.toString());
 			}
-			
+
 			result.add(res);
 		}
 		return result;
 	}
 
-	
 	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
 	public JSONObject getVenderPage(@RequestParam String domainName, String vendorName) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String templateUrl = null;
-		
+
 		List<Row> list = selectTo.selectUseTemplateofVendor(vendorName);
-		
+
 		if (list == null) {
-			
+
 			JSONObject res = serializerTo.resNotFoundTemplate("요청하신 사업자명을 통한 미리보기가 없습니다");
 			return res;
-			
+
 		}
-		
+
 		for (Row row : list) {
-			
+
 			templateUrl = row.getString("templateuipath");
 		}
-		
+
 		JSONObject server = parsingFrom.getServerInfo();
-		
+
 		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
-		
+
 		JSONObject res = serializerTo.resPreView(path);
-						
+
 		return res;
-		
+
 	}
-	
-	
-	@RequestMapping(value ="/getTemplatePage", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/getTemplatePage", method = RequestMethod.GET)
 	public JSONObject getTemplatePage(@RequestParam String domainName, String templateName) {
-		
+
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String templateUrl = null;
-		
+
 		List<Row> list = selectTo.selectTemplatePreView(templateName);
-		
+
 		if (list == null) {
-			
+
 			JSONObject res = serializerTo.resNotFoundTemplate("요청하신 템플릿 미리보기가 없습니다");
 			return res;
-			
+
 		}
-		
+
 		for (Row row : list) {
-			
+
 			templateUrl = row.getString("dirpath");
-						
+
 		}
-		
+
 		JSONObject server = parsingFrom.getServerInfo();
-		
+
 		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + templateUrl;
-						
+
 		JSONObject res = serializerTo.resPreView(path);
-		
+
 		return res;
-		
+
 	}
-	
-	
-	
-	
+
 	// request vendor template url
 //	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
 //	public JSONObject getVendorPage(@RequestParam("vendorName") String vendorName, HttpServletRequest _request)
@@ -893,70 +884,61 @@ public class InBoundInterface {
 //		return res;
 //	}
 
-	
-	
 	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
-	public JSONObject venderGen (InputStream body) {
-		
+	public JSONObject venderGen(InputStream body) {
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		String bf = null;
-		String response ="";
-		
+		String response = "";
+
 		JSONObject res = new JSONObject();
-		
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
-		
+
 		try {
-			while ((bf = in.readLine()) != null ) {
-				
+			while ((bf = in.readLine()) != null) {
+
 				response += bf;
-				
+
 			}
-			
-			
+
 			res = parsingFrom.parsingCreateVenderTemplate(response);
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		return res;
-		
-		
-		
+
 	}
-	
+
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 19. 오후 2:33:25]
-	 * desc	: 향후 템플릿 업로드 기능에 따라 POST로 변환 처리 필요
-	 * @version	:
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 19. 오후 2:33:25] desc : 향후 템플릿 업로드 기능에 따라
+	 *         POST로 변환 처리 필요
+	 * @version :
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param body
 	 * @return
 	 */
 	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
-	public JSONObject setTemplate (@RequestParam String templateName, String domainName) {
-		
+	public JSONObject setTemplate(@RequestParam String templateName, String domainName) {
+
 		JSONObject res = new JSONObject();
 
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		
+
 		parsingFrom.parsingTemplateInfo(templateName, domainName);
-		
+
 		return res;
-		
+
 	}
-	
-	
-	
+
 //	// request vendor generate
 //	@RequestMapping(value = "/VendorGen", method = RequestMethod.POST)
 //	public JSONObject VendorGen(InputStream body, HttpServletRequest _request,

@@ -12,6 +12,7 @@ import com.datastax.driver.core.schemabuilder.*;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.querybuilder.*;
+import com.kt.commonUtils.Constants;
 
 public class ConnectToCanssandra {
 
@@ -25,7 +26,7 @@ public class ConnectToCanssandra {
 	public ConnectToCanssandra() {
 
 		clu = Cluster.builder()
-				.addContactPoint("222.107.124.9")
+				.addContactPoint(Constants.CASSANDRA_PROPERTY_HOST)
 				.build();
 
 	}

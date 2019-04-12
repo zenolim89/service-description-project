@@ -1,33 +1,21 @@
 package com.kt.dataManager;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
-import com.kt.dataDao.OwnServiceList;
-import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseExcelForm;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
-import com.kt.dataForms.ReqCreateVender;
-import com.kt.dataForms.ReqDataForm;
+import com.kt.dataForms.ReqCreateVendor;
 import com.kt.dataForms.ReqSvcCodeForm;
-import com.typesafe.config.ConfigException.Parse;
 
 public class JSONParsingFrom {
 
@@ -61,20 +49,20 @@ public class JSONParsingFrom {
 	}
 
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오후 1:56:45]
-	 * desc	: 리턴값들 억지로 만들어서 던지는 것 같음. 데모 이후 방법론 정의해서 다시 만들 필요 있음
-	 * @version	:
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 20. 오후 1:56:45] desc : 리턴값들 억지로 만들어서 던지는 것
+	 *         같음. 데모 이후 방법론 정의해서 다시 만들 필요 있음
+	 * @version :
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param response
 	 * @return
 	 */
-	public JSONObject parsingCreateVenderTemplate(String response) {
+	public JSONObject parsingCreateWithTemplate(String response) {
 
-		ReqCreateVender venderInfo = new ReqCreateVender();
+		ReqCreateVendor vendorInfo = new ReqCreateVendor();
 		UITemplateController uiController = new UITemplateController();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
@@ -87,86 +75,111 @@ public class JSONParsingFrom {
 		try {
 
 			JSONObject obj = (JSONObject) parser.parse(response);
-  
-			JSONObject resObj = uiController.createVenderDir(obj.get("vendorName").toString(), obj.get("urlPath").toString());
+
+			JSONObject resObj = uiController.createWithTemplate(obj.get("vendorName").toString(),
+					obj.get("urlPath").toString(), obj.get("specName").toString());
 
 			if (resObj.get("code").toString() == "409") {
-
 				res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
-
 				return res;
 
 			} else if (resObj.get("code").toString() == "400") {
-
 				res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
-
 				return res;
 
 			} else {
-
-				String temPath = uiController.extractURL(resObj.get("temPath").toString());
-				//				String comPath = uiController.extractURL(resObj.get("comPath").toString());
-
-
-
-
-				venderInfo.setDomainName(obj.get("domainName").toString());
-				venderInfo.setVender(obj.get("vendorName").toString());
-				venderInfo.setTemplateUrl(temPath);
-				//					venderInfo.setVenderUrl(comPath);
-				venderInfo.setVenderUrl(resObj.get("comPath").toString());
-
-
-
-				resCode = insertTo.insertVenderToIndexList(venderInfo);
-
+				vendorInfo.setDomainName(obj.get("domainName").toString());
+				vendorInfo.setVendorName(obj.get("vendorName").toString());
+				vendorInfo.setSpecName(obj.get("specName").toString());
+				vendorInfo.setDirPath(resObj.get("tempPath").toString());
+				resCode = insertTo.insertTempToIndexList(vendorInfo);
 				JSONObject server = parsingFrom.getServerInfo();
-
-				res = serializerTo.resCreateVenderPath(resCode, "http://" + server.get("serverIp").toString()
-						+ ":" + server.get("port").toString() + resObj.get("comPath").toString());
-
+				res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
+						+ server.get("port").toString() + resObj.get("tempPath").toString());
 			}
-
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return res;
+	}
 
+	public JSONObject parsingCreateWithVendor(String response) {
+		ReqCreateVendor vendorInfo = new ReqCreateVendor();
+		UITemplateController uiController = new UITemplateController();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		InsertDataTo insertToSpecList = new InsertDataTo();
+		InsertDataTo insertToTempList = new InsertDataTo();
+		JSONObject res = new JSONObject();
+		String resCode;
+		try {
+			JSONObject obj = (JSONObject) parser.parse(response);
+
+			// insert to commonks.specindexlist 
+			JSONObject specresObj = insertToSpecList.insertSpecIndexTo(obj.get("vendorName").toString(),
+					obj.get("domainName").toString());
+			if (specresObj.get("resCode").toString() == "200") {
+				JSONObject resObj = uiController.createWithVendor(obj.get("vendorName").toString(),
+						obj.get("urlPath").toString(), obj.get("comUrl").toString(), obj.get("testUrl").toString());
+				if (resObj.get("code").toString() == "409") {
+					res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
+					return res;
+				} else if (resObj.get("code").toString() == "400") {
+					res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
+					return res;
+				} else {
+					vendorInfo.setDomainName(obj.get("domainName").toString());
+					vendorInfo.setVendorName(obj.get("vendorName").toString());
+					vendorInfo.setSpecName(obj.get("vendorName").toString());
+					vendorInfo.setDirPath(resObj.get("tempPath").toString());
+					resCode = insertToTempList.insertTempToIndexList(vendorInfo);
+					JSONObject server = parsingFrom.getServerInfo();
+					res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
+							+ server.get("port").toString() + resObj.get("tempPath").toString());
+				}
+			} else
+				return specresObj;
+
+		} catch (
+
+		ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return res;
 
 	}
 
-	public void parsingTemplateInfo (String templateName, String domainName) {
+	public void parsingTemplateInfo(String templateName, String domainName) {
 
 		InsertDataTo insertTo = new InsertDataTo();
 
 		JSONObject obj = this.getServerInfo();
 
-		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName; 
+		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName;
 
 		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
-
 
 	}
 
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오후 1:55:21]
-	 * desc	: 현재는 데이터를 JSON으로 만들고 있는데 향후 데이터 폼으로 변경 필요
-	 * @version	:
-	 * @param	: 
-	 * @return 	: JSONObject 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 20. 오후 1:55:21] desc : 현재는 데이터를 JSON으로 만들고
+	 *         있는데 향후 데이터 폼으로 변경 필요
+	 * @version :
+	 * @param :
+	 * @return : JSONObject
+	 * @throws :
+	 * @see :
+	 * 
 	 * @return
 	 */
-	public JSONObject getServerInfo () {
+	public JSONObject getServerInfo() {
 
 		JSONObject obj = new JSONObject();
 
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
-				.currentRequestAttributes();
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
 		String serverIp = attr.getRequest().getServerName();
 		String port = Integer.toString(attr.getRequest().getServerPort());
@@ -176,15 +189,9 @@ public class JSONParsingFrom {
 		obj.put("serverIp", serverIp);
 		obj.put("context", contextRoot);
 
-
 		return obj;
 
-
 	}
-
-
-
-
 
 	public ArrayList<BaseDictionarySet> parsingIntentInfo(JSONArray arr) {
 
@@ -412,7 +419,6 @@ public class JSONParsingFrom {
 		try {
 
 			JSONObject resObj = (JSONObject) parser.parse(response);
-
 			resSvcDesc.setComURL(resObj.get("comUrl").toString());
 			resSvcDesc.setDataType(resObj.get("dataType").toString());
 			resSvcDesc.setIntentInfo((JSONArray) resObj.get("intentInfo"));
@@ -485,25 +491,19 @@ public class JSONParsingFrom {
 				resSvcDesc.setTestURL(descObj.get("testUrl").toString());
 				resSvcDesc.setDomainName(descObj.get("domainName").toString());
 				resSvcDesc.setDomainId(descObj.get("domainId").toString());
-
 				descList.add(resSvcDesc);
 			}
-
 			res.put("resCode", "2001");
 			res.put("resMsg", error.getErrorCodeList().get("2001"));
-
 			inserTo.insertVenderSvcTo(descList);
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-
 			res.put("resCode", "4000");
 			res.put("resMsg", e.getMessage());
 			e.printStackTrace();
 		}
-
 		return res;
-
 	}
 
 	public JSONObject setExcelForm(String response, String realPath, String filePath) {
@@ -540,5 +540,4 @@ public class JSONParsingFrom {
 		}
 		return res;
 	}
-
 }

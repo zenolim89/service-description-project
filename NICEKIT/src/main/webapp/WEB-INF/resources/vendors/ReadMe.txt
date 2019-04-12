@@ -1,1 +1,0 @@
-This folder contains UI template resources including img, htmls, css, and javaScript for venders

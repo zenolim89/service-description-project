@@ -29,7 +29,7 @@ h1 {
 function init() {
 	var options = {};
 	options.keytype = "GBOXDEVM";
-	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+	options.apikey = "RTUwMDI3NDJ8R0JPWERFVk18MTU1MzE0MTQzODU5Ng==";
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			$("#output").append("<font color='red'>[DEBUG] init : Init Success</font><br>");
@@ -110,37 +110,37 @@ gigagenie.voice.onActionEvent = function(extra) {
 		case 'HotelAmenityItem':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+									+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelCheckout':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelHelp':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelViewPage':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelWebCam':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+ JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelTourInfo':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+ JSON.stringify(extra.actioncode)+ " || " + JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		default:

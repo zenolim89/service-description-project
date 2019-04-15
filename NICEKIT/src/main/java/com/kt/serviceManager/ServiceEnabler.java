@@ -6,10 +6,10 @@ import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataForms.ExtractionKeynTypeForJSON;
+import com.kt.service.spec.JsonSpecSvc;
 
 public class ServiceEnabler {
 
@@ -81,8 +81,13 @@ public class ServiceEnabler {
 		obj.put("resCode", "201");
 		obj.put("resMsg", "요청하신 " + word + "서비스를 요청하였습니다");
 		
+		/*TODO SERA 규격 관련 변경*/
+		JsonSpecSvc svc = new JsonSpecSvc();
+		obj = svc.createReqFormatForArrey(desc.getReqStructure(), desc.getReqSpec(), word, "spec3");
+		//obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
+		System.out.println("변경된 JSON");
+		System.out.println(obj.toString());
 		
-		obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		
 		res.put("resCode", "201");
 		res.put("resMsg", word + "서비스를 요청하였습니다");

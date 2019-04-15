@@ -5,6 +5,9 @@ var curPageInfo;
 var curPageHtml;
 var curPageObj;
 
+// 페이지 편집됨 상태를 저장
+var pageEdited = false;
+
 $(document).ready(function () {
 
 });
@@ -44,6 +47,22 @@ function _init() {
         addPage(pages[i]);
     }
 
+    // 탭 크기 적용
+    var num = $(".tab_menu li").length;
+    var wli = 100 / num +"%"
+    $(".tab_menu li").css("width", wli);
+
+    // $(".cbtns .btn_used").on("click", function(e){
+    //     e.preventDefault();
+    //     if($(this).hasClass("active")){
+    //         $(this).removeClass("active")
+    //     }
+    //     else
+    //     {
+    //         $(this).addClass("active")
+    //     }
+    // });
+
     // 페이지 클릭 이벤트
 
     // 첫펀째 페이지 열기
@@ -59,9 +78,9 @@ function addPage(page) {
         return;
     }
 
-    var item = $("<li><button type=\"menu\"></button></li>");
+    var item = $("<li><button type=\"menu\"><em></em></button></li>");
     var a = item.find("button");
-    a.text(page.name);
+    a.find("em").text(page.name);
     a.attr("data-name", page.name);
     a.click(function() {
         var pageName = $(this).attr("data-name");
@@ -75,8 +94,18 @@ function addPage(page) {
  * @param pageName
  */
 function openPage(pageName) {
+    if(pageEdited) { // 저장 확인
+        if(! confirm("편집중인 내용이 있습니다.\n저장하지않고 넘어 가시겠습니까?")) {
+            return;
+        }
+    }
+
     // 컴포넌트 섹션들 숨기기
-    $(".w_menus, .s_menus, .s2_menus, .service_area").css("display", "none");
+    $(".w_menus, .w_menus2, .s_menus, .s2_menus, .service_area").css("display", "none");
+
+    // 하단 서비스 설정 항목 내용 삭제
+    // $(".w_menus2").html("");
+
     // 기존 컴포넌트들 삭제
     $(".editor").html("");
 
@@ -116,6 +145,17 @@ function openPage(pageName) {
     $("#pages button").removeClass("active");
     $("#pages button[data-name='" + pageName + "']").addClass("active");
 
+    // 사용안함 버튼 체크 처리
+    var pageName = curPageInfo.name;
+    var btn = $("#pages button[data-name='" + pageName + "']");
+    if(btn.hasClass("disabled")) {
+        $(".cbtns .btn_ten").addClass("active");
+    } else {
+        $(".cbtns .btn_ten").removeClass("active");
+    }
+
+    // 페이지 편집 안된 상태로 적용
+    pageEdited = false;
 }
 
 /**
@@ -159,6 +199,9 @@ function addComponents(info) {
                 var text = com.find(".textarea").val();
                 text = nl2br(text);
                 applyTextToPreview(info.id, null, text);
+
+                // 편집됨
+                pageEdited = true;
             });
 
             // 편집 컴포넌트 추가
@@ -209,12 +252,12 @@ function addComponents(info) {
             // 이름
             com.find(".name").text(info.name);
 
-            // 서비스명
-            com.find(".text").val(info.service_name);
+            // 링크 연결
+            _connectInputLink(info.id, com.find(".link"));
 
-            com.find(".service_type_select").val(info.service_type);
-            com.find(".conn_link_select").val(info.service_name);
-            
+            // 서비스명
+            // com.find(".text").val(info.service_name);
+
             // com.find(".link").val(info.service_name);
 
             // 기존 텍스트
@@ -226,46 +269,6 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
-        
-        case "link_text3":
-            // 편집 컴포넌트
-            var com = _getComponentTemplate(info);
-            // 이름
-            com.find(".name").text(info.name);
-
-            // 서비스명
-            com.find(".text").val(info.service_name);
-            
-            com.find(".service_type_select").val(info.service_type);
-
-            if(info.service_type == "ControlSvcWithBackground"){
-            	com.find(".conn_link").val("");
-            	com.find(".conn_link").prop('placeholder', "해당없음");
-            	com.find(".conn_link").prop('disabled', true);
-            	
-            }else{
-            	com.find(".conn_link").prop('placeholder', "연결할 페이지");
-                com.find(".conn_link").val(info.conn_link);
-            }
-            
-            com.find(".service_type_select").change(function(){
-            	var optionSelected = $(this).find("option:selected");
-            	
-            	if( optionSelected.val() == "ControlSvcWithBackground"){
-            		$(this).parent().find(".conn_link").val("");
-            		$(this).parent().find(".conn_link").prop('placeholder', "해당없음");
-            		$(this).parent().find(".conn_link").prop('disabled', true);
-            	}
-            	else{
-            		$(this).parent().find(".conn_link").prop('placeholder', "연결할 페이지");
-            		$(this).parent().find(".conn_link").prop('disabled', false);
-            	}
-            });
-
-            // 편집 컴포넌트 추가
-            _addComponent(info.section, com);
-            break;
-            
         case "hover_image_text":
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
@@ -277,66 +280,35 @@ function addComponents(info) {
             _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
             // 텍스트 인풋 연결
             _connectInputText(info.id_text, com.find(".text"));
-            _connectInputHidden(info.id_service_type, com.find(".service_type"))
-            _connectInputHidden(info.id_conn_link, com.find(".conn_link"))
-            
 
+            // 기능변경 클릭
             ////////////////////////////////////////////////
-            com.find(".btn_plus.btn_spec").click(function() {
-                $(".w_menus2 .editor").html("");
-                var name = com.find(".text").val();
-                var service_type = com.find(".service_type").val();
-                addComponents({"name": info.name,
-                    "type": "link_text2",
-                    "service_name": name,
-                    "service_type": service_type,
-                    "section": "w_menus2",
-                    "id": "nolink"});
-                return false;
-            });
+            // com.find(".btn_plus.btn_spec").click(function() {
+            //     $(".w_menus2 .editor").html("");
+            //     var name = com.find(".text").val();
+            //     addComponents({"name": info.name,
+            //         "type": "link_text2",
+            //         "service_name": name,
+            //         "section": "w_menus2",
+            //         "id": "nolink"});
+            //     return false;
+            // });
             ////////////////////////////////////////////////
+
+            // 하위 편집 컴포넌트 추가
+            addComponents({"name": info.name,
+                "type": "link_text2",
+                "service_name": com.find(".text").val(),
+                "section": "w_menus2",
+                "id": "nolink"});
 
 
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
+
+            // TODO 기능변경 버튼 추가, 하나만 추가되어야 해서, 없으면 추가하고, 있으면 추가 안하게
+
             break;
-        
-        case "sub_hover_image_text":
-            // 편집 컴포넌트
-            var com = _getComponentTemplate(info);
-            // 이름
-            com.find(".name").text(info.name);
-
-            // 파일 연결
-            _connectInputFile(info.id_normal, com.find(".file_normal"), com.find(".img_normal"));
-            _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
-            // 텍스트 인풋 연결
-            _connectInputText(info.id_text, com.find(".text"));
-            _connectInputHidden(info.id_service_type, com.find(".service_type"))
-            _connectInputHidden(info.id_conn_link, com.find(".conn_link"))
-
-            ////////////////////////////////////////////////
-            com.find(".btn_plus.btn_spec").click(function() {
-                $(".w_menus2 .editor").html("");
-                var name = com.find(".text").val();
-                var service_type = com.find(".service_type").val();
-                var conn_link = com.find(".conn_link").val();
-                addComponents({"name": info.name,
-                    "type": "link_text3",
-                    "service_name": name,
-                    "service_type": service_type,
-                    "conn_link": conn_link,
-                    "section": "w_menus2",
-                    "id": "nolink"});
-                return false;
-            });
-            ////////////////////////////////////////////////
-
-
-            // 편집 컴포넌트 추가
-            _addComponent(info.section, com);
-            break;        
-        
         case "image_text_link":
         case "image_text_popup":
             // 편집 컴포넌트
@@ -380,6 +352,8 @@ function _connectInputFile(id, compElem, imgElem) {
     // 이미지 선택시 preview 에 바로 반영
     compElem.change(function() {
         applyImageToPreview(id, this, imgElem);
+        // 편집됨
+        pageEdited = true;
     });
 }
 
@@ -401,6 +375,8 @@ function _connectInputFileBackground(id, compElem, imgElem) {
     // 이미지 선택시 preview 에 바로 반영
     compElem.change(function() {
         applyBackgroundImageToPreview(id, this, imgElem);
+        // 편집됨
+        pageEdited = true;
     });
 }
 
@@ -420,13 +396,9 @@ function _connectInputText(id, compElem) {
     compElem.keyup(function() {
         var text = compElem.val();
         applyTextToPreview(id, text);
+        // 편집됨
+        pageEdited = true;
     });
-}
-
-function _connectInputHidden(id, compElem) {
-    // 기존 텍스트
-    var oldText = curPageObj.find("#" + id).val();
-    compElem.val(oldText);
 }
 
 /**
@@ -450,12 +422,16 @@ function _connectInputLink(id, compElem) {
         compElem.change(function() {
             var text = compElem.val();
             applyAttributeToPreview(id, "href", text);
+            // 편집됨
+            pageEdited = true;
         });
     } else {
         // 텍스트 편집 실시간 반영
         compElem.keyup(function() {
             var text = compElem.val();
             applyAttributeToPreview(id, "href", text);
+            // 편집됨
+            pageEdited = true;
         });
     }
 
@@ -638,8 +614,35 @@ function save() {
         console.log(htmlFilename);
 
         // 서버에 내용 업데이트
-        updatePage(domain, vendor, htmlFilename, generatedHtml);
+        updatePage(domain, vendor, htmlFilename, generatedHtml, function(data) {
+            if(data.code == 200) { // 저장 성공
+                pageEdited = false;
+                alert(data.message);
+            } else {
+                alert(data.code + ": " + data.message);
+            }
+        });
+
+        // 편집 안된 상태로 변경
+        pageEdited = false;
     } else {
         alert("저장할 수 없습니다.");
     }
+}
+
+
+/**
+ * 페이지 사용안함 처리
+ */
+function disablePage() {
+    var pageName = curPageInfo.name;
+    var btn = $("#pages button[data-name='" + pageName + "']");
+    if(btn.hasClass("disabled")) {
+        btn.removeClass("disabled");
+        $(".cbtns .btn_ten").removeClass("active");
+    } else {
+        btn.addClass("disabled");
+        $(".cbtns .btn_ten").addClass("active");
+    }
+    // console.log(curPageInfo);
 }

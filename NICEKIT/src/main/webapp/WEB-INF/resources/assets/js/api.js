@@ -1,5 +1,4 @@
-//var server = "http://222.107.124.9:8080/NICEKIT/";
-var server = "/NICEKIT/";
+var server = "http://222.107.124.9:8080/NICEKIT/";
 
 /**
  * 도메인 목록 조회
@@ -50,17 +49,49 @@ function getVendorDetail(domain, vendor, cb) {
 }
 
 /**
- * 사업장 생성
- * @param domain 도메인
- * @param newVendorName 사업장명
- * @param fromTemplatePath 복사할 기존 템플릿 경로
+ * 기존사업장으로 사업장 생성
+ * @param domain
+ * @param newVendorName
+ * @param urlPath
  * @param cb
  */
-function createVendor(domain, newVendorName, fromTemplatePath, cb) {
-    var reqParam = {domainName:domain, vendorName:newVendorName, urlPath:fromTemplatePath};
-	$.post(server + "VendorGen", JSON.stringify(reqParam), function(data) {
-        console.log(JSON.stringify(data));
-        cb(data);
+function createVendorFromVendor(domain, newVendorName, comUrl, testUrl, urlPath, cb) {
+    var param = {domainName:domain, vendorName:newVendorName, comUrl:comUrl, testUrl:testUrl, urlPath:urlPath};
+
+    $.ajax({
+        type: 'POST',
+        url: server + "CreateWithVendor",
+        data: JSON.stringify(param), // or JSON.stringify ({name: 'jonas'}),
+        success: function(data) {
+            console.log(data);
+            cb(data);
+        },
+        contentType: "application/json",
+        dataType: 'json'
+    });
+
+}
+
+
+/**
+ * 템플릿으로 사업장 생성
+ * @param domain
+ * @param newVendorName
+ * @param urlPath
+ * @param cb
+ */
+function createVendorFromTemplate(domain, newVendorName, templateName, urlPath, cb) {
+    var param = {domainName:domain, vendorName:newVendorName, specName: templateName, urlPath:urlPath};
+    $.ajax({
+        type: 'POST',
+        url: server + "CreateWithTemplate",
+        data: JSON.stringify(param), // or JSON.stringify ({name: 'jonas'}),
+        success: function(data) {
+            console.log(data);
+            cb(data);
+        },
+        contentType: "application/json",
+        dataType: 'json'
     });
 }
 
@@ -71,7 +102,7 @@ function createVendor(domain, newVendorName, fromTemplatePath, cb) {
  */
 function getTemplateList(domain, cb) {
     $.get(server + "getTemplate", {domainName: domain}, function(data) {
-        console.log(JSON.stringify(data));
+        console.log(data);
         if(data.resCode == "200") {
             cb(data.resData.templateList);
         } else {
@@ -98,19 +129,32 @@ function getTemplateDetail(domain, template, cb) {
 }
 
 /**
+ * 규격목록 조회
+ * @param domain
+ */
+function getSpecList(domain, cb) {
+    $.get(server + "getSpecList", {domainName: domain}, function (data) {
+        console.log(data);
+        if(data.resCode == "200") {
+            cb(data.resData.specList);
+        } else {
+            alert(data.resMsg);
+        }
+    });
+}
+
+/**
  * 파일 컨텐츠 업데이트
  * @param domain
  * @param vendor
  * @param filename
  * @param content
  */
-function updatePage(domain, vendor, filename, content) {
-    domain = "template";
+function updatePage(domain, vendor, filename, content, cb) {
+    // domain = "template";
     // domain = "resources/template/";
     // vendor = vendor + "/";
     console.log(vendor);
-    $.post(server + "api/update/file", {domain:domain, workplace:vendor, filename:filename, content:content}, function (data) {
-    // $.post(server + "api/update/file", {workplace:vendor, filename:filename, content:content}, function (data) {
-        console.log(data);
-    });
+    $.post(server + "api/update/file", {domain:domain, workplace:vendor, filename:filename, content:content}, cb);
 }
+

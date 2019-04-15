@@ -14,40 +14,28 @@ import com.kt.dataForms.GetSpecInfoDataForm;
 
 public class GetSpecInfoToSupportTool {
 
-	SelectDataTo selectTo = new SelectDataTo();
 	JSONParser parser = new JSONParser();
 	JSONSerializerTo serializerTo = new JSONSerializerTo();
 	JSONObject obj = new JSONObject();
 
 	public String getSpecTable(String specName) {
-
+		SelectDataTo selectTo = new SelectDataTo();
 		String targetTable = null;
-
 		List<Row> list = selectTo.selectGetSpecId(specName);
-
 		for (Row table : list) {
-
 			targetTable = table.getString("specid");
 		}
-
 		return targetTable;
-
 	}
 
 	public ArrayList<GetSpecInfoDataForm> resSpecData(String specName) throws ParseException {
-
+		SelectDataTo selectTo = new SelectDataTo();
 		ArrayList<GetSpecInfoDataForm> specList = new ArrayList<GetSpecInfoDataForm>();
-
 		String table = this.getSpecTable(specName);
-
 		try {
-
 			List<Row> list = selectTo.selectGetSpecInfo(table);
-
 			for (Row info : list) {
-
 				GetSpecInfoDataForm form = new GetSpecInfoDataForm();
-
 				form.setIntenName(info.getString("intentname"));
 				form.setInvokeType(info.getString("invoketype"));
 				form.setServiceCode(info.getString("servicecode"));
@@ -56,19 +44,11 @@ public class GetSpecInfoToSupportTool {
 				form.setServiceName(info.getString("servicename"));
 				form.setServiceType(info.getString("servicetype"));
 				form.setWordList((JSONArray) parser.parse(info.getString("dicList")));
-
 				specList.add(form);
-
 			}
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		}
-
 		return specList;
-
 	}
-
 }

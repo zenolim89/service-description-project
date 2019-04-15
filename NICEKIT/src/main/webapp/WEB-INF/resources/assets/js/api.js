@@ -21,15 +21,27 @@ function getDomainList(cb) {
  * @param domain
  * @param cb
  */
-function getVendorList(domain, cb) {
-    $.get(server + "getVendor", {domainName: domain}, function (data) {
-        console.log(data);
-        if(data.resCode == "200") {
-            cb(data.resData.vendorList);
-        } else {
-            alert(data.resMsg);
-        }
-    });
+function getVendorList(domain, temp, cb) {
+    if(temp) {
+        $.get(server + "getTemp", {domainName: domain}, function (data) {
+            console.log(data);
+            if(data.resCode == "200") {
+                cb(data.resData.tempList);
+            } else {
+                alert(data.resMsg);
+            }
+        });
+    } else {
+        $.get(server + "getVendor", {domainName: domain}, function (data) {
+            console.log(data);
+            if(data.resCode == "200") {
+                cb(data.resData.vendorList);
+            } else {
+                alert(data.resMsg);
+            }
+        });
+    }
+
 }
 
 /**
@@ -80,8 +92,8 @@ function createVendorFromVendor(domain, newVendorName, comUrl, testUrl, urlPath,
  * @param urlPath
  * @param cb
  */
-function createVendorFromTemplate(domain, newVendorName, templateName, urlPath, cb) {
-    var param = {domainName:domain, vendorName:newVendorName, specName: templateName, urlPath:urlPath};
+function createVendorFromTemplate(domain, newVendorName, specName, urlPath, cb) {
+    var param = {domainName:domain, vendorName:newVendorName, specName: specName, urlPath:urlPath};
     $.ajax({
         type: 'POST',
         url: server + "CreateWithTemplate",
@@ -151,7 +163,7 @@ function getSpecList(domain, cb) {
  * @param content
  */
 function updatePage(domain, vendor, filename, content, cb) {
-    // domain = "template";
+    domain = "temp";
     // domain = "resources/template/";
     // vendor = vendor + "/";
     console.log(vendor);

@@ -30,10 +30,77 @@
 
 <body class="comBg page">
 
+<script>
+    $(document).ready(function () {
+        var param = location.hash.substr(1);
+        var params = param.split("&");
+        for(var i = 0; i < params.length; i++) {
+            var p = params[i];
+            p = p.split("=");
+            if(p[0] == 'specName') {
+                $("input[name='specName']").val(decodeURIComponent(p[1]));
+            } else if(p[0] == 'domain') {
+                $("input[name='domainName']").val(p[1]);
+            } else if(p[0] == 'domainId') {
+                $("input[name='domainId']").val(p[1]);
+            }
+        }
+    });
+
+    var uploading = false;
+    function iframeLoaded() {
+        if(uploading) {
+            uploading = false;
+        } else {
+            return;
+        }
+
+        $("#fileContentTable tbody").html("");
+
+        var json = $("#uploadFrame").contents().text();
+
+        applyData(json);
+
+        // var k = "[{\"serviceName\":\"웹캠\",\"serviceCode\":\"REWCAM0143\",\"serviceDesc\":\"슬로프에 설치된 실시간웹캠 영상보기\",\"serviceType\":\"CheckSvcWithPage\",\"invokeType\":\"voice\",\"intentName\":\"HotelWebCam\",\"dicNameList\":\"실시간웹캠명\",\"wordList\":\"[\\\"A슬로프\\\",\\\"B슬로프\\\",\\\"H슬로프\\\",\\\"스키장전경\\\"]\",\"isRegistered\":false},{\"serviceName\":\"부대시설\",\"serviceCode\":\"REVIEW0145\",\"serviceDesc\":\"사업장 내 부대시설 정보 조회\",\"serviceType\":\"CheckSvcWithPage\",\"invokeType\":\"voice\",\"intentName\":\"HotelViewPage\",\"dicNameList\":\"부대시설명<br>레저스포츠명\",\"wordList\":\"[\\\"식음주점\\\",\\\"문화시설\\\",\\\"쇼핑편의\\\",\\\"의무시설\\\"]<br>[\\\"수영장\\\",\\\"사우나\\\",\\\"피트니스\\\"]\",\"isRegistered\":false},{\"serviceName\":\"시스템 연동\",\"serviceCode\":\"REINIT0143\",\"serviceDesc\":\"초기 시스템간 연동\",\"serviceType\":\"InitSvcWithBackground\",\"invokeType\":\"system\",\"intentName\":null,\"dicNameList\":null,\"wordList\":null,\"isRegistered\":false}]";
+    }
+    function applyData(json) {
+        var data = JSON.parse(json);
+        for(var i = 0; i < data.length; i++) {
+            var item = data[i];
+
+            var el = $("<tr>\n" +
+                "                                        <td>6</td>\n" +
+                "                                        <td>웹캠</td>\n" +
+                "                                        <td>voice</td>\n" +
+                "                                        <td>CheckSvcWitePage</td>\n" +
+                "                                        <td>슬로프에 설치된 실시간 웹캠 영상보기</td>\n" +
+                "                                        <td>REWCM0143</td>\n" +
+                "                                        <td>HotelWebCam</td>\n" +
+                "                                        <td>실시간 웹캠명</td>\n" +
+                "                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>\n" +
+                "                                    </tr>");
+
+            el.find("td:nth-child(1)").text(i+1);
+            el.find("td:nth-child(2)").text(item.serviceName);
+            el.find("td:nth-child(3)").text(item.invokeType);
+            el.find("td:nth-child(4)").text(item.serviceType);
+            el.find("td:nth-child(5)").text(item.serviceDesc);
+            el.find("td:nth-child(6)").text(item.serviceCode);
+            el.find("td:nth-child(7)").text(item.intentName);
+            el.find("td:nth-child(8)").text(item.dicNameList);
+            el.find("td:nth-child(9)").text(item.wordList);
+
+            $("#fileContentTable tbody").append(el);
+        }
+    }
+</script>
+
 <div id="skipToContent">
     <a href="#header">대메뉴 바로가기</a>
     <a href="#content">본문 바로가기</a>
 </div><!-- skipToContent -->
+
+<iframe width="0" height="0" name="_uploadFrame" id="uploadFrame" onload="iframeLoaded()" style="display:none;" ></iframe>
 
 <div class="wrap">
 
@@ -56,6 +123,8 @@
             </section><!-- spot_section -->
         </div><!-- header -->
 
+
+
         <div class="container">
             <div class="content" id="content">
                 <section class="service_list_box">
@@ -72,7 +141,11 @@
                         </div>
                         <div class="body_area">
                             <div class="form">
-                                <form action="">
+                                <form action="http://222.107.124.9:8080/NICEKIT/fileUpload" enctype="multipart/form-data" target="_uploadFrame" id="uploadForm" method="post">
+                                    <input type="hidden" name="domainName" />
+                                    <input type="hidden" name="domainId" />
+                                    <input type="hidden" name="specName" />
+
                                     <fieldset>
                                         <legend>일괄 등록 엑셀 파일 업로드</legend>
                                         <div class="table borderTable">
@@ -87,13 +160,14 @@
                                                     <td>
                                                         <div class="up_file inline w300">
                                                             <label class="comFile">
-                                                                <input type="file" class="hidFile" placeholder="선택된 파일 없음" title="파일 선택"><!-- disabled : disabled -->
+                                                                <input type="file" class="hidFile" name="uploadFile" placeholder="선택된 파일 없음" title="파일 선택"><!-- disabled : disabled -->
                                                                 <span class="comText unselect" title=""></span>
-                                                                <em class="sbtn">파일 선택</em>
+                                                                <em class="sbtn" style="background:#ccc;">파일 선택</em>
+                                                                <em class="sbtn" onclick="uploading = true; document.getElementById('uploadForm').submit(); return false;" style="margin-right:-100px;">업로드</em>
                                                             </label>
                                                         </div>
                                                         <p class="desc left">* 우측 엑셀 약식을 다운받아서, 일괄적으로 파일을 등록 할 수 있습니다. <br>* 중복된 서비스 명세 리스트가 있을 경우 새로운 정보로 업데이트 됩니다.</p>
-                                                        <a href="#" class="btn btn_sec"><em>양식 다운로드</em></a>
+                                                        <a href="sample.xls" target="_blank" class="btn btn_sec"><em>양식 다운로드</em></a>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -102,7 +176,7 @@
                                     </fieldset>
                                 </form>
                             </div>
-                            <div class="table">
+                            <div class="table" id="fileContentTable">
                                 <table>
                                     <colgroup>
                                         <col style="width:80px;"/>
@@ -121,78 +195,78 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>웹캠</td>
-                                        <td>voice</td>
-                                        <td>CheckSvcWitePage</td>
-                                        <td>슬로프에 설치된 실시간 웹캠 영상보기</td>
-                                        <td>REWCM0143</td>
-                                        <td>HotelWebCam</td>
-                                        <td>실시간 웹캠명</td>
-                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>부대시설</td>
-                                        <td>voice</td>
-                                        <td>CheckSvcWitePage</td>
-                                        <td>사업장 내 부대시설 정보조회</td>
-                                        <td>REVIEW0145</td>
-                                        <td>HotelViewPage</td>
-                                        <td>부대시설명 레저스포츠명</td>
-                                        <td>[“식음주점”,”문화시설”,”쇼핑편의”,”의무 시설”]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>시스템 연동</td>
-                                        <td>system</td>
-                                        <td>InitSvcWithBackground</td>
-                                        <td>기 시스템간 연동</td>
-                                        <td>REINIT0143</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>웹캠</td>
-                                        <td>voice</td>
-                                        <td>CheckSvcWitePage</td>
-                                        <td>슬로프에 설치된 실시간 웹캠 영상보기</td>
-                                        <td>REWCM0143</td>
-                                        <td>HotelWebCam</td>
-                                        <td>실시간 웹캠명</td>
-                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>부대시설</td>
-                                        <td>voice</td>
-                                        <td>CheckSvcWitePage</td>
-                                        <td>사업장 내 부대시설 정보조회</td>
-                                        <td>REVIEW0145</td>
-                                        <td>HotelViewPage</td>
-                                        <td>부대시설명 레저스포츠명</td>
-                                        <td>[“식음주점”,”문화시설”,”쇼핑편의”,”의무 시설”]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>시스템 연동</td>
-                                        <td>system</td>
-                                        <td>InitSvcWithBackground</td>
-                                        <td>기 시스템간 연동</td>
-                                        <td>REINIT0143</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td>6</td>-->
+<!--                                        <td>웹캠</td>-->
+<!--                                        <td>voice</td>-->
+<!--                                        <td>CheckSvcWitePage</td>-->
+<!--                                        <td>슬로프에 설치된 실시간 웹캠 영상보기</td>-->
+<!--                                        <td>REWCM0143</td>-->
+<!--                                        <td>HotelWebCam</td>-->
+<!--                                        <td>실시간 웹캠명</td>-->
+<!--                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>5</td>-->
+<!--                                        <td>부대시설</td>-->
+<!--                                        <td>voice</td>-->
+<!--                                        <td>CheckSvcWitePage</td>-->
+<!--                                        <td>사업장 내 부대시설 정보조회</td>-->
+<!--                                        <td>REVIEW0145</td>-->
+<!--                                        <td>HotelViewPage</td>-->
+<!--                                        <td>부대시설명 레저스포츠명</td>-->
+<!--                                        <td>[“식음주점”,”문화시설”,”쇼핑편의”,”의무 시설”]</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>4</td>-->
+<!--                                        <td>시스템 연동</td>-->
+<!--                                        <td>system</td>-->
+<!--                                        <td>InitSvcWithBackground</td>-->
+<!--                                        <td>기 시스템간 연동</td>-->
+<!--                                        <td>REINIT0143</td>-->
+<!--                                        <td>-</td>-->
+<!--                                        <td>-</td>-->
+<!--                                        <td>-</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>3</td>-->
+<!--                                        <td>웹캠</td>-->
+<!--                                        <td>voice</td>-->
+<!--                                        <td>CheckSvcWitePage</td>-->
+<!--                                        <td>슬로프에 설치된 실시간 웹캠 영상보기</td>-->
+<!--                                        <td>REWCM0143</td>-->
+<!--                                        <td>HotelWebCam</td>-->
+<!--                                        <td>실시간 웹캠명</td>-->
+<!--                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>2</td>-->
+<!--                                        <td>부대시설</td>-->
+<!--                                        <td>voice</td>-->
+<!--                                        <td>CheckSvcWitePage</td>-->
+<!--                                        <td>사업장 내 부대시설 정보조회</td>-->
+<!--                                        <td>REVIEW0145</td>-->
+<!--                                        <td>HotelViewPage</td>-->
+<!--                                        <td>부대시설명 레저스포츠명</td>-->
+<!--                                        <td>[“식음주점”,”문화시설”,”쇼핑편의”,”의무 시설”]</td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <td>1</td>-->
+<!--                                        <td>시스템 연동</td>-->
+<!--                                        <td>system</td>-->
+<!--                                        <td>InitSvcWithBackground</td>-->
+<!--                                        <td>기 시스템간 연동</td>-->
+<!--                                        <td>REINIT0143</td>-->
+<!--                                        <td>-</td>-->
+<!--                                        <td>-</td>-->
+<!--                                        <td>-</td>-->
+<!--                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div><!-- table -->
                             <div class="cbtns">
                                 <div class="right">
-                                    <a href="service_protocol_list.html" class="btn">목록</a>
+                                    <a href="domain.html" class="btn">목록</a>
                                 </div>
                             </div>
                         </div>

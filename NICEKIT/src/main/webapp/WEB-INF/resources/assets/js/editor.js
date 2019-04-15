@@ -184,6 +184,7 @@ function _getComponentTemplate(info) {
  * @param info
  */
 function addComponents(info) {
+    console.log("adding comp:" + info.type);
     switch (info.type) {
         case "textarea":
             // 편집 컴포넌트

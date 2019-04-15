@@ -20,11 +20,9 @@
 	<entry key="code.200">SUCCESS</entry>
 	<entry key="code.204">처리할 데이터가 없음</entry>
 
-
 	<!-- ========================================= -->
 	<!-- Upload File -->
 	<!-- ========================================= -->
-
 	<entry key="upload.file.resources.flag">false</entry> <!-- 아래의 소스를 변경하면, false로 필요 -->
 	<entry key="upload.file.external.path">/opt/nicekit/docbase</entry>  <!-- 서버의 절대 주소로 변경 -->
 	<entry key="upload.file.resource.path">/WEB-INF/resources</entry>  

@@ -214,7 +214,18 @@ public class JSONSerializerTo {
 		}
 	}
 
-	public JSONObject resCreateDirPath(String code, String path) {
+	public JSONObject resCreateDirPath(String code, String path, String specName) {
+		JSONObject res = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		res.put("resCode", code);
+		res.put("resMsg", "성공");
+		dataObj.put("urlPath", path);
+		dataObj.put("specName", specName);
+		res.put("resData", dataObj);
+		return res;
+	}
+	
+	public JSONObject resTempDirPath(String code, String path) {
 		JSONObject res = new JSONObject();
 		JSONObject dataObj = new JSONObject();
 		res.put("resCode", code);

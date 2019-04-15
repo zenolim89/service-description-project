@@ -13,13 +13,14 @@ import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.GetSpecInfoDataForm;
 
 public class GetSpecInfoToSupportTool {
-
-	SelectDataTo selectTo = new SelectDataTo();
+	
 	JSONParser parser = new JSONParser();
 	JSONSerializerTo serializerTo = new JSONSerializerTo();
 	JSONObject obj = new JSONObject();
 
 	public String getSpecTable(String specName) {
+		
+		SelectDataTo selectTo = new SelectDataTo();
 
 		String targetTable = null;
 
@@ -36,6 +37,7 @@ public class GetSpecInfoToSupportTool {
 
 	public ArrayList<GetSpecInfoDataForm> resSpecData(String specName) throws ParseException {
 
+		SelectDataTo selectTo = new SelectDataTo();
 		ArrayList<GetSpecInfoDataForm> specList = new ArrayList<GetSpecInfoDataForm>();
 
 		String table = this.getSpecTable(specName);

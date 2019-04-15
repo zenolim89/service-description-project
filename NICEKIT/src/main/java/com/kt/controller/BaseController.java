@@ -27,5 +27,16 @@ public abstract class BaseController {
 		return res;
 	}
 	
+	
+	protected <T> ResponseData<T> successInsertResponse(T data){
+		ResponseData<T> res = new ResponseData<>();
+		
+		res.setResCode(201);
+		res.setResMsg("성공");
+		res.setResData(data);
+        
+		return res;
+	}
+	
 
 }

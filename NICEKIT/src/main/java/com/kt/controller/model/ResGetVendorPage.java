@@ -2,14 +2,14 @@ package com.kt.controller.model;
 
 public class ResGetVendorPage {
 	
-	private String url;
+	private String urlPath;
 
-	public String getUrl() {
-		return url;
+	public void setUrlPath(String urlPath) {	
+		this.urlPath = urlPath;
 	}
-
-	public void setUrl(String url) {
-		this.url = url;
+	
+	public String getUrlPath() {
+		return urlPath;
 	}
 
 }

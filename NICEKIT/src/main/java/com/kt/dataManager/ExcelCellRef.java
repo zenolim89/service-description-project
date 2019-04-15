@@ -5,25 +5,25 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellReference;
 
 public class ExcelCellRef {
-	
+
 	public static String getName(Cell cell, int cellIndex) {
 		int cellNum = 0;
 
-		if(cell != null) {
+		if (cell != null) {
 			cellNum = cell.getColumnIndex();
-		}else {
+		} else {
 			cellNum = cellIndex;
 		}
-		
+
 		return CellReference.convertNumToColString(cellNum);
 	}
-	
+
 	public static String getValue(Cell cell) {
-		String value="";
-		
-		if(cell == null) {
-			value="";
-		}else {
+		String value = "";
+
+		if (cell == null) {
+			value = "";
+		} else {
 			CellType type = cell.getCellType();
 			switch (type) {
 			case FORMULA:
@@ -50,7 +50,7 @@ public class ExcelCellRef {
 				break;
 			}
 		}
-		
+
 		return value;
 	}
 

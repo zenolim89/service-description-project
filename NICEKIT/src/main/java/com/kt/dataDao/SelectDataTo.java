@@ -22,6 +22,7 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.internal.core.metadata.MetadataRefresh.Result;
 import com.datastax.oss.driver.shaded.guava.common.math.Quantiles;
 import com.datastax.oss.protocol.internal.request.Query;
+import com.kt.commonUtils.Constants;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataManager.JSONSerializerTo;
@@ -44,7 +45,6 @@ public class SelectDataTo {
 		Statement query = QueryBuilder.select().from(keySpace, name).where(QueryBuilder.eq("intentname", intentName))
 				.allowFiltering();
 		ResultSet set = session.execute(query);
-		
 
 		List<Row> rowList = set.all();
 
@@ -89,219 +89,261 @@ public class SelectDataTo {
 			e.printStackTrace();
 
 		}
-		
+
 		cluster.close();
 
 		return resObj;
 	}
-	
+
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 21. 오후 2:27:18]
-	 * desc	: "voice", "touch", "remocon" 타입안에 속하는 서비스 명세만 불러옴
-	 * @version	:
-	 * @param	: 
-	 * @return 	: List<Row> 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 21. 오후 2:27:18] desc : "voice", "touch",
+	 *         "remocon" 타입안에 속하는 서비스 명세만 불러옴
+	 * @version :
+	 * @param :
+	 * @return : List<Row>
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param table
 	 * @return
 	 */
-	public List<Row> selectGetSpecInfo (String table) {
-		
-		String keySpace = "vendersvcks";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.in("invoketype", "voice", "touch", "remocon"))
-				.allowFiltering();
-				
-		
+	public List<Row> selectGetSpecInfo(String table) {
+
+		Statement query = QueryBuilder.select().from(Constants.CASSANDRA_KEYSPACE_VENDOR, table)
+				.where(QueryBuilder.in("invoketype", "voice", "touch", "remocon")).allowFiltering();
+
 		ResultSet set = session.execute(query);
-		
+
 		cluster.close();
-		
+
 		List<Row> resList = set.all();
-		
+
 		return resList;
-		
+
 	}
-	
-	
-	public List<Row> selectGetSpecId (String specName) {
-		
-		String keySpace = "commonks";
-		String table ="specindexlist";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("specname", specName))
-				.allowFiltering();
-		
+
+	public List<Row> selectGetSpecId(String specName) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_SPECINDEXLIST)
+				.where(QueryBuilder.eq("specname", specName)).allowFiltering();
 		ResultSet set = session.execute(query);
-		
-		
+		cluster.close();
 		List<Row> reslist = set.all();
-		
 		return reslist;
-		
+
 	}
-	
-	public List<Row> selectTemplate (String urlPath) {
-		
-		String keySpace = "commonks";
-		String table = "templateList";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("dirpath", urlPath))
-				.allowFiltering();
-		
+
+	public List<Row> selectTemplateForPath(String urlPath) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
+				.where(QueryBuilder.eq("dirpath", urlPath)).allowFiltering();
 		ResultSet set = session.execute(query);
 		cluster.close();
-		
 		List<Row> resList = set.all();
-		
 		return resList;
 	}
-	
+
+	public List<Row> selectVendorForPath(String urlPath) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.where(QueryBuilder.eq("dirpath", urlPath)).allowFiltering();
+		ResultSet set = session.execute(query);
+		cluster.close();
+		List<Row> resList = set.all();
+		return resList;
+	}
+
+	public List<Row> selectVendorForSpec(String specName) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.where(QueryBuilder.eq("specname", specName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> resList = set.all();
+
+		return resList;
+	}
+
+	public List<Row> selectVendorTable(String specId) {
+
+		Statement query = QueryBuilder.select().from(Constants.CASSANDRA_KEYSPACE_VENDOR, specId).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+		List<Row> resList = set.all();
+		return resList;
+	}
+
 	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 20. 오전 11:47:47]
-	 * desc	: TemplateList와 venderindexlist에 하나의 select로 구현하기 위하여
-	 * keySpace와 table 이름을 inbound에서 하드코딩으로 처리하였음
-	 * 데모가 끝나고 변경해야함
-	 * @version	:
-	 * @param	: 
-	 * @return 	: List<Row> 
-	 * @throws 	: 
-	 * @see		: 
-	
+	 * @author : "Minwoo Ryu" [2019. 3. 20. 오전 11:47:47] desc : TemplateList와
+	 *         venderindexlist에 하나의 select로 구현하기 위하여 keySpace와 table 이름을 inbound에서
+	 *         하드코딩으로 처리하였음 데모가 끝나고 변경해야함
+	 * @version :
+	 * @param :
+	 * @return : List<Row>
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param vendorName
 	 * @param tableName
 	 * @param keySpace
 	 * @return
 	 */
-	public List<Row> selectUseTemplateofVendor (String vendorName) {
-		
-		String keySpace = "vendersvcks";
-		String table = "venderindexlist";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("vendername", vendorName))
-				.allowFiltering();
+	public List<Row> selectUseTemplateofVendor(String vendorName) {
 
-		
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.where(QueryBuilder.eq("vendorname", vendorName)).allowFiltering();
+
 		ResultSet set = session.execute(query);
 		cluster.close();
-		
-		List<Row> resList = set.all();
-		
-		
-		return resList;
-				
-	}
-	
-public List<Row> selectTemplatePreView (String templateName) {
-		
-		String keySpace = "commonks";
-		String table = "templatelist";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("templatename", templateName))
-				.allowFiltering();
 
-		
+		List<Row> resList = set.all();
+
+		return resList;
+
+	}
+
+	public List<Row> selectTemplatePreView(String templateName) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
+				.where(QueryBuilder.eq("templatename", templateName)).allowFiltering();
+
 		ResultSet set = session.execute(query);
 		cluster.close();
-		
+
 		List<Row> resList = set.all();
-		
-		
+
 		return resList;
-				
+
 	}
-	
-	
-	
-	public List<Row> selectVenderlistInDomain (String domainName) {
-		
-		String keySpace = "vendersvcks";
-		String table = "venderindexlist";
-		
+
+	public List<Row> selectVendorlistInDomain(String domainName) {
+
 		InsertDataTo insertTo = new InsertDataTo();
-		
-		TableMetadata res = insertTo.checkExsitingTable(table, keySpace);
-		
-		if (res == null)
-		{
+
+		TableMetadata res = insertTo.checkExsitingTable(Constants.CASSANDRA_TABLE_VENDORINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_VENDOR);
+
+		if (res == null) {
 			List<Row> reslist = null;
-			
+
 			return reslist;
 		}
-		
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("domainname", domainName))
-				.allowFiltering();
-		
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
+
 		ResultSet set = session.execute(query);
 		cluster.close();
-		
+
 		List<Row> reslist = set.all();
-		
+
 		return reslist;
-		
+
 	}
 	
-	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 18. 오후 5:23:05]
-	 * desc	: 생성기의 요청에 따라 commonks에 저장된 speclist를 조회하는 메소스
-	 *        테이블 생성 유무에 따른 에러 메시지를 정의해야하는지 여부 추후 고려 필요
-	 * @version	:
-	 * @param	: 
-	 * @return 	: List<Row> 
-	 * @throws 	: 
-	 * @see		: 
+	public List<Row> selectTemplistInDomain(String domainName) {
+
+		InsertDataTo insertTo = new InsertDataTo();
+
+		TableMetadata res = insertTo.checkExsitingTable(Constants.CASSANDRA_TABLE_TEMPINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_COMMON);
+
+		if (res == null) {
+			List<Row> reslist = null;
+
+			return reslist;
+		}
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
+				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> reslist = set.all();
+
+		return reslist;
+
+	}
 	
+	public List<Row> selectTempInfo(String vendorName, String domainName) {
+
+		InsertDataTo insertTo = new InsertDataTo();
+
+		TableMetadata res = insertTo.checkExsitingTable(Constants.CASSANDRA_TABLE_TEMPINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_COMMON);
+
+		if (res == null) {
+			List<Row> reslist = null;
+
+			return reslist;
+		}
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
+				.where(QueryBuilder.eq("vendorname", vendorName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> reslist = set.all();
+
+		return reslist;
+
+	}
+	
+
+	/**
+	 * @author : "Minwoo Ryu" [2019. 3. 18. 오후 5:23:05] desc : 생성기의 요청에 따라 commonks에
+	 *         저장된 speclist를 조회하는 메소스 테이블 생성 유무에 따른 에러 메시지를 정의해야하는지 여부 추후 고려 필요
+	 * @version :
+	 * @param :
+	 * @return : List<Row>
+	 * @throws :
+	 * @see :
+	 * 
 	 * @param domainName
 	 * @return
 	 */
-	public List<Row> selectSpecList (String domainName) {
-		
-				
-		String keySpace = "commonks";
-		String table = "specindexlist";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("domainname", domainName))
-				.allowFiltering();
-		
-		ResultSet set = session.execute(query);
-		cluster.close();
-		
-		List<Row> resList = set.all();
-						
-		
-		return resList;
-	}
-	
-	public List<Row> selectTemplateList (String domainName) {
-		
-		String keySpace = "commonks";
-		String table = "templatelist";
-		
-		Statement query = QueryBuilder.select().from(keySpace, table)
-				.where(QueryBuilder.eq("domainname", domainName))
-				.allowFiltering();
-		
-		ResultSet set = session.execute(query);
-		cluster.close();
-		
-		List<Row> resList = set.all();
-		
-		return resList;
-		
-	}
-	
+	public List<Row> selectSpecList(String domainName) {
 
-	
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_SPECINDEXLIST)
+				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> resList = set.all();
+
+		return resList;
+	}
+
+	public List<Row> selectTemplateList(String domainName) {
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
+				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> resList = set.all();
+
+		return resList;
+
+	}
 
 //	public JSONArray selectDomainListToCommon() {
 //		
@@ -315,94 +357,101 @@ public List<Row> selectTemplatePreView (String templateName) {
 //
 //		return arr;
 //	}
-	
 
 	public JSONObject selectDomainList() {
 
-		Statement query = QueryBuilder.select().from("commonks", "domainlist");
+		Statement query = QueryBuilder.select().from(Constants.CASSANDRA_KEYSPACE_COMMON,
+				Constants.CASSANDRA_TABLE_DOMAINLIST);
 		ResultSet res = session.execute(query);
 		cluster.close();
-		
+
 		JSONObject resObj = serializerTo.resDomainList(res);
 
 		return resObj;
 
 	}
 	
-	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
-	 * desc	: 요청하는 Item (i.e., 컬럼의 값)의 존재 유무를 확인하는 메소드  
-	 *        요청하는 Item 값이 존재할 경우 true를 반환하고, 존재하지 않을 경우 false를 반환 
-	 *                
-	 * @version	: 0.1
-	 * @return 	: Boolean
-	 * @throws 	: 
-	 * @see		: 
+	public List<Row> selectDomainList2() {
 
-	 * @param 
+		Statement query = QueryBuilder.select().from(Constants.CASSANDRA_KEYSPACE_COMMON,
+				Constants.CASSANDRA_TABLE_DOMAINLIST);
+		ResultSet res = session.execute(query);
+		cluster.close();
+
+		return res.all();
+
+	}
+
+	/**
+	 * @author : "Minwoo Ryu" [2019. 3. 16. 오 16:54:27] desc : 요청하는 Item (i.e., 컬럼의
+	 *         값)의 존재 유무를 확인하는 메소드 요청하는 Item 값이 존재할 경우 true를 반환하고, 존재하지 않을 경우 false를
+	 *         반환
+	 * 
+	 * @version : 0.1
+	 * @return : Boolean
+	 * @throws :
+	 * @see :
+	 * 
+	 * @param
 	 * @return
 	 */
-	public Boolean isExistedItem (String keySpace, String table, String targetCn, String item) {
-		
+	public Boolean isExistedItem(String keySpace, String table, String targetCn, String item) {
+
 		Boolean res = null;
-		
-		Statement query = QueryBuilder.select().from(keySpace, table);
-		
-		ResultSet resSet = session.execute(query);
-		
-		List<Row> rowList = resSet.all();
-		
-		for(Row row : rowList) {
-			
-			System.out.println(row.getString(targetCn).toString());
-			
-			if ((row.getString(targetCn).toString()).equals(item)) {
-				
-				res = true;
-				
-				return res;
-				
-			} 
-		}
-		
-		res = false;
-		
-		
-		return res;
-		
-	}
-	
-	/**
-	 * @author	: "Minwoo Ryu" [2019. 3. 16. 오 16:54:27]
-	 * desc	: 검색 대상의 테이블의 전체 row 개수를 확인하기 위한 메소드 
-	 *        PartitionKey를 정의하기 위한 용도로 활용되며, int형의 전체 row 개수를 반환 (0: 값이 없음)
-	 *                
-	 * @version	: 
-	 * @return 	: 
-	 * @throws 	: 
-	 * @see		: 
 
-	 * @param 
+		Statement query = QueryBuilder.select().from(keySpace, table);
+
+		ResultSet resSet = session.execute(query);
+
+		List<Row> rowList = resSet.all();
+
+		for (Row row : rowList) {
+
+			System.out.println(row.getString(targetCn).toString());
+
+			if ((row.getString(targetCn).toString()).equals(item)) {
+
+				res = true;
+
+				return res;
+
+			}
+		}
+
+		res = false;
+
+		return res;
+
+	}
+
+	/**
+	 * @author : "Minwoo Ryu" [2019. 3. 16. 오 16:54:27] desc : 검색 대상의 테이블의 전체 row
+	 *         개수를 확인하기 위한 메소드 PartitionKey를 정의하기 위한 용도로 활용되며, int형의 전체 row 개수를 반환
+	 *         (0: 값이 없음)
+	 * 
+	 * @version :
+	 * @return :
+	 * @throws :
+	 * @see :
+	 * 
+	 * @param
 	 * @return
 	 */
-	
-	public int selectNumberOfRows (String keySpace, String table) {
-		
+
+	public int selectNumberOfRows(String keySpace, String table) {
+
 		Statement query = QueryBuilder.select().from(keySpace, table);
-		
+
 		ResultSet set = session.execute(query);
-		
-		
+
 		List<Row> resRow = set.all();
-		
+
 		int allRow = resRow.size();
-		
+
 		return allRow;
-		
-		
+
 	}
-	
-	
+
 //	public ResultSet selectServiceCode (String keySpace, String table, String svcType, String domainname) {
 //		
 //		Statement query = QueryBuilder.select().from(keySpace, table)
@@ -430,7 +479,7 @@ public List<Row> selectTemplatePreView (String templateName) {
 
 		Statement query = QueryBuilder.select().from(ksName, tableName);
 		ResultSet res = session.execute(query);
-		
+
 		cluster.close();
 
 		List<Row> resList = res.all();
@@ -458,7 +507,7 @@ public List<Row> selectTemplatePreView (String templateName) {
 				.where(QueryBuilder.eq("intentname", intentName));
 
 		ResultSet res = session.execute(query);
-		
+
 		cluster.close();
 
 		List<Row> resList = res.all();

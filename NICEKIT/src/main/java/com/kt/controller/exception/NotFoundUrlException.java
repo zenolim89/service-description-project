@@ -2,14 +2,15 @@ package com.kt.controller.exception;
 
 import org.springframework.http.HttpStatus;
 
+import com.kt.commonUtils.Constants;
+
 public class NotFoundUrlException extends XRestException{
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static final String[] NOT_FOUND_URL = new String[]{"404", "유효하지 않은 URL"};
 
     public NotFoundUrlException() {
-        super(NOT_FOUND_URL[0], NOT_FOUND_URL[1]);
+        super(Constants.NOT_FOUND_URL[0], Constants.NOT_FOUND_URL[1]);
     }
 
 	@Override

@@ -2,13 +2,12 @@ package com.kt.controller.model;
 
 public class ResCreateWithVendor {
 	
-	private String url;
+	private String urlPath;
 
-	public String getUrl() {
-		return url;
+	public String getUrlPath() {
+		return urlPath;
 	}
-
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUrlPath(String urlPath) {
+		this.urlPath = urlPath;
 	}
 }

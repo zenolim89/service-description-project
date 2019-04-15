@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta
-	http-equiv="Content-Type"
-	Content="text/html; charset=utf-8"
-/>
-<meta
-	name="viewport"
-	content="height=1080, width=1920, user-scalable=no"
-/>
-<script
-	type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-></script>
+<meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+<meta name="viewport" content="height=1080, width=1920, user-scalable=no" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <style type="text/css">
 body {
 	background-color: rgb(255, 255, 255);
@@ -32,16 +23,13 @@ h1 {
 	align-content: center;
 }
 </style>
-<script
-	type="text/javascript"
-	src="http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js"
-></script>
+<script type="text/javascript" src="http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js"></script>
 <script type="text/javascript">
 
 function init() {
 	var options = {};
 	options.keytype = "GBOXDEVM";
-	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+	options.apikey = "RTUwMDI3NDJ8R0JPWERFVk18MTU1MzE0MTQzODU5Ng==";
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			$("#output").append("<font color='red'>[DEBUG] init : Init Success</font><br>");
@@ -122,37 +110,37 @@ gigagenie.voice.onActionEvent = function(extra) {
 		case 'HotelAmenityItem':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+									+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelCheckout':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelHelp':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelViewPage':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+  JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelWebCam':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+ JSON.stringify(extra.actioncode)+ " || "+ JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		case 'HotelTourInfo':
 			$("#output").append(
 						"<font color='red'>[DEBUG] onActionEvent : "
-									+ JSON.stringify(extra.parameter) + "</font><br>");
+						+ sentence + " || "+ JSON.stringify(extra.actioncode)+ " || " + JSON.stringify(extra.parameter) + "</font><br>");
 			// next action
 			break;
 		default:
@@ -285,17 +273,9 @@ gigagenie.voice.onRequestClose = function() {
 </head>
 <body onload=init()>
 	<h1>GiGA Genie Developers Service SDK Test</h1>
-	<input
-		type='button'
-		value='getVoiceText'
-		class='btn'
-		onclick='getVoiceText()'
-	>
+	<input type='button' value='getVoiceText' class='btn' onclick='getVoiceText()'>
 	<br>
 	<br>
-	<div
-		style='width: 95%; border: 1px solid gray; padding: 10px; font-weight: 10;'
-		id='output'
-	></div>
+	<div style='width: 95%; border: 1px solid gray; padding: 10px; font-weight: 10;' id='output'></div>
 </body>
 </html>

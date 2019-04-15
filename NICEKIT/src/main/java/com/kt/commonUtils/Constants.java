@@ -1,8 +1,5 @@
 package com.kt.commonUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class Constants {
 	/** 카산드라 DB 관련 */
 	public static final String CASSANDRA_PROPERTY_HOST = "222.107.124.9";

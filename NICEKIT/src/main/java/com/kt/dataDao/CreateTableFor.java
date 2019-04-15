@@ -1,23 +1,13 @@
 package com.kt.dataDao;
 
-import org.dom4j.datatype.DatatypeElement;
-import org.json.simple.JSONObject;
-
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
-import com.datastax.driver.core.TableMetadata;
-import com.datastax.oss.driver.api.core.metadata.schema.ClusteringOrder;
-import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
 import com.kt.commonUtils.Constants;
-import com.typesafe.config.ConfigException.Parse;
-
-import ch.qos.logback.core.pattern.parser.Parser;
 
 /**
  * @author : "Minwoo Ryu" [2019. 3. 15. 오후 8:11:38]
@@ -68,8 +58,8 @@ public class CreateTableFor {
 	public void createTableForTemplateList() {
 
 		CreateTable create = ((CreateTable) SchemaBuilderDsl
-				.createTable(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST).ifNotExists())
-						.withPartitionKey("templatename", DataTypes.TEXT)
+				.createTable(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
+				.ifNotExists()).withPartitionKey("templatename", DataTypes.TEXT)
 						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT);
 
 		SimpleStatement query = new SimpleStatement(create.toString());
@@ -78,27 +68,29 @@ public class CreateTableFor {
 		cluster.close();
 
 	}
-	
+
 	public void createTableForTempList() {
 
 		CreateTable create = ((CreateTable) SchemaBuilderDsl
 				.createTable(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
 				.ifNotExists()).withPartitionKey("vendorname", DataTypes.TEXT)
-						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT).withColumn("specname", DataTypes.TEXT);
+						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT)
+						.withColumn("specname", DataTypes.TEXT);
 
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
 
 		cluster.close();
 
-	}	
+	}
 
 	public void createTableForVendorList() {
 
 		CreateTable create = ((CreateTable) SchemaBuilderDsl
 				.createTable(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
 				.ifNotExists()).withPartitionKey("vendorname", DataTypes.TEXT)
-						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT).withColumn("specname", DataTypes.TEXT);
+						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT)
+						.withColumn("specname", DataTypes.TEXT);
 
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);

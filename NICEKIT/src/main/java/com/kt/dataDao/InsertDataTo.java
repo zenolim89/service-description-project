@@ -2,13 +2,7 @@ package com.kt.dataDao;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.cassandra.locator.SeedProvider;
-import org.apache.cassandra.streaming.StreamEvent.SessionCompleteEvent;
-import org.apache.tools.ant.filters.LineContains.Contains;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.ResultSet;
@@ -17,7 +11,6 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.oss.driver.api.querybuilder.SchemaBuilderDsl;
 import com.kt.commonUtils.Constants;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
@@ -289,7 +282,7 @@ public class InsertDataTo {
 		}
 
 	}
-	
+
 	public String insertVendorToIndexList(ReqCreateVendor vendor) {
 
 		SelectDataTo selectTo = new SelectDataTo();
@@ -303,12 +296,9 @@ public class InsertDataTo {
 			createTable.createTableForVendorList();
 		}
 
-		Boolean existed = selectTo.isExistedItem(Constants.CASSANDRA_KEYSPACE_VENDOR,
-				Constants.CASSANDRA_TABLE_VENDORINDEXLIST, "vendorname", vendor.getVendorName());
-
 		Statement query = QueryBuilder
-				.insertInto(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST).ifNotExists()
-				.value("vendorname", vendor.getVendorName()).value("domainname", vendor.getDomainName())
+				.insertInto(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.ifNotExists().value("vendorname", vendor.getVendorName()).value("domainname", vendor.getDomainName())
 				.value("dirpath", vendor.getDirPath()).value("specname", vendor.getSpecName());
 
 		session.execute(query);

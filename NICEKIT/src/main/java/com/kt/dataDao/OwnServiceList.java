@@ -1,8 +1,6 @@
 package com.kt.dataDao;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-
 import com.kt.dataForms.BaseSvcForm;
 
 public class OwnServiceList {

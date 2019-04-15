@@ -78,13 +78,27 @@ public class CreateTableFor {
 		cluster.close();
 
 	}
+	
+	public void createTableForTempList() {
 
-	public void createTableForVenderList() {
+		CreateTable create = ((CreateTable) SchemaBuilderDsl
+				.createTable(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
+				.ifNotExists()).withPartitionKey("vendorname", DataTypes.TEXT)
+						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT).withColumn("specname", DataTypes.TEXT);
+
+		SimpleStatement query = new SimpleStatement(create.toString());
+		session.execute(query);
+
+		cluster.close();
+
+	}	
+
+	public void createTableForVendorList() {
 
 		CreateTable create = ((CreateTable) SchemaBuilderDsl
 				.createTable(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
 				.ifNotExists()).withPartitionKey("vendorname", DataTypes.TEXT)
-						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT);
+						.withClusteringColumn("domainname", DataTypes.TEXT).withColumn("dirpath", DataTypes.TEXT).withColumn("specname", DataTypes.TEXT);
 
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
@@ -147,7 +161,6 @@ public class CreateTableFor {
 
 		SimpleStatement query = new SimpleStatement(create.toString());
 		session.execute(query);
-
 		cluster.close();
 
 	}

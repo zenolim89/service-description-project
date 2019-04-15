@@ -55,7 +55,7 @@ public class UITemplateController {
 	 */
 	public JSONObject createWithTemplate(String vendorName, String urlPath, String specName) {
 		SelectDataTo selectTo = new SelectDataTo();
-		JSONObject obj = new JSONObject();
+		JSONObject resObj = new JSONObject();
 		String templateName = null;
 		String dn = vendorName;
 		String sourcePath = this.extractURL(urlPath);
@@ -73,6 +73,36 @@ public class UITemplateController {
 		System.out.println((!sourceFilePath.exists()));
 
 		if (!sourceFilePath.exists()) {
+			resObj.put("code", "400");
+			return resObj;
+
+		} else if (targetFilePath.exists()) {
+
+			resObj.put("code", "409");
+			return resObj;
+
+		} else {
+
+			targetFilePath.mkdirs();
+			this.copyTemplate(sourceFilePath, targetFilePath, specName);
+			resObj.put("code", "201");
+			resObj.put("specName", specName);
+			resObj.put("tempPath", Constants.EXTERNAL_FOLDER_URLPATH_TEMP + "/" + dn);
+			return resObj;
+		}
+	}
+
+	public JSONObject moveToVendor(String vendorName, String urlPath) {
+		JSONObject obj = new JSONObject();
+
+		File sourceFilePath = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_TEMP
+				+ File.separator + vendorName);
+		File targetFilePath = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_VENDORS
+				+ File.separator + vendorName);
+
+		System.out.println((!sourceFilePath.exists()));
+
+		if (!sourceFilePath.exists()) {
 			obj.put("code", "400");
 			return obj;
 
@@ -84,10 +114,11 @@ public class UITemplateController {
 		} else {
 
 			targetFilePath.mkdirs();
-			this.copyTemplate(sourceFilePath, targetFilePath, specName);
+			this.copyVendor(sourceFilePath, targetFilePath);
+			this.deleteTemp(sourceFilePath);
+
 			obj.put("code", "201");
-			obj.put("specName", specName);
-			obj.put("tempPath", Constants.EXTERNAL_FOLDER_URLPATH_TEMP + "/" + dn);
+			obj.put("vendorPath", Constants.EXTERNAL_FOLDER_URLPATH_VENDORS + "/" + vendorName);
 			return obj;
 		}
 	}
@@ -175,6 +206,7 @@ public class UITemplateController {
 
 				// 주석대상 1)
 				FileInputStream fileIn = null;
+
 				// InputStream fileIn = null;
 
 				FileOutputStream fileOut = null;
@@ -183,11 +215,13 @@ public class UITemplateController {
 
 					// DB처리 이후에 해당 리스트 이곳에 대입
 					// 처리 후 주석대상 1), 2), 3) 번 주석처리 필요
+
 					// fileIn = new ByteArrayInputStream(htmlConverter.removeItm(file, "UTF-8",
-					// _selectorMap, _itmMap),"UTF-8");
+					// _selectorMap, _itmMap), "UTF-8");
 
 					// 주석대상 2)
 					fileIn = new FileInputStream(file);
+
 					fileOut = new FileOutputStream(temp);
 
 					byte[] b = new byte[4096];
@@ -259,4 +293,22 @@ public class UITemplateController {
 		}
 	}
 
+	public void deleteTemp(File tempFolder) {
+		try {
+			if (tempFolder.exists()) {
+				File[] fileList = tempFolder.listFiles(); // 파일리스트 얻어오기
+				for (File file : fileList) {
+					if (file.isFile())
+						file.delete(); // 파일 삭제
+					else
+						this.deleteTemp(file);
+					file.delete();
+				}
+				tempFolder.delete();
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+
+	}
 }

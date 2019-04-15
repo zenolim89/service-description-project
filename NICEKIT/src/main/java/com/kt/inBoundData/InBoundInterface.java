@@ -241,6 +241,107 @@ public class InBoundInterface {
 		return res;
 	}
 
+	/** request file upload */
+	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
+	public @ResponseBody List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
+			MultipartHttpServletRequest request, @RequestParam String domainName, @RequestParam String domainId,
+			@RequestParam String specName) {
+		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
+
+		// UtilFile 객체 생성
+		UtilFile utilFile = new UtilFile();
+
+		// 파일 업로드 결과값을 path로 받아온다(이미 fileUpload() 메소드에서 해당 경로에 업로드는 끝났음)
+		String uploadPath = utilFile.fileUpload(request, uploadFile);
+		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
+
+		/** 업로드 엑셀파일 파서 */
+		ExcelService excelSvc = new ExcelService();
+		List<ExcelUploadForm> list = excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
+
+		List<ResFileUpload> result = new ArrayList<ResFileUpload>();
+		for (ExcelUploadForm e : list) {
+			ResFileUpload res = new ResFileUpload();
+			res.setServiceName(e.getServiceName());
+			res.setServiceCode(e.getServiceCode());
+			res.setServiceDesc(e.getServiceDesc());
+			res.setServiceType(e.getServiceType());
+			res.setInvokeType(e.getInvokeType());
+			res.setIntentName(e.getIntentInfo());
+			res.setIsRegistered(e.isRegistered());
+
+			// dicNameList, wordList 매핑
+			if (e.getDicList() != null) {
+				StringBuilder sbDic = new StringBuilder();
+				StringBuilder sbWord = new StringBuilder();
+
+				List<DicParam> dicList = e.getDicList();
+				for (DicParam item : dicList) {
+					if (sbDic.length() > 0)
+						sbDic.append("<br>");
+					if (sbWord.length() > 0)
+						sbWord.append("<br>");
+
+					sbDic.append(item.getDicName());
+					sbWord.append(item.getWordList());
+				}
+				res.setDicNameList(sbDic.toString());
+				res.setWordList(sbWord.toString());
+			}
+			result.add(res);
+		}
+		return result;
+	}
+
+	/** request temp list */
+	@RequestMapping(value = "/getTemp", method = RequestMethod.GET)
+	public JSONObject getTempList(@RequestParam String domainName) {
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		String reqDomain = domainName;
+		JSONObject res = serializerTo.resTempList(reqDomain);
+		return res;
+	}
+
+	/** deploy vendor */
+	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
+	public JSONObject tempSave(InputStream body) {
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		JSONObject res = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+			res = parsingFrom.resTempSaveToVendor(response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/** deploy vendor */
+	@RequestMapping(value = "/deployVendor", method = RequestMethod.POST)
+	public JSONObject deployVendor(InputStream body) {
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		JSONObject res = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+			res = parsingFrom.resTempMoveToVendor(response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	/** registration domain intent information */
 	@RequestMapping(value = "/setDictionary", method = RequestMethod.POST)
 	public JSONObject setDicList(InputStream body) {
@@ -299,57 +400,6 @@ public class InBoundInterface {
 			response = e.getMessage().toString();
 		}
 		return res;
-	}
-
-	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-	public @ResponseBody List<ResFileUpload> uploadController(@RequestParam("uploadFile") MultipartFile uploadFile,
-			MultipartHttpServletRequest request, @RequestParam String domainName, @RequestParam String domainId,
-			@RequestParam String specName) {
-		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
-
-		// UtilFile 객체 생성
-		UtilFile utilFile = new UtilFile();
-
-		// 파일 업로드 결과값을 path로 받아온다(이미 fileUpload() 메소드에서 해당 경로에 업로드는 끝났음)
-		String uploadPath = utilFile.fileUpload(request, uploadFile);
-		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
-
-		/** 업로드 엑셀파일 파서 */
-		ExcelService excelSvc = new ExcelService();
-		List<ExcelUploadForm> list = excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
-
-		List<ResFileUpload> result = new ArrayList<ResFileUpload>();
-		for (ExcelUploadForm e : list) {
-			ResFileUpload res = new ResFileUpload();
-			res.setServiceName(e.getServiceName());
-			res.setServiceCode(e.getServiceCode());
-			res.setServiceDesc(e.getServiceDesc());
-			res.setServiceType(e.getServiceType());
-			res.setInvokeType(e.getInvokeType());
-			res.setIntentName(e.getIntentInfo());
-			res.setIsRegistered(e.isRegistered());
-
-			// dicNameList, wordList 매핑
-			if (e.getDicList() != null) {
-				StringBuilder sbDic = new StringBuilder();
-				StringBuilder sbWord = new StringBuilder();
-
-				List<DicParam> dicList = e.getDicList();
-				for (DicParam item : dicList) {
-					if (sbDic.length() > 0)
-						sbDic.append("<br>");
-					if (sbWord.length() > 0)
-						sbWord.append("<br>");
-
-					sbDic.append(item.getDicName());
-					sbWord.append(item.getWordList());
-				}
-				res.setDicNameList(sbDic.toString());
-				res.setWordList(sbWord.toString());
-			}
-			result.add(res);
-		}
-		return result;
 	}
 
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)

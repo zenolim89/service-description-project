@@ -1,6 +1,9 @@
 package com.kt.commonUtils;
 
-public interface Constants {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Constants {
 	/** 카산드라 DB 관련 */
 	public static final String CASSANDRA_PROPERTY_HOST = "222.107.124.9";
 
@@ -24,5 +27,4 @@ public interface Constants {
 	public static final String EXTERNAL_FOLDER_URLPATH_TEMP = "/docbase/temp";
 	public static final String EXTERNAL_FOLDER_URLPATH_TEMPLATE = "/docbase/template";
 	public static final String EXTERNAL_FOLDER_URLPATH_VENDORS = "/docbase/vendors";
-
 }

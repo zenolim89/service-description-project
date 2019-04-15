@@ -1,14 +1,20 @@
 package com.kt.dataManager;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.datastax.driver.core.Row;
+import com.kt.dataDao.DeleteDataTo;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
+import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseExcelForm;
 import com.kt.dataForms.BaseIntentInfoForm;
@@ -66,43 +72,41 @@ public class JSONParsingFrom {
 		UITemplateController uiController = new UITemplateController();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-
 		InsertDataTo insertTo = new InsertDataTo();
-
-		JSONObject res = new JSONObject();
+		JSONObject resObj = new JSONObject();
 		String resCode;
 
 		try {
 
 			JSONObject obj = (JSONObject) parser.parse(response);
 
-			JSONObject resObj = uiController.createWithTemplate(obj.get("vendorName").toString(),
+			JSONObject createResObj = uiController.createWithTemplate(obj.get("vendorName").toString(),
 					obj.get("urlPath").toString(), obj.get("specName").toString());
 
-			if (resObj.get("code").toString() == "409") {
-				res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
-				return res;
+			if (createResObj.get("code").toString() == "409") {
+				resObj = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
+				return resObj;
 
-			} else if (resObj.get("code").toString() == "400") {
-				res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
-				return res;
+			} else if (createResObj.get("code").toString() == "400") {
+				resObj = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
+				return resObj;
 
 			} else {
 				vendorInfo.setDomainName(obj.get("domainName").toString());
 				vendorInfo.setVendorName(obj.get("vendorName").toString());
 				vendorInfo.setSpecName(obj.get("specName").toString());
-				vendorInfo.setDirPath(resObj.get("tempPath").toString());
+				vendorInfo.setDirPath(createResObj.get("tempPath").toString());
 				resCode = insertTo.insertTempToIndexList(vendorInfo);
 				JSONObject server = parsingFrom.getServerInfo();
-				res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
-						+ server.get("port").toString() + resObj.get("tempPath").toString());
+				resObj = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
+						+ server.get("port").toString() + createResObj.get("tempPath").toString());
 			}
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return res;
+		return resObj;
 	}
 
 	public JSONObject parsingCreateWithVendor(String response) {
@@ -117,30 +121,32 @@ public class JSONParsingFrom {
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
 
-			// insert to commonks.specindexlist 
-			JSONObject specresObj = insertToSpecList.insertSpecIndexTo(obj.get("vendorName").toString(),
+			// insert to commonks.specindexlist
+			JSONObject specResObj = insertToSpecList.insertSpecIndexTo(obj.get("vendorName").toString(),
 					obj.get("domainName").toString());
-			if (specresObj.get("resCode").toString() == "200") {
-				JSONObject resObj = uiController.createWithVendor(obj.get("vendorName").toString(),
+
+			if (specResObj.get("resCode").toString() == "200") {
+				JSONObject createResObj = uiController.createWithVendor(obj.get("vendorName").toString(),
 						obj.get("urlPath").toString(), obj.get("comUrl").toString(), obj.get("testUrl").toString());
-				if (resObj.get("code").toString() == "409") {
+
+				if (createResObj.get("code").toString() == "409") {
 					res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
 					return res;
-				} else if (resObj.get("code").toString() == "400") {
+				} else if (createResObj.get("code").toString() == "400") {
 					res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
 					return res;
 				} else {
 					vendorInfo.setDomainName(obj.get("domainName").toString());
 					vendorInfo.setVendorName(obj.get("vendorName").toString());
 					vendorInfo.setSpecName(obj.get("vendorName").toString());
-					vendorInfo.setDirPath(resObj.get("tempPath").toString());
+					vendorInfo.setDirPath(createResObj.get("tempPath").toString());
 					resCode = insertToTempList.insertTempToIndexList(vendorInfo);
 					JSONObject server = parsingFrom.getServerInfo();
 					res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
-							+ server.get("port").toString() + resObj.get("tempPath").toString());
+							+ server.get("port").toString() + createResObj.get("tempPath").toString());
 				}
 			} else
-				return specresObj;
+				return specResObj;
 
 		} catch (
 
@@ -150,6 +156,100 @@ public class JSONParsingFrom {
 		}
 		return res;
 
+	}
+
+	public JSONObject resTempSaveToVendor(String response) {
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		JSONObject res = new JSONObject();
+
+		SelectDataTo selectTo = new SelectDataTo();
+		JSONObject resObj = new JSONObject();
+		String tempPath = null;
+		try {
+			JSONObject obj = (JSONObject) parser.parse(response);
+
+			List<Row> list = selectTo.selectTempInfo(obj.get("vendorName").toString(),
+					obj.get("domainName").toString());
+
+			if (list == null) {
+				resObj.put("resCode", "400");
+				resObj.put("resMsg", "저장 할 사업장 정보가 없습니다");
+				return resObj;
+			} else {
+				for (Row row : list)
+					tempPath = row.getString("dirpath");
+				JSONObject server = parsingFrom.getServerInfo();
+				res = serializerTo.resCreateDirPath("200",
+						"http://" + server.get("serverIp").toString() + ":" + server.get("port").toString() + tempPath);
+			}
+		} catch (
+
+		ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	public JSONObject resTempMoveToVendor(String response) {
+		ReqCreateVendor vendorInfo = new ReqCreateVendor();
+		UITemplateController uiController = new UITemplateController();
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		JSONObject res = new JSONObject();
+		String resCode;
+
+		SelectDataTo selectTo = new SelectDataTo();
+		InsertDataTo insertTo = new InsertDataTo();
+		DeleteDataTo deleteTo = new DeleteDataTo();
+		JSONObject resObj = new JSONObject();
+		String tempPath = null;
+		String specName = null;
+		try {
+			JSONObject obj = (JSONObject) parser.parse(response);
+
+			List<Row> list = selectTo.selectTempInfo(obj.get("vendorName").toString(),
+					obj.get("domainName").toString());
+
+			if (list == null) {
+				resObj.put("resCode", "400");
+				resObj.put("resMsg", "배포 할 사업장 정보가 없습니다");
+				return resObj;
+			} else {
+				for (Row row : list) {
+					tempPath = row.getString("dirpath");
+					specName = row.getString("specname");
+				}
+				resObj = uiController.moveToVendor(obj.get("vendorName").toString(), tempPath);
+				if (resObj.get("code").toString() == "409") {
+					res = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
+					return res;
+
+				} else if (resObj.get("code").toString() == "400") {
+					res = serializerTo.resNotFoundTemplate("복사할 원본 디렉토리가 존재하지 않습니다");
+					return res;
+
+				} else {
+					vendorInfo.setDomainName(obj.get("domainName").toString());
+					vendorInfo.setVendorName(obj.get("vendorName").toString());
+					vendorInfo.setSpecName(specName);
+					vendorInfo.setDirPath(resObj.get("vendorPath").toString());
+					resCode = insertTo.insertVendorToIndexList(vendorInfo);
+					deleteTo.deleteRowForTempIndexList(obj.get("vendorName").toString(),
+							obj.get("domainName").toString());
+					JSONObject server = parsingFrom.getServerInfo();
+					res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
+							+ server.get("port").toString() + resObj.get("vendorPath").toString());
+				}
+			}
+		} catch (
+
+		ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	public void parsingTemplateInfo(String templateName, String domainName) {

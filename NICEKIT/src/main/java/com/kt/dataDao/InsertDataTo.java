@@ -64,7 +64,7 @@ public class InsertDataTo {
 
 		if (res == null) {
 
-			createTable.createTableForVenderList();
+			createTable.createTableForTempList();
 		}
 
 		Boolean existed = selectTo.isExistedItem(Constants.CASSANDRA_KEYSPACE_COMMON,
@@ -287,6 +287,38 @@ public class InsertDataTo {
 
 			return obj;
 		}
+
+	}
+	
+	public String insertVendorToIndexList(ReqCreateVendor vendor) {
+
+		SelectDataTo selectTo = new SelectDataTo();
+		String resCode;
+
+		TableMetadata res = this.checkExsitingTable(Constants.CASSANDRA_TABLE_VENDORINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_VENDOR);
+
+		if (res == null) {
+
+			createTable.createTableForVendorList();
+		}
+
+		Boolean existed = selectTo.isExistedItem(Constants.CASSANDRA_KEYSPACE_VENDOR,
+				Constants.CASSANDRA_TABLE_VENDORINDEXLIST, "vendorname", vendor.getVendorName());
+
+		Statement query = QueryBuilder
+				.insertInto(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST).ifNotExists()
+				.value("vendorname", vendor.getVendorName()).value("domainname", vendor.getDomainName())
+				.value("dirpath", vendor.getDirPath()).value("specname", vendor.getSpecName());
+
+		session.execute(query);
+		cluster.close();
+
+		resCode = "201";
+
+		return resCode;
+
+		// }
 
 	}
 

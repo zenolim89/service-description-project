@@ -17,11 +17,13 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
 import com.kt.dataDao.Account;
+import com.kt.dataDao.DeleteDataTo;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.OwnServiceList;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.KeyValueFormatForJSON;
+import com.kt.dataForms.ReqCreateVendor;
 import com.kt.dataForms.BaseDictionarySet;
 import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
@@ -55,7 +57,7 @@ public class JSONSerializerTo {
 		List<Row> list = selectTo.selectVendorlistInDomain(domainName);
 
 		if (list == null) {
-			resObj.put("resCode", "200");
+			resObj.put("resCode", "400");
 			resObj.put("resMsg", "등록된 사업장 정보가 없습니다");
 			dataObj.put("vendorList", arr);
 			resObj.put("resData", dataObj);
@@ -69,7 +71,33 @@ public class JSONSerializerTo {
 			resObj.put("resData", dataObj);
 			return resObj;
 		}
+	}
 
+	public JSONObject resTempList(String domainName) {
+
+		SelectDataTo selectTo = new SelectDataTo();
+
+		JSONObject resObj = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		JSONArray arr = new JSONArray();
+
+		List<Row> list = selectTo.selectTemplistInDomain(domainName);
+
+		if (list == null) {
+			resObj.put("resCode", "400");
+			resObj.put("resMsg", "편집 할 사업장 정보가 없습니다");
+			dataObj.put("tempList", arr);
+			resObj.put("resData", dataObj);
+			return resObj;
+		} else {
+			resObj.put("resCode", "200");
+			resObj.put("resMsg", "성공");
+			for (Row row : list)
+				arr.add(row.getString("vendorname"));
+			dataObj.put("tempList", arr);
+			resObj.put("resData", dataObj);
+			return resObj;
+		}
 	}
 
 	/**

@@ -250,6 +250,59 @@ public class SelectDataTo {
 		return reslist;
 
 	}
+	
+	public List<Row> selectTemplistInDomain(String domainName) {
+
+		InsertDataTo insertTo = new InsertDataTo();
+
+		TableMetadata res = insertTo.checkExsitingTable(Constants.CASSANDRA_TABLE_TEMPINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_COMMON);
+
+		if (res == null) {
+			List<Row> reslist = null;
+
+			return reslist;
+		}
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
+				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> reslist = set.all();
+
+		return reslist;
+
+	}
+	
+	public List<Row> selectTempInfo(String vendorName, String domainName) {
+
+		InsertDataTo insertTo = new InsertDataTo();
+
+		TableMetadata res = insertTo.checkExsitingTable(Constants.CASSANDRA_TABLE_TEMPINDEXLIST,
+				Constants.CASSANDRA_KEYSPACE_COMMON);
+
+		if (res == null) {
+			List<Row> reslist = null;
+
+			return reslist;
+		}
+
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPINDEXLIST)
+				.where(QueryBuilder.eq("vendorname", vendorName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> reslist = set.all();
+
+		return reslist;
+
+	}
+	
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 3. 18. 오후 5:23:05] desc : 생성기의 요청에 따라 commonks에

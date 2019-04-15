@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../assets/js/ui.js"></script>
 
     <script src="../assets/js/api.js"></script>
-    <script src="../assets/js/editor.js"></script>
+    <script src="../assets/js/editor.js?v=2"></script>
     <script src="../assets/js/parser.js"></script>
 
     <style>
@@ -59,9 +59,11 @@
 
         templatePath = decodeURIComponent(templatePath);
         console.log(templatePath);
+
+        // TODO 테스트
         // templatePath = "../template";
+
         $(document).ready(function () {
-        	console.log("SERA: "+templatePath);
             init(domain, vendor, templatePath + "/");
         });
     </script>
@@ -98,11 +100,15 @@
             <div class="content" id="content">
                 <section class="page_section bg_ede9e2">
                     <article class="sec sec_menu">
-                        <h3 class="sec_title" style="padding:0;"><strong id="vendor_name">-</strong></h3>
+                        <h3 class="sec_title"><strong id="vendor_name">-</strong></h3>
                         <ul class="tab_menu" id="pages">
 
                         </ul>
                         <!--<a href="#" class="btn_site">Sitemap</a>-->
+<!--                        <button class="btn btn_save_01 btn_ten" type="button">일괄 임시 저장</button>-->
+                        <div class="cbtns">
+                            <button class="btn btn_save_02 btn_save btn_twv" type="button" style="background:#000 !important;border:0 !important;"><em>저장</em></button>
+                        </div>
                     </article>
                     <article class="sec sec_preview">
                         <div class="preview_area" style="height:920px;">
@@ -204,7 +210,9 @@
                             </div>
                         </div>
                         <div class="cbtns">
-                            <a href="#" class="btn btn_save" onclick="save(); return false;"><em>저장</em></a>
+                            <a href="#" class="btn btn_used btn_ten" onclick="disablePage(); return false;"><em>사용안함</em></a>
+                            <a href="#" class="btn btn_sec" onclick="save(); return false;"><em>임시저장</em></a>
+<!--                            <a href="#" class="btn btn_save" onclick="return false;"><em>저장</em></a>-->
                         </div>
                     </article>
                 </section>
@@ -221,9 +229,10 @@
             $(this).addClass("active");
         });
 
+
+
         // 기능변경 - (객실용품) 서비스 기능 열기
         $(".btn_plus").on("click", function(e){
-        	console.log("SERA: ");
             e.preventDefault();
             var title = $(this).parents(".box").find(".t").text();
             $(".service_area").find(".s_title").text("("+title+") 서비스 기능")
@@ -732,7 +741,7 @@
         });
 
         // 초기 설정
-        require.config({ paths: { 'vs': 'assets/js/monaco-editor/vs' }});
+        require.config({ paths: { 'vs': '../assets/js/monaco-editor/vs' }});
         controlUi("POST", "request");
         removeSpecDom("POST", "request");
 
@@ -820,103 +829,47 @@
         </div>
     </div>
 
-		<div class="comp link_text2">
-			<div class="box form_line" style="weiht: 350px; height: 350px;">
-				<div class="t_area">
-					<p class="t name">이름</p>
-				</div>
-				<span class="inp_box"> <label>서비스명</label> <input type="text" class="comText text" placeholder="명칭" /> 
-				<label>서비스타입</label>
-				 <select class="comText link service_type_select">
-						<option>서비스 타입을 선택해주세요.</option>
-						<option value="CheckSvcWithPage">조회성 서비스(페이지 전환)</option>
-						<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
-						<option value="ControlSvcWithPage">제어성 서비스(페이지 전환)</option>
-						<option value="ControlSvcWithPopup">제어성 서비스(팝업 표출)</option>
-						<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
-				</select> 
-				<label>연결링크</label> <!--<input type="text" class="comText link" placeholder="연결할 페이지" />--> 
-				<select class="comText link conn_link_select">
-						<option>연결 링크를 선택해주세요.</option>
-						<option>부대시설</option>
-						<option>웹캠</option>
-						<option>객실용품</option>
-						<option>엔터테인먼트</option>
-						<option>이벤트</option>
-						<option>관광정보</option>
-						<option>체크아웃</option>
-				</select>
-				</span>
-				<div class="b_area">
-					<a href="#" onclick="return false;" class="btn_confirm"><em>+ 기능변경</em></a>
-				</div>
-			</div>
-		</div>
+    <div class="comp link_text2">
+        <div class="box form_line" style="height:440px;">
+            <div class="t_area">
+                <p class="t name">이름</p>
+            </div>
+            <span class="inp_box">
+                <label>서비스명</label>
+                <input type="text" class="comText text" placeholder="서비스명" />
+                <label>부가설명 문구</label>
+                <input type="text" class="comText text" placeholder="부가 설명 문구" />
+                <label>사용 단어(음성 발화)</label>
+                <input type="text" class="comText text" placeholder="사용 단어(음성 발화)" />
+                <label>서비스 타입</label>
+                <select class="comText">
+                    <option>서비스 타입을 선택해주세요.</option>
+                    <option>조회성 서비스, 페이지전환</option>
+                    <option>조회성 서비스, 팝업 표출</option>
+                    <option>제어성 서비스, 페이지 전환</option>
+                    <option>제어성 서비스, 팝업 표출</option>
+                    <option>제어성 서비스, 백그라운드 실행</option>
+                </select>
 
-		<!-- Tab 객실용품  페이지 -->
-		<div class="comp link_text3">
-			<div class="box form_line" style="weiht: 350px; height: 350px;">
-				<div class="t_area">
-					<p class="t name">이름</p>
-				</div>
-				<span class="inp_box"> 
-					<label>서비스명</label>
-					<input type="text" class="comText text" placeholder="명칭" /> 
-					<label>서비스타입</label> 
-					<select class="comText link service_type_select">
-						<option>서비스 타입을 선택해주세요.</option>
-						<option value="CheckSvcWithPopup">조회성 서비스(팝업 표출)</option>
-						<option value="ControlSvcWithPopup">제어성 서비스(팝업 표출)</option>
-						<option value="ControlSvcWithBackground">제어성 서비스(백그라운드)</option>
-					</select> 
-					<label>연결링크</label>
-					<input type="text" class="comText link conn_link" placeholder="연결할 페이지" />
-				</span>
-				<div class="b_area">
-					<a href="#" onclick="return false;" class="btn_confirm"><em>+ 기능변경</em></a>
-				</div>
-			</div>
-		</div>
-		
-		<!--sub_hover_image_text 형식(이미지 normal, over 와 text)-->
-		<div class="comp sub_hover_image_text">
-			<div class="box ml0">
-				<div class="t_area">
-					<p class="t name">부대시설</p>
-				</div>
-				<div class="icon_box icon_off">
-					<label class="comFile"> <input type="file" class="hidFile file_normal" title="파일 선택">
-					<!-- disabled : disabled -->
-						<div class="img">
-							<img class="img_normal" src="../assets/images/icons/icon_s_01_off.png" alt=" ">
-						</div>
-						<p>
-							<b>버튼 Normal</b> : 102x102 사이즈
-						</p>
-					</label>
-				</div>
-				<div class="icon_box icon_on">
-					<label class="comFile"> <input type="file" class="hidFile file_hover" title="파일 선택">
-					<!-- disabled : disabled -->
-						<div class="img">
-							<img class="img_hover" src="../assets/images/icons/icon_s_01_on.png" alt=" ">
-						</div>
-						<p>
-							<b>버튼 Over</b> : 150x150 사이즈
-						</p>
-					</label>
-				</div>
-				<span class="inp_box">
-					<input type="text" class="comText text" placeholder="명칭" style="margin: 0 auto; display: block; margin-bottom: 5px;" />
-					<input type="hidden" class="service_type"/>
-					<input type="hidden" class="conn_link"/>
-				</span>
-				<div class="b_area">
-					<a href="#" class="btn_plus btn_spec"><em>+ 기능변경</em></a>
-				</div>
-			</div>
-		</div>
-		
+                <label>연결링크</label>
+                <!--<input type="text" class="comText link" placeholder="연결할 페이지" />-->
+                <select class="comText link">
+                    <option>연결링크를 선택해주세요.</option>
+                    <option>부대시설</option>
+                    <option>웹캠</option>
+                    <option>객실용품</option>
+                    <option>엔터테인먼트</option>
+                    <option>이벤트</option>
+                    <option>관광정보</option>
+                    <option>체크아웃</option>
+                </select>
+            </span>
+<!--            <div class="b_area">-->
+<!--                <a href="#" onclick="return false;" class="btn_confirm"><em>서버 URL 변경</em></a>-->
+<!--            </div>-->
+        </div>
+    </div>
+
     <!--hover_image_text 형식(이미지 normal, over 와 text)-->
     <div class="comp hover_image_text">
         <div class="box ml0">
@@ -944,11 +897,10 @@
             <span class="inp_box">
                 <!--<label>명칭</label>-->
                 <input type="text" class="comText text" placeholder="명칭" style="margin: 0 auto; display: block;margin-bottom: 5px;" />
-				<input type="hidden" class="service_type"/>
-				<input type="hidden" class="conn_link"/>
             </span>
             <div class="b_area">
-                <a href="#" class="btn_plus btn_spec"><em>+ 기능변경</em></a>
+<!--                <a href="#" class="btn_plus btn_spec"><em>+ 기능변경</em></a>-->
+                <button class="btn_used" type="button"><em>사용 안함</em></button>
             </div>
         </div>
     </div>

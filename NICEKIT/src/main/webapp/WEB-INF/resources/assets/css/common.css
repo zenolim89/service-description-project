@@ -367,17 +367,18 @@ body.scroll_off { overflow:hidden; }
 .h255 { height:255px; }
 .under:hover { text-decoration:underline; }
 .mh_ts { -webkit-transition:all 0.6s; transition:all 0.6s; }
-.btn_pri { border:1px solid #4270e0; color:#4270e0; background-color:#fff; }
-.btn_sec { border:1px solid #0758be; color:#fff; background-color:#0758be; }
-.btn_thr { border:1px solid #ccc; color:#fff; background-color:#ccc; }
-.btn_for { border:1px solid #2fbcb4; color:#fff; background-color:#2fbcb4; }
-.btn_fiv { border:1px solid #2fbcb4; color:#2fbcb4; background-color:#fff; }
-.btn_six { border:1px solid #e5e5e5; color:#777; background-color:#f7f8f9; }
-.btn_sev { border:1px solid #f7d94c; color:#613d17; background-color:#f7d94c; }
-.btn_eig { border:1px solid #666; color:#666; background-color:#fff; }
-.btn_nin { border:1px solid #999; color:#999; background-color:#fff; }
-.btn_ten { border:1px solid #f15f7b; color:#f15f7b; background-color:#fff; }
-.btn_ele { border:1px solid #e5e5e5; color:#fff; background-color:#e5e5e5; }
+.btn_pri { border:1px solid #4270e0 !important; color:#4270e0 !important; background-color:#fff !important; }
+.btn_sec { border:1px solid #0758be !important; color:#fff !important; background-color:#0758be !important; }
+.btn_thr { border:1px solid #ccc !important; color:#fff !important; background-color:#ccc !important; }
+.btn_for { border:1px solid #2fbcb4 !important; color:#fff !important; background-color:#2fbcb4 !important; }
+.btn_fiv { border:1px solid #2fbcb4 !important; color:#2fbcb4 !important; background-color:#fff !important; }
+.btn_six { border:1px solid #e5e5e5 !important; color:#777 !important; background-color:#f7f8f9 !important; }
+.btn_sev { border:1px solid #f7d94c !important; color:#613d17 !important; background-color:#f7d94c !important; }
+.btn_eig { border:1px solid #666 !important; color:#666 !important; background-color:#fff !important; }
+.btn_nin { border:1px solid #999 !important; color:#999 !important; background-color:#fff !important; }
+.btn_ten { border:1px solid #f15f7b !important; color:#f15f7b !important; background-color:#fff !important; }
+.btn_ele { border:1px solid #e5e5e5 !important; color:#fff !important; background-color:#e5e5e5 !important; }
+.btn_twv { border:1px solid #f15f7b !important; color:#fff !important; background-color:#f15f7b !important; }
 /* */
 .tbtn.disable,
 .btn.disable { border:1px solid #ddd !important; color:#fff !important; background-color:#ddd !important; }

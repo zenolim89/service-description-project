@@ -1,4 +1,4 @@
-var server = "http://222.107.124.9:8080/NICEKIT/";
+var server = "/NICEKIT/";
 
 /**
  * 도메인 목록 조회
@@ -170,3 +170,18 @@ function updatePage(domain, vendor, filename, content, cb) {
     $.post(server + "api/update/file", {domain:domain, workplace:vendor, filename:filename, content:content}, cb);
 }
 
+
+/**
+ * 규격정보조회
+ * @param domain
+ */
+function getSpecInfo(domain, spec,cb) {
+    $.get(server + "getSpecInfo", {domainName: domain,specName:spec}, function (data) {
+        console.log(data);
+        if(data.resCode == "200") {
+        	 cb(data.resData.specDesc);
+        } else {
+        	alert(data.resMsg);
+        }
+    });
+}

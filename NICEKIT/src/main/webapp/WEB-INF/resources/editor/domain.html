@@ -207,8 +207,9 @@
                             // 생성된 사업장 편집 화면으로 이동
 
                             var path = data.resData.urlPath;
+                            var specname = data.resData.specName;
 
-                            var editPath = "edit.html#domain=" + domain + "&vendor=" + ($("#newVendorNameFromTemplate").val()) + "&path=" + (path);
+                            var editPath = "edit.html#domain=" + domain +"&spec="+specname+ "&vendor=" + ($("#newVendorNameFromTemplate").val()) + "&path=" + (path);
                             window.location = editPath;
 
                             // myAlert("생성 성공");
@@ -439,7 +440,7 @@
                         "  <a href=\"#\" class=\"btn_select name\"><em>템플릿 선택</em></a>\n" +
                         "  <a href=\"#\" class=\"btn_view\"><em>미리보기</em></a>\n" +
                         "</li>");
-                    elem.find("img").attr("src", "http://222.107.124.9:8080/docbase/template/" + template + "/preview.jpg");
+                    elem.find("img").attr("src", "/docbase/template/" + template + "/preview.jpg");
                     elem.find(".name em").text(template);
                     elem.attr("data-name", template);
                     elem.attr("data-domain", domain);
@@ -527,7 +528,7 @@
                 // getVendorDetail(domain, vendor, function(path) {
                 //     window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
                 // });
-                var path = "http://222.107.124.9:8080/docbase/temp/" + vendor + "/";
+                var path = "/docbase/temp/" + vendor + "/";
                 window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + (path);
             } else if(menuId == "btn_03") { // 사업장 선택 후 생성
                 // no way

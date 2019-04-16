@@ -830,27 +830,42 @@
     </div>
 
     <div class="comp link_text2">
-        <div class="box form_line" style="height:440px;">
+        <div class="box form_line" style="height:370px;">
+            <div class="t_area">
+                <p class="t name">이름</p>
+            </div>
+            <span class="inp_box">
+                <label>서비스명</label>
+                <input type="text" class="comText text service" placeholder="서비스명" />
+                <label>부가설명 문구</label>
+                <input type="text" class="comText text desc" placeholder="부가 설명 문구" />
+                <label>사용 단어(음성 발화)</label>
+                <input type="text" class="comText text cmd" placeholder="사용 단어(음성 발화)" />
+                <label>서비스 타입</label>
+                <select class="comText serviceType">
+                    <option>서비스 타입을 선택해주세요.</option>
+                    <option value="CheckSvcWithPage">조회성 서비스, 페이지전환</option>
+                    <option value="CheckSvcWithPopup">조회성 서비스, 팝업 표출</option>
+                    <option value="ControlSvcWithPage">제어성 서비스, 페이지 전환</option>
+                    <option value="ControlSvcWithPopup">제어성 서비스, 팝업 표출</option>
+                    <option value="ControlSvcWithBackground">제어성 서비스, 백그라운드 실행</option>
+                </select>
+            </span>
+<!--            <div class="b_area">-->
+<!--                <a href="#" onclick="return false;" class="btn_confirm"><em>서버 URL 변경</em></a>-->
+<!--            </div>-->
+        </div>
+    </div>
+
+
+    <div class="comp link_text3" >
+        <div class="box form_line" style="height:220px;">
             <div class="t_area">
                 <p class="t name">이름</p>
             </div>
             <span class="inp_box">
                 <label>서비스명</label>
                 <input type="text" class="comText text" placeholder="서비스명" />
-                <label>부가설명 문구</label>
-                <input type="text" class="comText text" placeholder="부가 설명 문구" />
-                <label>사용 단어(음성 발화)</label>
-                <input type="text" class="comText text" placeholder="사용 단어(음성 발화)" />
-                <label>서비스 타입</label>
-                <select class="comText">
-                    <option>서비스 타입을 선택해주세요.</option>
-                    <option>조회성 서비스, 페이지전환</option>
-                    <option>조회성 서비스, 팝업 표출</option>
-                    <option>제어성 서비스, 페이지 전환</option>
-                    <option>제어성 서비스, 팝업 표출</option>
-                    <option>제어성 서비스, 백그라운드 실행</option>
-                </select>
-
                 <label>연결링크</label>
                 <!--<input type="text" class="comText link" placeholder="연결할 페이지" />-->
                 <select class="comText link">
@@ -869,6 +884,8 @@
 <!--            </div>-->
         </div>
     </div>
+
+
 
     <!--hover_image_text 형식(이미지 normal, over 와 text)-->
     <div class="comp hover_image_text">

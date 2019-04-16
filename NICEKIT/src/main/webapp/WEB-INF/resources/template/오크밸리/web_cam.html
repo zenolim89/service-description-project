@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>KT_GigaGenie</title>
+  <meta name="viewport" content="width=1920, height=1080, user-scalable=no" />
+  <script src="common/js/jq-lastest.js"></script>
+  <script src="common/js/swiper.js"></script>
+  <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
+</head>
+<body>
+
+<div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
+  <section id="contents">
+    <h1 class="type-txt">실시간 웹캠</h1>
+	<p class="desc-title">즐거움과 생동감이 가득한 오크밸리 현장 모습을 24시간 중계해 드립니다.</p>
+    <div class="weather-api">
+      <i class="icon"><img src="common/images/ic_weather_type01.png" alt=""></i>
+      <span class="tmper-area"><em class="f-rb">28</em>℃</span>
+      <span class="day-date">
+        금요일<br>
+        2018.01.27
+      </span>
+      <em class="time f-rb200">06:21</em>
+      <span class="am-pm">오후</span>
+    </div>
+	<ul class="webcam-list">
+		<li>
+			<a id="lnk1" href="#webcam-popup">
+				<img id="img1" src="common/images/img_webcam.jpg" alt="">
+				<strong id="name1">오크밸리 스키장</strong>
+			</a>
+		</li>
+		<li>
+			<a id="lnk2" href="#webcam-popup">
+				<img id="img2" src="common/images/img_webcam02.jpg" alt="">
+				<strong id="name2">마운틴 정상</strong>
+			</a>
+		</li>
+		<li>
+			<a id="lnk3" href="#webcam-popup">
+				<img id="img3" src="common/images/img_webcam03.jpg" alt="">
+				<strong id="name3">A 슬로프</strong>
+			</a>
+		</li>
+		<li>
+			<a id="lnk4" href="#webcam-popup">
+				<img id="img4" src="common/images/img_webcam04.jpg" alt="">
+				<strong id="name4">G 슬로프</strong>
+			</a>
+		</li>
+		<li>
+			<a id="lnk5" href="#webcam-popup">
+				<img id="img5" src="common/images/img_webcam05.jpg" alt="">
+				<strong id="name5">I 슬로프</strong>
+			</a>
+		</li>
+		<li>
+			<a id="lnk6" href="#webcam-popup">
+				<img id="img6" src="common/images/img_webcam06.jpg" alt="">
+				<strong id="name6">H 슬로프</strong>
+			</a>
+		</li>
+	</ul>
+    <div class="genie-voice">
+      <em>지니야,</em>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">오크밸리 스키장 보여줘</div>
+            <div class="swiper-slide">마운틴 정상 보여줘</div>
+            <div class="swiper-slide">A 슬로프 보여줘</div>
+            <div class="swiper-slide">G 슬로프 보여줘</div>
+            <div class="swiper-slide">I 슬로프 보여줘</div>
+            <div class="swiper-slide">H 슬로프 보여줘</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <article id="webcam-popup" class="popup-fulltype" style="display:none;">
+  	<div class="popup-webcam">
+  		<h1></h1>
+  		<div class="webcam-area">
+  			<img src="common/images/img_webcam07.jpg" alt="">
+  			<button type="button" class="prev">prev</button>
+  			<button type="button" class="next">next</button>
+      </div>
+      <span class="guide-cell">
+        <i class="prev">이전</i>
+        <i class="next">다음</i>
+      </span>
+      <div class="btn-area">
+  			<button type="button" class="set-btn-type1 close">닫기</button>
+  		</div>
+  	</div>
+  </article>
+</div>
+<script>
+function popupControl() {
+	var target = $('.webcam-list a');
+	$.each(target,function() {
+		$(this).on('click',function(e) {
+			e.preventDefault();
+			var title = $(this).find('strong').text();
+			$($(this).attr('href')).show().find('h1').html(title);
+      setTimeout(function() {
+        $('.popup-fulltype').find('.close').attr('tabindex',0).focus();
+      },100)
+			$($(this).attr('href')).find('.close').on('click',function() {
+				$('.popup-fulltype').hide();
+			})
+		})
+	})
+}
+popupControl();
+
+function setSlide() {
+  var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    direction: 'vertical',
+    loop: true,
+    height: 69,
+    autoplay: {
+      delay: 1000,
+    }
+  });
+}
+setTimeout(function() {setSlide()},10)
+</script>
+</body>
+</html>

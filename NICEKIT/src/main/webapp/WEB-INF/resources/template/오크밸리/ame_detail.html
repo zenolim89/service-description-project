@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>KT_GigaGenie</title>
+    <meta name="viewport" content="width=1920, height=1080, user-scalable=no"/>
+    <script src="common/js/jq-lastest.js"></script>
+    <script src="common/js/swiper.js"></script>
+    <link rel="stylesheet" type="text/css" href="common/css/gigagenie.css">
+</head>
+<body>
+
+<div id="document" class="type-index" style="background-image:url(common/images/bg_webcam.jpg);">
+    <section id="contents">
+        <h1 class="type-txt">객실용품 요청</h1>
+        <p class="desc-title">필요하신 사항을 선택해주세요.</p>
+        <div class="weather-api">
+            <i class="icon"><img src="common/images/ic_weather_type01.png" alt=""></i>
+            <span class="tmper-area"><em class="f-rb">28</em>℃</span>
+            <span class="day-date">
+        금요일<br>
+        2018.01.27
+      </span>
+            <em class="time f-rb200">06:21</em>
+            <span class="am-pm">오후</span>
+        </div>
+        <div class="wrap-ame column2-type">
+            <button class="prev"></button>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide">
+                        <a id="lnk1" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img1_normal" src="common/images/ic_ame02_01.png" alt="">
+                                <img id="img1_hover" src="common/images/ic_ame02_01_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt1">체중계</span>
+                            <input type="hidden" id="service_type1" value="CheckSvcWithPopup"/>
+                            <input type="hidden" id="conn_link1" value="#link"/>
+                            <i class="count">1</i>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk2" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img2_normal" src="common/images/ic_ame02_02.png" alt="">
+                                <img id="img2_hover" src="common/images/ic_ame02_02_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt2">토스트기</span>
+                            <input type="hidden" id="service_type2" value="ControlSvcWithPopup"/>
+                            <input type="hidden" id="conn_link2" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk3" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img3_normal" src="common/images/ic_ame02_03.png" alt="">
+                                <img id="img3_hover" src="common/images/ic_ame02_03_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt3">이불</span>
+                            <input type="hidden" id="service_type3" value="ControlSvcWithBackground"/>
+                            <input type="hidden" id="conn_link3" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk4" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img4_normal" src="common/images/ic_ame02_04.png" alt="">
+                                <img id="img4_hover" src="common/images/ic_ame02_04_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt4">휴지</span>
+                            <input type="hidden" id="service_type4" value="CheckSvcWithPopup"/>
+                            <input type="hidden" id="conn_link4" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk5" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img5_normal" src="common/images/ic_ame02_05.png" alt="">
+                                <img id="img5_hover" src="common/images/ic_ame02_05_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt5">공기청정기</span>
+                            <input type="hidden" id="service_type5" value="ControlSvcWithPopup"/>
+                            <input type="hidden" id="conn_link5" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk6" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img6_normal" src="common/images/ic_ame02_06.png" alt="">
+                                <img id="img6_hover" src="common/images/ic_ame02_06_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt6">필기구</span>
+                            <input type="hidden" id="service_type6" value="ControlSvcWithBackground"/>
+                            <input type="hidden" id="conn_link6" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk7" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img7_normal" src="common/images/ic_ame02_07.png" alt="">
+                                <img id="img7_hover" src="common/images/ic_ame02_07_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt7">휴지</span>
+                            <input type="hidden" id="service_type7" value="CheckSvcWithPopup"/>
+                            <input type="hidden" id="conn_link7" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk8" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img8_normal" src="common/images/ic_ame02_08.png" alt="">
+                                <img id="img8_hover" src="common/images/ic_ame02_08_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt8">물컵</span>
+                            <input type="hidden" id="service_type8" value="CheckSvcWithPopup"/>
+                            <input type="hidden" id="conn_link8" value="#link"/>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a id="lnk9" href="#amenity" class="layer-pop-control">
+                            <i class="icon">
+                                <img id="img9_normal" src="common/images/ic_ame02_09.png" alt="">
+                                <img id="img9_hover" src="common/images/ic_ame02_09_over.png" alt="" class="over">
+                            </i>
+                            <span id="txt9">슬리퍼</span>
+                            <input type="hidden" id="service_type9" value="CheckSvcWithPopup"/>
+                            <input type="hidden" id="conn_link9" value="#link"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <button class="next"></button>
+        </div>
+        <div class="genie-voice">
+            <em>지니야,</em>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide">체중계 보여줘</div>
+                    <div class="swiper-slide">이불 보여줘</div>
+                    <div class="swiper-slide">가습기 보여줘</div>
+                    <div class="swiper-slide">휴지 보여줘</div>
+                    <div class="swiper-slide">슬리퍼 보여줘</div>
+                    <div class="swiper-slide">토스트기 보여줘</div>
+                    <div class="swiper-slide">공기청정기 보여줘</div>
+                    <div class="swiper-slide">필기구 보여줘</div>
+                    <div class="swiper-slide">물컵 보여줘</div>
+                </div>
+            </div>
+        </div>
+        <a href="#request" class="request add-guide layer-pop-control">요청내역</a>
+        <span class="guide-cell">
+      <i class="prev">이전</i>
+      <i class="next">다음</i>
+    </span>
+    </section>
+
+    <!-- layer popup 객실 요청 (어메니티) -->
+    <article id="amenity" class="popup-fulltype" style="display:none;">
+        <!-- 01 -->
+        <div class="alert-layout">
+            <h1>용품 수량 선택</h1>
+            <table class="popup-tbl subsection30">
+                <colgroup>
+                    <col style="width:60%;">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">용품</th>
+                    <th scope="col">수량</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <span class="thumb"><img src="common/images/ic_goods.png" alt=""></span>
+                        슬리퍼
+                    </td>
+                    <td>
+                        <div class="spinner">
+                            <button type="button" class="minus"></button>
+                            <input type="text" class="f-rb" value="1" readonly>
+                            <button type="button" class="plus"></button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn-area">
+                <a href="#confirm" class="set-btn-type1 w381 confirm layer-pop-control">확인</a>
+                <button type="button" class="set-btn-type1 w381 cancel">취소</button>
+            </div>
+        </div>
+    </article>
+    <!-- //layer popup 객실 요청 (어메니티) -->
+
+    <!-- layer popup 객실 요청 (컨시어지) -->
+    <article id="confirm" class="popup-fulltype" style="display:none;">
+        <div class="alert-layout">
+            <h1>요청 확인</h1>
+            <p class="desc-alert">컨시어지명을 요청하시겠습니까?</p>
+            <div class="btn-area">
+                <button type="button" class="set-btn-type1 w381 confirm">확인</button>
+                <button type="button" class="set-btn-type1 w381 cancel">취소</button>
+            </div>
+        </div>
+    </article>
+    <!-- //layer popup 객실 요청 (컨시어지) -->
+
+    <!-- layer popup 객실 요청 (요청내역) -->
+    <article id="request" class="popup-fulltype" style="display:none;">
+        <div class="alert-layout">
+            <h1>신청 내역</h1>
+            <table class="popup-tbl subsection30">
+                <colgroup>
+                    <col style="width:50%;">
+                    <col>
+                    <col style="width:25%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">용품</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">상태</th>
+                </tr>
+                </thead>
+            </table>
+            <div class="wrap-popup-tbl scroll-type" tabindex="0">
+                <table class="popup-tbl type2">
+                    <colgroup>
+                        <col style="width:50%;">
+                        <col>
+                        <col style="width:25%;">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td class="a-left">슬리퍼</td>
+                        <td class="f-rb">3</td>
+                        <td class="status"><i>요청중</i></td>
+                    </tr>
+                    <tr>
+                        <td class="a-left">슬리퍼</td>
+                        <td class="f-rb">3</td>
+                        <td class="status">완료</td>
+                    </tr>
+                    <tr>
+                        <td class="a-left">슬리퍼</td>
+                        <td class="f-rb">1</td>
+                        <td class="status">완료</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-area">
+                <button type="button" class="set-btn-type1 w100p confirm">확인</button>
+            </div>
+        </div>
+    </article>
+    <!-- //layer popup 객실 요청 (요청내역) -->
+
+</div>
+
+</body>
+
+<script>
+    function popupControl() {
+        var target = $('.layer-pop-control');
+        $.each(target, function () {
+            $(this).on('click', function (e) {
+                e.preventDefault();
+                $($(this).attr('href')).show();
+                $($(this).attr('href')).find('.confirm').on('click', function (e) {
+                    e.preventDefault();
+                    $(this).closest($('.popup-fulltype')).hide();
+                })
+                $($(this).attr('href')).find('.cancel').on('click', function (e) {
+                    e.preventDefault();
+                    $(this).closest($('.popup-fulltype')).hide();
+                })
+            })
+        })
+    }
+
+    popupControl();
+
+    function spinnerControl() {
+        var minus = $('.spinner .minus'),
+            plus = $('.spinner .plus'),
+            input = $('.spinner input[type="text"]');
+        plus.on('click', function () {
+            if (parseInt(input.val()) > 0) {
+                input.val(parseInt(input.val()) + 1);
+            }
+            ;
+        })
+        minus.on('click', function () {
+            if (parseInt(input.val()) > 1) {
+                input.val(parseInt(input.val()) - 1);
+            }
+            ;
+        })
+    }
+
+    spinnerControl();
+
+    function ameSlide() {
+        var ameSwiper = new Swiper('.wrap-ame .swiper-container', {
+            slidesPerView: 5,
+            slidesPerColumn: 2,
+            spaceBetween: 30,
+            loop: false,
+        });
+        if ($('.wrap-ame .swiper-container .swiper-slide').length <= 10) {
+            $('.wrap-ame .prev').addClass('disabled');
+            $('.wrap-ame .next').addClass('disabled');
+        }
+        $('.wrap-ame .prev').on('click', function () {
+            if (!$(this).is('.disabled')) {
+                ameSwiper.slidePrev();
+            }
+        })
+        $('.wrap-ame .next').on('click', function () {
+            if (!$(this).is('.disabled')) {
+                ameSwiper.slideNext();
+            }
+        })
+    }
+
+    ameSlide();
+
+    function setSlide() {
+        var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            direction: 'vertical',
+            loop: true,
+            height: 69,
+            autoplay: {
+                delay: 1000,
+            }
+        });
+    }
+
+    setTimeout(function () {
+        setSlide()
+    }, 10)
+</script>
+</html>

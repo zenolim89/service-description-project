@@ -55,8 +55,8 @@ public class JSONParsingFrom {
 		String resCode;
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
-			JSONObject createResObj = uiController.createWithTemplate(obj.get("vendorName").toString(),
-					obj.get("urlPath").toString(), obj.get("specName").toString());
+			JSONObject createResObj = uiController.createWithTemplate(obj.get("domainName").toString(),
+					obj.get("vendorName").toString(), obj.get("urlPath").toString(), obj.get("specName").toString());
 			if (createResObj.get("code").toString() == "409") {
 				resObj = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
 				return resObj;

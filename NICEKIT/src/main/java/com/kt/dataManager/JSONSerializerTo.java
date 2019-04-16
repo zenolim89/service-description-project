@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.datastax.driver.core.ResultSet;
@@ -130,6 +131,36 @@ public class JSONSerializerTo {
 		return res;
 	}
 
+	public ArrayList<String> resWordInfo(String domainName, String specName, String serviceName) {
+		JSONParser parser = new JSONParser();
+		ArrayList<GetSpecInfoDataForm> list = new ArrayList<GetSpecInfoDataForm>();
+		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		ArrayList<String> res = new ArrayList<String>();
+		JSONArray rawdata = new JSONArray();
+		JSONArray tempdata = new JSONArray();
+		JSONObject tempObj = new JSONObject();
+		JSONArray result = new JSONArray();
+		try {
+			list = tool.resSpecData(specName);
+			for (GetSpecInfoDataForm form : list) {
+				if (serviceName.equals(form.getServiceName()))
+					rawdata = form.getWordList();
+			}
+			tempdata = (JSONArray) rawdata.get(0);
+			tempObj = (JSONObject) tempdata.get(0);
+ 			result = (JSONArray) parser.parse(tempObj.get("wordList").toString());
+			
+			for(int i=0;i < result.size();i++){
+			    res.add(result.get(i).toString());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return res;
+	}
+
 	public JSONObject resNotFoundTemplate(String msg) {
 		JSONObject res = new JSONObject();
 		JSONObject dataObj = new JSONObject();
@@ -224,7 +255,7 @@ public class JSONSerializerTo {
 		res.put("resData", dataObj);
 		return res;
 	}
-	
+
 	public JSONObject resTempDirPath(String code, String path) {
 		JSONObject res = new JSONObject();
 		JSONObject dataObj = new JSONObject();

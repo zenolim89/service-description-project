@@ -1,11 +1,14 @@
 package com.kt.dataManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONObject;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -47,14 +50,18 @@ public class UITemplateController {
 	 * @param urlPath
 	 * @return
 	 */
-	public JSONObject createWithTemplate(String vendorName, String urlPath, String specName) {
+	public JSONObject createWithTemplate(String domainName, String vendorName, String urlPath, String specName) {
 		SelectDataTo selectTo = new SelectDataTo();
+		ArrayList<String> wordList = new ArrayList<String>();
 		JSONObject resObj = new JSONObject();
 		String templateName = null;
 		String dn = vendorName;
 		String sourcePath = this.extractURL(urlPath);
+		String serviceName = "객실용품";
 
 		List<Row> list = selectTo.selectTemplateForPath(sourcePath);
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		wordList = serializerTo.resWordInfo(domainName, specName, serviceName);
 
 		for (Row row : list)
 			templateName = row.getString("templatename");
@@ -78,7 +85,7 @@ public class UITemplateController {
 		} else {
 
 			targetFilePath.mkdirs();
-			this.copyTemplate(sourceFilePath, targetFilePath, specName);
+			this.copyTemplate(sourceFilePath, targetFilePath, wordList);
 			resObj.put("code", "201");
 			resObj.put("specName", specName);
 			resObj.put("tempPath", Constants.EXTERNAL_FOLDER_URLPATH_TEMP + "/" + dn);
@@ -180,7 +187,7 @@ public class UITemplateController {
 
 	}
 
-	public void copyTemplate(File sourceFile, File targetFile, String SpecName) {
+	public void copyTemplate(File sourceFile, File targetFile, ArrayList<String> wordList) {
 
 		HtmlConverter htmlConverter = new HtmlConverter();
 
@@ -194,30 +201,20 @@ public class UITemplateController {
 
 				temp.mkdirs();
 
-				this.copyTemplate(file, temp, SpecName);
+				this.copyTemplate(file, temp, wordList);
 
 			} else {
-
-				// 주석대상 1)
-				FileInputStream fileIn = null;
-
-				// InputStream fileIn = null;
-
+				InputStream fileIn = null;
 				FileOutputStream fileOut = null;
-
 				try {
-
-					// DB처리 이후에 해당 리스트 이곳에 대입
-					// 처리 후 주석대상 1), 2), 3) 번 주석처리 필요
-
-					// fileIn = new ByteArrayInputStream(htmlConverter.removeItm(file, "UTF-8",
-					// _selectorMap, _itmMap), "UTF-8");
-
-					// 주석대상 2)
-					fileIn = new FileInputStream(file);
-
+					if (file.getName().equals("ame_detail.html")) {
+						fileIn = new ByteArrayInputStream(
+								(htmlConverter.removeItm(file, "UTF-8", "[name=amenity]", "target-name", wordList))
+										.getBytes());
+					} else {
+						fileIn = new FileInputStream(file);
+					}
 					fileOut = new FileOutputStream(temp);
-
 					byte[] b = new byte[4096];
 
 					int cnt = 0;

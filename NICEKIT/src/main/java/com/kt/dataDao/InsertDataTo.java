@@ -459,7 +459,7 @@ public class InsertDataTo {
 					.value("domainid", data.getDomainId()).value("specname", data.getSpecName())
 					.value("invoketype", data.getInvokeType()).value("servicelink", data.getServiceLink())
 					.value("servicecode", data.getServiceCode()).value("headerinfo", data.getToJsonFormatHeader())
-					.value("commURL", data.getCommonURL()).value("testURL", data.getTestURL())
+					.value("commurl", data.getCommonURL()).value("testurl", data.getTestURL())
 					.value("method", data.getTransMethod()).value("datatype", data.getDataType())
 					.value("servicetype", data.getServiceType()).value("requestformat", data.getReqEx())
 					.value("requestspec", data.getToJsonFormatReqParam()).value("responseFormat", data.getResEx())
@@ -519,5 +519,4 @@ public class InsertDataTo {
 		}
 		cluster.close();
 	}
-
 }

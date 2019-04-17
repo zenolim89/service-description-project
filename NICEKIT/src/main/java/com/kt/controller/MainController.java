@@ -14,9 +14,13 @@ import java.lang.Void;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kt.controller.exception.DirectoryAlreadyExistsException;
+import com.kt.controller.exception.NotFoundDeployVendorException;
+import com.kt.controller.exception.NotFoundDirectoryException;
 import com.kt.controller.exception.NotFoundDomainException;
 import com.kt.controller.exception.NotFoundPreviewTemplateException;
 import com.kt.controller.exception.NotFoundPreviewVendorException;
+import com.kt.controller.exception.NotFoundSaveTempException;
 import com.kt.controller.exception.NotFoundSpecException;
 import com.kt.controller.exception.NotFoundTempException;
 import com.kt.controller.exception.NotFoundTemplateException;
@@ -62,14 +66,14 @@ public class MainController extends BaseController{
 	 * 		Case01 ID 불일치(NOT_FOUND_ACCOUNT)
 	 * 		Case02 PW 불일치(NOT_MATCH_PASSWORD)
 	 */
-	@RequestMapping(value="/auth", method=RequestMethod.POST)
-	public ResponseData<Void> reqAuth(@RequestBody ReqAuth req){
-		
+	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+	public ResponseData<Void> reqAuth(@RequestBody ReqAuth req) {
+
 		System.out.println("ID: " + req.getId());
 		System.out.println("PW: " + req.getPw());
-		
+
 		coreSvc.Auth(req.getId(), req.getPw());
-		
+
 		return successResponse();
 	}
 	
@@ -80,15 +84,15 @@ public class MainController extends BaseController{
 	 * @exception
 	 * 		Case01 도메인 목록이 없을 경우(NOT_FOUND_DOMAIN)
 	 */
-	@RequestMapping(value="/getDomain", method=RequestMethod.GET)
-	public ResponseData<ResGetDomain> getDomain(){
+	@RequestMapping(value = "/getDomain", method = RequestMethod.GET)
+	public ResponseData<ResGetDomain> getDomain() {
+		ResGetDomain result = new ResGetDomain();
 		
 		List<String> domainList = coreSvc.getDomainList();
-		if(domainList == null || domainList.isEmpty()) {
+		if (domainList == null || domainList.isEmpty()) {
 			throw new NotFoundDomainException();
 		}
-		
-		ResGetDomain result = new ResGetDomain();
+
 		result.setDomainList(domainList);
 
 		return successResponse(result);
@@ -101,15 +105,17 @@ public class MainController extends BaseController{
 	 * @exception
 	 * 		Case01 연동규격 목록이 없을 경우(NOT_FOUND_SPEC)
 	 */
-	@RequestMapping(value="/getSpecList", method=RequestMethod.GET)
-	public ResponseData<ResGetSpecList> getSepcList(@RequestParam String domainName){
+	@RequestMapping(value = "/getSpecList", method = RequestMethod.GET)
+	public ResponseData<ResGetSpecList> getSepcList(@RequestParam String domainName) {
 		ResGetSpecList result = new ResGetSpecList();
-		
+
 		List<String> specList = coreSvc.getSepcList(domainName);
-		if(specList == null || specList.isEmpty()) {
+		if (specList == null || specList.isEmpty()) {
 			throw new NotFoundSpecException();
 		}
-		
+
+		result.setSpecList(specList);
+
 		return successResponse(result);
 	}
 
@@ -120,15 +126,17 @@ public class MainController extends BaseController{
 	 * @exception
 	 * 		Case01 템플릿 목록이 없을 경우(NOT_FOUND_TEMPLATE)
 	 */
-	@RequestMapping(value="/getTemplate", method=RequestMethod.GET)
-	public ResponseData<ResGetTemplate> getTemplate(@RequestParam String domainName){
+	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
+	public ResponseData<ResGetTemplate> getTemplate(@RequestParam String domainName) {
 		ResGetTemplate result = new ResGetTemplate();
-		
+
 		List<String> templateList = coreSvc.getTemplateList(domainName);
-		if(templateList == null || templateList.isEmpty()) {
+		if (templateList == null || templateList.isEmpty()) {
 			throw new NotFoundTemplateException();
 		}
-		
+
+		result.setTemplateList(templateList);
+
 		return successResponse(result);
 	}
 	
@@ -140,17 +148,19 @@ public class MainController extends BaseController{
 	 * @exception
 	 * 		Case01 등록된 사업장 목록이 없을 경우(NOT_FOUND_VENDOR)
 	 */
-	@RequestMapping(value="/getVendor", method=RequestMethod.GET)
-	public ResponseData<ResGetVendor> getVendor(@RequestParam String domianName){
+	@RequestMapping(value = "/getVendor", method = RequestMethod.GET)
+	public ResponseData<ResGetVendor> getVendor(@RequestParam String domianName) {
 		ResGetVendor result = new ResGetVendor();
-		
+
 		List<String> vendorList = coreSvc.getVendorList(domianName);
-		if(vendorList == null || vendorList.isEmpty()) {
+		if (vendorList == null || vendorList.isEmpty()) {
 			throw new NotFoundVendorException();
 		}
-		
+
+		result.setVendorList(vendorList);
+
 		return successResponse(result);
-		
+
 	}
 
 
@@ -158,44 +168,46 @@ public class MainController extends BaseController{
 	 * 임시저장된 사업장 목록 조회
 	 * @param domainName
 	 * @return
-	 * @exception NotFoundTempException 편집할 사업장이 없을 경우
+	 * @exception 
+	 * 		Case01 편집할 사업장이 없을 경우(NOT_FOUND_TEMP)
 	 */
-	@RequestMapping(value="/getTemp", method=RequestMethod.GET)
-	public ResponseData<ResGetTemp> getTemp(@RequestParam String domainName){
+	@RequestMapping(value = "/getTemp", method = RequestMethod.GET)
+	public ResponseData<ResGetTemp> getTemp(@RequestParam String domainName) {
 		ResGetTemp result = new ResGetTemp();
 		List<String> tempList = coreSvc.getTempList(domainName);
-		
-		if(tempList == null || tempList.isEmpty()) {
+
+		if (tempList == null || tempList.isEmpty()) {
 			throw new NotFoundTempException();
 		}
-		
+
 		result.setTempList(tempList);
-		
+
 		return successResponse(result);
 	}
-
 	
 	/**
 	 * 사업장 서비스 화면 미리보기
 	 * @param domianName 도메인명
-	 * @param vendor	사업장명
+	 * @param vendorName 사업장명
 	 * @return
-	 * @exception NotFoundPreviewVendorException 해당 사업장에 대한 미리보기가 존재하지 않는 경우
+	 * @exception 
+	 * 		Case01 해당 사업장에 대한 미리보기가 존재하지 않는 경우(NOT_FOUND_PREVIEW_VENDOR)
 	 * 
 	 */
-	@RequestMapping(value="/getVendorPage", method=RequestMethod.GET)
-	public ResponseData<ResGetVendorPage> getVendorPage(@RequestParam String vendorName){
+	@RequestMapping(value = "/getVendorPage", method = RequestMethod.GET)
+	public ResponseData<ResGetVendorPage> getVendorPage(@RequestParam String vendorName) {
 		ResGetVendorPage result = new ResGetVendorPage();
-		
+
 		String dirPath = coreSvc.getVendorPage(vendorName);
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONObject server = parsingFrom.getServerInfo();
 		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + dirPath;
-		
+
 		result.setUrlPath(path);
-		return successResponse(result);
 		
+		return successResponse(result);
+
 	}
 	
 	
@@ -204,29 +216,31 @@ public class MainController extends BaseController{
 	 * @param domainName
 	 * @param templateName
 	 * @return
-	 * @exception NotFoundPreviewTemplateException 해당 템플릿에 대한 미리보기가 존재하지 않는 경우
+	 * @exception 
+	 * 		Case01 해당 템플릿에 대한 미리보기가 존재하지 않는 경우(NOT_FOUND_PREVIEW_TEMPLATE)
 	 */
-	@RequestMapping(value="/getTemplatePage", method=RequestMethod.GET)
-	public ResponseData<ResGetTemplatePage> getTemplatePage(@RequestParam String domainName, @RequestParam String templateName){
+	@RequestMapping(value = "/getTemplatePage", method = RequestMethod.GET)
+	public ResponseData<ResGetTemplatePage> getTemplatePage(@RequestParam String domainName,
+			@RequestParam String templateName) {
 		ResGetTemplatePage result = new ResGetTemplatePage();
-		
+
 		String dirPath = coreSvc.getTemplatePage(templateName);
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONObject server = parsingFrom.getServerInfo();
 		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + dirPath;
-		
+
 		result.setUrlPath(path);
-		
+
 		return successResponse(result);
-		
+
 	}
 	
 
 	/**
 	 * 신규 사업장 폴더 생성 및 기존 사업장 파일 복사
 	 * @param domianName
-	 * @param vendor
+	 * @param vendorName
 	 * @param urlPath
 	 * @return
 	 * @exception
@@ -254,7 +268,7 @@ public class MainController extends BaseController{
 	/**
 	 * 신규 사업장 폴더 생성 및 기존 템플릿 복사
 	 * @param domianName	도메인명
-	 * @param vendor		신규사업장명
+	 * @param vendorName		신규사업장명
 	 * @param urlPath		기존 템플릿 경로
 	 * @return
 	 * @exception
@@ -289,12 +303,9 @@ public class MainController extends BaseController{
 	 */
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
 	public ResponseData<List<ResFileUpload>> fileUpload(MultipartHttpServletRequest request,
-			@RequestParam String domainName,
-			@RequestParam String domainId,
-			@RequestParam String specName,
-			@RequestParam("uploadFile") MultipartFile uploadFile){
-		
-		
+			@RequestParam String domainName, @RequestParam String domainId, @RequestParam String specName,
+			@RequestParam("uploadFile") MultipartFile uploadFile) {
+
 		System.out.println("RewardController reAddProCtrl uploadFile : " + uploadFile);
 		// System.out.println("RewardController reAddProCtrl reward : " + reward);
 
@@ -306,14 +317,14 @@ public class MainController extends BaseController{
 
 		// System.out.println("RewardController reAddProCtrl n : " + n);
 		System.out.println("RewardController reAddProCtrl uploadPath : " + uploadPath);
-		
+
 		/* 업로드 엑셀파일 파서 */
 		ExcelService excelSvc = new ExcelService();
 		List<ExcelUploadForm> list = excelSvc.excelUpload(uploadPath, domainName, domainId, specName);
 
 		List<ResFileUpload> array = new ArrayList<ResFileUpload>();
-		
-		for(ExcelUploadForm e : list) {
+
+		for (ExcelUploadForm e : list) {
 			ResFileUpload res = new ResFileUpload();
 			res.setServiceName(e.getServiceName());
 			res.setServiceCode(e.getServiceCode());
@@ -322,63 +333,82 @@ public class MainController extends BaseController{
 			res.setInvokeType(e.getInvokeType());
 			res.setIntentName(e.getIntentInfo());
 			res.setIsRegistered(e.isRegistered());
-			
+
 			/* dicNameList, wordList 매핑 */
-			if(e.getDicList() != null) {
+			if (e.getDicList() != null) {
 				StringBuilder sbDic = new StringBuilder();
 				StringBuilder sbWord = new StringBuilder();
-				
+
 				List<DicParam> dicList = e.getDicList();
-				for(DicParam item : dicList) {
-					if(sbDic.length() > 0) sbDic.append("<br>");
-					if(sbWord.length() > 0) sbWord.append("<br>");
-					
+				for (DicParam item : dicList) {
+					if (sbDic.length() > 0)
+						sbDic.append("<br>");
+					if (sbWord.length() > 0)
+						sbWord.append("<br>");
+
 					sbDic.append(item.getDicName());
 					sbWord.append(item.getWordList());
 				}
 				res.setDicNameList(sbDic.toString());
 				res.setWordList(sbWord.toString());
 			}
-			
+
 			array.add(res);
 		}
-		
+
 		return successResponse(array);
-		
+
 	}
 	
 	
-	
-	@RequestMapping(value="/tempSave", method=RequestMethod.POST)
-	public ResponseData<ResSaveTemp> saveTemp(@RequestBody ReqSaveTemp req){
+	/**
+	 * 편집 중 임시저장
+	 * @param domianName	도메인명
+	 * @param vendorName		신규사업장명
+	 * @return
+	 * @exception
+	 * 		Case01 저장 할 사업장 정보를 찾을수 없는 경우(NOT_FOUND_SAVE_TEMP)
+	 */	
+	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
+	public ResponseData<ResSaveTemp> saveTemp(@RequestBody ReqSaveTemp req) {
 		ResSaveTemp result = new ResSaveTemp();
-		
+
 		String dirPath = coreSvc.saveTemp(req.getVenderName(), req.getDomainName());
-		
+
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONObject server = parsingFrom.getServerInfo();
 		String path = "http://" + server.get("serverIp") + ":" + server.get("port") + dirPath;
-		
+
 		result.setUrlPath(path);
-		
+
 		return successResponse(result);
-		
+
 	}
-	
-	@RequestMapping(value="/deployVendor", method=RequestMethod.POST)
-	public ResponseData<ResDeployVendor> deployVendor(@RequestBody ReqDeployVendor req){
+
+	/**
+	 * 서비스 배포
+	 * @param domianName	도메인명
+	 * @param vendorName		신규사업장명
+	 * @return
+	 * @exception
+	 * 		Case01 배포 할 사업장 정보를 찾을 수 없는 경우(NOT_FOUND_DEPLOY_VENDOR)
+	 * 		Case02 해당 사업장의 디렉토리가 이미 존재하는 경우(DIRECTORY_ALREADY_EXISTS)
+	 * 		Case03 복사할 원본 디렉토리를 찾을수 없는 경우(NOT_FOUND_DIRECTORY)
+	 */	
+	@RequestMapping(value = "/deployVendor", method = RequestMethod.POST)
+	public ResponseData<ResDeployVendor> deployVendor(@RequestBody ReqDeployVendor req) {
 		ResDeployVendor result = new ResDeployVendor();
-		
+
 		String dirPath = coreSvc.deployVendor(req.getVenderName(), req.getDomainName());
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONObject server = parsingFrom.getServerInfo();
-		
+
 		String path = "http://" + server.get("serverIp").toString() + ":" + server.get("port").toString() + dirPath;
-		
+
 		result.setUrlPath(path);
-		
+
 		return successResponse(result);
-		
+
 	}
 	
 	

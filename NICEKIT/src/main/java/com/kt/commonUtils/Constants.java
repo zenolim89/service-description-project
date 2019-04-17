@@ -52,6 +52,7 @@ public class Constants {
 	public static final String[] SPEC_ALREADY_EXISTS 					= new String[]{"702", "요청하신 규격이 이미 등록되어 있습니다"};
 	
 	public static final String[] DB_INSERT_FAILED 							= new String[]{"801", "데이터베이스 삽입 실패하였습니다."};
+	
 
 	
 	

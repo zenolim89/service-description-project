@@ -48,7 +48,8 @@ function init(_domain, _vendor, path) {
 }
 function _init() {
     // 페이지명
-    $("#vendor_name").text(tmp.getTemplateName());
+    //$("#vendor_name").text(tmp.getTemplateName());
+    $("#vendor_name").text(vendor);
 
     // 프리뷰 로드 이벤트
     $("#preview").load(function() {

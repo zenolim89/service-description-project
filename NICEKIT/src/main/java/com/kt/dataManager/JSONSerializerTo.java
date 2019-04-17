@@ -78,7 +78,12 @@ public class JSONSerializerTo {
 			resObj.put("resCode", "200");
 			resObj.put("resMsg", "성공");
 			for (Row row : list)
-				arr.add(row.getString("vendorname"));
+			{
+				JSONObject tempObj = new JSONObject();
+				tempObj.put("vendorName", row.getString("vendorname"));
+				tempObj.put("specName", row.getString("specname"));
+				arr.add(tempObj);
+			}
 			dataObj.put("tempList", arr);
 			resObj.put("resData", dataObj);
 			return resObj;

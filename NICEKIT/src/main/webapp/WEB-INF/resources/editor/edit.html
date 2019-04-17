@@ -42,7 +42,8 @@
         var domain;
         var vendor;
         var templatePath;
-
+		var spec; 
+		
         var param = location.hash.substr(1);
         var params = param.split("&");
         for(var i = 0; i < params.length; i++) {
@@ -54,6 +55,8 @@
                 templatePath = p[1];
             } else if(p[0] == 'vendor') {
                 vendor = decodeURIComponent(p[1]);
+            }else if(p[0] == 'spec') {
+            	spec = decodeURIComponent(p[1]);
             }
         }
 
@@ -64,7 +67,7 @@
         // templatePath = "../template";
 
         $(document).ready(function () {
-            init(domain, vendor, templatePath + "/");
+            init(domain, vendor, spec,templatePath + "/");
         });
     </script>
 </head>

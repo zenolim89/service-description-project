@@ -20,12 +20,12 @@ $(document).ready(function () {
 /**
  * 초기화
  */
-function init(_domain, _vendor, path) {
+function init(_domain, _vendor, _spec,path) {
     domain = _domain;
     vendor = _vendor;
     
     
-    spec="오크밸리";
+    spec=_spec;
     getSpecInfo(domain,spec,function(specDesc){
     	curSpecInfo = specDesc;
     	var temp = new Array();

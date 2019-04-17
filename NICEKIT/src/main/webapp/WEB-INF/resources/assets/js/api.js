@@ -26,7 +26,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getTemp", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData.tempList);
+                cb(data.resData);						//SERA
             } else {
                 alert(data.resMsg);
             }
@@ -35,7 +35,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getVendor", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData.vendorList);
+                cb(data.resData);					//SERA
             } else {
                 alert(data.resMsg);
             }

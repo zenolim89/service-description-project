@@ -185,3 +185,21 @@ function getSpecInfo(domain, spec,cb) {
         }
     });
 }
+
+
+
+function deployVendor(doamain, vendor, cb){
+    var param = {domainName:domain, vendorName:vendor};
+
+    $.ajax({
+        type: 'POST',
+        url: server + "deployVendor",
+        data: JSON.stringify(param), // or JSON.stringify ({name: 'jonas'}),
+        success: function(data) {
+            console.log(data);
+            cb(data);
+        },
+        contentType: "application/json",
+        dataType: 'json'
+    });
+}

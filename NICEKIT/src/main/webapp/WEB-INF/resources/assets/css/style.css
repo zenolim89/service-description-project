@@ -39,7 +39,7 @@ input[type=password] { letter-spacing:4px; }
 input[type=password]::-webkit-input-placeholder { letter-spacing:0; }
 input[type=password]::-moz-placeholder { letter-spacing:0; }
 input[type=password]:-ms-input-placeholder { letter-spacing:0 !important; }
-fieldset { min-width:100%; }
+fieldset { min-width:100%; text-align: center;}
 pre { white-space:pre-wrap; white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-wrap:break-all; }
 
 @media aural { caption,legend,hr {display:block;} } 

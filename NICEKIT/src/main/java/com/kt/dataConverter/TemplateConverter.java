@@ -61,20 +61,23 @@ public class TemplateConverter {
 		HashMap<String,Object> serviceFullListMap = this.getServiceFullListMap(templateJSONObject);
 		
 		this.setFullServiceMapValue(templateJSONObject, serviceFullListMap);
-	
+		
 		this.setWordList(_domainName, _specName, serviceFullListMap);
 		
 	}
 	
+
 	public void setWordList(String _domainName, String _specName, HashMap<String, Object> _serviceFullListMap){
 		
 		ArrayList<String> wordList = new ArrayList<String>();
+		ArrayList<String> temp = new ArrayList<>();
 		//String serviceName = "객실용품";
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		
 		//wordList = serializerTo.resWordInfo(_domainName, _specName, serviceName);
 		
 		for( String key : _serviceFullListMap.keySet() ) {
+			
 			
 			System.out.println(String.format("domainName : [%s] / specName : [%s] / serviceName : [%s]", _domainName, _specName, key));
 			
@@ -86,7 +89,7 @@ public class TemplateConverter {
 			}
 			
 			if( wordList.size() > 0) {
-				
+				temp.add(key);
 				htmlWordListMap.put((String) _serviceFullListMap.get(key), wordList);
 				
 			}
@@ -95,6 +98,8 @@ public class TemplateConverter {
 			}
 			
 		}
+		
+		htmlWordListMap.put("main.html",temp);
 		
 		System.out.println("####################################");
 		System.out.println(htmlWordListMap.toString());
@@ -154,7 +159,7 @@ public class TemplateConverter {
 			}
 			
 		}
-		
+
 		return fullServiceMap;
 	}
 	
@@ -180,7 +185,7 @@ public class TemplateConverter {
 		//File sourceFile = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_VENDORS+ File.separator + _templateName + File.separator + "template.json");
 		
 		File sourceFile = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_TEMPLATE
-				+ File.separator + _templateName + File.separator + _specName +File.separator + "template.json");
+				+ File.separator + _templateName + File.separator + "template.json");
 		
 		byte[] encoded = Files.readAllBytes(Paths.get(sourceFile.getAbsolutePath()));
 		

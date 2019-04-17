@@ -256,7 +256,7 @@ public class CoreService {
 	 */
 	public String createWithTemplate(String domainName, String vandor, String urlPath, String specName) {
 		UITemplateController uiController = new UITemplateController();
-		JSONObject createResObj = uiController.createWithTemplate(vandor, urlPath, specName);
+		JSONObject createResObj = uiController.createWithTemplate(domainName, vandor, urlPath, specName);
 		ReqCreateVendor vendorInfo = new ReqCreateVendor();
 		InsertDataTo insertTo = new InsertDataTo();
 		String resultCode = createResObj.get("code").toString();

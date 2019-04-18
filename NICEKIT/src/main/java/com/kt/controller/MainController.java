@@ -14,13 +14,7 @@ import java.lang.Void;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kt.controller.exception.DirectoryAlreadyExistsException;
-import com.kt.controller.exception.NotFoundDeployVendorException;
-import com.kt.controller.exception.NotFoundDirectoryException;
 import com.kt.controller.exception.NotFoundDomainException;
-import com.kt.controller.exception.NotFoundPreviewTemplateException;
-import com.kt.controller.exception.NotFoundPreviewVendorException;
-import com.kt.controller.exception.NotFoundSaveTempException;
 import com.kt.controller.exception.NotFoundSpecException;
 import com.kt.controller.exception.NotFoundTempException;
 import com.kt.controller.exception.NotFoundTemplateException;

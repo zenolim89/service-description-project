@@ -20,12 +20,12 @@ $(document).ready(function () {
 /**
  * 초기화
  */
-function init(_domain, _vendor, path) {
+function init(_domain, _vendor, _spec,path) {
     domain = _domain;
     vendor = _vendor;
     
     
-    spec="오크밸리";
+    spec=_spec;
     getSpecInfo(domain,spec,function(specDesc){
     	curSpecInfo = specDesc;
     	var temp = new Array();
@@ -48,8 +48,42 @@ function init(_domain, _vendor, path) {
 }
 function _init() {
     // 페이지명
-    $("#vendor_name").text(tmp.getTemplateName());
+    //$("#vendor_name").text(tmp.getTemplateName());
+    $("#vendor_name").text(vendor);
 
+    //도메인페이지로 가기
+    $("#godomain").click(function(){
+            if(! confirm("편집중인 내용이 있습니다.\n저장하지않고 넘어 가시겠습니까?")) {
+                return;
+            }else{
+            	var form = document.createElement("form");
+            	form.setAttribute("method","Post");
+            	form.setAttribute("action", "reqLogin");
+            	document.body.appendChild(form);
+            	form.submit();
+            }
+    });
+    
+    //서비스 저장
+    $("#service_save").click(function(){
+    	deployVendor(domain, vendor, function(data){
+    	    if(data.resCode == 200 || data.resCode == 201){
+    	    	alert("저장 완료");
+            	var form = document.createElement("form");
+            	form.setAttribute("method","Post");
+            	form.setAttribute("action", "reqLogin");
+            	document.body.appendChild(form);
+            	form.submit();
+    	    }else{
+    	        alert("[ERROR] " + data.resMsg);
+    	    }
+    	})
+    });
+    
+    
+    
+    
+    
     // 프리뷰 로드 이벤트
     $("#preview").load(function() {
         var as = getElementInsidePreview("a");
@@ -281,10 +315,11 @@ function addComponents(info) {
             var com = _getComponentTemplate(info);
             // 이름
             com.find(".name").text(info.name);
-
+            com.find(".name").text(info.service_name);
+            
             // 링크 연결
             _connectInputLink(info.id, com.find(".link"));
-
+            
             // 서비스명
              com.find(".desc").val(ameInfo.serviceDesc);
              com.find(".service").val(ameInfo.serviceName);
@@ -306,7 +341,8 @@ function addComponents(info) {
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
             // 이름
-            com.find(".name").text(info.name);
+            //com.find(".name").text(info.name);
+            com.find(".name").text(info.service_name);
 
             // 링크 연결
             _connectInputLink(info.id, com.find(".link"));
@@ -333,9 +369,8 @@ function addComponents(info) {
             var com = _getComponentTemplate(info);
 
 
-        	
-        	// 이름
-            com.find(".name").text(info.name);
+            //com.find(".name").text(info.name);
+
 
             
             // 파일 연결
@@ -359,9 +394,13 @@ function addComponents(info) {
             ////////////////////////////////////////////////
             var word = com.find(".text").val();
             
+            //객실용품
         	for(var i=0;i<jsonWordList.length;i++){
         		if(word == jsonWordList[i]){
         			
+                	// 이름
+                    com.find(".name").text(word);
+                    
         			console.log("일치: "+word);
                     // 하위 편집 컴포넌트 추가
                     addComponents({"name": info.name,
@@ -375,10 +414,12 @@ function addComponents(info) {
         		}
         	}
         	
+        	//메인
         	for(var i=0;i<curSpecInfo.length;i++){
         		if(word == curSpecInfo[i].serviceName){
-        			
-        			console.log("일치: "+word);
+                	// 이름
+                    com.find(".name").text(word);
+                    
                     // 하위 편집 컴포넌트 추가
                     addComponents({"name": info.name,
                         "type": "link_text3",

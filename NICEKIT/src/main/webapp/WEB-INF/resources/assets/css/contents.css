@@ -357,9 +357,9 @@ button {outline: none;}
 .s_menus {position: relative; width: 1650px; margin:50px auto 0; padding-top:40px; border-top:1px solid #d0ccc7;}
 .s_menus .s_title {position: absolute; top:-15px; left:50%; transform: translateX(-50%); font-size:18px; height: 30px; line-height: 30px; color:#333333; font-weight: bolder; padding:0 10px; background: #ede9e2}
 .s_menus .form_field:after {content: ""; display: block; clear: both;}
-.s_menus .form_field .box {position: relative; display: block; float:left; width: 227px; height: auto; padding-bottom:39px; margin-left:10px; border:1px solid #b9b6b2; border-radius: 8px; overflow: hidden; background-color: #cac7c3; box-sizing: border-box;}
+.s_menus .form_field .box {position: relative; display: inline-block; width: 227px; height: 455px; padding-bottom:39px; margin-left:10px; border:1px solid #b9b6b2; border-radius: 8px; overflow: hidden; background-color: #cac7c3; box-sizing: border-box;}
 .s_menus .form_field .box .t_area {position: relative; height: 39px; width: 100%; background: #f8f6f3;}
-.s_menus .form_field .box .t_area p.t {padding-left:18px; font-size:16px; line-height: 39px; color:#333; font-weight: bold;}
+.s_menus .form_field .box .t_area p.t {padding-left:18px; font-size:16px; line-height: 39px; color:#333; font-weight: bold;display: inline-block;float: left;}
 .s_menus .form_field .box .b_area {position: absolute; bottom:0; left:0; height: 39px; width: 100%; background: #f8f6f3;}
 .s_menus .form_field .box .icon_box {padding:0; margin:0 19px;}
 .s_menus .form_field .box .icon_box p {padding:5px 0; font-size:12px; line-height:20px; color:#000; text-align: center;}

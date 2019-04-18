@@ -26,7 +26,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getTemp", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData.tempList);
+                cb(data.resData);						//SERA
             } else {
                 alert(data.resMsg);
             }
@@ -35,7 +35,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getVendor", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData.vendorList);
+                cb(data.resData);					//SERA
             } else {
                 alert(data.resMsg);
             }
@@ -183,5 +183,23 @@ function getSpecInfo(domain, spec,cb) {
         } else {
         	alert(data.resMsg);
         }
+    });
+}
+
+
+
+function deployVendor(doamain, vendor, cb){
+    var param = {domainName:domain, vendorName:vendor};
+
+    $.ajax({
+        type: 'POST',
+        url: server + "deployVendor",
+        data: JSON.stringify(param), // or JSON.stringify ({name: 'jonas'}),
+        success: function(data) {
+            console.log(data);
+            cb(data);
+        },
+        contentType: "application/json",
+        dataType: 'json'
     });
 }

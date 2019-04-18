@@ -26,7 +26,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getTemp", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData);						//SERA
+                cb(data.resData);						//INFO SERA
             } else {
                 alert(data.resMsg);
             }
@@ -35,7 +35,7 @@ function getVendorList(domain, temp, cb) {
         $.get(server + "getVendor", {domainName: domain}, function (data) {
             console.log(data);
             if(data.resCode == "200") {
-                cb(data.resData);					//SERA
+                cb(data.resData);					//INFO SERA
             } else {
                 alert(data.resMsg);
             }
@@ -170,7 +170,7 @@ function updatePage(domain, vendor, filename, content, cb) {
     $.post(server + "api/update/file", {domain:domain, workplace:vendor, filename:filename, content:content}, cb);
 }
 
-
+//INFO SERA
 /**
  * 규격정보조회
  * @param domain
@@ -187,7 +187,7 @@ function getSpecInfo(domain, spec,cb) {
 }
 
 
-
+// INFO SERA
 function deployVendor(doamain, vendor, cb){
     var param = {domainName:domain, vendorName:vendor};
 

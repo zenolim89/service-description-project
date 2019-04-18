@@ -6,9 +6,9 @@ var curPageInfo;
 var curPageHtml;
 var curPageObj;
 var curSpecInfo;
-var ameInfo;
-var jsonWordList ;
-var mainList ;
+var ameInfo;				//INFO SERA
+var jsonWordList ;		//INFO SERA
+var mainList ;			//INFO SERA
 
 // 페이지 편집됨 상태를 저장
 var pageEdited = false;
@@ -23,9 +23,8 @@ $(document).ready(function () {
 function init(_domain, _vendor, _spec,path) {
     domain = _domain;
     vendor = _vendor;
-    
-    
     spec=_spec;
+  //INFO SERA
     getSpecInfo(domain,spec,function(specDesc){
     	curSpecInfo = specDesc;
     	var temp = new Array();
@@ -49,8 +48,8 @@ function init(_domain, _vendor, _spec,path) {
 function _init() {
     // 페이지명
     //$("#vendor_name").text(tmp.getTemplateName());
-    $("#vendor_name").text(vendor);
-
+    $("#vendor_name").text(vendor);		
+    //INFO SERA
     //도메인페이지로 가기
     $("#godomain").click(function(){
             if(! confirm("편집중인 내용이 있습니다.\n저장하지않고 넘어 가시겠습니까?")) {
@@ -310,6 +309,7 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
+          //INFO SERA   
         case "link_text2":
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
@@ -337,7 +337,8 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
-        case "link_text3":
+           //INFO SERA
+        case "link_text3":					
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
             // 이름
@@ -361,7 +362,8 @@ function addComponents(info) {
 
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
-            break;             
+            break;
+          //INFO SERA    
         case "hover_image_text":
         	
         	
@@ -393,6 +395,8 @@ function addComponents(info) {
             // });
             ////////////////////////////////////////////////
             var word = com.find(".text").val();
+            
+            //INFO SERA
             
             //객실용품
         	for(var i=0;i<jsonWordList.length;i++){

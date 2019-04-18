@@ -83,11 +83,7 @@ public class TemplateConverter {
 			
 			try {
 			wordList= serializerTo.resWordInfo(_domainName, _specName, key);
-			}
-			catch(Exception e){
-				e.printStackTrace();
-			}
-			
+			System.out.println(wordList.toString());
 			if( wordList.size() > 0) {
 				temp.add(key);
 				htmlWordListMap.put((String) _serviceFullListMap.get(key), wordList);
@@ -96,6 +92,12 @@ public class TemplateConverter {
 			else{
 				this.removeItem(key);
 			}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+
 			
 		}
 		

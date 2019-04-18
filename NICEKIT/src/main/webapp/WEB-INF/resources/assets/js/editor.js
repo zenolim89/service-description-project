@@ -1,9 +1,14 @@
 var tmp;
 var domain;
 var vendor;
+var spec;
 var curPageInfo;
 var curPageHtml;
 var curPageObj;
+var curSpecInfo;
+var ameInfo;
+var jsonWordList ;
+var mainList ;
 
 // 페이지 편집됨 상태를 저장
 var pageEdited = false;
@@ -15,15 +20,70 @@ $(document).ready(function () {
 /**
  * 초기화
  */
-function init(_domain, _vendor, path) {
+function init(_domain, _vendor, _spec,path) {
     domain = _domain;
     vendor = _vendor;
+    
+    
+    spec=_spec;
+    getSpecInfo(domain,spec,function(specDesc){
+    	curSpecInfo = specDesc;
+    	var temp = new Array();
+    	
+    	for(var i=0;i<curSpecInfo.length;i++){
+    		temp.push(curSpecInfo[i].serviceName);
+    	    if(curSpecInfo[i].serviceName == "객실용품"){
+    	    	
+    	    	ameInfo = curSpecInfo[i];
+    	    	var diclist = ameInfo.intentInfo[0].dicList[0];
+    	    	var wordlist = diclist[0].wordList;
+    	    	 jsonWordList = JSON.parse(wordlist);
+    	    }
+    	}
+    	
+    	mainList = temp;
+    	
+    });
     tmp = new template(path, _init);
 }
 function _init() {
     // 페이지명
-    $("#vendor_name").text(tmp.getTemplateName());
+    //$("#vendor_name").text(tmp.getTemplateName());
+    $("#vendor_name").text(vendor);
 
+    //도메인페이지로 가기
+    $("#godomain").click(function(){
+            if(! confirm("편집중인 내용이 있습니다.\n저장하지않고 넘어 가시겠습니까?")) {
+                return;
+            }else{
+            	var form = document.createElement("form");
+            	form.setAttribute("method","Post");
+            	form.setAttribute("action", "reqLogin");
+            	document.body.appendChild(form);
+            	form.submit();
+            }
+    });
+    
+    //서비스 저장
+    $("#service_save").click(function(){
+    	deployVendor(domain, vendor, function(data){
+    	    if(data.resCode == 200 || data.resCode == 201){
+    	    	alert("저장 완료");
+            	var form = document.createElement("form");
+            	form.setAttribute("method","Post");
+            	form.setAttribute("action", "reqLogin");
+            	document.body.appendChild(form);
+            	form.submit();
+    	    }else{
+    	        alert("[ERROR] " + data.resMsg);
+    	    }
+    	})
+    });
+    
+    
+    
+    
+    
     // 프리뷰 로드 이벤트
     $("#preview").load(function() {
         var as = getElementInsidePreview("a");
@@ -135,6 +195,9 @@ function openPage(pageName) {
         // console.log(body);
         // curPageObj = $(body);
 
+        
+        
+        
         // 편집용 컴포넌트 추가
         var components = pageInfo.components;
         for(var i = 0; i < components.length; i++) {
@@ -184,6 +247,7 @@ function _getComponentTemplate(info) {
  * @param info
  */
 function addComponents(info) {
+    console.log("adding comp:" + info.type);
     switch (info.type) {
         case "textarea":
             // 편집 컴포넌트
@@ -251,14 +315,18 @@ function addComponents(info) {
             var com = _getComponentTemplate(info);
             // 이름
             com.find(".name").text(info.name);
-
+            com.find(".name").text(info.service_name);
+            
             // 링크 연결
             _connectInputLink(info.id, com.find(".link"));
-
+            
             // 서비스명
-            // com.find(".text").val(info.service_name);
-
-            // com.find(".link").val(info.service_name);
+             com.find(".desc").val(ameInfo.serviceDesc);
+             com.find(".service").val(ameInfo.serviceName);
+             com.find(".cmd").val(info.service_name + " 가져다줘");
+             com.find(".serviceType").val(ameInfo.serviceType);
+             
+            // com.find(".liameInfonk").val(info.service_name);
 
             // 기존 텍스트
             // _connectInputText(info.id, com.find(".text"));
@@ -269,12 +337,42 @@ function addComponents(info) {
             // 편집 컴포넌트 추가
             _addComponent(info.section, com);
             break;
-        case "hover_image_text":
+        case "link_text3":
             // 편집 컴포넌트
             var com = _getComponentTemplate(info);
             // 이름
-            com.find(".name").text(info.name);
+            //com.find(".name").text(info.name);
+            com.find(".name").text(info.service_name);
 
+            // 링크 연결
+            _connectInputLink(info.id, com.find(".link"));
+
+            var link_tmp = info.service_link.replace("/","");
+            // 서비스명
+             com.find(".text").val(info.service_name);
+             com.find(".link").val(link_tmp);
+             console.log(link_tmp);
+
+            // 기존 텍스트
+            // _connectInputText(info.id, com.find(".text"));
+
+            // 링크 연결
+            // _connectInputLink(info.id, com.find(".link"));
+
+            // 편집 컴포넌트 추가
+            _addComponent(info.section, com);
+            break;             
+        case "hover_image_text":
+        	
+        	
+            // 편집 컴포넌트
+            var com = _getComponentTemplate(info);
+
+
+            //com.find(".name").text(info.name);
+
+
+            
             // 파일 연결
             _connectInputFile(info.id_normal, com.find(".file_normal"), com.find(".img_normal"));
             _connectInputFile(info.id_hover, com.find(".file_hover"), com.find(".img_hover"));
@@ -294,17 +392,48 @@ function addComponents(info) {
             //     return false;
             // });
             ////////////////////////////////////////////////
+            var word = com.find(".text").val();
+            
+            //객실용품
+        	for(var i=0;i<jsonWordList.length;i++){
+        		if(word == jsonWordList[i]){
+        			
+                	// 이름
+                    com.find(".name").text(word);
+                    
+        			console.log("일치: "+word);
+                    // 하위 편집 컴포넌트 추가
+                    addComponents({"name": info.name,
+                        "type": "link_text2",
+                        "service_name": com.find(".text").val(),
+                        "section": "w_menus2",
+                        "id": "nolink"});
 
-            // 하위 편집 컴포넌트 추가
-            addComponents({"name": info.name,
-                "type": "link_text2",
-                "service_name": com.find(".text").val(),
-                "section": "w_menus2",
-                "id": "nolink"});
+                    // 편집 컴포넌트 추가
+                    _addComponent(info.section, com);
+        		}
+        	}
+        	
+        	//메인
+        	for(var i=0;i<curSpecInfo.length;i++){
+        		if(word == curSpecInfo[i].serviceName){
+                	// 이름
+                    com.find(".name").text(word);
+                    
+                    // 하위 편집 컴포넌트 추가
+                    addComponents({"name": info.name,
+                        "type": "link_text3",
+                        "service_name": com.find(".text").val(),
+                        "section": "w_menus2",
+                        "service_link": curSpecInfo[i].serviceLink,
+                        "id": "nolink"});
 
-
-            // 편집 컴포넌트 추가
-            _addComponent(info.section, com);
+                    // 편집 컴포넌트 추가
+                    _addComponent(info.section, com);
+        		}
+        	}
+        	
+        	
 
             // TODO 기능변경 버튼 추가, 하나만 추가되어야 해서, 없으면 추가하고, 있으면 추가 안하게
 

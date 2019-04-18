@@ -1,23 +1,30 @@
 package com.kt.dataManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
 import com.kt.dataConverter.HtmlConverter;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 
 public class UITemplateController {
+	
+	private TemplateConverter templateConverter;
 
 	public String getAttribute() {
 
@@ -46,24 +53,55 @@ public class UITemplateController {
 	 * @param venderName
 	 * @param urlPath
 	 * @return
+	 * @throws ParseException 
+	 * @throws IOException 
 	 */
-	public JSONObject createWithTemplate(String vendorName, String urlPath, String specName) {
-		SelectDataTo selectTo = new SelectDataTo();
+	public JSONObject createWithTemplate(String domainName, String vendorName, String urlPath, String specName) {
+		
+		//url을 이용해서 json받아서
+		//json파일 먼저 선택 후 복사
+		//아래에서는 json파일을 제외한 대상 복사
+		
+		/*
+		ArrayList<String> wordList = new ArrayList<String>();
+		String serviceName = "객실용품";
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		System.out.println(String.format("domainName : [%s] / specName : [%s] / serviceName : [%s]", domainName, specName, serviceName));
+		wordList = serializerTo.resWordInfo(domainName, specName, serviceName);
+		*/
+		
+		//테스트코드
+		//specName = "오크밸리";
+
+		String dn = vendorName;
 		JSONObject resObj = new JSONObject();
 		String templateName = null;
-		String dn = vendorName;
 		String sourcePath = this.extractURL(urlPath);
-
+		SelectDataTo selectTo = new SelectDataTo();
 		List<Row> list = selectTo.selectTemplateForPath(sourcePath);
-
 		for (Row row : list)
 			templateName = row.getString("templatename");
+		
+		
+		templateConverter = new TemplateConverter();
+		try {
+			templateConverter.setTemplateConverter(templateName, domainName, specName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		File sourceFilePath = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_TEMPLATE
 				+ File.separator + templateName);
 		File targetFilePath = new File(
 				Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_TEMP + File.separator + dn);
 
+		System.out.println(String.format("sourceFilePath : [%s] / targetFilePath : [%s]", sourceFilePath.getAbsolutePath(), targetFilePath.getAbsolutePath()));
+		
 		System.out.println((!sourceFilePath.exists()));
 
 		if (!sourceFilePath.exists()) {
@@ -78,10 +116,11 @@ public class UITemplateController {
 		} else {
 
 			targetFilePath.mkdirs();
+			//this.copyTemplate(sourceFilePath, targetFilePath, wordList);
 			this.copyTemplate(sourceFilePath, targetFilePath, specName);
 			resObj.put("code", "201");
 			resObj.put("specName", specName);
-			resObj.put("tempPath", Constants.EXTERNAL_FOLDER_URLPATH_TEMP + "/" + dn);
+			resObj.put("tempPath", Constants.EXTERNAL_FOLDER_URLPATH_TEMP + "/" + vendorName);
 			return resObj;
 		}
 	}
@@ -180,7 +219,8 @@ public class UITemplateController {
 
 	}
 
-	public void copyTemplate(File sourceFile, File targetFile, String SpecName) {
+	public void copyTemplate(File sourceFile, File targetFile, String _specName ) {
+			//ArrayList<String> wordList) {
 
 		HtmlConverter htmlConverter = new HtmlConverter();
 
@@ -194,30 +234,39 @@ public class UITemplateController {
 
 				temp.mkdirs();
 
-				this.copyTemplate(file, temp, SpecName);
+				this.copyTemplate(file, temp, _specName);
 
 			} else {
-
-				// 주석대상 1)
-				FileInputStream fileIn = null;
-
-				// InputStream fileIn = null;
-
+				InputStream fileIn = null;
 				FileOutputStream fileOut = null;
-
 				try {
-
-					// DB처리 이후에 해당 리스트 이곳에 대입
-					// 처리 후 주석대상 1), 2), 3) 번 주석처리 필요
-
-					// fileIn = new ByteArrayInputStream(htmlConverter.removeItm(file, "UTF-8",
-					// _selectorMap, _itmMap), "UTF-8");
-
-					// 주석대상 2)
-					fileIn = new FileInputStream(file);
-
+					
+					
+					//json은 json파일 쓰기
+					if(file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length()).equals("json")){
+						fileIn = new ByteArrayInputStream(this.templateConverter.getJSON().getBytes("UTF-8"));
+					}
+					else if( this.templateConverter.hasWordList(file.getName())) {
+						fileIn = new ByteArrayInputStream(
+								(htmlConverter.removeItm(file, "UTF-8", "[name=target]", "target-name", 
+										this.templateConverter.getWordList(file.getName())))
+										.getBytes("UTF-8"));
+					}
+					else {
+						fileIn = new FileInputStream(file);
+					}
+					
+					/*
+					if (file.getName().equals("ame_detail.html")) {
+						fileIn = new ByteArrayInputStream(
+								(htmlConverter.removeItm(file, "UTF-8", "[name=amenity]", "target-name", wordList))
+										.getBytes());
+					} else {
+						fileIn = new FileInputStream(file);
+					}
+					*/
+					
 					fileOut = new FileOutputStream(temp);
-
 					byte[] b = new byte[4096];
 
 					int cnt = 0;

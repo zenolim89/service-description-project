@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../assets/js/ui.js"></script>
 
     <script src="../assets/js/api.js"></script>
-    <!--<script src="assets/js/editor.js"></script>-->
-    <!--<script src="assets/js/parser.js"></script>-->
+    <!--<script src="../assets/js/editor.js"></script>-->
+    <!--<script src="../assets/js/parser.js"></script>-->
 
     <script>
         $(document).ready(function () {
@@ -101,10 +101,14 @@
                 if(id == "btn_03") { // 사업장 선택 후 생성 선택
                     $(".nameTitle").css("display", "");
                     $(".btn_copy em").text("복사");
+
+                    updateVendorList(false);
                 } else if(id == "btn_04") { //  사업장 편집 선택
                     $(".nameTitle").css("display", "none");
                     $(".btn_copy em").text("편집");
                     $(".article_list").show();
+
+                    updateVendorList(true);
                 }
             }
 
@@ -195,13 +199,20 @@
                 // 템플릿 정보 조회
                 getTemplateDetail(domain, name, function(path) {
                     // 템플릿으로 사업장 생성 요청
-                    createVendorFromTemplate(domain, $("#newVendorNameFromTemplate").val(), name, path, function(data) {
+                    createVendorFromTemplate(domain, $("#newVendorNameFromTemplate").val(), $("#newVendorSpecFromTemplate").val(), path, function(data) {
                         $("#popup_ready").bPopup().close();
 
                         if(data.resCode == "200" || data.resCode == "201") {
                             // 생성 성공
-                            // TODO 생성된 사업장 편집 화면으로 이동
-                            myAlert("생성 성공");
+                            // 생성된 사업장 편집 화면으로 이동
+
+                            var path = data.resData.urlPath;
+                            var specname = data.resData.specName;
+
+                            var editPath = "edit.html#domain=" + domain +"&spec="+specname+ "&vendor=" + ($("#newVendorNameFromTemplate").val()) + "&path=" + (path);
+                            window.location = editPath;
+
+                            // myAlert("생성 성공");
                             // http://localhost:63342/AIB2B/editor/edit.html#domain=resort&vendor=%EC%98%A4%ED%81%AC%EB%B0%B8%EB%A6%AC&path=http%3A%2F%2F222.107.124.9%3A8080%2Fdocbase%2Fvendors%2F%EC%98%A4%ED%81%AC%EB%B0%B8%EB%A6%AC
                         } else {
                             // 생성 실패
@@ -295,8 +306,13 @@
 
                         if(data.resCode == "200" || data.resCode == "201") {
                             // 생성 성공
-                            // TODO 생성된 사업장 편집 화면으로 이동
-                            myAlert("생성 성공");
+                            // myAlert("생성 성공");
+                            // 생성된 사업장 편집 화면으로 이동
+                            var path = data.resData.urlPath;
+                            var specname = data.resData.specName;
+                            
+                            var editPath = "edit.html#domain=" + domain +"&spec="+specname+ "&vendor=" + ($("#newVendorNameFromVendor").val().trim()) + "&path=" + (path);
+                            window.location = editPath;
                         } else {
                             // 생성 실패
                             myAlert(data.resMsg);
@@ -363,44 +379,78 @@
             });
         }
 
+        // 선택 도메인
+        var selectedDomain = null;
+
+        /**
+         * 사업장 목록 조회(temp = true : 임시 사업장 조회)
+         */
+        function updateVendorList(temp) {
+            // 사업장 목록 모두 삭제
+            $(".service_list li").remove();
+
+            // 사업장 목록 조회
+            getVendorList(selectedDomain, temp, function(obj) {
+                // if(vendorList.length == 0) {
+                //     vendorList.push("오크밸리");
+                // }
+                
+                if(obj.vendorList != null){
+                	 var vendorList = obj.vendorList;
+                     console.log(vendorList);
+                     for(var i = 0; i < vendorList.length; i++) {
+                         var vendor = vendorList[i];
+
+                         var elem = $(
+                             "<li>\n" +
+                             "  <button type=\"menu\">\n" +
+                             "    <p class=\"name\">오크벨리</p>\n" +
+                             "  </button>\n" +
+                             "</li>");
+                         elem.find(".name").text(vendor);
+                         elem.find("button").attr("data-name", vendor);
+                         elem.find("button").attr("data-domain", selectedDomain);
+                         $(".service_list ul").append(elem);
+                     }
+
+                    }else if(obj.tempList != null) {
+                    	var tempList = obj.tempList;
+                        for(var i = 0; i < tempList.length; i++) {
+                            var vendor = tempList[i].vendorName;
+                            var spec = tempList[i].specName;
+                            
+                            var elem = $(
+                                "<li>\n" +
+                                "  <button type=\"menu\">\n" +
+                                "    <p class=\"name\">오크벨리</p>\n" +
+                                "  </button>\n" +
+                                "</li>");
+                            elem.find(".name").text(vendor);
+                            elem.find("button").attr("data-name", vendor);
+                            elem.find("button").attr("data-spec", spec);
+                            elem.find("button").attr("data-domain", selectedDomain);
+                            $(".service_list ul").append(elem);
+                        }
+                        }
+				//사업장 목록 초기화               
+                 initVendorList();
+
+            });
+        }
+
         /**
          * 도메인 선택 작업
          * @param domain
          */
         function selectDomain(domain) {
-            // 사업장 목록 모두 삭제
-            $(".service_list li").remove();
+            // 선택 도메인
+            selectedDomain = domain;
 
             // 템플릿 모두 삭제
             $(".templete_list li").remove();
 
             $("button.domain").removeClass("active");
             $("button.domain." + domain).addClass("active");
-
-            // 사업장 목록 조회
-            getVendorList(domain, function(vendorList) {
-                // if(vendorList.length == 0) {
-                //     vendorList.push("오크밸리");
-                // }
-                console.log(vendorList);
-                for(var i = 0; i < vendorList.length; i++) {
-                    var vendor = vendorList[i];
-
-                    var elem = $(
-                        "<li>\n" +
-                        "  <button type=\"menu\">\n" +
-                        "    <p class=\"name\">오크벨리</p>\n" +
-                        "  </button>\n" +
-                        "</li>");
-                    elem.find(".name").text(vendor);
-                    elem.find("button").attr("data-name", vendor);
-                    elem.find("button").attr("data-domain", domain);
-                    $(".service_list ul").append(elem);
-                }
-
-                // 사업장 목록 초기화
-                initVendorList();
-            });
 
             // 템플릿 목록 조회
             getTemplateList(domain, function(templateList) {
@@ -410,10 +460,11 @@
 
                     var elem = $(
                         "<li>\n" +
-                        "  <div class=\"img\"><img src=\"assets/images/sample/320x175_01.jpg\" alt=\" \"></div>\n" +
+                        "  <div class=\"img\"><img src=\"../assets/images/sample/320x175_01.jpg\" alt=\" \"></div>\n" +
                         "  <a href=\"#\" class=\"btn_select name\"><em>템플릿 선택</em></a>\n" +
                         "  <a href=\"#\" class=\"btn_view\"><em>미리보기</em></a>\n" +
                         "</li>");
+                    elem.find("img").attr("src", "/docbase/template/" + template + "/preview.jpg");
                     elem.find(".name em").text(template);
                     elem.attr("data-name", template);
                     elem.attr("data-domain", domain);
@@ -426,7 +477,7 @@
                         getTemplateDetail(domain, template, function(path) {
                             console.log(path);
                             // 템플릿 프리뷰로 이동
-                            var previewPath = "preview.html#domain=" + domain + "&path=" + encodeURIComponent(path);
+                            var previewPath = "preview.html#domain=" + domain + "&path=" + (path);
                             console.log(previewPath);
                             window.location = previewPath;
                         });
@@ -456,6 +507,9 @@
                     specTrs.push($("<tr><td class='radioBox'></td><td class='radioBox'></td><td class='radioBox'></td><td class='radioBox'></td></tr>"))
                 }
 
+                // 목록 삭제
+                $("#newVendorSpecFromTemplate").html("<option value=''>선택해주세요.</option>");
+
                 for(var i = 0; i < cnt; i++) {
                     var el = $("<div></div>");
                     el.append($("<input type=\"radio\" name=\"nameList\" id=\"name01\" class=\"hid_input\">"));
@@ -469,6 +523,8 @@
                     var row = Math.floor(i / 4);
                     var col = Math.floor(i % 4);
                     specTrs[row].find("td:nth-child(" + (col+1) + ")").html(el.html());
+
+                    $("#newVendorSpecFromTemplate").append("<option value='" + name + "'>" + name + "</option>");
 
                 }
 
@@ -488,10 +544,22 @@
             }
             var vendor = sel.attr("data-name");
             var domain = sel.attr("data-domain");
-            // getVendorDetail(vendor);
-            getVendorDetail(domain, vendor, function(path) {
-                window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
-            });
+            var spec = sel.attr("data-spec");
+
+            // 선택된 서비스 유형 버튼의 id
+            var menuId = $(".menu_selecter li .menu_btn.active").attr("id");
+            if(menuId == "btn_04") { // 사업장 편집
+                // // getVendorDetail(vendor);
+                // getVendorDetail(domain, vendor, function(path) {
+                //     window.location = "edit.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
+                // });
+                var path = "/docbase/temp/" + vendor + "/";
+                window.location = "edit.html#domain=" + domain + "&spec=" + spec+ "&vendor=" + vendor + "&path=" + (path);
+            } else if(menuId == "btn_03") { // 사업장 선택 후 생성
+                // no way
+            }
+
+
         }
 
         /**
@@ -506,7 +574,7 @@
             var vendor = sel.attr("data-name");
             var domain = sel.attr("data-domain");
             getVendorDetail(domain, vendor, function(path) {
-                window.location = "preview.html#domain=" + domain + "&vendor=" + vendor + "&path=" + encodeURIComponent(path);
+                window.location = "preview.html#domain=" + domain + "&vendor=" + vendor + "&path=" + (path);
             });
         }
 
@@ -522,7 +590,7 @@
                 return;
             }
             var name = chk.attr("id");
-            name = encodeURIComponent(name);
+            // name = encodeURIComponent(name);
             window.location = "service_protocol_list.html#service=" + name;
         }
 
@@ -531,8 +599,7 @@
          */
         function createServiceProtocol() {
             var name = $("#newServiceProtocolName").val();
-            name = encodeURIComponent(name);
-            window.location = "service_protocol_list.html#service=" + name;
+            window.location = "service_protocol_regist.html#specName=" + name + "&domain=" + (selectedDomain) + "&domainId=" + ("resort0001");
         }
     </script>
 </head>
@@ -745,12 +812,12 @@
                     <!--                        <div class="templete_list">-->
                     <!--                            <ul class="list">-->
                     <!--                                <li>-->
-                    <!--                                    <div class="img"><img src="assets/images/sample/320x175_01.jpg" alt=" "></div>-->
+                    <!--                                    <div class="img"><img src="../assets/images/sample/320x175_01.jpg" alt=" "></div>-->
                     <!--                                    <a href="#" class="btn_select"><em>템플릿 선택</em></a>-->
                     <!--                                    <a href="#" class="btn_view"><em>미리보기</em></a>-->
                     <!--                                </li>-->
                     <!--                                <li>-->
-                    <!--                                    <div class="img"><img src="assets/images/sample/320x175_01.jpg" alt=" "></div>-->
+                    <!--                                    <div class="img"><img src="../assets/images/sample/320x175_01.jpg" alt=" "></div>-->
                     <!--                                    <a href="#" class="btn_select"><em>템플릿 선택</em></a>-->
                     <!--                                    <a href="#" class="btn_view"><em>미리보기</em></a>-->
                     <!--                                </li>-->
@@ -927,11 +994,13 @@
             <form method="get" action="">
                 <fieldset>
                     <legend>서비스 사업장 명을 입력 해주세요.</legend>
-                    <input type="text" class="comText" id="newVendorNameFromTemplate" placeholder="서비스 사업장 명을  입력 해주세요">
+                    <input type="text" class="comText" id="newVendorNameFromTemplate" placeholder="신규로 등록할 서비스 사업장 명을 넣어 주세요.">
+                    <select class="comText" style="margin-top:10px;" id="newVendorSpecFromTemplate">
+                        <option value="">선택해주세요.</option>
+                    </select>
                 </fieldset>
             </form>
         </div>
-        <p class="desc">*신규로 등록할 서비스 사업장 명을 넣어 주세요.</p>
         <div class="pbtns">
             <button class="btn btn_cancle btn_close">취소</button>
             <button class="btn btn_confirm">확인</button>
@@ -974,7 +1043,7 @@
     </div>
     <div class="popup_body">
         <p class="title">“<span class="new_vendor_name"></span>” 서비스 사업장을 생성 중입니다.</p>
-        <p class="desc red">*사업장 복사는  5 ~ 10초 정도의 시간이 걸립니다.</p>
+        <p class="desc red">*최장 1분 정도의 시간이 걸립니다.</p>
         <div class="load"></div>
     </div>
 </div>

@@ -55,8 +55,8 @@ public class JSONParsingFrom {
 		String resCode;
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
-			JSONObject createResObj = uiController.createWithTemplate(obj.get("vendorName").toString(),
-					obj.get("urlPath").toString(), obj.get("specName").toString());
+			JSONObject createResObj = uiController.createWithTemplate(obj.get("domainName").toString(),
+					obj.get("vendorName").toString(), obj.get("urlPath").toString(), obj.get("specName").toString());
 			if (createResObj.get("code").toString() == "409") {
 				resObj = serializerTo.resConflict("409", "요청하신 사업장의 디렉토리가 이미 존재합니다");
 				return resObj;
@@ -70,8 +70,11 @@ public class JSONParsingFrom {
 				vendorInfo.setDirPath(createResObj.get("tempPath").toString());
 				resCode = insertTo.insertTempToIndexList(vendorInfo);
 				JSONObject server = parsingFrom.getServerInfo();
-				resObj = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
-						+ server.get("port").toString() + createResObj.get("tempPath").toString());
+				resObj = serializerTo
+						.resCreateDirPath(
+								resCode, "http://" + server.get("serverIp").toString() + ":"
+										+ server.get("port").toString() + createResObj.get("tempPath").toString(),
+								obj.get("specName").toString());
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -110,8 +113,11 @@ public class JSONParsingFrom {
 					vendorInfo.setDirPath(createResObj.get("tempPath").toString());
 					resCode = insertToTempList.insertTempToIndexList(vendorInfo);
 					JSONObject server = parsingFrom.getServerInfo();
-					res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
-							+ server.get("port").toString() + createResObj.get("tempPath").toString());
+					res = serializerTo
+							.resCreateDirPath(resCode,
+									"http://" + server.get("serverIp").toString() + ":" + server.get("port").toString()
+											+ createResObj.get("tempPath").toString(),
+									obj.get("vendorName").toString());
 				}
 			} else
 				return specResObj;
@@ -141,7 +147,7 @@ public class JSONParsingFrom {
 				for (Row row : list)
 					tempPath = row.getString("dirpath");
 				JSONObject server = parsingFrom.getServerInfo();
-				res = serializerTo.resCreateDirPath("200",
+				res = serializerTo.resTempDirPath("200",
 						"http://" + server.get("serverIp").toString() + ":" + server.get("port").toString() + tempPath);
 			}
 		} catch (ParseException e) {
@@ -193,7 +199,7 @@ public class JSONParsingFrom {
 					deleteTo.deleteRowForTempIndexList(obj.get("vendorName").toString(),
 							obj.get("domainName").toString());
 					JSONObject server = parsingFrom.getServerInfo();
-					res = serializerTo.resCreateDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
+					res = serializerTo.resTempDirPath(resCode, "http://" + server.get("serverIp").toString() + ":"
 							+ server.get("port").toString() + resObj.get("vendorPath").toString());
 				}
 			}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.datastax.driver.core.ResultSet;
@@ -76,8 +77,12 @@ public class JSONSerializerTo {
 		} else {
 			resObj.put("resCode", "200");
 			resObj.put("resMsg", "성공");
-			for (Row row : list)
-				arr.add(row.getString("vendorname"));
+			for (Row row : list) {
+				JSONObject tempObj = new JSONObject();
+				tempObj.put("vendorName", row.getString("vendorname"));
+				tempObj.put("specName", row.getString("specname"));
+				arr.add(tempObj);
+			}
 			dataObj.put("tempList", arr);
 			resObj.put("resData", dataObj);
 			return resObj;
@@ -122,6 +127,36 @@ public class JSONSerializerTo {
 			}
 			specDesc.put("specDesc", svcList);
 			res.put("resData", specDesc);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return res;
+	}
+
+	public ArrayList<String> resWordInfo(String domainName, String specName, String serviceName) {
+		JSONParser parser = new JSONParser();
+		ArrayList<GetSpecInfoDataForm> list = new ArrayList<GetSpecInfoDataForm>();
+		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		ArrayList<String> res = new ArrayList<String>();
+		JSONArray rawdata = new JSONArray();
+		JSONArray tempdata = new JSONArray();
+		JSONObject tempObj = new JSONObject();
+		JSONArray result = new JSONArray();
+		try {
+			list = tool.resSpecData(specName);
+			for (GetSpecInfoDataForm form : list) {
+				if (serviceName.equals(form.getServiceName()))
+					rawdata = form.getWordList();
+			}
+			tempdata = (JSONArray) rawdata.get(0);
+			tempObj = (JSONObject) tempdata.get(0);
+ 			result = (JSONArray) parser.parse(tempObj.get("wordList").toString());
+			
+			for(int i=0;i < result.size();i++){
+			    res.add(result.get(i).toString());
+			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -214,7 +249,18 @@ public class JSONSerializerTo {
 		}
 	}
 
-	public JSONObject resCreateDirPath(String code, String path) {
+	public JSONObject resCreateDirPath(String code, String path, String specName) {
+		JSONObject res = new JSONObject();
+		JSONObject dataObj = new JSONObject();
+		res.put("resCode", code);
+		res.put("resMsg", "성공");
+		dataObj.put("urlPath", path);
+		dataObj.put("specName", specName);
+		res.put("resData", dataObj);
+		return res;
+	}
+
+	public JSONObject resTempDirPath(String code, String path) {
 		JSONObject res = new JSONObject();
 		JSONObject dataObj = new JSONObject();
 		res.put("resCode", code);

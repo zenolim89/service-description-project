@@ -2,15 +2,17 @@ package com.kt.controller.model;
 
 import java.util.List;
 
+import com.kt.data.model.TempInfo;
+
 public class ResGetTemp {
-	private List<String> tempList;
-	
-	public void setTempList(List<String> tempList) {
-		this.tempList = tempList;
-	}
-	
-	public List<String> getTempList() {
+	private List<TempInfo> tempList;
+
+	public List<TempInfo> getTempList() {
 		return tempList;
+	}
+
+	public void setTempList(List<TempInfo> tempList) {
+		this.tempList = tempList;
 	}
 
 }

@@ -321,9 +321,9 @@ function addComponents(info) {
             _connectInputLink(info.id, com.find(".link"));
             
             // 서비스명
-             com.find(".desc").val(ameInfo.serviceDesc);
-             com.find(".service").val(ameInfo.serviceName);
-             com.find(".cmd").val(info.service_name + " 가져다줘");
+             //com.find(".desc").val(ameInfo.serviceDesc);
+             //com.find(".service").val(ameInfo.serviceName);
+             com.find(".cmd").val(info.service_name + " 갖다줘");
              com.find(".serviceType").val(ameInfo.serviceType);
              
             // com.find(".liameInfonk").val(info.service_name);

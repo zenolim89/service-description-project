@@ -36,6 +36,7 @@ import com.kt.controller.model.ResGetVendor;
 import com.kt.controller.model.ResGetVendorPage;
 import com.kt.controller.model.ResSaveTemp;
 import com.kt.controller.model.ResponseData;
+import com.kt.data.model.TempInfo;
 import com.kt.dataForms.DicParam;
 import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ResFileUpload;
@@ -143,10 +144,10 @@ public class MainController extends BaseController{
 	 * 		Case01 등록된 사업장 목록이 없을 경우(NOT_FOUND_VENDOR)
 	 */
 	@RequestMapping(value = "/getVendor", method = RequestMethod.GET)
-	public ResponseData<ResGetVendor> getVendor(@RequestParam String domianName) {
+	public ResponseData<ResGetVendor> getVendor(@RequestParam String domainName) {
 		ResGetVendor result = new ResGetVendor();
 
-		List<String> vendorList = coreSvc.getVendorList(domianName);
+		List<String> vendorList = coreSvc.getVendorList(domainName);
 		if (vendorList == null || vendorList.isEmpty()) {
 			throw new NotFoundVendorException();
 		}
@@ -168,7 +169,7 @@ public class MainController extends BaseController{
 	@RequestMapping(value = "/getTemp", method = RequestMethod.GET)
 	public ResponseData<ResGetTemp> getTemp(@RequestParam String domainName) {
 		ResGetTemp result = new ResGetTemp();
-		List<String> tempList = coreSvc.getTempList(domainName);
+		List<TempInfo> tempList = coreSvc.getTempList(domainName);
 
 		if (tempList == null || tempList.isEmpty()) {
 			throw new NotFoundTempException();
@@ -404,23 +405,6 @@ public class MainController extends BaseController{
 		return successResponse(result);
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
 	
 	
 	

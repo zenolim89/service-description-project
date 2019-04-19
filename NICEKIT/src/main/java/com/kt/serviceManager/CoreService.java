@@ -18,6 +18,7 @@ import com.kt.controller.exception.NotFoundPreviewVendorException;
 import com.kt.controller.exception.NotFoundSaveTempException;
 import com.kt.controller.exception.NotMatchPasswordException;
 import com.kt.controller.exception.SpecAlreadyExistsException;
+import com.kt.data.model.TempInfo;
 import com.kt.dataDao.Account;
 import com.kt.dataDao.DeleteDataTo;
 import com.kt.dataDao.InsertDataTo;
@@ -126,14 +127,16 @@ public class CoreService {
 	 * @param domainName
 	 * @return
 	 */
-	public List<String> getTempList(String domainName){
+	public List<TempInfo> getTempList(String domainName){
 		SelectDataTo selectTo = new SelectDataTo();
 		List<Row> rowList = selectTo.selectTemplistInDomain(domainName);
 		
-		List<String> list = new ArrayList<String>();
+		List<TempInfo> list = new ArrayList<TempInfo>();
 		
 		for (Row row : rowList) {
-			list.add(row.getString("vendorname"));
+			
+			TempInfo info = new TempInfo(row.getString("vendorname"), row.getString("specname"));
+			list.add(info);
 		}
 		
 		return list;

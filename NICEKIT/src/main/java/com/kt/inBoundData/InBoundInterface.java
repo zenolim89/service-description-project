@@ -138,7 +138,7 @@ public class InBoundInterface {
 	public JSONObject getTemplateList(@RequestParam String domainName, @RequestParam String specName) {
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		res = serializerTo.resTemplateList(domainName);
+		res = serializerTo.resTemplateList(domainName, specName);
 		return res;
 	}
 

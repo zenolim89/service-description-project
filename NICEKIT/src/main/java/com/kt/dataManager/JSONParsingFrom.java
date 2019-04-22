@@ -215,34 +215,34 @@ public class JSONParsingFrom {
 		ReqSetTemplate templateInfo = new ReqSetTemplate();
 		InsertDataTo insertTo = new InsertDataTo();
 		JSONObject res = new JSONObject();
-		
+
 		// 1)서비스 리스트 리턴 메소트 추가
 		ArrayList<String> svcList = new ArrayList<String>();
 		svcList.add("test1");
 		svcList.add("test2");
 		svcList.add("test3");
-		
+
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
 			templateInfo.setDomainName(obj.get("domainName").toString());
 			templateInfo.setTemplateName(obj.get("templateName").toString());
 			templateInfo.setTemplatePath(obj.get("templatePath").toString());
-			
+
 			// 2)서비스 리스트 set
 			templateInfo.setServiceList(svcList.toString());
-			if(insertTo.insertTemplateinfo(templateInfo)) {
-			res.put("resCode", "2001");
-			res.put("resMsg", "성공");
+			if (insertTo.insertTemplateinfo(templateInfo)) {
+				res.put("resCode", "2001");
+				res.put("resMsg", "성공");
 			} else {
 				res.put("resCode", "500");
 				res.put("resMsg", "실패");
 			}
-		}catch (ParseException e) {
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			res.put("resCode", "500");
 			res.put("resMsg", e.toString());
-		}		
+		}
 		return res;
 	}
 

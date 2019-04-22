@@ -77,7 +77,7 @@ public class JSONSerializerTo {
 		} else {
 			resObj.put("resCode", "200");
 			resObj.put("resMsg", "성공");
-			for (Row row : list){
+			for (Row row : list) {
 				JSONObject tempObj = new JSONObject();
 				tempObj.put("vendorName", row.getString("vendorname"));
 				tempObj.put("specName", row.getString("specname"));
@@ -152,10 +152,10 @@ public class JSONSerializerTo {
 			}
 			tempdata = (JSONArray) rawdata.get(0);
 			tempObj = (JSONObject) tempdata.get(0);
- 			result = (JSONArray) parser.parse(tempObj.get("wordList").toString());
-			
-			for(int i=0;i < result.size();i++){
-			    res.add(result.get(i).toString());
+			result = (JSONArray) parser.parse(tempObj.get("wordList").toString());
+
+			for (int i = 0; i < result.size(); i++) {
+				res.add(result.get(i).toString());
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -229,11 +229,13 @@ public class JSONSerializerTo {
 		}
 	}
 
-	public JSONObject resTemplateList(String domainName) {
-		SelectDataTo selectTo = new SelectDataTo();
+	public JSONObject resTemplateList(String domainName, String specName) {
+		SelectDataTo selectToService = new SelectDataTo();
+		SelectDataTo selectToTemplate = new SelectDataTo();
 		JSONObject dataObj = new JSONObject();
 		JSONArray arr = new JSONArray();
-		List<Row> list = selectTo.selectTemplateList(domainName);
+		List<Row> svcList = selectToService.selectTemplateList(specName);
+		List<Row> list = selectToTemplate.selectTemplateList(domainName);
 		if (list == null) {
 			JSONObject res = this.resDescription("404", "사용가능한 UI 템플릿이 없습니다");
 			res.put("resData", arr);
@@ -336,20 +338,17 @@ public class JSONSerializerTo {
 		res.put("resData", resData);
 		return res;
 	}
-	
-
 
 	public JSONObject createJSONForIntentInfo(String intentName) {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		JSONObject obj = new JSONObject();
-		String ksName = "commonks";
-		String targetTable = "intentInfo";
 		String reqIntentName = intentName;
 		String responseHTML = "";
 		ArrayList<BaseIntentInfoForm> resList;
 		try {
-			resList = selectTo.selectIntentInfo(ksName, targetTable, reqIntentName);
+			resList = selectTo.selectIntentInfo(Constants.CASSANDRA_KEYSPACE_COMMON,
+					Constants.CASSANDRA_TABLE_INTENTINFO, reqIntentName);
 			JSONArray list = new JSONArray();
 			for (BaseIntentInfoForm form : resList) {
 				ArrayList<BaseDictionarySet> dicList = parsingFrom.parsingIntentInfo(form.getArr());

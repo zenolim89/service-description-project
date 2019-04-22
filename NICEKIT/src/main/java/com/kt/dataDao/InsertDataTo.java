@@ -17,6 +17,7 @@ import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ReqCreateVendor;
+import com.kt.dataForms.ReqSetTemplate;
 import com.kt.dataForms.ReqSvcCodeForm;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
@@ -124,7 +125,8 @@ public class InsertDataTo {
 	 * }
 	 */
 
-	public void insertTemplateinfo(String template, String path, String domain) {
+	public Boolean insertTemplateinfo(ReqSetTemplate templateInfo) {
+		Boolean response = null;
 
 		TableMetadata res = this.checkExsitingTable(Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST,
 				Constants.CASSANDRA_KEYSPACE_COMMON);
@@ -137,10 +139,23 @@ public class InsertDataTo {
 
 		Statement query = QueryBuilder
 				.insertInto(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
-				.ifNotExists().value("domainname", domain).value("templatename", template).value("dirpath", path);
+				.ifNotExists().value("domainname", templateInfo.getDomainName())
+				.value("templatename", templateInfo.getTemplateName()).value("dirpath", templateInfo.getTemplatePath())
+				.value("servicelist", templateInfo.getServiceList());
 
-		session.execute(query);
+		ResultSet resSet = session.execute(query);
 		cluster.close();
+
+		List<Row> resList = resSet.all();
+
+		for (Row row : resList) {
+
+			response = row.getBool(0);
+
+		}
+
+		return response;
+
 	}
 
 	public Boolean insertDomainList(String domainName) {

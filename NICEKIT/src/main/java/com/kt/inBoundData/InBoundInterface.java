@@ -29,6 +29,7 @@ import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DicParam;
 import com.kt.dataForms.ExcelUploadForm;
+import com.kt.dataForms.ReqSetTemplate;
 import com.kt.dataForms.ResFileUpload;
 import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
@@ -134,7 +135,7 @@ public class InBoundInterface {
 
 	/** request template list */
 	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
-	public JSONObject getTemplateList(@RequestParam String domainName) {
+	public JSONObject getTemplateList(@RequestParam String domainName, @RequestParam String specName) {
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		res = serializerTo.resTemplateList(domainName);
@@ -284,7 +285,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** deploy vendor */
+	/** save to temp folder */
 	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
 	public JSONObject tempSave(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -320,6 +321,28 @@ public class InBoundInterface {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/** add template */
+	@RequestMapping(value = "/setTemplate", method = RequestMethod.POST)
+	public JSONObject setTemplate(InputStream body) {
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+		String bf = null;
+		String response = "";
+		JSONObject res = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+			res = parsingFrom.parsingTemplateInfo(response);
+		} catch (Exception e) {
+			response = e.getMessage().toString();
+			res.put("resCode", "4000");
+			res.put("resMsg", response);
+			System.out.println(response);
 		}
 		return res;
 	}
@@ -618,14 +641,6 @@ public class InBoundInterface {
 		res = serializerTo.resSpecInfo(domainName, specName);
 		return res;
 
-	}
-
-	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
-	public JSONObject setTemplate(@RequestParam String templateName, String domainName) {
-		JSONObject res = new JSONObject();
-		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		parsingFrom.parsingTemplateInfo(templateName, domainName);
-		return res;
 	}
 
 }

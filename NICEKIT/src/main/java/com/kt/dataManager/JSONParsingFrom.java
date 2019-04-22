@@ -21,6 +21,7 @@ import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqCreateVendor;
+import com.kt.dataForms.ReqSetTemplate;
 import com.kt.dataForms.ReqSvcCodeForm;
 
 public class JSONParsingFrom {
@@ -210,11 +211,39 @@ public class JSONParsingFrom {
 		return res;
 	}
 
-	public void parsingTemplateInfo(String templateName, String domainName) {
+	public JSONObject parsingTemplateInfo(String response) {
+		ReqSetTemplate templateInfo = new ReqSetTemplate();
 		InsertDataTo insertTo = new InsertDataTo();
-		JSONObject obj = this.getServerInfo();
-		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName;
-		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
+		JSONObject res = new JSONObject();
+		
+		// 1)서비스 리스트 리턴 메소트 추가
+		ArrayList<String> svcList = new ArrayList<String>();
+		svcList.add("test1");
+		svcList.add("test2");
+		svcList.add("test3");
+		
+		try {
+			JSONObject obj = (JSONObject) parser.parse(response);
+			templateInfo.setDomainName(obj.get("domainName").toString());
+			templateInfo.setTemplateName(obj.get("templateName").toString());
+			templateInfo.setTemplatePath(obj.get("templatePath").toString());
+			
+			// 2)서비스 리스트 set
+			templateInfo.setServiceList(svcList.toString());
+			if(insertTo.insertTemplateinfo(templateInfo)) {
+			res.put("resCode", "2001");
+			res.put("resMsg", "성공");
+			} else {
+				res.put("resCode", "500");
+				res.put("resMsg", "실패");
+			}
+		}catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			res.put("resCode", "500");
+			res.put("resMsg", e.toString());
+		}		
+		return res;
 	}
 
 	/**

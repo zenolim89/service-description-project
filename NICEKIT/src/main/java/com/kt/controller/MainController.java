@@ -408,6 +408,15 @@ public class MainController extends BaseController{
 	
 	
 	
+	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
+	public ResponseData<Void> reqService(@RequestParam String intentName, @RequestParam String word,
+			@RequestParam String name) {
+		
+		coreSvc.executeService("", name, intentName, "", word);
+
+		return successResponse();
+	}
+	
 	
 	
 	

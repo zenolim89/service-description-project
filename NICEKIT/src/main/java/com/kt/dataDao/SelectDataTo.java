@@ -57,7 +57,7 @@ public class SelectDataTo {
 
 		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
 
-		try {
+		//try {
 
 			for (Row r : rowList) {
 
@@ -69,31 +69,93 @@ public class SelectDataTo {
 				desc.setMethod(r.getString("method"));
 				desc.setDataType(r.getString("datatype"));
 
-				desc.setToUrl(r.getString("tourl"));
+				desc.setComURL(r.getString("commurl"));
+				desc.setTestURL(r.getString("testurl"));
+				//desc.setToUrl(r.getString("tourl"));
 				desc.setServiceType(r.getString("servicetype"));
 
-				desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
-				desc.setReqSpec((JSONArray) parser.parse(r.getString("requestspec")));
-				desc.setResStructure((JSONArray) parser.parse(r.getString("responseformat")));
-				desc.setResSpec((JSONArray) parser.parse(r.getString("responsespec")));
-				desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
+//				desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
+//				desc.setReqSpec((JSONArray) parser.parse(r.getString("requestspec")));
+//				desc.setResStructure((JSONArray) parser.parse(r.getString("responseformat")));
+//				desc.setResSpec((JSONArray) parser.parse(r.getString("responsespec")));
+//				desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
 
-				resObj = enabler.discoverMatchingWord(desc, word);
-				resObj.put("toUrl", r.getString("tourl"));
-				resObj.put("serviceType", r.getString("servicetype"));
+				desc.setStrHeaderInfo(r.getString("headerinfo"));
+				desc.setStrReqSpec(r.getString("requestspec"));
+				desc.setStrReqStructure(r.getString("requestformat"));
+				desc.setStrResSpec(r.getString("responsespec"));
+				desc.setStrResStructure(r.getString("responseformat"));	
+				desc.setStrDicList(r.getString("diclist"));	
+				
+				
+				
+				System.out.println(desc.getServiceCode());
+				//resObj = enabler.discoverMatchingWord(desc, word);
+				//resObj.put("toUrl", r.getString("tourl"));
+				//resObj.put("serviceType", r.getString("servicetype"));
 
 			}
 
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//
+//		}
 
 		cluster.close();
 
 		return resObj;
 	}
+	
+	
+	
+	
+	public DiscoveredServiceDESC selectServiceInfo(String keySpace, String tableName, String intentName) {
+
+		ServiceEnabler enabler = new ServiceEnabler();
+
+		Statement query = QueryBuilder.select().from(keySpace, tableName).where(QueryBuilder.eq("intentname", intentName))
+				.allowFiltering();
+		ResultSet set = session.execute(query);
+
+		List<Row> rowList = set.all();
+
+		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
+
+		DiscoveredServiceDESC result = new DiscoveredServiceDESC();
+		
+		for (Row r : rowList) {
+
+				DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
+
+				desc.setComURL(r.getString("commurl"));
+				desc.setDomainId(r.getString("domainid"));
+				desc.setTestURL(r.getString("testurl"));
+				desc.setMethod(r.getString("method"));
+				desc.setDataType(r.getString("datatype"));
+
+				desc.setComURL(r.getString("commurl"));
+				desc.setTestURL(r.getString("testurl"));
+				desc.setServiceType(r.getString("servicetype"));
+
+				desc.setStrHeaderInfo(r.getString("headerinfo"));
+				desc.setStrReqSpec(r.getString("requestspec"));
+				desc.setStrReqStructure(r.getString("requestformat"));
+				desc.setStrResSpec(r.getString("responsespec"));
+				desc.setStrResStructure(r.getString("responseformat"));	
+				desc.setStrDicList(r.getString("diclist"));	
+				
+				result = desc;
+			}
+
+		cluster.close();
+
+		
+		return result;
+	}
+
+	
+	
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 3. 21. 오후 2:27:18] desc : "voice", "touch",

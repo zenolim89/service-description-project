@@ -12,6 +12,7 @@ import com.kt.controller.exception.NotFoundUrlException;
 import com.kt.controller.exception.ServiceUnavailableException;
 import com.kt.controller.model.ResGetDomain;
 import com.kt.controller.model.ResponseData;
+import com.kt.service.httpclient.RestClient;
 
 @RestController
 @RequestMapping("/test")
@@ -65,4 +66,20 @@ public class TestController extends BaseController{
 		
 		throw new ServiceUnavailableException();
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value="/05")
+	public ResponseData<String> test05(){
+		
+		
+		RestClient client = new RestClient();
+		String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro";
+		String resBody = client.get(uri);
+		
+		return successResponse(resBody);
+	}
+	
 }

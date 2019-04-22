@@ -85,6 +85,21 @@
                     menuOn(id);
                 }
             });
+            
+            //메뉴
+            $(".menu_selecter li .menu_btn").mouseenter(function(e){
+            	e.preventDefault();
+            	var id = $(this).attr("id");
+            	var name ="."+id;
+            	$(".menu_selecter").find(name).show();
+            });
+            
+            $(".menu_selecter li .menu_btn").mouseleave(function(e){
+            	e.preventDefault();
+            	var id = $(this).attr("id");
+            	var name ="."+id;
+            	$(".menu_selecter .desc").hide();
+            });
 
             //메뉴에 맞춘 등록 버튼 활성화
             function menuOff(){
@@ -639,7 +654,7 @@
                     <article class="page_top">
                         <div class="page_title"><!-- 배경 -->
                             <div class="tsec">
-                                <h2 class="title">AI B2B 서비스 사업장 Dashboard</h2>
+                                <h2 class="title">설정 Dashboard</h2>
                             </div>
                         </div>
                     </article><!-- sub_top -->

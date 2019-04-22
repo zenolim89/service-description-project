@@ -399,7 +399,7 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
 		ModelAndView mv = new ModelAndView("jsonView");
-		String keySpace = "vendersvcks";
+		String keySpace = "vendorsvcks";
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
 		if (res.containsKey("serviceType")) {

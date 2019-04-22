@@ -83,7 +83,7 @@ public class ServiceEnabler {
 		
 		/*TODO SERA 규격 관련 변경*/
 		JsonSpecSvc svc = new JsonSpecSvc();
-		obj = svc.createReqFormatForArrey(desc.getReqStructure(), desc.getReqSpec(), word, "spec3");
+		//obj = svc.createReqFormatForArrey(desc.getReqStructure(), desc.getReqSpec(), word, "spec3");
 		//obj = this.createReqFormat(desc.getReqStructure(), desc.getReqSpec(), word);
 		System.out.println("변경된 JSON");
 		System.out.println(obj.toString());

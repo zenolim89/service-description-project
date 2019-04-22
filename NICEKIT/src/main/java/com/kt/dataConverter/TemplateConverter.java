@@ -165,6 +165,34 @@ public class TemplateConverter {
 		return fullServiceMap;
 	}
 	
+	public ArrayList<String> getServiceFullList(JSONObject _jsonObject){
+		
+		ArrayList<String> serviceFullList = new ArrayList<>();
+		
+		JSONArray pageArrayList = (JSONArray) _jsonObject.get("pages");
+		
+		for( int i = 0 ; i < pageArrayList.size(); i ++) {
+			
+			JSONObject jsonObject = (JSONObject) pageArrayList.get(i);
+			
+			//메인에 있는 모든 서비스명을 ArrayList로 만들어 return한다
+			if( jsonObject.get("name").equals("메인")) {
+				
+				JSONArray componentsArray  = (JSONArray) jsonObject.get("components");
+				
+				for( int j = 0 ; j < componentsArray.size(); j++) {
+					
+					//fullServiceList.add(componentsArray.getJSONObject(j).getString("name"));
+					
+					serviceFullList.add((String) ((JSONObject)componentsArray.get(j)).get("name"));
+				}
+			}
+			
+		}
+
+		return serviceFullList;
+	}
+	
 	public void setFullServiceMapValue(JSONObject _jsonObject, HashMap<String,Object> _fullServiceMap) {
 		
 		JSONArray pageArrayList = (JSONArray) _jsonObject.get("pages");
@@ -183,6 +211,20 @@ public class TemplateConverter {
 	}
 	
 	public JSONObject getTemplateJSON(String _templateName, String _specName) throws IOException, ParseException {
+		
+		//File sourceFile = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_VENDORS+ File.separator + _templateName + File.separator + "template.json");
+		
+		File sourceFile = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_TEMPLATE
+				+ File.separator + _templateName + File.separator + "template.json");
+		
+		byte[] encoded = Files.readAllBytes(Paths.get(sourceFile.getAbsolutePath()));
+		
+		String templateJSONString = new String(encoded, "UTF-8");
+		
+		return (JSONObject) new JSONParser().parse(templateJSONString);
+	}
+	
+	public JSONObject getTemplateJSON(String _templateName) throws IOException, ParseException {
 		
 		//File sourceFile = new File(Constants.EXTERNAL_FOLDER_REALPATH + Constants.EXTERNAL_FOLDER_URLPATH_VENDORS+ File.separator + _templateName + File.separator + "template.json");
 		

@@ -43,7 +43,7 @@
         var vendor;
         var templatePath;
 		var spec; //INFO SERA
-		
+
         var param = location.hash.substr(1);
         var params = param.split("&");
         for(var i = 0; i < params.length; i++) {
@@ -69,6 +69,17 @@
         $(document).ready(function () {
             init(domain, vendor, spec,templatePath + "/");
         });
+
+
+
+        function myAlert(msg) {
+            if(msg === undefined) {
+                msg = "undefined";
+            }
+            console.log('alert : ' + msg);
+            $("#popup_alert_02 .popup_body .title").text(msg);
+            $("#popup_alert_02").bPopup();
+        }
     </script>
 </head>
 <body class="comBg page">
@@ -289,11 +300,11 @@
 
                     <ul class="frm">
                         <li>
-                            <label class="lb" for="com_url">com Url</label>
+                            <label class="lb" for="comUrl">com Url</label>
                             <input class="text" name="comUrl" id="comUrl" type="text" placeholder="input url" title="com Url" />
                         </li>
                         <li>
-                            <label class="lb" for="test_url">test Url</label>
+                            <label class="lb" for="testUrl">test Url</label>
                             <input class="text" name="testUrl" id="testUrl" type="text" placeholder="input url" title="test Url" />
                         </li>
                     </ul><!-- frm -->
@@ -977,6 +988,50 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    function showPopupReady(msg, desc) {
+        $("#popup_ready .popup_body .title").text(msg);
+        $("#popup_ready .popup_body .desc").text(desc);
+
+        $("#popup_ready").bPopup(
+            {
+                modalClose: false
+            }
+        );
+    }
+    function hidePopupReady() {
+        $("#popup_ready").bPopup().close();
+    }
+</script>
+
+<div class="popup popup_ready" id="popup_ready">
+    <div class="popup_head">
+        <p class="title">알림</p>
+    </div>
+    <div class="popup_body">
+        <p class="title">“<span class="new_vendor_name"></span>” 서비스 사업장을 생성 중입니다.</p>
+        <p class="desc red">*최장 3분 정도의 시간이 소요됩니다.</p>
+        <div class="load"></div>
+    </div>
+</div>
+
+<div class="popup popup_alert" id="popup_alert_02">
+    <div class="popup_head">
+        <p class="title">알림</p>
+        <a href="#" class="btn_close b-close"><em>팝업닫기</em></a>
+    </div>
+    <div class="popup_body">
+        <p class="title"></p>
+        <div class="pbtns">
+            <button class="btn wfull btn_confirm btn_close b-close">확인</button>
+        </div>
+    </div>
+</div>
+
+
+
 
 </body>
 

@@ -229,23 +229,32 @@ public class JSONSerializerTo {
 		}
 	}
 
-	public JSONObject resTemplateList(String domainName, String specName) {
-		SelectDataTo selectToService = new SelectDataTo();
+	public JSONObject resTemplateList(String domainName, String specName) throws ParseException {
 		SelectDataTo selectToTemplate = new SelectDataTo();
+		ArrayList<GetSpecInfoDataForm> list = new ArrayList<GetSpecInfoDataForm>();
+		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
+		ArrayList<String> svcList = new ArrayList<String>();
 		JSONObject dataObj = new JSONObject();
 		JSONArray arr = new JSONArray();
-		List<Row> svcList = selectToService.selectTemplateList(specName);
-		List<Row> list = selectToTemplate.selectTemplateList(domainName);
-		if (list == null) {
+
+		try {
+			list = tool.resServiceList(specName);
+			for (GetSpecInfoDataForm form : list) {
+				if (!form.getServiceName().equals("시스템연동"))
+					svcList.add(form.getServiceName());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONArray templateList = selectToTemplate.selectTemplateList(domainName, svcList);
+		if (templateList == null || templateList.size() == 0) {
 			JSONObject res = this.resDescription("404", "사용가능한 UI 템플릿이 없습니다");
 			res.put("resData", arr);
 			return res;
 		} else {
-			for (Row row : list) {
-				arr.add(row.getString("templatename"));
-			}
 			JSONObject res = this.resDescription("200", "성공");
-			dataObj.put("templateList", arr);
+			dataObj.put("templateList", templateList);
 			res.put("resData", dataObj);
 			return res;
 		}

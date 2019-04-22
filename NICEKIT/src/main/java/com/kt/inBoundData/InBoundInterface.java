@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -25,11 +26,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DicParam;
 import com.kt.dataForms.ExcelUploadForm;
-import com.kt.dataForms.ReqSetTemplate;
 import com.kt.dataForms.ResFileUpload;
 import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
@@ -138,7 +139,12 @@ public class InBoundInterface {
 	public JSONObject getTemplateList(@RequestParam String domainName, @RequestParam String specName) {
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		res = serializerTo.resTemplateList(domainName, specName);
+		try {
+			res = serializerTo.resTemplateList(domainName, specName);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return res;
 	}
 
@@ -285,7 +291,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** save to temp folder */
+	/** deploy vendor */
 	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
 	public JSONObject tempSave(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -328,21 +334,22 @@ public class InBoundInterface {
 	/** add template */
 	@RequestMapping(value = "/setTemplate", method = RequestMethod.POST)
 	public JSONObject setTemplate(InputStream body) {
-		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
 		JSONObject res = new JSONObject();
 		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
 		try {
 			while ((bf = in.readLine()) != null) {
 				response += bf;
 			}
 			res = parsingFrom.parsingTemplateInfo(response);
+
+			// send response to a specific method in parsingfrom
 		} catch (Exception e) {
-			response = e.getMessage().toString();
-			res.put("resCode", "4000");
-			res.put("resMsg", response);
-			System.out.println(response);
+			res.put("code", "4000");
+			res.put("resMsg", e.getMessage());
 		}
 		return res;
 	}

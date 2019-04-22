@@ -17,6 +17,77 @@ $(document).ready(function () {
 
 });
 
+
+/**
+ * 수정이 발생한 전체 파일 업로드
+ * @param input
+ * @param cb
+ */
+function uploadFile(input, cb) {
+    var origFilename = input.attr("data-orig-filename");
+
+    var path = origFilename.substring(0, origFilename.lastIndexOf("/"));
+    var filename = origFilename.substring(origFilename.lastIndexOf("/")+1);
+
+    var formData = new FormData();
+
+    formData.append("domain", "temp"); // temp 로 고정
+    formData.append("workplace", vendor);
+    formData.append("path", path);
+    formData.append("file", input[0].files[0], filename);
+
+    $.ajax({
+        url: "/NICEKIT/api/upload/file", // get the upload URL for the server
+        success: function(fileData) {
+            console.log(fileData);
+            if(typeof cb === 'function') {
+                cb(fileData);
+            }
+        },
+        error: function(e) {
+            console.log(e);
+            if(typeof cb === 'function') {
+                cb(null);
+            }
+        },
+        // Form data
+        data: formData,
+        type: 'POST',
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+/**
+ * 수정이 발생한 전체 파일 업로드
+ * @param cb
+ * @param index
+ */
+function uploadFiles(cb, index) {
+    if(index === undefined) {
+        index = 0;
+    }
+
+    var files = $("input[type='file']");
+    if(index >= files.length) { // 전체 업로드 완료
+        if(typeof cb === 'function') {
+            cb();
+        }
+
+        return;
+    }
+
+    var file = $($("input[type='file']").get(index));
+    if(file.val() != "") { // 업로드할 파일이 없으면 건너띔
+        uploadFile(file, function(ret) {
+            uploadFiles(cb, index+1);
+        });
+    } else {
+        uploadFiles(cb, index+1);
+    }
+}
+
 /**
  * 초기화
  */
@@ -24,8 +95,12 @@ function init(_domain, _vendor, _spec,path) {
     domain = _domain;
     vendor = _vendor;
     spec=_spec;
+
+    showPopupReady("잠시만 기다려주세요...", "");
   //INFO SERA
     getSpecInfo(domain,spec,function(specDesc){
+        hidePopupReady();
+
     	curSpecInfo = specDesc;
     	var temp = new Array();
     	
@@ -41,9 +116,10 @@ function init(_domain, _vendor, _spec,path) {
     	}
     	
     	mainList = temp;
-    	
+
+        tmp = new template(path, _init);
     });
-    tmp = new template(path, _init);
+
 }
 function _init() {
     // 페이지명
@@ -174,7 +250,7 @@ function openPage(pageName) {
     var templatePath = tmp.templatePath;
 
     // 프리뷰 불러오기
-    var pagePath = templatePath + pageInfo.path;
+    var pagePath = templatePath + pageInfo.path + "?ts=" + (new Date().getTime());
     // preview 에서 a 태그 클릭 이벤트 발생시 어디로 가는지 알려주고 이동은 시키지 않음
     $("#preview").attr("src", pagePath);
     console.log("preview : " + pagePath);
@@ -397,14 +473,18 @@ function addComponents(info) {
             var word = com.find(".text").val();
             
             //INFO SERA
+            console.log("word: " + word);
+            console.log("jsonWordList");
+            console.log(jsonWordList);
+
             
             //객실용품
         	for(var i=0;i<jsonWordList.length;i++){
         		if(word == jsonWordList[i]){
-        			
+
                 	// 이름
                     com.find(".name").text(word);
-                    
+
         			console.log("일치: "+word);
                     // 하위 편집 컴포넌트 추가
                     addComponents({"name": info.name,
@@ -417,7 +497,8 @@ function addComponents(info) {
                     _addComponent(info.section, com);
         		}
         	}
-        	
+            // _addComponent(info.section, com);
+
         	//메인
         	for(var i=0;i<curSpecInfo.length;i++){
         		if(word == curSpecInfo[i].serviceName){
@@ -497,7 +578,12 @@ function _connectInputFileBackground(id, compElem, imgElem) {
         image = curPageObj;
     }
     var oldSrc = image.css("background-image");
-    compElem.attr("data-orig-filename", oldSrc);
+
+    var origFilename = oldSrc;
+    if(origFilename.indexOf("url(") == 0) {
+        origFilename = origFilename.substring("url('".length, origFilename.length - "')".length);
+    }
+    compElem.attr("data-orig-filename", origFilename);
     if(oldSrc.indexOf("url(\"data:") == 0) {
         imgElem.css("background-image", oldSrc);
     } else {
@@ -647,9 +733,9 @@ function applyImageToPreview(id, input, imgElem) {
             }
 
             // 페이지 obj 에 반영
-            // item = curPageObj.find("#" + id);
-            item = curPageObj.find("*[id='" + id + "']");
-            item.attr('src', e.target.result);
+            // => 파일은 직접 파일 업로드해서 교체하는 방식으로 변경으로 페이지 컨텐츠 수정은 하지않도록 변경
+            // item = curPageObj.find("*[id='" + id + "']");
+            // item.attr('src', e.target.result);
         };
 
         reader.readAsDataURL(input.files[0]);
@@ -673,12 +759,12 @@ function applyBackgroundImageToPreview(id, input, imgElem) {
             imgElem.css("background-image", "url(" + e.target.result + ")");
 
             // 페이지 obj 에 반영
-            // item = curPageObj.find("#" + id);
-            item = curPageObj.find("*[id='" + id + "']");
-            if(item.length <= 0 && curPageObj.attr("id") == id) {
-                item = curPageObj;
-            }
-            item.css('background-image', "url(" + e.target.result + ")");
+            // => 파일은 직접 파일 업로드해서 교체하는 방식으로 변경으로 페이지 컨텐츠 수정은 하지않도록 변경
+            // item = curPageObj.find("*[id='" + id + "']");
+            // if(item.length <= 0 && curPageObj.attr("id") == id) {
+            //     item = curPageObj;
+            // }
+            // item.css('background-image', "url(" + e.target.result + ")");
         };
 
         reader.readAsDataURL(input.files[0]);
@@ -705,11 +791,18 @@ function endsWith(str, suffix) {
  * @returns {void | string}
  */
 function br2nl(text) {
+    if(typeof text !== 'string') {
+        return;
+    }
+
     var regex = /<br\s*[\/]?>/gi;
     return text.replace(regex, "\n");
 }
 
 function nl2br (str, is_xhtml) {
+    if(typeof str !== 'string') {
+        return;
+    }
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
 }
@@ -738,29 +831,32 @@ function save() {
     // 현재 iframe 의 url
     // $("#preview").contents().get(0).location.href
 
+    // 업로드할 파일 업로드
+    uploadFiles(function() {
+        var previewLocation = $("#preview").contents().get(0).location.href;
+        previewLocation = previewLocation.substring(0, previewLocation.indexOf("?"));
+        if(endsWith(previewLocation, curPageInfo.path)) {
+            var generatedHtml = getGeneratedHtml();
+            var htmlFilename = curPageInfo.path;
+            console.log(generatedHtml);
+            console.log(htmlFilename);
 
-    var previewLocation = $("#preview").contents().get(0).location.href;
-    if(endsWith(previewLocation, curPageInfo.path)) {
-        var generatedHtml = getGeneratedHtml();
-        var htmlFilename = curPageInfo.path;
-        console.log(generatedHtml);
-        console.log(htmlFilename);
+            // 서버에 내용 업데이트
+            updatePage(domain, vendor, htmlFilename, generatedHtml, function(data) {
+                if(data.code == 200) { // 저장 성공
+                    pageEdited = false;
+                    myAlert(data.message);
+                } else {
+                    myAlert(data.code + ": " + data.message);
+                }
+            });
 
-        // 서버에 내용 업데이트
-        updatePage(domain, vendor, htmlFilename, generatedHtml, function(data) {
-            if(data.code == 200) { // 저장 성공
-                pageEdited = false;
-                alert(data.message);
-            } else {
-                alert(data.code + ": " + data.message);
-            }
-        });
-
-        // 편집 안된 상태로 변경
-        pageEdited = false;
-    } else {
-        alert("저장할 수 없습니다.");
-    }
+            // 편집 안된 상태로 변경
+            pageEdited = false;
+        } else {
+            myAlert("저장할 수 없습니다.");
+        }
+    }, 0);
 }
 
 

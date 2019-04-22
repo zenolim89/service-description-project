@@ -110,10 +110,11 @@ function createVendorFromTemplate(domain, newVendorName, specName, urlPath, cb) 
 /**
  * 템플릿 목록 조회
  * @param domain
+ * @param specName
  * @param cb
  */
-function getTemplateList(domain, cb) {
-    $.get(server + "getTemplate", {domainName: domain}, function(data) {
+function getTemplateList(domain, specName, cb) {
+    $.get(server + "getTemplate", {domainName: domain, specName: specName}, function(data) {
         console.log(data);
         if(data.resCode == "200") {
             cb(data.resData.templateList);
@@ -121,6 +122,55 @@ function getTemplateList(domain, cb) {
             alert(data.regMsg);
         }
     });
+}
+
+/**
+ * 템플릿 파일 업로드
+ * @param domain
+ * @param newTemplateName
+ * @param newTemplateFile
+ * @param cb
+ */
+function uploadTemplate(domain, newTemplateName, newTemplateFile, cb) {
+    // 템플릿 파일 업로드
+    var formData = new FormData();
+    formData.append("domain", "template");
+    formData.append("workplace", newTemplateName);
+    formData.append("path", "");
+    formData.append("file", newTemplateFile);
+
+    $.ajax({
+        url: server + "api/upload/file", // get the upload URL for the server
+        success: function(fileData) {
+            console.log(fileData);
+            if(fileData != null && fileData.resCode == "200") { // 업로드 성공
+                // DB에 등록
+                uploadTemplate__(domain, newTemplateName, "/docbase/template/" + newTemplateName, cb);
+            }
+        },
+        error: function(e) {
+            console.log(e);
+            cb(null);
+        },
+        // Form data
+        data: formData,
+        type: 'POST',
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+/**
+ * 업로드된 템플릿 DB 등록
+ * @param domainName
+ * @param templateName
+ * @param templatePath
+ * @param cb
+ * @private
+ */
+function uploadTemplate__(domainName, templateName, templatePath, cb) {
+    $.post(server + "setTemplate", {domainName: domainName, templateName: templateName, templatePath: templatePath}, cb);
 }
 
 /**
@@ -175,7 +225,7 @@ function updatePage(domain, vendor, filename, content, cb) {
  * 규격정보조회
  * @param domain
  */
-function getSpecInfo(domain, spec,cb) {
+function getSpecInfo(domain, spec, cb) {
     $.get(server + "getSpecInfo", {domainName: domain,specName:spec}, function (data) {
         console.log(data);
         if(data.resCode == "200") {

@@ -92,9 +92,9 @@ public class CoreService {
 	 * @param domainName
 	 * @return
 	 */
-	public List<String> getTemplateList(String domainName) {
+	/*public List<String> getTemplateList(String domainName, String specName) {
 		SelectDataTo selectTo = new SelectDataTo();
-		List<Row> rowList = selectTo.selectTemplateList(domainName);
+		List<Row> rowList = selectTo.selectTemplateList(domainName, specName);
 		List<String> list = new ArrayList<String>();
 		
 		for (Row row : rowList) {
@@ -102,7 +102,7 @@ public class CoreService {
 		}
 		
 		return list;
-	}
+	}*/
 	
 	/**
 	 * 사업장 목록 조회

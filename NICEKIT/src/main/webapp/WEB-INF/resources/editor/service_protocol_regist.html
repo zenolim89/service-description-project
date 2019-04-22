@@ -38,7 +38,9 @@
             var p = params[i];
             p = p.split("=");
             if(p[0] == 'specName') {
-                $("input[name='specName']").val(decodeURIComponent(p[1]));
+                var specName = decodeURIComponent(p[1]);
+                $("input[name='specName']").val(specName);
+                $("#specName").text(specName);
             } else if(p[0] == 'domain') {
                 $("input[name='domainName']").val(p[1]);
             } else if(p[0] == 'domainId') {
@@ -77,7 +79,10 @@
                 "                                        <td>REWCM0143</td>\n" +
                 "                                        <td>HotelWebCam</td>\n" +
                 "                                        <td>실시간 웹캠명</td>\n" +
-                "                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>\n" +
+                "                                        <td><button class=\"btn_text\" type=\"button\">식음 업장명 외2</button></td>\n" +
+                "                                        <td><button class=\"btn_edit btn_for\" type=\"button\">성공</button></td>\n" +
+                "                                        <td><button class=\"btn_edit btn_ten\" type=\"button\">삭제</button></td>" +
+                // "                                        <td>[“A스로프”, “B슬로프”,”스키 장전경”]</td>\n" +
                 "                                    </tr>");
 
             el.find("td:nth-child(1)").text(i+1);
@@ -88,10 +93,64 @@
             el.find("td:nth-child(6)").text(item.serviceCode);
             el.find("td:nth-child(7)").text(item.intentName);
             el.find("td:nth-child(8)").text(item.dicNameList);
-            el.find("td:nth-child(9)").text(item.wordList);
+
+            var td9 = el.find("td:nth-child(9)");
+            td9.attr("data-word", item.wordList);
+
+            var wordList = JSON.parse(item.wordList);
+            if(wordList.length == 0) {
+                td9.text("");
+            } else if(wordList.length == 1) {
+                td9.html("<button class=\"btn_text\" type=\"button\" onclick='openWordListPopup(event)'>" + wordList[0] + "</button>");
+            } else {
+                var t = wordList[0] + " 외" + (wordList.length -1);
+                td9.html("<button class=\"btn_text\" type=\"button\" onclick='openWordListPopup(event)'>" + t + "</button>");
+            }
 
             $("#fileContentTable tbody").append(el);
         }
+    }
+
+    function openWordListPopup(event) {
+        console.log($(event.target));
+
+        var wordList = $(event.target).parent().attr("data-word");
+        wordList = JSON.parse(wordList);
+
+        wordList = wordList.join(",");
+        $("#popup_table td").text(wordList);
+
+        $("#popup_table").bPopup();
+    }
+
+    /**
+     * 팝업창 열기
+     * @param url
+     * @param title
+     * @param w
+     * @param h
+     * @constructor
+     */
+    function PopupCenter(url, title, w, h) {
+        // Fixes dual-screen position                         Most browsers      Firefox
+        var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+        var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+
+        var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+        var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+        var top = ((height / 2) - (h / 2)) + dualScreenTop;
+        var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+        // Puts focus on the newWindow
+        if (window.focus) {
+            newWindow.focus();
+        }
+    }
+
+    function openSheet() {
+        PopupCenter("/NICEKIT/resources/view/sheet.html", "인벤트/어휘 등록", 940, 860);
     }
 </script>
 
@@ -109,7 +168,7 @@
         <div class="header" id="header">
             <section class="title_section">
                 <article class="title_area">
-                    <h1 class="title"><a href="#"><img src="../assets/images/common/title.png"/></a></h1>
+                    <h1 class="title"><a href="domain.html"><img src="../assets/images/common/title.png"/></a></h1>
                 </article>
             </section><!-- title_section -->
 
@@ -131,9 +190,9 @@
                     <article class="left_area">
                         <div class="title_area">
                             <p class="ht">AIB2B</p>
-                            <p class="name">오크 벨리 규격</p>
+                            <p class="name" id="specName">오크 벨리 규격</p>
                         </div>
-                        <a href="#" class="btn_intent">인텐트 / 어휘 등록</a>
+                        <a href="#" class="btn_intent" onclick="openSheet()">인텐트 / 어휘 등록</a>
                     </article>
                     <article class="main_area">
                         <div class="header_area">
@@ -162,8 +221,8 @@
                                                             <label class="comFile">
                                                                 <input type="file" class="hidFile" name="uploadFile" placeholder="선택된 파일 없음" title="파일 선택"><!-- disabled : disabled -->
                                                                 <span class="comText unselect" title=""></span>
-                                                                <em class="sbtn" style="background:#ccc;">파일 선택</em>
-                                                                <em class="sbtn" onclick="uploading = true; document.getElementById('uploadForm').submit(); return false;" style="margin-right:-100px;">업로드</em>
+                                                                <em class="sbtn" style="background:#000;">파일 선택</em>
+                                                                <em class="sbtn" onclick="uploading = true; document.getElementById('uploadForm').submit(); return false;" style="margin-right:-100px; background:#384e9c;">업로드</em>
                                                             </label>
                                                         </div>
                                                         <p class="desc left">* 우측 엑셀 약식을 다운받아서, 일괄적으로 파일을 등록 할 수 있습니다. <br>* 중복된 서비스 명세 리스트가 있을 경우 새로운 정보로 업데이트 됩니다.</p>
@@ -191,7 +250,7 @@
                                     </colgroup>
                                     <thead>
                                     <tr>
-                                        <th>No.</th><th>서비스명</th><th>인보크 타입</th><th>서비스 타입</th><th>서비스 개요</th><th>서비스 코드</th><th>인텐트 명</th><th>사전명</th><th>어휘</th>
+                                        <th>No.</th><th>서비스명</th><th>인보크 타입</th><th>서비스 타입</th><th>서비스 개요</th><th>서비스 코드</th><th>인텐트 명</th><th>사전명</th><th>어휘</th><th>테스트</th><th>삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -277,6 +336,40 @@
 
     </div><!-- areas -->
 </div><!-- wrap -->
+
+<div class="popup popup_table" id="popup_table">
+    <div class="popup_head">
+        <p class="title">어휘</p>
+        <a href="#" class="btn_close"><em>팝업닫기</em></a>
+    </div>
+    <div class="popup_body">
+        <div class="table">
+            <table>
+                <colgroup>
+                    <col style="width: 30%" />
+                    <col style="width: 70%" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th>어휘</th>
+                    <td class="left">째즈 슬로프, 레게, 클래식, 펑키, 테크노,  슈퍼파이프</td>
+                </tr>
+<!--                <tr>-->
+<!--                    <th>골프장 웹캠명</th>-->
+<!--                    <td class="left">A골프장 전경, B골프장 전경, C골프장 전경</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th>워터파크 웹캠명</th>-->
+<!--                    <td class="left">비발디 워터파크</td>-->
+<!--                </tr>-->
+                </tbody>
+            </table>
+        </div>
+        <div class="pbtns">
+            <button class="btn wfull btn_close btn_confirm" type="submit">확인</button>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {

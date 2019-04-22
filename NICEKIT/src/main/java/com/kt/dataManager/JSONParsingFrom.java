@@ -1,5 +1,6 @@
 package com.kt.dataManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.datastax.driver.core.Row;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.DeleteDataTo;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
@@ -211,31 +213,30 @@ public class JSONParsingFrom {
 		return res;
 	}
 
-	public JSONObject parsingTemplateInfo(String response) {
-		ReqSetTemplate templateInfo = new ReqSetTemplate();
+	public JSONObject parsingTemplateInfo(String response) throws IOException {
 		InsertDataTo insertTo = new InsertDataTo();
+		ReqSetTemplate templateInfo = new ReqSetTemplate();
 		JSONObject res = new JSONObject();
 
-		// 1)서비스 리스트 리턴 메소트 추가
-		ArrayList<String> svcList = new ArrayList<String>();
-		svcList.add("test1");
-		svcList.add("test2");
-		svcList.add("test3");
+		ArrayList<String> templateServiceList = new ArrayList<>();
+		TemplateConverter templateConverter = new TemplateConverter();
 
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
 			templateInfo.setDomainName(obj.get("domainName").toString());
 			templateInfo.setTemplateName(obj.get("templateName").toString());
 			templateInfo.setTemplatePath(obj.get("templatePath").toString());
-
-			// 2)서비스 리스트 set
-			templateInfo.setServiceList(svcList.toString());
+			templateServiceList.addAll(templateConverter
+					.getServiceFullList(templateConverter.getTemplateJSON(obj.get("templateName").toString())));
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.addAll(templateServiceList);
+			templateInfo.setServiceList(jsonArray.toJSONString());
 			if (insertTo.insertTemplateinfo(templateInfo)) {
 				res.put("resCode", "2001");
 				res.put("resMsg", "성공");
 			} else {
 				res.put("resCode", "500");
-				res.put("resMsg", "실패");
+				res.put("resMsg", "db insert 실패");
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

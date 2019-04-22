@@ -4,6 +4,10 @@
  * @version 1.0.0
  */
 
+$.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
+	console.log('gigagenie.js loading...');
+});
+
 $.getScript('/NICEKIT/nicekit/js/common/RequestParam.js', function() {
 	console.log('RequestParam.js loading...');
 });

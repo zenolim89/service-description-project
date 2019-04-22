@@ -250,7 +250,7 @@ public class SelectDataTo {
 		return reslist;
 
 	}
-	
+
 	public List<Row> selectTemplistInDomain(String domainName) {
 
 		InsertDataTo insertTo = new InsertDataTo();
@@ -276,7 +276,7 @@ public class SelectDataTo {
 		return reslist;
 
 	}
-	
+
 	public List<Row> selectTempInfo(String vendorName, String domainName) {
 
 		InsertDataTo insertTo = new InsertDataTo();
@@ -302,7 +302,6 @@ public class SelectDataTo {
 		return reslist;
 
 	}
-	
 
 	/**
 	 * @author : "Minwoo Ryu" [2019. 3. 18. 오후 5:23:05] desc : 생성기의 요청에 따라 commonks에
@@ -330,8 +329,8 @@ public class SelectDataTo {
 		return resList;
 	}
 
-	public List<Row> selectTemplateList(String domainName) {
-
+	public JSONArray selectTemplateList(String domainName, ArrayList<String> serviceList) throws ParseException {
+		JSONArray resList = new JSONArray();
 		Statement query = QueryBuilder.select()
 				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
 				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
@@ -339,7 +338,14 @@ public class SelectDataTo {
 		ResultSet set = session.execute(query);
 		cluster.close();
 
-		List<Row> resList = set.all();
+		List<Row> rowList = set.all();
+		for (Row row : rowList) {
+			JSONParser jsonParser = new JSONParser();
+			JSONArray jsonArray = (JSONArray) jsonParser.parse(row.getString("servicelist"));
+
+			if (jsonArray.containsAll(serviceList))
+				resList.add(row.getString("templateName"));
+		}
 
 		return resList;
 
@@ -370,7 +376,7 @@ public class SelectDataTo {
 		return resObj;
 
 	}
-	
+
 	public List<Row> selectDomainList2() {
 
 		Statement query = QueryBuilder.select().from(Constants.CASSANDRA_KEYSPACE_COMMON,

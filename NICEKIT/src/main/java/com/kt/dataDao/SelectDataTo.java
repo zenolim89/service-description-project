@@ -69,7 +69,7 @@ public class SelectDataTo {
 				desc.setMethod(r.getString("method"));
 				desc.setDataType(r.getString("datatype"));
 
-				desc.setToUrl(r.getString("tourl"));
+				desc.setToUrl(r.getString("servicelink"));
 				desc.setServiceType(r.getString("servicetype"));
 
 				desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
@@ -79,9 +79,12 @@ public class SelectDataTo {
 				desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
 
 				resObj = enabler.discoverMatchingWord(desc, word);
-				resObj.put("toUrl", r.getString("tourl"));
+				resObj.put("resCode", "200");
+				resObj.put("resMsg", "성공");
+				resObj.put("toUrl", r.getString("servicelink"));
 				resObj.put("serviceType", r.getString("servicetype"));
-
+				if (resObj != null)
+					return resObj;
 			}
 
 		} catch (ParseException e) {

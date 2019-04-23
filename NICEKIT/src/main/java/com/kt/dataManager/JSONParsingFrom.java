@@ -230,7 +230,8 @@ public class JSONParsingFrom {
 			templateInfo.setTemplatePath(obj.get("templatePath").toString());
 			templateInfo.setServiceList(jsonArray.toJSONString());
 			if (insertTo.insertTemplateinfo(templateInfo)) {
-				res.put("resCode", "2001");
+				JSONObject dataObj = new JSONObject();
+				res.put("resCode", "200");
 				res.put("resMsg", "성공");
 			} else {
 				res.put("resCode", "500");

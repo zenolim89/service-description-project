@@ -341,7 +341,7 @@ public class InBoundInterface {
 			}
 			res = parsingFrom.parsingTemplateInfo(response);
 		} catch (Exception e) {
-			res.put("code", "4000");
+			res.put("code", "400");
 			res.put("resMsg", e.getMessage());
 		}
 		return res;
@@ -433,7 +433,7 @@ public class InBoundInterface {
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
 		res = selectTo.selectMatchingService(intentName, word, name, Constants.CASSANDRA_KEYSPACE_VENDOR);
 		if (res.containsKey("serviceType")) {
-			if ((res.get("serviceType").toString()).equals("RetriveATChangeView")) {
+			if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("resCode", res.get("resCode").toString());
 				map.put("resMsg", res.get("resMsg").toString());

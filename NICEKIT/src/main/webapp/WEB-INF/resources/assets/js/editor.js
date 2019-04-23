@@ -141,7 +141,11 @@ function _init() {
     
     //서비스 저장
     $("#service_save").click(function(){
+        showPopupReady("잠시만 기다려주세요...", "");
+        // 배포
     	deployVendor(domain, vendor, function(data){
+    	    hidePopupReady();
+
     	    if(data.resCode == 200 || data.resCode == 201){
     	    	alert("저장 완료");
             	var form = document.createElement("form");
@@ -845,7 +849,7 @@ function save() {
             updatePage(domain, vendor, htmlFilename, generatedHtml, function(data) {
                 if(data.code == 200) { // 저장 성공
                     pageEdited = false;
-                    myAlert(data.message);
+                    myAlert("임시저장되었습니다.");
                 } else {
                     myAlert(data.code + ": " + data.message);
                 }

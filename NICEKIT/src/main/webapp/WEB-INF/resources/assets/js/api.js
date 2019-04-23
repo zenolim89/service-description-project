@@ -143,7 +143,7 @@ function uploadTemplate(domain, newTemplateName, newTemplateFile, cb) {
         url: server + "api/upload/file", // get the upload URL for the server
         success: function(fileData) {
             console.log(fileData);
-            if(fileData != null && fileData.resCode == "200") { // 업로드 성공
+            if(fileData != null && fileData.code == 200) { // 업로드 성공
                 // DB에 등록
                 uploadTemplate__(domain, newTemplateName, "/docbase/template/" + newTemplateName, cb);
             }
@@ -170,7 +170,11 @@ function uploadTemplate(domain, newTemplateName, newTemplateFile, cb) {
  * @private
  */
 function uploadTemplate__(domainName, templateName, templatePath, cb) {
-    $.post(server + "setTemplate", {domainName: domainName, templateName: templateName, templatePath: templatePath}, cb);
+	var reqData = {};
+	reqData.domainName = domainName;
+	reqData.templateName=templateName;
+	reqData.templatePath=templatePath;
+    $.post(server + "setTemplate", JSON.stringify(reqData), cb);
 }
 
 /**

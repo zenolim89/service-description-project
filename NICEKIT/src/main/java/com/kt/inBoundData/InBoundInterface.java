@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DicParam;
@@ -625,6 +627,21 @@ public class InBoundInterface {
 		JSONObject res = new JSONObject();
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		parsingFrom.parsingTemplateInfo(templateName, domainName);
+		
+		ArrayList<String> templateServiceList = new ArrayList<>();
+		
+		TemplateConverter templateConverter = new TemplateConverter();
+		
+		try {
+			templateServiceList.addAll(templateConverter.getServiceFullList(templateConverter.getTemplateJSON(templateName)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return res;
 	}
 

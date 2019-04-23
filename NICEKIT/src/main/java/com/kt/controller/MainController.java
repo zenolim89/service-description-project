@@ -34,14 +34,12 @@ import com.kt.controller.model.ResGetTemplate;
 import com.kt.controller.model.ResGetTemplatePage;
 import com.kt.controller.model.ResGetVendor;
 import com.kt.controller.model.ResGetVendorPage;
-import com.kt.controller.model.ResReqService;
 import com.kt.controller.model.ResSaveTemp;
 import com.kt.controller.model.ResponseData;
 import com.kt.data.model.TempInfo;
 import com.kt.dataForms.DicParam;
 import com.kt.dataForms.ExcelUploadForm;
 import com.kt.dataForms.ResFileUpload;
-import com.kt.dataForms.ThirdPartyResMsg;
 import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.UtilFile;
@@ -382,6 +380,7 @@ public class MainController extends BaseController{
 
 	}
 
+	
 	/**
 	 * 서비스 배포
 	 * @param domianName	도메인명
@@ -407,24 +406,6 @@ public class MainController extends BaseController{
 		return successResponse(result);
 
 	}
-	
-	
-	
-	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
-	public ResponseData<ResReqService> reqService(@RequestParam String intentName, @RequestParam String word,
-			@RequestParam String name) {
-		
-		ResReqService result = new ResReqService();
-		
-		ThirdPartyResMsg msg = coreSvc.executeService("", name, intentName, "", word);
-
-		result.setData(msg.getData());
-		result.setSource(msg.getSource());
-		
-		return successResponse(result);
-	}
-	
-	
 	
 	
 }

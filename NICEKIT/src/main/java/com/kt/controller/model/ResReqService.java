@@ -1,11 +1,12 @@
 package com.kt.controller.model;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class ResReqService {
 	
 	private JSONArray data;
-	private String source;
+	private JSONObject source;
 	
 	
 	public JSONArray getData() {
@@ -14,13 +15,10 @@ public class ResReqService {
 	public void setData(JSONArray data) {
 		this.data = data;
 	}
-	public String getSource() {
+	public JSONObject getSource() {
 		return source;
 	}
-	public void setSource(String source) {
+	public void setSource(JSONObject source) {
 		this.source = source;
 	}
-	
-	
-
 }

@@ -441,7 +441,18 @@ function svcRespProcess() {
 		var resCode = svcObj.obj['resCode'];
 		var resMsg = svcObj.obj['resMsg'];
 		var resUrl = svcObj.obj['resUrl'];
-		sendTTS(resMsg, resCode, resUrl);
+		
+		var text = resMsg[0];
+		
+		//200일경우 tts
+		if( resCode == '200'){
+			sendTTS(text['eventplace'], resCode, resUrl);
+		}
+		else if( resCode == '201'){
+			window.location.href = resUrl;
+		}
+		
+		
 	}
 }
 

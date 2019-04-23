@@ -2,8 +2,10 @@ package com.kt.sevice.jsonparser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.json.simple.JSONArray;
@@ -178,6 +180,12 @@ public class JsonParserSvc {
 		return list;
 	}
 	
+	/**
+	 * 동일한 fieldName을 가진 요소의 Path 가져오기
+	 * @param str
+	 * @param targetName
+	 * @return
+	 */
 	public List<String> getMatchFieldNameList(String str, String targetName){
 		
 		List<String> result = new ArrayList<String>();
@@ -247,6 +255,98 @@ public class JsonParserSvc {
 		
 		return parentNode;
 	}
+	
+	
+	/**
+	 * 해당 JSON Source에서 동일한 fieldName를 가진 데이터 추출
+	 * @param source JSON
+	 * @param entityNames Json Key 리스트
+	 */
+	public List<Map<String, String>> searchForEntitys(String source, List<String> fieldNames) {
+		
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		
+		for (String fieldName : fieldNames) {
+			List<Map<String, String>> temp = this.searchForEntity(source, fieldName);
+			if(!temp.isEmpty()) {
+				result.addAll(temp);
+			}
+		}
+
+		/* FOR TEST */
+		if(!result.isEmpty()) {
+			for (Map<String, String> map : result) {
+				System.out.println(map.toString());
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 해당 JSON Source에서 동일한 fieldName를 가진 데이터 추출
+	 * @param source JSON
+	 * @param entityNames Json Key 리스트
+	 */
+	public List<Map<String, String>> searchForEntity(String source, String fieldName){
+		
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		
+		List<JsonElementInfo> infos = this.getJsonElementList(source);
+		
+		for (JsonElementInfo el : infos) {
+			if(el.getKey().equals(fieldName)) {
+				Map<String, String> temp = new HashMap<String, String>();
+				temp.put(el.getKey(), el.getValue());
+				result.add(temp);
+			}
+		}
+		
+		/* FOR TEST */
+//		if(!result.isEmpty()) {
+//			for (Map<String, String> map : result) {
+//				System.out.println(map.toString());
+//			}
+//		}
+		
+		return result;
+	}
+	
+	
+    /**
+     * Map을 json으로 변환한다.
+     *
+     * @param map Map<String, Object>.
+     * @return JSONObject.
+     */
+    public JSONObject getJsonStringFromMap( Map<String, String> map )
+    {
+        JSONObject jsonObject = new JSONObject();
+        
+        for( Map.Entry<String, String> entry : map.entrySet() ) {
+        	String key = entry.getKey();
+            Object value = entry.getValue();
+            jsonObject.put(key, value);
+        }
+        
+        return jsonObject;
+    }
+	
+    /**
+     * List<Map>을 jsonArray로 변환한다.
+     *
+     * @param _msg List<Map<String, Object>>.
+     * @return JSONArray.
+     */
+    public JSONArray getJsonArrayFromList( List<Map<String, String>> _msg )
+    {
+        JSONArray jsonArray = new JSONArray();
+        for( Map<String, String> map : _msg ) {
+            jsonArray.add( this.getJsonStringFromMap( map ) );
+        }
+        
+        return jsonArray;
+    }
 	
 	
 	/***

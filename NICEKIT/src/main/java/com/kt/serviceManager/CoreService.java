@@ -3,8 +3,11 @@ package com.kt.serviceManager;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 
@@ -23,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 import com.datastax.driver.core.Row;
+import com.fasterxml.jackson.core.JsonParser;
 import com.kt.controller.exception.DbInsertFailedException;
 import com.kt.controller.exception.DirectoryAlreadyExistsException;
 import com.kt.controller.exception.NotFoundAccountException;
@@ -40,9 +44,11 @@ import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataForms.ReqCreateVendor;
+import com.kt.dataForms.ThirdPartyResMsg;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.UITemplateController;
 import com.kt.service.spec.JsonSpecSvc;
+import com.kt.sevice.jsonparser.JsonParserSvc;
 
 @Service
 public class CoreService {
@@ -398,7 +404,7 @@ public class CoreService {
 	 * @param property
 	 * @param word
 	 */
-	public void executeService(String keySpace, String tableName, String intentName, String property, String word) {
+	public ThirdPartyResMsg executeService(String keySpace, String tableName, String intentName, String property, String word) {
 		
 		keySpace = "vendorsvcks";
 		property = "발화어휘";
@@ -409,6 +415,7 @@ public class CoreService {
 		
 		JsonSpecSvc svc = new JsonSpecSvc();
 		JSONObject temp  = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word, "발화 어휘");
+		
 		String word_id = "";
 		if(word.equals("을숙도")){
 			word_id = "2507834";
@@ -465,16 +472,23 @@ public class CoreService {
         rd.close();
 
         conn.disconnect();
-		
-		
-		
-		System.out.println(sb.toString());
-		
+        
+        JsonSpecSvc jsonSpecSvc =new JsonSpecSvc();
+        List<Map<String, String>> _msg = jsonSpecSvc.selectResMsg(sb.toString(), desc.getStrResSpec() , "설정 값");
+
+        JsonParserSvc jsonParserSvc = new JsonParserSvc();
+        
+        JSONArray jsonMsg = jsonParserSvc.getJsonArrayFromList(_msg);
+        
+        ThirdPartyResMsg resMsg = new ThirdPartyResMsg();
+        resMsg.setSource(sb.toString());
+        resMsg.setData(jsonMsg);
+        
+        return resMsg;
 		
         }catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+        return null;
         }
 }

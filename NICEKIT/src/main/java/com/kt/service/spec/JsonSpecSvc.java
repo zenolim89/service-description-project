@@ -3,6 +3,7 @@ package com.kt.service.spec;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -88,7 +89,6 @@ public class JsonSpecSvc {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -112,4 +112,41 @@ public class JsonSpecSvc {
 
 		return svc.getJsonObject(targetNode.toString());
 	}
+	
+	/**
+	 * 3rd Party System 응답 메시지 데이터 추출
+	 * @param _target
+	 * @param _spec
+	 * @param property
+	 * @return
+	 */
+	public List<Map<String, String>> selectResMsg(String resMsg, String spec, String property) {
+		
+		JsonParserSvc svc = new JsonParserSvc();
+		
+		/* [Step1] spec과 property(ex.발화 어휘)를 이용하여 변경할 FieldName 목록 추출*/
+		List<String> targetFieldNames = new ArrayList<String>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			
+			List<HttpParam> specList = mapper.readValue(spec, new TypeReference<List<HttpParam>>(){});
+			
+			for (HttpParam httpParam : specList) {
+				if(httpParam.getValue().equals(property)) {
+					targetFieldNames.add(httpParam.getParameter());
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/* [Step2] target과 변경할 FieldName을 이용하여 Data 추출*/
+		List<Map<String, String>> mapList = new ArrayList<Map<String,String>>();
+		if(!targetFieldNames.isEmpty()) {
+			mapList = svc.searchForEntitys(resMsg, targetFieldNames);
+		}
+		
+		return mapList;
+	}
+	
 }

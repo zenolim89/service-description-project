@@ -217,19 +217,17 @@ public class JSONParsingFrom {
 		InsertDataTo insertTo = new InsertDataTo();
 		ReqSetTemplate templateInfo = new ReqSetTemplate();
 		JSONObject res = new JSONObject();
-
+		JSONArray jsonArray = new JSONArray();
 		ArrayList<String> templateServiceList = new ArrayList<>();
 		TemplateConverter templateConverter = new TemplateConverter();
-
 		try {
 			JSONObject obj = (JSONObject) parser.parse(response);
+			templateServiceList.addAll(templateConverter
+					.getServiceFullList(templateConverter.getTemplateJSON(obj.get("templateName").toString())));
+			jsonArray.addAll(templateServiceList);
 			templateInfo.setDomainName(obj.get("domainName").toString());
 			templateInfo.setTemplateName(obj.get("templateName").toString());
 			templateInfo.setTemplatePath(obj.get("templatePath").toString());
-			templateServiceList.addAll(templateConverter
-					.getServiceFullList(templateConverter.getTemplateJSON(obj.get("templateName").toString())));
-			JSONArray jsonArray = new JSONArray();
-			jsonArray.addAll(templateServiceList);
 			templateInfo.setServiceList(jsonArray.toJSONString());
 			if (insertTo.insertTemplateinfo(templateInfo)) {
 				res.put("resCode", "2001");

@@ -329,7 +329,7 @@ public class SelectDataTo {
 		return resList;
 	}
 
-	public JSONArray selectTemplateList(String domainName, ArrayList<String> serviceList) throws ParseException {
+	public JSONArray selectTemplateList(String domainName, ArrayList<String> serviceList) {
 		JSONArray resList = new JSONArray();
 		Statement query = QueryBuilder.select()
 				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
@@ -341,12 +341,16 @@ public class SelectDataTo {
 		List<Row> rowList = set.all();
 		for (Row row : rowList) {
 			JSONParser jsonParser = new JSONParser();
-			JSONArray jsonArray = (JSONArray) jsonParser.parse(row.getString("servicelist"));
-
-			if (jsonArray.containsAll(serviceList))
-				resList.add(row.getString("templateName"));
+			JSONArray jsonArray;
+			try {
+				jsonArray = (JSONArray) jsonParser.parse(row.getString("servicelist"));
+				if (jsonArray.containsAll(serviceList))
+					resList.add(row.getString("templateName"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
 		return resList;
 
 	}

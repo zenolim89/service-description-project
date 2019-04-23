@@ -139,12 +139,7 @@ public class InBoundInterface {
 	public JSONObject getTemplateList(@RequestParam String domainName, @RequestParam String specName) {
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		try {
-			res = serializerTo.resTemplateList(domainName, specName);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		res = serializerTo.resTemplateList(domainName, specName);
 		return res;
 	}
 
@@ -291,7 +286,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** deploy vendor */
+	/** save temp repository */
 	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
 	public JSONObject tempSave(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -311,7 +306,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** deploy vendor */
+	/** deploy vendor service */
 	@RequestMapping(value = "/deployVendor", method = RequestMethod.POST)
 	public JSONObject deployVendor(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -331,7 +326,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** add template */
+	/** set template information */
 	@RequestMapping(value = "/setTemplate", method = RequestMethod.POST)
 	public JSONObject setTemplate(InputStream body) {
 		String bf = null;
@@ -345,13 +340,21 @@ public class InBoundInterface {
 				response += bf;
 			}
 			res = parsingFrom.parsingTemplateInfo(response);
-
-			// send response to a specific method in parsingfrom
 		} catch (Exception e) {
 			res.put("code", "4000");
 			res.put("resMsg", e.getMessage());
 		}
 		return res;
+	}
+
+	/** get spec information */
+	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
+	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
+		JSONObject res = new JSONObject();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		res = serializerTo.resSpecInfo(domainName, specName);
+		return res;
+
 	}
 
 	/** registration domain intent information */
@@ -416,9 +419,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)
 	public JSONObject setSpec(@RequestParam String domainName, @RequestParam String specName) {
-		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
-		String ks = "commonks";
 		JSONObject resObj = insertTo.insertSpecIndexTo(specName, domainName);
 		return resObj;
 	}
@@ -429,9 +430,8 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
 		ModelAndView mv = new ModelAndView("jsonView");
-		String keySpace = "vendersvcks";
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
-		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+		res = selectTo.selectMatchingService(intentName, word, name, Constants.CASSANDRA_KEYSPACE_VENDOR);
 		if (res.containsKey("serviceType")) {
 			if ((res.get("serviceType").toString()).equals("RetriveATChangeView")) {
 				Map<String, String> map = new HashMap<String, String>();
@@ -639,15 +639,6 @@ public class InBoundInterface {
 			response = e.getMessage().toString();
 		}
 		return res;
-	}
-
-	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
-	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
-		JSONObject res = new JSONObject();
-		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		res = serializerTo.resSpecInfo(domainName, specName);
-		return res;
-
 	}
 
 }

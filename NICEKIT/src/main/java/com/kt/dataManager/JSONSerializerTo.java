@@ -229,13 +229,12 @@ public class JSONSerializerTo {
 		}
 	}
 
-	public JSONObject resTemplateList(String domainName, String specName) throws ParseException {
+	public JSONObject resTemplateList(String domainName, String specName) {
 		SelectDataTo selectToTemplate = new SelectDataTo();
 		ArrayList<GetSpecInfoDataForm> list = new ArrayList<GetSpecInfoDataForm>();
 		GetSpecInfoToSupportTool tool = new GetSpecInfoToSupportTool();
 		ArrayList<String> svcList = new ArrayList<String>();
 		JSONObject dataObj = new JSONObject();
-		JSONArray arr = new JSONArray();
 
 		try {
 			list = tool.resServiceList(specName);
@@ -246,11 +245,13 @@ public class JSONSerializerTo {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JSONObject res = this.resDescription("500", "해당 정보를 찾을 수 없습니다.");
+			return res;
 		}
+
 		JSONArray templateList = selectToTemplate.selectTemplateList(domainName, svcList);
 		if (templateList == null || templateList.size() == 0) {
 			JSONObject res = this.resDescription("404", "사용가능한 UI 템플릿이 없습니다");
-			res.put("resData", arr);
 			return res;
 		} else {
 			JSONObject res = this.resDescription("200", "성공");

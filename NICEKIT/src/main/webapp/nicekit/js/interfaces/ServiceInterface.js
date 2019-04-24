@@ -61,17 +61,42 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  */
 
 var options = {};
-var keytype = "GBOXDEVM";
-var keytype = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+var keyType = "GBOXDEVM";
+var apiKey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
 function init() {
+	
+	var pathName =  location.pathname;
+	var vendorNameSplit = pathName.split("/");
+	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length-2]);
+	
+	console.log('pathName : ' + pathName);
+	console.log('vendorNameSplit : ' + vendorNameSplit);
+	console.log('vendorName : ' + vendorName);
+	
+	var specId;
+	
+	$.ajax({
+		url:'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName='+vendorName,
+		type:'GET',
+		async: false,
+		success: function(data){
+
+			console.log(data);
+			
+			specId = data['specId'];
+        }
+	});
+	
+	console.log('specId : ' + specId);
+	
 	options = {};
-	options.keytype = "GBOXDEVM";
-	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+	options.keytype = keytype;
+	options.apikey = apiKey;
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
 			alert("[DEBUG] init 실행 완료");
-			SpeechINTRC('appId');
+			SpeechINTRC(specId);
 		}
 	});
 }
@@ -259,52 +284,52 @@ function SpeechINTRC(appId) {
 		var sentence = extra.uword;
 		alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
 		switch (extra.actioncode) {
-			case 'HotelAmenityItem':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			case 'HotelCheckout':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-CHECKOUT']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			case 'HotelHelp':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-QUESTIONS']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			case 'HotelViewPage':
-				var parameter;
-				if (extra.parameter.hasOwnProperty('NE-SERVICEMENU'))
-					parameter = extra.parameter['NE-SERVICEMENU'];
-				else if (extra.parameter.hasOwnProperty('NE-FACILITIES'))
-					parameter = extra.parameter['NE-FACILITIES'];
-				else if (extra.parameter.hasOwnProperty('NE-RESTAURANT'))
-					parameter = extra.parameter['NE-RESTAURANT'];
-				else if (extra.parameter.hasOwnProperty('NE-LEISURE'))
-					parameter = extra.parameter['NE-LEISURE'];
-				else if (extra.parameter.hasOwnProperty('NE-SHOPPING'))
-					parameter = extra.parameter['NE-SHOPPING'];
-				else if (extra.parameter.hasOwnProperty('NE-CULTURAL'))
-					parameter = extra.parameter['NE-CULTURAL'];
-				else if (extra.parameter.hasOwnProperty('NE-MEDICAL'))
-					parameter = extra.parameter['NE-MEDICAL'];
-				else if (extra.parameter.hasOwnProperty('NE-RELIGION'))
-					parameter = extra.parameter['NE-RELIGION'];
-				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
-					parameter = extra.parameter['NE-PARTNERSHIP'];
-				svcReqFunction('rsrt001', extra.actioncode, parameter);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			case 'HotelWebCam':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-WEBCAM']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			case 'HotelTourInfo':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				break;
-			default:
-				sendTTS("전송실패");
-				break;
+		case 'HotelAmenityItem':
+			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-AMENITY']);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		case 'HotelCheckout':
+			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-CHECKOUT']);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		case 'HotelHelp':
+			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-QUESTIONS']);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		case 'HotelViewPage':
+			var parameter;
+			if (extra.parameter.hasOwnProperty('NE-SERVICEMENU'))
+				parameter = extra.parameter['NE-SERVICEMENU'];
+			else if (extra.parameter.hasOwnProperty('NE-FACILITIES'))
+				parameter = extra.parameter['NE-FACILITIES'];
+			else if (extra.parameter.hasOwnProperty('NE-RESTAURANT'))
+				parameter = extra.parameter['NE-RESTAURANT'];
+			else if (extra.parameter.hasOwnProperty('NE-LEISURE'))
+				parameter = extra.parameter['NE-LEISURE'];
+			else if (extra.parameter.hasOwnProperty('NE-SHOPPING'))
+				parameter = extra.parameter['NE-SHOPPING'];
+			else if (extra.parameter.hasOwnProperty('NE-CULTURAL'))
+				parameter = extra.parameter['NE-CULTURAL'];
+			else if (extra.parameter.hasOwnProperty('NE-MEDICAL'))
+				parameter = extra.parameter['NE-MEDICAL'];
+			else if (extra.parameter.hasOwnProperty('NE-RELIGION'))
+				parameter = extra.parameter['NE-RELIGION'];
+			else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
+				parameter = extra.parameter['NE-PARTNERSHIP'];
+			svcReqFunction(appId, extra.actioncode, parameter);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		case 'HotelWebCam':
+			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-WEBCAM']);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		case 'HotelTourInfo':
+			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-PERIPHERAL']);
+			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+			break;
+		default:
+			sendTTS("전송실패");
+			break;
 		}
 	}
 }

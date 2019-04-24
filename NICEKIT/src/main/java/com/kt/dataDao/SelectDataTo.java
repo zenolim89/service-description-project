@@ -395,19 +395,37 @@ public class SelectDataTo {
 		return resList;
 
 	}
+	
+	public String selectSpecName(String vendorName) {
 
-//	public JSONArray selectDomainListToCommon() {
-//		
-//		Collection<TableMetadata> tables = cluster.getMetadata().getKeyspace("domainks").getTables();
-//
-//		List<String> tableList = tables.stream().map(tm -> tm.getName()).collect(Collectors.toList());
-//
-//		JSONArray arr = serializerTo.resDomainList(tableList);
-//
-//		cluster.close();
-//
-//		return arr;
-//	}
+		Statement query = QueryBuilder.select()
+				.from(Constants.CASSANDRA_KEYSPACE_VENDOR, Constants.CASSANDRA_TABLE_VENDORINDEXLIST)
+				.where(QueryBuilder.eq("vendorname", vendorName)).allowFiltering();
+
+		ResultSet set = session.execute(query);
+		cluster.close();
+
+		List<Row> resList = set.all();
+
+		return resList.get(0).getString("specname");
+
+	}
+	
+
+	// public JSONArray selectDomainListToCommon() {
+	//
+	// Collection<TableMetadata> tables =
+	// cluster.getMetadata().getKeyspace("domainks").getTables();
+	//
+	// List<String> tableList = tables.stream().map(tm ->
+	// tm.getName()).collect(Collectors.toList());
+	//
+	// JSONArray arr = serializerTo.resDomainList(tableList);
+	//
+	// cluster.close();
+	//
+	// return arr;
+	// }
 
 	public JSONObject selectDomainList() {
 
@@ -503,26 +521,27 @@ public class SelectDataTo {
 
 	}
 
-//	public ResultSet selectServiceCode (String keySpace, String table, String svcType, String domainname) {
-//		
-//		Statement query = QueryBuilder.select().from(keySpace, table)
-//				.where(QueryBuilder.eq("domainname", domainname))
-//				.and(QueryBuilder.eq("servicetype", svcType))
-//				.orderBy(QueryBuilder.desc("servicetype"))
-//				.allowFiltering();
-//		
-//		ResultSet resSet = session.execute(query);
-//		
-//		List<Row> rowList = resSet.all();
-//		
-//		for(Row row : rowList) {
-//			
-//			System.out.println(row.getString("servicetype"));
-//			
-//		}
-//		
-//		return resSet;
-//	}
+	// public ResultSet selectServiceCode (String keySpace, String table, String
+	// svcType, String domainname) {
+	//
+	// Statement query = QueryBuilder.select().from(keySpace, table)
+	// .where(QueryBuilder.eq("domainname", domainname))
+	// .and(QueryBuilder.eq("servicetype", svcType))
+	// .orderBy(QueryBuilder.desc("servicetype"))
+	// .allowFiltering();
+	//
+	// ResultSet resSet = session.execute(query);
+	//
+	// List<Row> rowList = resSet.all();
+	//
+	// for(Row row : rowList) {
+	//
+	// System.out.println(row.getString("servicetype"));
+	//
+	// }
+	//
+	// return resSet;
+	// }
 
 	public ArrayList<String> selectIntentNameList(String ksName, String tableName) throws ParseException {
 
@@ -578,6 +597,29 @@ public class SelectDataTo {
 
 		return intentInfoList;
 
+	}
+	
+	public String getSpecName(String vendorName) {
+		
+		//List<Row> specList = this.selectSpecList(domainName);
+		
+		//System.out.println(specList.toString());
+		
+		//String specName = specList.get(0).getString("specname");
+		
+		//String specId = this.selectGetSpecId(this.selectSpecName(vendorName)).get(0).getString("specid");
+		
+		String specName = this.selectSpecName(vendorName);
+		
+		return specName;
+		
+	}
+	
+	public String getSpecID(String specName) {
+		
+		String specId = this.selectGetSpecId(specName).get(0).getString("specid");
+		
+		return specId;
 	}
 
 }

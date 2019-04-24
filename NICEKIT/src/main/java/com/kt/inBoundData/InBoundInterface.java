@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
+import com.kt.controller.model.ResReqService;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DicParam;
@@ -35,10 +38,17 @@ import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.dataManager.UtilFile;
+import com.kt.serviceManager.WebAppService;
+
+
 
 @RestController
 @RequestMapping("")
 public class InBoundInterface {
+	
+	@Autowired
+	private WebAppService webAppSvc;
+	
 	// Logger instance
 	private static final Logger logger = Logger.getLogger(InBoundInterface.class);
 
@@ -352,7 +362,6 @@ public class InBoundInterface {
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
 		res = serializerTo.resSpecInfo(domainName, specName);
 		return res;
-
 	}
 
 	/** registration domain intent information */
@@ -428,20 +437,30 @@ public class InBoundInterface {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
 		ModelAndView mv = new ModelAndView("jsonView");
+		String keySpace = "vendorsvcks";
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
-		res = selectTo.selectMatchingService(intentName, word, name, Constants.CASSANDRA_KEYSPACE_VENDOR);
-		if (res.containsKey("serviceType")) {
-			if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
+		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+		
+		System.out.println(String.format("jsonObject : [%s]", res.toString()));
+		
+		//if (res.containsKey("serviceType")) {
+		//리다이렉션
+		
+		if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
 				Map<String, String> map = new HashMap<String, String>();
-				map.put("resCode", res.get("resCode").toString());
+				//map.put("resCode", res.get("resCode").toString());
+				map.put("resCode", "201");
 				map.put("resMsg", res.get("resMsg").toString());
 				map.put("resUrl", res.get("toUrl").toString());
 				mv.addObject("obj", map);
-			}
 		} else {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("resCode", res.get("resCode").toString());
-			map.put("resMsg", res.get("resMsg").toString());
+			
+			ResReqService result = webAppSvc.executeService("", name, intentName, "", word);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			//map.put("resCode", res.get("resCode").toString());
+			map.put("resCode", "200");
+			map.put("resMsg", result.getData());
 			map.put("resUrl", "none");
 			mv.addObject("obj", map);
 		}
@@ -638,5 +657,19 @@ public class InBoundInterface {
 		}
 		return res;
 	}
-
+	
+	@RequestMapping(value = "/getSpecId", method = RequestMethod.GET)
+	public JSONObject getSpecId(@RequestParam String vendorName) {
+		
+		System.out.println(vendorName);
+		
+		SelectDataTo selectDataTo = new SelectDataTo();
+		SelectDataTo selectDataTo2 = new SelectDataTo();
+		
+		JSONObject res = new JSONObject();
+		res.put("code","200");
+		res.put("specId", selectDataTo2.getSpecID(selectDataTo.getSpecName(vendorName)));
+		
+		return res;
+	}
 }

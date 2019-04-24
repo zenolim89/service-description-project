@@ -61,17 +61,42 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  */
 
 var options = {};
-var keytype = "GBOXDEVM";
-var keytype = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+var keyType = "GBOXDEVM";
+var apiKey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
 function init() {
+
+	var pathName = location.pathname;
+	var vendorNameSplit = pathName.split("/");
+	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
+
+	console.log('pathName : ' + pathName);
+	console.log('vendorNameSplit : ' + vendorNameSplit);
+	console.log('vendorName : ' + vendorName);
+
+	var specId;
+
+	$.ajax({
+			url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+
+				console.log(data);
+
+				specId = data['specId'];
+			}
+	});
+
+	console.log('specId : ' + specId);
+
 	options = {};
-	options.keytype = "GBOXDEVM";
-	options.apikey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
+	options.keytype = keytype;
+	options.apikey = apiKey;
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
 			alert("[DEBUG] init 실행 완료");
-			SpeechINTRC('appId');
+			SpeechINTRC(specId);
 		}
 	});
 }
@@ -260,15 +285,15 @@ function SpeechINTRC(appId) {
 		alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-AMENITY']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-AMENITY']);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelCheckout':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-CHECKOUT']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-CHECKOUT']);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelHelp':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-QUESTIONS']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-QUESTIONS']);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelViewPage':
@@ -291,15 +316,20 @@ function SpeechINTRC(appId) {
 					parameter = extra.parameter['NE-RELIGION'];
 				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
 					parameter = extra.parameter['NE-PARTNERSHIP'];
-				svcReqFunction('rsrt001', extra.actioncode, parameter);
+				svcReqFunction(appId, extra.actioncode, parameter);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelWebCam':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-WEBCAM']);
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-WEBCAM']);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelTourInfo':
-				svcReqFunction('rsrt001', extra.actioncode, extra.parameter['NE-PERIPHERAL']);
+				var parameter;
+				if (extra.parameter.hasOwnProperty('NE-PERIPHERAL'))
+					parameter = extra.parameter['NE-PERIPHERAL'];
+				else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
+					parameter = extra.parameter['NE-TOURSPOT'];
+				svcReqFunction(appId, extra.actioncode, extra.parameter);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:

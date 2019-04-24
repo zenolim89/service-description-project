@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataForms.ExtractionKeynTypeForJSON;
@@ -17,20 +19,33 @@ public class ServiceEnabler {
 		
 		JSONObject res = new JSONObject();
 		
-		JSONArray arr = desc.getDicList();
+		JSONArray arr = (JSONArray) desc.getDicList().get(0);
+		
+		System.out.println(arr.toString());
 
 		for (int i=0; i < arr.size(); i++) {
 
 			JSONObject obj = (JSONObject) arr.get(i);
 			
-			JSONArray wordArr = (JSONArray) obj.get("wordList");
+			//JSONArray wordArr = (JSONArray) obj.get("wordList");
+			
+			JSONArray wordArr = null;
+			
+			try {
+				wordArr = (JSONArray) new JSONParser().parse((String) obj.get("wordList"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			for (int j = 0; j < wordArr.size(); j++) {
 				
-				JSONObject wordObj = (JSONObject) wordArr.get(j);
+				//JSONObject wordObj = (JSONObject) wordArr.get(j);
 				
-				if (word.equals(wordObj.get("word").toString())) {
-
+				String wordObj = (String) wordArr.get(j);
+				
+				//if (word.equals(wordObj.get("word").toString())) {
+				if(word.equals(wordObj)) {
 					res = this.createRequestData(desc, word);
 					
 					return res;

@@ -21,7 +21,7 @@ public class HtmlConverter {
 		
 		getRemoveItmDocument(document, _selector, _selectorAttribute, _itmList);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	/*
@@ -34,7 +34,7 @@ public class HtmlConverter {
 
 		getRemoveItmDocument(document, _selectorMap, _itmMap);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	/*
@@ -47,7 +47,7 @@ public class HtmlConverter {
 
 		getReplaceDocument(document, _selectorMap, _itmMap);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	
@@ -60,7 +60,7 @@ public class HtmlConverter {
 		
 		getRemoveItmDocument(document, _selector, _selectorAttribute, _itmList);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	/*
@@ -73,7 +73,7 @@ public class HtmlConverter {
 
 		getRemoveItmDocument(document, _selectorMap, _itmMap);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	/*
@@ -86,7 +86,7 @@ public class HtmlConverter {
 
 		getReplaceDocument(document, _selectorMap, _itmMap);
 		
-		return document.html();
+		return document.outerHtml();
 	}
 	
 	/*

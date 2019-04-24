@@ -150,8 +150,7 @@ public class JSONSerializerTo {
 				if (serviceName.equals(form.getServiceName()))
 					rawdata = form.getWordList();
 			}
-			tempdata = (JSONArray) rawdata.get(0);
-			tempObj = (JSONObject) tempdata.get(0);
+			tempObj = (JSONObject) rawdata.get(0);
 			result = (JSONArray) parser.parse(tempObj.get("wordList").toString());
 			for (int i = 0; i < result.size(); i++) {
 				res.add(result.get(i).toString());

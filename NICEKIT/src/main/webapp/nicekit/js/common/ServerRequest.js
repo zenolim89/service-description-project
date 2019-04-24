@@ -449,7 +449,17 @@ function svcRespProcess() {
 			sendTTS(text['eventplace'], resCode, resUrl);
 		}
 		else if( resCode == '201'){
-			window.location.href = resUrl;
+			
+			var hostName = location.hostname;
+			var pathName = location.pathname;
+			var vendorNameSplit = pathName.split("/");
+			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length-2]);
+			
+			var newUrl = window.location.protocol + "//" + window.location.host + "/docbase/vendors/" + vendorName + "/"+ resUrl;
+			
+			alert(newUrl);
+			
+			window.location.href = newUrl;
 		}
 		
 		

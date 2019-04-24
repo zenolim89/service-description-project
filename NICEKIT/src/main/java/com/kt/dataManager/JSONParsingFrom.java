@@ -1,5 +1,6 @@
 package com.kt.dataManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.datastax.driver.core.Row;
+import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.DeleteDataTo;
 import com.kt.dataDao.ErrorCodeList;
 import com.kt.dataDao.InsertDataTo;
@@ -21,6 +23,7 @@ import com.kt.dataForms.BaseIntentInfoForm;
 import com.kt.dataForms.BaseSvcForm;
 import com.kt.dataForms.BaseVenderSvcForm;
 import com.kt.dataForms.ReqCreateVendor;
+import com.kt.dataForms.ReqSetTemplate;
 import com.kt.dataForms.ReqSvcCodeForm;
 
 public class JSONParsingFrom {
@@ -210,11 +213,37 @@ public class JSONParsingFrom {
 		return res;
 	}
 
-	public void parsingTemplateInfo(String templateName, String domainName) {
+	public JSONObject parsingTemplateInfo(String response) throws IOException {
 		InsertDataTo insertTo = new InsertDataTo();
-		JSONObject obj = this.getServerInfo();
-		String finalPath = obj.get("context").toString() + "/resources/template/" + templateName;
-		insertTo.insertTemplateinfo(templateName, finalPath, domainName);
+		ReqSetTemplate templateInfo = new ReqSetTemplate();
+		JSONObject res = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		ArrayList<String> templateServiceList = new ArrayList<>();
+		TemplateConverter templateConverter = new TemplateConverter();
+		try {
+			JSONObject obj = (JSONObject) parser.parse(response);
+			templateServiceList.addAll(templateConverter
+					.getServiceFullList(templateConverter.getTemplateJSON(obj.get("templateName").toString())));
+			jsonArray.addAll(templateServiceList);
+			templateInfo.setDomainName(obj.get("domainName").toString());
+			templateInfo.setTemplateName(obj.get("templateName").toString());
+			templateInfo.setTemplatePath(obj.get("templatePath").toString());
+			templateInfo.setServiceList(jsonArray.toJSONString());
+			if (insertTo.insertTemplateinfo(templateInfo)) {
+				JSONObject dataObj = new JSONObject();
+				res.put("resCode", "200");
+				res.put("resMsg", "성공");
+			} else {
+				res.put("resCode", "500");
+				res.put("resMsg", "db insert 실패");
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			res.put("resCode", "500");
+			res.put("resMsg", e.toString());
+		}
+		return res;
 	}
 
 	/**

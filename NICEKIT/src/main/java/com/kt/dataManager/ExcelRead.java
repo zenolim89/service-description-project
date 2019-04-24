@@ -66,7 +66,7 @@ public class ExcelRead {
 				case "serviceCode":
 				case "intentInfo":
 				case "transMethod":
-				case "commonURL":
+				case "comURL":
 				case "testURL":
 					format.put(key, new CellReference(j, 1));
 					break;
@@ -85,10 +85,6 @@ public class ExcelRead {
 				}
 			}
 
-//			 for(String key : format.keySet()) { 
-//				 System.out.println(String.format("키 : %s, 값 : %s", key, format.get(key)) );
-//				 }
-
 			ExcelUploadForm form = new ExcelUploadForm();
 
 			// 기본 정보
@@ -99,7 +95,7 @@ public class ExcelRead {
 			form.setServiceDesc(cellReader(sheet, format.get("serviceDesc")));
 			form.setServiceCode(cellReader(sheet, format.get("serviceCode")));
 			form.setTransMethod(cellReader(sheet, format.get("transMethod")));
-			form.setCommonURL(cellReader(sheet, format.get("commonURL")));
+			form.setCommonURL(cellReader(sheet, format.get("comURL")));
 			form.setTestURL(cellReader(sheet, format.get("testURL")));
 
 			// Intent 정보
@@ -154,7 +150,7 @@ public class ExcelRead {
 		List<HttpParam> reqParams = new ArrayList<HttpParam>();
 
 		int loop = (end.getRow() - start.getRow()) - 1;
-		
+
 		for (int j = 0; j < loop; j++) {
 
 			Row row = sheet.getRow(start.getRow() + j);

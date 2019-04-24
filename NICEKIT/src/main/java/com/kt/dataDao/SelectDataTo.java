@@ -57,13 +57,9 @@ public class SelectDataTo {
 
 		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
 
-		// try {
-
 		for (Row r : rowList) {
 
 			DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
-			
-			System.out.println(r.toString());
 
 			desc.setComURL(r.getString("commurl"));
 			desc.setDomainId(r.getString("domainid"));
@@ -71,19 +67,11 @@ public class SelectDataTo {
 			desc.setMethod(r.getString("method"));
 			desc.setDataType(r.getString("datatype"));
 
+			desc.setToUrl(r.getString("servicelink"));
 			desc.setComURL(r.getString("commurl"));
 			desc.setTestURL(r.getString("testurl"));
-			desc.setToUrl(r.getString("servicelink"));
 			desc.setServiceType(r.getString("servicetype"));
 
-			try {
-			desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
-			desc.setReqSpec((JSONArray) parser.parse(r.getString("requestspec")));
-			desc.setResStructure((JSONArray) parser.parse(r.getString("responseformat")));
-			desc.setResSpec((JSONArray) parser.parse(r.getString("responsespec")));
-			desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
-
-			
 			desc.setStrHeaderInfo(r.getString("headerinfo"));
 			desc.setStrReqSpec(r.getString("requestspec"));
 			desc.setStrReqStructure(r.getString("requestformat"));
@@ -91,23 +79,14 @@ public class SelectDataTo {
 			desc.setStrResStructure(r.getString("responseformat"));
 			desc.setStrDicList(r.getString("diclist"));
 
-			System.out.println(desc.getServiceCode());
 			resObj = enabler.discoverMatchingWord(desc, word);
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			
+			resObj.put("resCode", "200");
+			resObj.put("resMsg", "성공");
 			resObj.put("toUrl", r.getString("servicelink"));
 			resObj.put("serviceType", r.getString("servicetype"));
-
+			if (resObj != null)
+				return resObj;
 		}
-
-		// } catch (ParseException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		//
-		// }
 
 		cluster.close();
 
@@ -391,8 +370,8 @@ public class SelectDataTo {
 		return resList;
 	}
 
-	public List<Row> selectTemplateList(String domainName) {
-
+	public JSONArray selectTemplateList(String domainName, ArrayList<String> serviceList) {
+		JSONArray resList = new JSONArray();
 		Statement query = QueryBuilder.select()
 				.from(Constants.CASSANDRA_KEYSPACE_COMMON, Constants.CASSANDRA_TABLE_TEMPLATEINDEXLIST)
 				.where(QueryBuilder.eq("domainname", domainName)).allowFiltering();
@@ -400,8 +379,19 @@ public class SelectDataTo {
 		ResultSet set = session.execute(query);
 		cluster.close();
 
-		List<Row> resList = set.all();
-
+		List<Row> rowList = set.all();
+		for (Row row : rowList) {
+			JSONParser jsonParser = new JSONParser();
+			JSONArray jsonArray;
+			try {
+				jsonArray = (JSONArray) jsonParser.parse(row.getString("servicelist"));
+				if (jsonArray.containsAll(serviceList))
+					resList.add(row.getString("templateName"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return resList;
 
 	}

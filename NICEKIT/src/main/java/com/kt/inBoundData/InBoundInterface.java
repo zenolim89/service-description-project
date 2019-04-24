@@ -145,10 +145,10 @@ public class InBoundInterface {
 
 	/** request template list */
 	@RequestMapping(value = "/getTemplate", method = RequestMethod.GET)
-	public JSONObject getTemplateList(@RequestParam String domainName) {
+	public JSONObject getTemplateList(@RequestParam String domainName, @RequestParam String specName) {
 		JSONObject res = new JSONObject();
 		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		res = serializerTo.resTemplateList(domainName);
+		res = serializerTo.resTemplateList(domainName, specName);
 		return res;
 	}
 
@@ -270,14 +270,13 @@ public class InBoundInterface {
 				StringBuilder sbDic = new StringBuilder();
 				StringBuilder sbWord = new StringBuilder();
 				List<DicParam> dicList = e.getDicList();
-				for (DicParam item : dicList) {
-					if (sbDic.length() > 0)
-						sbDic.append("<br>");
-					if (sbWord.length() > 0)
-						sbWord.append("<br>");
-					sbDic.append(item.getDicName());
-					sbWord.append(item.getWordList());
-				}
+				sbDic.append(dicList.get(0).getDicName());
+				sbWord.append(dicList.get(0).getWordList());
+				/*
+				 * 명세 등록 UI 변경반영 필요 
+				 * for (DicParam item : dicList) {
+				 * sbDic.append(item.getDicName()); sbWord.append(item.getWordList()); }
+				 */
 				res.setDicNameList(sbDic.toString());
 				res.setWordList(sbWord.toString());
 			}
@@ -295,7 +294,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** deploy vendor */
+	/** save temp repository */
 	@RequestMapping(value = "/tempSave", method = RequestMethod.POST)
 	public JSONObject tempSave(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -315,7 +314,7 @@ public class InBoundInterface {
 		return res;
 	}
 
-	/** deploy vendor */
+	/** deploy vendor service */
 	@RequestMapping(value = "/deployVendor", method = RequestMethod.POST)
 	public JSONObject deployVendor(InputStream body) {
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
@@ -332,6 +331,36 @@ public class InBoundInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return res;
+	}
+
+	/** set template information */
+	@RequestMapping(value = "/setTemplate", method = RequestMethod.POST)
+	public JSONObject setTemplate(InputStream body) {
+		String bf = null;
+		String response = "";
+		JSONObject res = new JSONObject();
+		BufferedReader in = new BufferedReader(new InputStreamReader(body));
+		JSONParsingFrom parsingFrom = new JSONParsingFrom();
+
+		try {
+			while ((bf = in.readLine()) != null) {
+				response += bf;
+			}
+			res = parsingFrom.parsingTemplateInfo(response);
+		} catch (Exception e) {
+			res.put("code", "400");
+			res.put("resMsg", e.getMessage());
+		}
+		return res;
+	}
+
+	/** get spec information */
+	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
+	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
+		JSONObject res = new JSONObject();
+		JSONSerializerTo serializerTo = new JSONSerializerTo();
+		res = serializerTo.resSpecInfo(domainName, specName);
 		return res;
 	}
 
@@ -397,9 +426,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)
 	public JSONObject setSpec(@RequestParam String domainName, @RequestParam String specName) {
-		SelectDataTo selectTo = new SelectDataTo();
 		InsertDataTo insertTo = new InsertDataTo();
-		String ks = "commonks";
 		JSONObject resObj = insertTo.insertSpecIndexTo(specName, domainName);
 		return resObj;
 	}
@@ -630,41 +657,9 @@ public class InBoundInterface {
 		}
 		return res;
 	}
-
-	@RequestMapping(value = "/getSpecInfo", method = RequestMethod.GET)
-	public JSONObject getSpecInfo(@RequestParam String domainName, String specName) {
-		JSONObject res = new JSONObject();
-		JSONSerializerTo serializerTo = new JSONSerializerTo();
-		res = serializerTo.resSpecInfo(domainName, specName);
-		return res;
-
-	}
-
-	@RequestMapping(value = "/setTemplate", method = RequestMethod.GET)
-	public JSONObject setTemplate(@RequestParam String templateName, String domainName) {
-		JSONObject res = new JSONObject();
-		JSONParsingFrom parsingFrom = new JSONParsingFrom();
-		parsingFrom.parsingTemplateInfo(templateName, domainName);
-		
-		ArrayList<String> templateServiceList = new ArrayList<>();
-		
-		TemplateConverter templateConverter = new TemplateConverter();
-		
-		try {
-			templateServiceList.addAll(templateConverter.getServiceFullList(templateConverter.getTemplateJSON(templateName)));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return res;
-	}
 	
 	@RequestMapping(value = "/getSpecId", method = RequestMethod.GET)
-	public JSONObject setTemplate(@RequestParam String vendorName) {
+	public JSONObject getSpecId(@RequestParam String vendorName) {
 		
 		System.out.println(vendorName);
 		
@@ -677,5 +672,4 @@ public class InBoundInterface {
 		
 		return res;
 	}
-
 }

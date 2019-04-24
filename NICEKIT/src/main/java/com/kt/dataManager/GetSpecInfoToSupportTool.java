@@ -51,4 +51,21 @@ public class GetSpecInfoToSupportTool {
 		}
 		return specList;
 	}
+
+	public ArrayList<GetSpecInfoDataForm> resServiceList(String specName) throws ParseException {
+		SelectDataTo selectTo = new SelectDataTo();
+		ArrayList<GetSpecInfoDataForm> serviceList = new ArrayList<GetSpecInfoDataForm>();
+		String table = this.getSpecTable(specName);
+		try {
+			List<Row> list = selectTo.selectGetSpecInfo(table);
+			for (Row info : list) {
+				GetSpecInfoDataForm form = new GetSpecInfoDataForm();
+				form.setServiceName(info.getString("servicename"));
+				serviceList.add(form);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return serviceList;
+	}
 }

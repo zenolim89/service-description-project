@@ -824,7 +824,7 @@ function getGeneratedHtml() {
     // console.log(beforeBody);
     // console.log(afterBody);
 
-    var generatedHtml = beforeBody + " <body onload='init();'> " + bodyHtml + "</body>" + afterBody;
+    var generatedHtml = beforeBody + " <body onload='init()'> " + bodyHtml + "</body>" + afterBody;
     return generatedHtml;
 }
 

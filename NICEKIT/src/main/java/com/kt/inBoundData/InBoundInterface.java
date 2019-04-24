@@ -260,14 +260,13 @@ public class InBoundInterface {
 				StringBuilder sbDic = new StringBuilder();
 				StringBuilder sbWord = new StringBuilder();
 				List<DicParam> dicList = e.getDicList();
-				for (DicParam item : dicList) {
-					if (sbDic.length() > 0)
-						sbDic.append("<br>");
-					if (sbWord.length() > 0)
-						sbWord.append("<br>");
-					sbDic.append(item.getDicName());
-					sbWord.append(item.getWordList());
-				}
+				sbDic.append(dicList.get(0).getDicName());
+				sbWord.append(dicList.get(0).getWordList());
+				/*
+				 * 명세 등록 UI 변경반영 필요 
+				 * for (DicParam item : dicList) {
+				 * sbDic.append(item.getDicName()); sbWord.append(item.getWordList()); }
+				 */
 				res.setDicNameList(sbDic.toString());
 				res.setWordList(sbWord.toString());
 			}

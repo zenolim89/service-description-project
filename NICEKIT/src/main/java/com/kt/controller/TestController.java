@@ -67,19 +67,5 @@ public class TestController extends BaseController{
 		throw new ServiceUnavailableException();
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value="/05")
-	public ResponseData<String> test05(){
-		
-		
-		RestClient client = new RestClient();
-		String uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro";
-		String resBody = client.get(uri);
-		
-		return successResponse(resBody);
-	}
-	
+
 }

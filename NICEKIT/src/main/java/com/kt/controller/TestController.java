@@ -15,54 +15,58 @@ import com.kt.controller.model.ResponseData;
 
 @RestController
 @RequestMapping("/test")
-public class TestController extends BaseController{
+public class TestController extends BaseController {
 
 	/**
 	 * successResponse() 테스트
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/01")
-	public ResponseData<Void> test01(){
+	@RequestMapping(value = "/01")
+	public ResponseData<Void> test01() {
 		return successResponse();
 	}
-	
-	
+
 	/**
 	 * successResponse(T data) 테스트
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/02")
-	public ResponseData<ResGetDomain> test02(){
-		
+	@RequestMapping(value = "/02")
+	public ResponseData<ResGetDomain> test02() {
+
 		ResGetDomain result = new ResGetDomain();
-		
+
 		List<String> domainList = new ArrayList<String>();
 		domainList.add("resort");
 		domainList.add("hotel");
 		domainList.add("shop");
 
 		result.setDomainList(domainList);
-		
+
 		return successResponse(result);
 	}
-	
+
 	/**
 	 * Exception 테스트 - Not Found URL
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/03")
-	public ResponseData<ResGetDomain> test03(){
-		
+	@RequestMapping(value = "/03")
+	public ResponseData<ResGetDomain> test03() {
+
 		throw new NotFoundUrlException();
 	}
-	
+
 	/**
 	 * Exception 테스트 - Service Unavailable
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/04")
-	public ResponseData<ResGetDomain> test04(){
-		
+	@RequestMapping(value = "/04")
+	public ResponseData<ResGetDomain> test04() {
+
 		throw new ServiceUnavailableException();
 	}
+
 }

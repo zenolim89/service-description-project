@@ -85,10 +85,6 @@ public class ExcelRead {
 				}
 			}
 
-//			 for(String key : format.keySet()) { 
-//				 System.out.println(String.format("키 : %s, 값 : %s", key, format.get(key)) );
-//				 }
-
 			ExcelUploadForm form = new ExcelUploadForm();
 
 			// 기본 정보
@@ -153,10 +149,12 @@ public class ExcelRead {
 
 		List<HttpParam> reqParams = new ArrayList<HttpParam>();
 
-		for (int j = 0; j < 5; j++) {
+		int loop = (end.getRow() - start.getRow()) - 1;
+
+		for (int j = 0; j < loop; j++) {
 
 			Row row = sheet.getRow(start.getRow() + j);
-			if (row == null)
+			if (row == null || ExcelCellRef.getValue(row.getCell(0)).equals(""))
 				continue;
 
 			if (!ExcelCellRef.getValue(row.getCell(0)).equals("Parameter")) {

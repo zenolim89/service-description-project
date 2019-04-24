@@ -57,45 +57,83 @@ public class SelectDataTo {
 
 		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
 
-		try {
+		for (Row r : rowList) {
 
-			for (Row r : rowList) {
+			DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
 
-				DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
+			desc.setComURL(r.getString("commurl"));
+			desc.setDomainId(r.getString("domainid"));
+			desc.setTestURL(r.getString("testurl"));
+			desc.setMethod(r.getString("method"));
+			desc.setDataType(r.getString("datatype"));
 
-				desc.setComURL(r.getString("commurl"));
-				desc.setDomainId(r.getString("domainid"));
-				desc.setTestURL(r.getString("testurl"));
-				desc.setMethod(r.getString("method"));
-				desc.setDataType(r.getString("datatype"));
+			desc.setToUrl(r.getString("servicelink"));
+			desc.setComURL(r.getString("commurl"));
+			desc.setTestURL(r.getString("testurl"));
+			desc.setServiceType(r.getString("servicetype"));
 
-				desc.setToUrl(r.getString("servicelink"));
-				desc.setServiceType(r.getString("servicetype"));
+			desc.setStrHeaderInfo(r.getString("headerinfo"));
+			desc.setStrReqSpec(r.getString("requestspec"));
+			desc.setStrReqStructure(r.getString("requestformat"));
+			desc.setStrResSpec(r.getString("responsespec"));
+			desc.setStrResStructure(r.getString("responseformat"));
+			desc.setStrDicList(r.getString("diclist"));
 
-				desc.setReqStructure((JSONArray) parser.parse(r.getString("requestformat")));
-				desc.setReqSpec((JSONArray) parser.parse(r.getString("requestspec")));
-				desc.setResStructure((JSONArray) parser.parse(r.getString("responseformat")));
-				desc.setResSpec((JSONArray) parser.parse(r.getString("responsespec")));
-				desc.setDicList((JSONArray) parser.parse(r.getString("diclist")));
-
-				resObj = enabler.discoverMatchingWord(desc, word);
-				resObj.put("resCode", "200");
-				resObj.put("resMsg", "성공");
-				resObj.put("toUrl", r.getString("servicelink"));
-				resObj.put("serviceType", r.getString("servicetype"));
-				if (resObj != null)
-					return resObj;
-			}
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
+			resObj = enabler.discoverMatchingWord(desc, word);
+			resObj.put("resCode", "200");
+			resObj.put("resMsg", "성공");
+			resObj.put("toUrl", r.getString("servicelink"));
+			resObj.put("serviceType", r.getString("servicetype"));
+			if (resObj != null)
+				return resObj;
 		}
 
 		cluster.close();
 
 		return resObj;
+	}
+
+	public DiscoveredServiceDESC selectServiceInfo(String keySpace, String tableName, String intentName) {
+
+		ServiceEnabler enabler = new ServiceEnabler();
+
+		Statement query = QueryBuilder.select().from(keySpace, tableName)
+				.where(QueryBuilder.eq("intentname", intentName)).allowFiltering();
+		ResultSet set = session.execute(query);
+
+		List<Row> rowList = set.all();
+
+		ArrayList<DiscoveredServiceDESC> resList = new ArrayList<DiscoveredServiceDESC>();
+
+		DiscoveredServiceDESC result = new DiscoveredServiceDESC();
+
+		for (Row r : rowList) {
+
+			DiscoveredServiceDESC desc = new DiscoveredServiceDESC();
+
+			desc.setComURL(r.getString("commurl"));
+			desc.setDomainId(r.getString("domainid"));
+			desc.setTestURL(r.getString("testurl"));
+			desc.setMethod(r.getString("method"));
+			desc.setDataType(r.getString("datatype"));
+
+			desc.setComURL(r.getString("commurl"));
+			desc.setTestURL(r.getString("testurl"));
+			desc.setServiceType(r.getString("servicetype"));
+
+			desc.setStrHeaderInfo(r.getString("headerinfo"));
+			desc.setStrReqSpec(r.getString("requestspec"));
+			desc.setStrReqStructure(r.getString("requestformat"));
+			desc.setStrResSpec(r.getString("responsespec"));
+			desc.setStrResStructure(r.getString("responseformat"));
+			desc.setStrDicList(r.getString("diclist"));
+
+			result = desc;
+		}
+
+		cluster.close();
+
+		return result;
 	}
 
 	/**

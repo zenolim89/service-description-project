@@ -16,6 +16,13 @@ public class DiscoveredServiceDESC {
 	String toUrl;
 	String serviceType;
 
+	String strHeaderInfo;
+	String strReqStructure;
+	String strReqSpec;
+	String strResStructure;
+	String strResSpec;
+	String strDicList;
+	
 	JSONArray headerInfo;
 	JSONArray reqStructure;
 	JSONArray reqSpec;
@@ -150,5 +157,60 @@ public class DiscoveredServiceDESC {
 	public void setResSpec(JSONArray resSpec) {
 		this.resSpec = resSpec;
 	}
+
+	
+	//++++++++++++++++++++++++++++++++
+	
+	
+	public String getStrHeaderInfo() {
+		return strHeaderInfo;
+	}
+
+	public void setStrHeaderInfo(String strHeaderInfo) {
+		this.strHeaderInfo = strHeaderInfo;
+	}
+
+	public String getStrReqStructure() {
+		return strReqStructure;
+	}
+
+	public void setStrReqStructure(String strReqStructure) {
+		this.strReqStructure = strReqStructure;
+	}
+
+	public String getStrReqSpec() {
+		return strReqSpec;
+	}
+
+	public void setStrReqSpec(String strReqSpec) {
+		this.strReqSpec = strReqSpec;
+	}
+
+	public String getStrResStructure() {
+		return strResStructure;
+	}
+
+	public void setStrResStructure(String strResStructure) {
+		this.strResStructure = strResStructure;
+	}
+
+	public String getStrResSpec() {
+		return strResSpec;
+	}
+
+	public void setStrResSpec(String strResSpec) {
+		this.strResSpec = strResSpec;
+	}
+
+	public String getStrDicList() {
+		return strDicList;
+	}
+
+	public void setStrDicList(String strDicList) {
+		this.strDicList = strDicList;
+	}
+	
+	
+	//++++++++++++++++++++++++++++++++
 
 }

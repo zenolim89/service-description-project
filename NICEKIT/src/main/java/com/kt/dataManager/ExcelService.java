@@ -15,6 +15,7 @@ public class ExcelService {
 
 		/* 엑셀 데이터 파싱 */
 		List<ExcelUploadForm> list = ExcelRead.read(option, domainName, domainId, specName);
+
 		InsertDataTo specIdInsertTo = new InsertDataTo();
 		specIdInsertTo.insertSpecIndexTo(specName, domainName);
 

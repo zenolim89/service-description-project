@@ -213,26 +213,22 @@ public class ExcelUploadForm {
 	}
 
 	public String getToJsonFormatDicList() {
-		JSONArray jsonList = new JSONArray();
-		jsonList.add(dicList);
+		JSONArray jsonList = JSONArray.fromObject(dicList);
 		return jsonList.toString();
 	}
 
 	public String getToJsonFormatHeader() {
-		JSONArray jsonList = new JSONArray();
-		jsonList.add(header);
+		JSONArray jsonList = JSONArray.fromObject(header);
 		return jsonList.toString();
 	}
 
 	public String getToJsonFormatReqParam() {
-		JSONArray jsonList = new JSONArray();
-		jsonList.add(reqParam);
+		JSONArray jsonList = JSONArray.fromObject(reqParam);
 		return jsonList.toString();
 	}
 
 	public String getToJsonFormatResParam() {
-		JSONArray jsonList = new JSONArray();
-		jsonList.add(resParam);
+		JSONArray jsonList = JSONArray.fromObject(resParam);
 		return jsonList.toString();
 	}
 

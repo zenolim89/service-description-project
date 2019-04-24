@@ -60,9 +60,6 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  *          sendTTSAPI(&quot;음성인식 서비스를 실행합니다. &quot;); } }); }
  */
 
-var options = {};
-var keyType = "GBOXDEVM";
-var apiKey = "VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==";
 function init() {
 
 	var pathName = location.pathname;
@@ -90,8 +87,8 @@ function init() {
 	console.log('specId : ' + specId);
 
 	options = {};
-	options.keytype = keytype;
-	options.apikey = apiKey;
+	options.keytype = 'GBOXDEVM';
+	options.apikey = 'VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==';
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
@@ -329,7 +326,7 @@ function SpeechINTRC(appId) {
 					parameter = extra.parameter['NE-PERIPHERAL'];
 				else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
 					parameter = extra.parameter['NE-TOURSPOT'];
-				svcReqFunction(appId, extra.actioncode, extra.parameter);
+				svcReqFunction(appId, extra.actioncode, parameter);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:

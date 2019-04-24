@@ -15,7 +15,6 @@ import org.json.simple.parser.ParseException;
 import com.kt.commonUtils.Constants;
 import com.kt.dataManager.JSONSerializerTo;
 
-
 public class TemplateConverter {
 	
 	private HashMap<String,ArrayList<String>> htmlWordListMap;
@@ -28,7 +27,6 @@ public class TemplateConverter {
 	}
 	
 	public ArrayList<String> getWordList(String _htmlName){
-		
 		return htmlWordListMap.get(_htmlName);
 	}
 	

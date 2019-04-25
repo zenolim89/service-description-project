@@ -3,6 +3,9 @@
  * @author zenolim <zenolim89@gmail.com>
  * @version 1.0.0
  */
+$.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
+	console.log('gigagenie.js loading...');
+});
 
 $.getScript('/NICEKIT/nicekit/js/common/RequestParam.js', function() {
 	console.log('RequestParam.js loading...');
@@ -438,24 +441,21 @@ function svcRespProcess() {
 		var resMsg = svcObj.obj['resMsg'];
 		var resUrl = svcObj.obj['resUrl'];
 
-		var text = resMsg[0];
-
 		//200일경우 tts
 		if (resCode == '200') {
-			sendTTS(text['eventplace'], resCode, resUrl);
+			sendTTS(resMsg, resCode, resUrl);
 		}
-		else if (resCode == '201') {
-
+		else if( resCode == '201'){
+			
 			var hostName = location.hostname;
 			var pathName = location.pathname;
 			var vendorNameSplit = pathName.split("/");
-			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
-
-			var newUrl = window.location.protocol + "//" + window.location.host
-						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
-
+			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length-2]);
+			
+			var newUrl = window.location.protocol + "//" + window.location.host + "/docbase/vendors/" + vendorName + "/"+ resUrl;
+			
 			alert(newUrl);
-
+			
 			window.location.href = newUrl;
 		}
 

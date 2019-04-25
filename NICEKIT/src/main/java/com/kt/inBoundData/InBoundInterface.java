@@ -460,7 +460,7 @@ public class InBoundInterface {
 			Map<String, Object> map = new HashMap<String, Object>();
 			//map.put("resCode", res.get("resCode").toString());
 			map.put("resCode", "200");
-			map.put("resMsg", result.getData());
+			map.put("resMsg", ((JSONObject)result.getData().get(0)).get("eventplace"));
 			map.put("resUrl", "none");
 			mv.addObject("obj", map);
 		}

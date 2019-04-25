@@ -40,14 +40,15 @@ public class JsonSpecSvc {
 	 * @param property
 	 * @return
 	 */
-	public JSONObject createReqFormat(String _target, String _spec, String word, String property) {
+	public JsonNode createReqFormat(String _target, String _spec, String word, String property) {
 
 		JsonParserSvc svc = new JsonParserSvc();
 
-		JSONObject target = svc.getJsonObject(_target);
+		JsonNode targetNode = svc.getJsonNode(_target.toString());
+		
 		JSONArray spec = svc.getJsonArray(_spec);
 
-		return this.createReqFormat(target, spec, word, property, _spec);
+		return this.createReqFormat(targetNode, spec, word, property, _spec);
 	}
 
 	/**
@@ -58,11 +59,11 @@ public class JsonSpecSvc {
 	 * @param property
 	 * @return
 	 */
-	public JSONObject createReqFormat(JSONObject target, JSONArray spec, String word, String property, String _spec) {
+	public JsonNode createReqFormat(JsonNode targetNode, JSONArray spec, String word, String property, String _spec) {
 
 		JsonParserSvc svc = new JsonParserSvc();
 
-		JsonNode targetNode = svc.getJsonNode(target.toString());
+		//JsonNode targetNode = svc.getJsonNode(target.toString());
 		List<JsonElementInfo> targetEleInfos = svc.getJsonElementList(targetNode.toString());
 		List<JsonElementInfo> specEleInfos = svc.getJsonElementList(spec.toString());
 
@@ -106,7 +107,7 @@ public class JsonSpecSvc {
 			svc.putAt(targetNode, jsonPrtExpr, word);
 		}
 
-		return svc.getJsonObject(targetNode.toString());
+		return targetNode;
 	}
 
 	/**

@@ -110,7 +110,7 @@ function init(_domain, _vendor, _spec,path) {
     	    	
     	    	ameInfo = curSpecInfo[i];
     	    	var diclist = ameInfo.intentInfo[0].dicList[0];
-    	    	var wordlist = diclist[0].wordList;
+    	    	var wordlist = diclist.wordList;
     	    	 jsonWordList = JSON.parse(wordlist);
     	    }
     	}
@@ -477,9 +477,9 @@ function addComponents(info) {
             var word = com.find(".text").val();
             
             //INFO SERA
-            console.log("word: " + word);
-            console.log("jsonWordList");
-            console.log(jsonWordList);
+            //console.log("word: " + word);
+            //console.log("jsonWordList");
+            //console.log(jsonWordList);
 
             
             //객실용품

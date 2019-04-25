@@ -55,14 +55,20 @@ public class WebAppService {
 		} else if (_word.equals("부여국악")) {
 			word = "부여국악";
 			word_id = "1258353";
-		} else if (_word.equals("휴지")) {
+		} else if (_word.equals("체중계")) {
 			word = "1";
-		} else if (_word.equals("칫솔")) {
+		} else if (_word.equals("이불")) {
 			word = "2";
-		} else if (_word.equals("치약")) {
+		} else if (_word.equals("공기청청기")) {
 			word = "3";
-		} else if (_word.equals("수건")) {
+		} else if (_word.equals("휴지")) {
 			word = "4";
+		} else if (_word.equals("슬리퍼")) {
+			word = "5";
+		} else if (_word.equals("가습기")) {
+			word = "6";
+		} else if (_word.equals("물컵")) {
+			word = "7";
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();

@@ -7,6 +7,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+
 import com.kt.commonUtils.Constants;
 import com.kt.controller.model.ResReqService;
 import com.kt.dataDao.SelectDataTo;
@@ -27,9 +30,9 @@ public class WebAppService {
 	 * @param word
 	 */
 	public ResReqService executeService(String keySpace, String tableName, String intentName, String property,
-			String word) {
+			String _word) {
 		property = "발화어휘";
-		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + tableName);
+		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + _word + " 서비스 사업장 구분자:" + tableName);
 
 		/* [Step1] DB 해당 조회 */
 		SelectDataTo selectTo = new SelectDataTo();
@@ -37,21 +40,40 @@ public class WebAppService {
 				intentName);
 
 		/* [Step2] Request 파라메터 변경 */
+		String word = "";
 		String word_id = "";
 
-		if (word.equals("을숙도")) {
+		if (_word.equals("을숙도")) {
+			word = "을숙도";
 			word_id = "2507834";
-		} else if (word.equals("영동난계")) {
+		} else if (_word.equals("영동난계")) {
+			word = "영동난계";
 			word_id = "1118680";
-		} else if (word.equals("가락몰")) {
+		} else if (_word.equals("가락몰")) {
+			word = "가락몰";
 			word_id = "2509701";
-		} else if (word.equals("부여국악")) {
+		} else if (_word.equals("부여국악")) {
+			word = "부여국악";
 			word_id = "1258353";
+		} else if (_word.equals("체중계")) {
+			word = "1";
+		} else if (_word.equals("이불")) {
+			word = "2";
+		} else if (_word.equals("공기청청기")) {
+			word = "3";
+		} else if (_word.equals("휴지")) {
+			word = "4";
+		} else if (_word.equals("슬리퍼")) {
+			word = "5";
+		} else if (_word.equals("가습기")) {
+			word = "6";
+		} else if (_word.equals("물컵")) {
+			word = "7";
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();
-		JSONObject temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word, "발화 어휘");
-		JSONObject param = svc.createReqFormat(temp.toString(), desc.getStrReqSpec(), word_id, "설정 값");
+		JsonNode temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word, "발화 어휘");
+		JsonNode param = svc.createReqFormat(temp.toString(), desc.getStrReqSpec(), word_id, "설정 값");
 
 		System.out.println("[ 변경된 Request Message ]");
 		System.out.println(param.toString());
@@ -62,7 +84,7 @@ public class WebAppService {
 		String response = "";
 
 		if (desc.getMethod().equals("POST")) {
-			System.out.println("NOT Support Method");
+			response = client.post(desc.getComURL(), desc.getHeaderInfo(), param.toString());
 		} else if (desc.getMethod().equals("GET")) {
 			response = client.get(desc.getComURL(), desc.getHeaderInfo(), param);
 		} else {

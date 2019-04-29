@@ -477,9 +477,9 @@ function addComponents(info) {
             var word = com.find(".text").val();
             
             //INFO SERA
-            console.log("word: " + word);
-            console.log("jsonWordList");
-            console.log(jsonWordList);
+            //console.log("word: " + word);
+            //console.log("jsonWordList");
+            //console.log(jsonWordList);
 
             
             //객실용품
@@ -824,7 +824,7 @@ function getGeneratedHtml() {
     // console.log(beforeBody);
     // console.log(afterBody);
 
-    var generatedHtml = beforeBody + " <body onload='init();'> " + bodyHtml + "</body>" + afterBody;
+    var generatedHtml = beforeBody + " <body onload='init()'> " + bodyHtml + "</body>" + afterBody;
     return generatedHtml;
 }
 

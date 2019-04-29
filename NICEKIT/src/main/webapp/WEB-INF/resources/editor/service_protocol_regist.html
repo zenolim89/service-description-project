@@ -91,14 +91,16 @@
             el.find("td:nth-child(4)").text(item.serviceType);
             el.find("td:nth-child(5)").text(item.serviceDesc);
             el.find("td:nth-child(6)").text(item.serviceCode);
-            el.find("td:nth-child(7)").text(item.intentName);
-            el.find("td:nth-child(8)").text(item.dicNameList);
-
+            if(item.intentName != null) el.find("td:nth-child(7)").text(item.intentName);
+            else el.find("td:nth-child(7)").text("");
+            if(item.dicNameList != null) el.find("td:nth-child(8)").text(item.dicNameList);
+            else el.find("td:nth-child(8)").text("");
+            
             var td9 = el.find("td:nth-child(9)");
             td9.attr("data-word", item.wordList);
 
             var wordList = JSON.parse(item.wordList);
-            if(wordList.length == 0) {
+            if(wordList == null || wordList.length == 0) {
                 td9.text("");
             } else if(wordList.length == 1) {
                 td9.html("<button class=\"btn_text\" type=\"button\" onclick='openWordListPopup(event)'>" + wordList[0] + "</button>");
@@ -109,6 +111,8 @@
 
             $("#fileContentTable tbody").append(el);
         }
+        
+        hidePopupReady();
     }
 
     function openWordListPopup(event) {
@@ -152,7 +156,33 @@
     function openSheet() {
         PopupCenter("/NICEKIT/resources/view/sheet.html", "인벤트/어휘 등록", 940, 860);
     }
+    
+    function showPopupReady(msg, desc) {
+        $("#popup_ready .popup_body .title").text(msg);
+        $("#popup_ready .popup_body .desc").text(desc);
+
+        $("#popup_ready").bPopup(
+            {
+                modalClose: false
+            }
+        );
+    }
+    function hidePopupReady() {
+        $("#popup_ready").bPopup().close();
+    }
 </script>
+
+<div class="popup popup_ready" id="popup_ready">
+    <div class="popup_head">
+        <p class="title">알림</p>
+    </div>
+    <div class="popup_body">
+        <p class="title">“<span class="new_vendor_name"></span>” 서비스 사업장을 생성 중입니다.</p>
+        <p class="desc red">*최장 3분 정도의 시간이 소요됩니다.</p>
+        <div class="load"></div>
+    </div>
+</div>
+
 
 <div id="skipToContent">
     <a href="#header">대메뉴 바로가기</a>
@@ -222,7 +252,7 @@
                                                                 <input type="file" class="hidFile" name="uploadFile" placeholder="선택된 파일 없음" title="파일 선택"><!-- disabled : disabled -->
                                                                 <span class="comText unselect" title=""></span>
                                                                 <em class="sbtn" style="background:#000;">파일 선택</em>
-                                                                <em class="sbtn" onclick="uploading = true; document.getElementById('uploadForm').submit(); return false;" style="margin-right:-100px; background:#384e9c;">업로드</em>
+                                                                <em class="sbtn" onclick="uploading = true; showPopupReady('잠시만 기다려주세요...', ''); document.getElementById('uploadForm').submit(); return false;" style="margin-right:-100px; background:#384e9c;">업로드</em>
                                                             </label>
                                                         </div>
                                                         <p class="desc left">* 우측 엑셀 약식을 다운받아서, 일괄적으로 파일을 등록 할 수 있습니다. <br>* 중복된 서비스 명세 리스트가 있을 경우 새로운 정보로 업데이트 됩니다.</p>

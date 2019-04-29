@@ -32,6 +32,8 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  * @module SvcInterface/GiGAGenieAPI
  */
 
+var Authorization = '';
+
 /**
  * @method init
  * @param {String} [keytype="GBOXDEVM"] - 개발(GBOXDEVM) 또는 상용(GBOXCOMM) 키 종류 입력
@@ -59,9 +61,9 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  *          console.log('Initialize Success'); alert(&quot;init 실행 완료&quot;);
  *          sendTTSAPI(&quot;음성인식 서비스를 실행합니다. &quot;); } }); }
  */
-
 function init() {
 
+	var specId;
 	var pathName = location.pathname;
 	var vendorNameSplit = pathName.split("/");
 	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
@@ -70,16 +72,12 @@ function init() {
 	console.log('vendorNameSplit : ' + vendorNameSplit);
 	console.log('vendorName : ' + vendorName);
 
-	var specId;
-
 	$.ajax({
 			url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
 			type : 'GET',
 			async : false,
 			success : function(data) {
-
 				console.log(data);
-
 				specId = data['specId'];
 			}
 	});
@@ -93,7 +91,72 @@ function init() {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
 			alert("[DEBUG] init 실행 완료");
+
+			if (getPageName() != 'welcome_login.html')
+				getAuth(vendorName);
 			SpeechINTRC(specId);
+		}
+	});
+}
+
+/**
+ * 페이지 이름 가져오기
+ * @return pageName 현재 페이지 이름
+ */
+function getPageName() {
+	var pageName = "";
+	var tempPageName = window.location.href;
+	var strPageName = tempPageName.split("/");
+	// pageName = strPageName[strPageName.length-1].split("?")[0];
+	pageName = strPageName[strPageName.length - 1];
+	console.log("pageName  : " + pageName);
+	return pageName;
+}
+
+/** Get Auth Key */
+function getAuth(vendorName) {
+	var options = {};
+	gigagenie.appinfo.getAuthKey(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			alert("Key value is " + extra.authkey);
+			alert("SetTime value is " + extra.settime);
+			alert("DueTime value is " + extra.duetime);
+		}
+		else if (result_cd === 404) {
+			alert("Key is not set.");
+			var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + "/welcome_login.html";
+			alert(newUrl);
+			window.location.href = newUrl;
+		}
+		else {
+			alert("getAuthKey is fail.");
+		}
+	});
+}
+
+/** Set Auth key */
+function setAuth(id, pw) {
+	var options = {};
+	options.authkey = 'asdasldkjalskdasd';
+	options.duetime = '20190519184202';
+
+	var pathName = location.pathname;
+	var vendorNameSplit = pathName.split("/");
+	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
+
+	// ajax 호출 및 authkey 리턴
+
+	gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			alert("AuthKey Set is Success");
+			var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + "/main.html";
+			alert(newUrl);
+			window.location.href = newUrl;
+		}
+		else {
+			alert("AuthKey Set is fail.");
 		}
 	});
 }
@@ -326,7 +389,7 @@ function SpeechINTRC(appId) {
 					parameter = extra.parameter['NE-PERIPHERAL'];
 				else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
 					parameter = extra.parameter['NE-TOURSPOT'];
-				svcReqFunction(appId, extra.actioncode, extra.parameter);
+				svcReqFunction(appId, extra.actioncode, parameter);
 				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:

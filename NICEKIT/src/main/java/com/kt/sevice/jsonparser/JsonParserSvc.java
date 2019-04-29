@@ -353,6 +353,19 @@ public class JsonParserSvc {
 
 		return jsonArray;
 	}
+	
+//	public List<Map<String, String>> getListMapFromJsonArray(JSONArray jsonArray) {
+//
+//		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+//
+//		if(jsonArray != null) {
+//			int jsonSize = jsonArray.size();
+//			for(int i=0; i<jsonSize; i++) {
+//				Map<String, String> map = 
+//			}
+//		}
+//		return result;
+//	}
 
 	/***
 	 * ========= Start [ getJsonElementList(String str) ] ======================

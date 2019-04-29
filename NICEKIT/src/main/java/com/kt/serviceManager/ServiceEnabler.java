@@ -19,7 +19,8 @@ public class ServiceEnabler {
 		
 		JSONObject res = new JSONObject();
 		
-		JSONArray arr = (JSONArray) desc.getDicList().get(0);
+		JSONArray arr = (JSONArray) desc.getDicList();
+		//JSONArray arr = (JSONArray) desc.getDicList().get(0);  //org
 		
 		System.out.println(arr.toString());
 

@@ -431,41 +431,41 @@ public class InBoundInterface {
 		return resObj;
 	}
 
-	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
-	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
-			@RequestParam String name) {
-		SelectDataTo selectTo = new SelectDataTo();
-		JSONObject res = new JSONObject();
-		ModelAndView mv = new ModelAndView("jsonView");
-		String keySpace = "vendorsvcks";
-		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
-		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
-		
-		System.out.println(String.format("jsonObject : [%s]", res.toString()));
-		
-		//if (res.containsKey("serviceType")) {
-		//리다이렉션
-		
-		if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
-				Map<String, String> map = new HashMap<String, String>();
-				//map.put("resCode", res.get("resCode").toString());
-				map.put("resCode", "201");
-				map.put("resMsg", res.get("resMsg").toString());
-				map.put("resUrl", res.get("toUrl").toString());
-				mv.addObject("obj", map);
-		} else {
-			
-			ResReqService result = webAppSvc.executeService("", name, intentName, "", word);
-			
-			Map<String, Object> map = new HashMap<String, Object>();
-			//map.put("resCode", res.get("resCode").toString());
-			map.put("resCode", "200");
-			map.put("resMsg", ((JSONObject)result.getData().get(0)).get("eventplace"));
-			map.put("resUrl", "none");
-			mv.addObject("obj", map);
-		}
-		return mv;
-	}
+//	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
+//	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
+//			@RequestParam String name) {
+//		SelectDataTo selectTo = new SelectDataTo();
+//		JSONObject res = new JSONObject();
+//		ModelAndView mv = new ModelAndView("jsonView");
+//		String keySpace = "vendorsvcks";
+//		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
+//		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
+//		
+//		System.out.println(String.format("jsonObject : [%s]", res.toString()));
+//		
+//		//if (res.containsKey("serviceType")) {
+//		//리다이렉션
+//		
+//		if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
+//				Map<String, String> map = new HashMap<String, String>();
+//				//map.put("resCode", res.get("resCode").toString());
+//				map.put("resCode", "201");
+//				map.put("resMsg", res.get("resMsg").toString());
+//				map.put("resUrl", res.get("toUrl").toString());
+//				mv.addObject("obj", map);
+//		} else {
+//			
+//			ResReqService result = webAppSvc.executeService("", name, intentName, "", word);
+//			
+//			Map<String, Object> map = new HashMap<String, Object>();
+//			//map.put("resCode", res.get("resCode").toString());
+//			map.put("resCode", "200");
+//			map.put("resMsg", ((JSONObject)result.getData().get(0)).get("eventplace"));
+//			map.put("resUrl", "none");
+//			mv.addObject("obj", map);
+//		}
+//		return mv;
+//	}
 
 	@RequestMapping(value = "/svcCode", method = RequestMethod.POST)
 	public JSONObject getServiceCode(InputStream body) {

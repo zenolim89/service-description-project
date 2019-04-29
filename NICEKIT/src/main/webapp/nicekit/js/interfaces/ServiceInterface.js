@@ -138,14 +138,25 @@ function getAuth(vendorName) {
 /** Set Auth key */
 function setAuth(id, pw) {
 	var options = {};
-	options.authkey = 'asdasldkjalskdasd';
-	options.duetime = '20190519184202';
+// options.authkey = 'asdasldkjalskdasd';
+// options.duetime = '20190519184202';
 
 	var pathName = location.pathname;
 	var vendorNameSplit = pathName.split("/");
 	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
 
-	// ajax 호출 및 authkey 리턴
+	// ajax 호출 및 auth key 리턴
+	var params = "id=" + id + "pwd=" + pw;
+	$.ajax({
+			url : 'http://222.107.124.9:8080/NICEKIT/auth',
+			type : 'POST',
+			data : param,
+			success : function(data) {
+				alert(data);
+				options.authkey = data['serviceId'];
+				options.duetime = '20190519184202';
+			}
+	});
 
 	gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {

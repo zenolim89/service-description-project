@@ -26,9 +26,9 @@ public class WebAppController extends BaseController{
 	 */
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
 	public ResponseData<ResReqService> reqService(@RequestParam String intentName, @RequestParam String word,
-			@RequestParam String name) {
+			@RequestParam String name, @RequestParam String token) {
 		
-		ResReqService result = webAppSvc.executeService("", name, intentName, "", word);
+		ResReqService result = webAppSvc.executeService("", name, intentName, "", word, token);
 
 		return successResponse(result);
 	}

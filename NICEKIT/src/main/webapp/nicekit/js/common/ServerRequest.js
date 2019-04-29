@@ -445,17 +445,18 @@ function svcRespProcess() {
 		if (resCode == '200') {
 			sendTTS(resMsg, resCode, resUrl);
 		}
-		else if( resCode == '201'){
-			
+		else if (resCode == '201') {
+
 			var hostName = location.hostname;
 			var pathName = location.pathname;
 			var vendorNameSplit = pathName.split("/");
-			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length-2]);
-			
-			var newUrl = window.location.protocol + "//" + window.location.host + "/docbase/vendors/" + vendorName + "/"+ resUrl;
-			
+			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
+
+			var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
+
 			alert(newUrl);
-			
+
 			window.location.href = newUrl;
 		}
 

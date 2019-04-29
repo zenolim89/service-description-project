@@ -418,7 +418,7 @@ function createXMLHttpSvcReq() {
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
 	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
-				+ "=" + parameter + "&" + "name" + "=" + appId);
+				+ "=" + parameter + "&" + "name" + "=" + appId + "&" + "token" + "=" +Authorization);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
@@ -442,11 +442,10 @@ function svcRespProcess() {
 		var resUrl = svcObj.obj['resUrl'];
 
 		//200일경우 tts
+		//전환 + a
 		if (resCode == '200') {
-			sendTTS(resMsg, resCode, resUrl);
-		}
-		else if (resCode == '201') {
-
+			//sendTTS(resMsg, resCode, resUrl);
+			
 			var hostName = location.hostname;
 			var pathName = location.pathname;
 			var vendorNameSplit = pathName.split("/");
@@ -456,7 +455,29 @@ function svcRespProcess() {
 						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
 
 			alert(newUrl);
+			
+			if( resUrl.toString() == "none"){
+				sendTTS(resMsg, resCode, resUrl);
+			}
+			else{	
+				sendTTS(resMsg, resCode, resUrl);
+				setTimeout(function(){
+					window.location.href = newUrl;
+					}, 5000);
+			}
+		}
+		//단순 전환
+		else if (resCode == '201') {
+		
+			var hostName = location.hostname;
+			var pathName = location.pathname;
+			var vendorNameSplit = pathName.split("/");
+			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
 
+			var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
+			
+			alert(newUrl);
 			window.location.href = newUrl;
 		}
 

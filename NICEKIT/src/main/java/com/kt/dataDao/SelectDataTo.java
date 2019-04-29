@@ -91,6 +91,9 @@ public class SelectDataTo {
 			resObj.put("resMsg", "성공");
 			resObj.put("toUrl", r.getString("servicelink"));
 			resObj.put("serviceType", r.getString("servicetype"));
+			resObj.put("testurl", r.getString("testurl"));
+			
+			System.out.println(r.toString());
 			
 			if (resObj != null)
 				return resObj;

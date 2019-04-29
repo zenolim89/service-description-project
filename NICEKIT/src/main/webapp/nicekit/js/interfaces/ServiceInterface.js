@@ -92,8 +92,11 @@ function init() {
 			console.log('Initialize Success');
 			alert("[DEBUG] init 실행 완료");
 
-			if (getPageName() != 'welcome_login.html')
+			if (getPageName() == 'welcome_login.html')
+				delAuth();
+			else
 				getAuth(vendorName);
+
 			SpeechINTRC(specId);
 		}
 	});
@@ -118,9 +121,8 @@ function getAuth(vendorName) {
 	var options = {};
 	gigagenie.appinfo.getAuthKey(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			alert("Key value is " + extra.authkey);
-			alert("SetTime value is " + extra.settime);
-			alert("DueTime value is " + extra.duetime);
+			alert("[DEBUG] Key value is " + extra.authkey);
+			Authorization = extra.authkey;
 		}
 		else if (result_cd === 404) {
 			alert("Key is not set.");
@@ -130,44 +132,60 @@ function getAuth(vendorName) {
 			window.location.href = newUrl;
 		}
 		else {
-			alert("getAuthKey is fail.");
+			alert("[DEBUG] getAuthKey is fail.");
 		}
 	});
 }
 
 /** Set Auth key */
-function setAuth(id, pw) {
-	var options = {};
-// options.authkey = 'asdasldkjalskdasd';
-// options.duetime = '20190519184202';
+function setAuth(user_id, user_pw) {
 
 	var pathName = location.pathname;
 	var vendorNameSplit = pathName.split("/");
 	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
 
 	// ajax 호출 및 auth key 리턴
-	var params = "id=" + id + "pwd=" + pw;
 	$.ajax({
-			url : 'http://222.107.124.9:8080/NICEKIT/auth',
+			url : '/NICEKIT/auth',
 			type : 'POST',
-			data : param,
-			success : function(data) {
-				alert(data);
-				options.authkey = data['serviceId'];
+			data : {
+					id : user_id,
+					pwd : user_pw
+			},
+			success : function(result) {
+				alert("[DEBUG] svcAccsToken 수신: "+ result['resltData']['svcAccsToken']);
+
+				var options = {};
+				//options.authkey = 'asdasldkjalskdasd';
+				options.authkey = result['resltData']['svcAccsToken'];
 				options.duetime = '20190519184202';
+
+				gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
+					if (result_cd === 200) {
+						alert("[DEBUG] AuthKey Set is Success");
+						var newUrl = window.location.protocol + "//" + window.location.host
+									+ "/docbase/vendors/" + vendorName + "/main.html";
+						alert(newUrl);
+						window.location.href = newUrl;
+					}
+					else {
+						alert("[DEBUG] AuthKey Set is fail.");
+					}
+				});
 			}
 	});
+}
 
-	gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
+/** Delete Auth key */
+// callback 방식
+function delAuth() {
+	var options = {};
+	gigagenie.appinfo.delAuthKey(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			alert("AuthKey Set is Success");
-			var newUrl = window.location.protocol + "//" + window.location.host
-						+ "/docbase/vendors/" + vendorName + "/main.html";
-			alert(newUrl);
-			window.location.href = newUrl;
+			alert("AuthKey Deleting is Success");
 		}
 		else {
-			alert("AuthKey Set is fail.");
+			alert("AuthKey Deleting is fail.");
 		}
 	});
 }

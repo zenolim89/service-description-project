@@ -38,6 +38,7 @@ import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.dataManager.UtilFile;
+import com.kt.service.httpclient.RestClient;
 import com.kt.serviceManager.WebAppService;
 
 
@@ -407,7 +408,11 @@ public class InBoundInterface {
 
 	/** set auth */
 	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	public JSONObject reqAuth(InputStream body) {
+	public JSONObject reqAuth(
+			//InputStream body
+			@RequestParam String id, @RequestParam String pwd
+			) {
+		/*
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
@@ -421,7 +426,22 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-		return res;
+		*/
+		
+		RestClient restClient = new RestClient();
+		
+		HashMap<String,String> headerMap = new HashMap<>();
+		HashMap<String,String> bodyMap = new HashMap<>();
+		
+		headerMap.put("Content-Type", "application/json");
+		
+		bodyMap.put("userId", id);
+		bodyMap.put("pwd",pwd);
+		bodyMap.put("serviceId","A7077233106");
+		
+		JSONObject jsonObject = restClient.doJSONBodyPost(" http://125.159.61.195:50014/api/v1/auth/login", headerMap, bodyMap);
+		
+		return jsonObject;
 	}
 
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)

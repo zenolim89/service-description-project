@@ -3,12 +3,20 @@ package com.kt.service.httpclient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.json.simple.JSONArray;
+
+import net.sf.json.JSON;
 
 public class RestClient {
 
@@ -118,4 +126,88 @@ public class RestClient {
 		return null;
 	}
 
+	public JSONObject doJSONBodyPost(String _url, HashMap<String,String> _headerMap, HashMap<String,String> _paramMap) {
+
+		StringBuilder urlBuilder = new StringBuilder(_url);
+
+		try {
+
+			URL url = new URL(urlBuilder.toString());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+			conn.setRequestMethod("POST");
+
+			this.setHeader(conn, _headerMap);
+			this.setJSONBody(conn.getOutputStream(), _paramMap);
+			
+			JSONObject jsonObject = this.getResponseJSON(conn);
+			
+			conn.disconnect();
+
+			return jsonObject;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private void setHeader(HttpURLConnection _connection, HashMap<String,String> _headerMap) {
+		
+		_connection.setDoOutput(true);
+		
+		for( String key : _headerMap.keySet()) {
+			
+			_connection.setRequestProperty(key, _headerMap.get(key));
+			
+		}
+		
+	}
+	
+	private void setJSONBody(OutputStream _outputStream, HashMap<String,String> _headerMap) {
+		
+		JSONObject jsonObejct = new JSONObject(_headerMap);
+		
+		try {
+			_outputStream.write(jsonObejct.toString().getBytes("UTF-8"));
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				_outputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private JSONObject getResponseJSON(HttpURLConnection _connection) {
+
+		String resultString=null;
+		JSONObject jsonObject = null;
+		
+		try {
+			BufferedReader rd;
+			rd = new BufferedReader(new InputStreamReader(_connection.getInputStream(), "UTF-8"));
+
+			StringBuilder sb = new StringBuilder();
+
+			String line;
+			while ((line = rd.readLine()) != null) {
+				sb.append(line);
+			}
+
+			rd.close();
+			resultString = sb.toString();
+			jsonObject = (JSONObject) new JSONParser().parse(resultString);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jsonObject;
+	}
 }

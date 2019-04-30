@@ -54,19 +54,19 @@ public class WebAppService {
 			word = "부여국악";
 			word_id = "1258353";
 		} else if (_word.equals("체중계")) {
-			word = "1";
+			word_id = "1";
 		} else if (_word.equals("이불")) {
-			word = "2";
+			word_id = "2";
 		} else if (_word.equals("공기청청기")) {
-			word = "3";
+			word_id = "3";
 		} else if (_word.equals("휴지")) {
-			word = "4";
+			word_id = "4";
 		} else if (_word.equals("슬리퍼")) {
-			word = "5";
+			word_id = "5";
 		} else if (_word.equals("가습기")) {
-			word = "6";
+			word_id = "6";
 		} else if (_word.equals("물컵")) {
-			word = "7";
+			word_id = "7";
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();

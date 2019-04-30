@@ -33,6 +33,7 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  */
 
 var Authorization = '';
+var specId = null;
 
 /**
  * @method init
@@ -63,7 +64,7 @@ var Authorization = '';
  */
 function init() {
 
-	var specId;
+	//var specId;
 	var pathName = location.pathname;
 	var vendorNameSplit = pathName.split("/");
 	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
@@ -71,16 +72,21 @@ function init() {
 	console.log('pathName : ' + pathName);
 	console.log('vendorNameSplit : ' + vendorNameSplit);
 	console.log('vendorName : ' + vendorName);
+	
+	alert(' pathName : ' + pathName);
+	alert( 'vendorName : ' + vendorName);
 
-	$.ajax({
-			url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
-			type : 'GET',
-			async : false,
-			success : function(data) {
-				console.log(data);
-				specId = data['specId'];
-			}
-	});
+	if( specId == null){
+		$.ajax({
+				url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
+				type : 'GET',
+				async : false,
+				success : function(data) {
+					console.log(data);
+					specId = data['specId'];
+				}
+		});
+	}
 
 	console.log('specId : ' + specId);
 

@@ -417,8 +417,13 @@ function createXMLHttpSvcReq() {
  */
 function svcReqFunction(appId, intent, parameter) {
 	createXMLHttpSvcReq();
-	SvcRequest.open('GET', '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
-				+ "=" + parameter + "&" + "name" + "=" + appId + "&" + "token" + "=" +Authorization);
+	
+	var requestUrl = '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
+	+ "=" + parameter + "&" + "name" + "=" + appId + "&" + "token" + "=" +Authorization;
+	
+	alert(requestUrl);
+	
+	SvcRequest.open('GET', requestUrl);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
 	SvcRequest.send(null);
 	SvcRequest.onreadystatechange = svcRespProcess;
@@ -447,7 +452,7 @@ function svcRespProcess() {
 		var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
 
 		var newUrl = window.location.protocol + "//" + window.location.host
-					+ "/docbase/vendors/" + vendorName + "/" + resUrl;
+					+ "/docbase/vendors/" + vendorName + resUrl;
 
 		alert(newUrl);
 		

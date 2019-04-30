@@ -59,11 +59,11 @@ public class WebAppService {
 			
 			HotelWordId hotelWordId = new HotelWordId();
 			word_id = hotelWordId.getWordId(_word);
-			
+			word = _word;
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();
-		JsonNode temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word_id, "발화 어휘");
+		JsonNode temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word, "발화 어휘");
 		JsonNode param = svc.createReqFormat(temp.toString(), desc.getStrReqSpec(), word_id, "설정 값");
 
 		System.out.println("[ 변경된 Request Message ]");

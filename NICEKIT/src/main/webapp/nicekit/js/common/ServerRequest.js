@@ -441,21 +441,19 @@ function svcRespProcess() {
 		var resMsg = svcObj.obj['resMsg'];
 		var resUrl = svcObj.obj['resUrl'];
 
+		var hostName = location.hostname;
+		var pathName = location.pathname;
+		var vendorNameSplit = pathName.split("/");
+		var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
+
+		var newUrl = window.location.protocol + "//" + window.location.host
+					+ "/docbase/vendors/" + vendorName + "/" + resUrl;
+
+		alert(newUrl);
+		
 		//200일경우 tts
 		//전환 + a
 		if (resCode == '200') {
-			//sendTTS(resMsg, resCode, resUrl);
-			
-			var hostName = location.hostname;
-			var pathName = location.pathname;
-			var vendorNameSplit = pathName.split("/");
-			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
-
-			var newUrl = window.location.protocol + "//" + window.location.host
-						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
-
-			alert(newUrl);
-			
 			if( resUrl.toString() == "none"){
 				sendTTS(resMsg, resCode, resUrl);
 			}
@@ -468,16 +466,6 @@ function svcRespProcess() {
 		}
 		//단순 전환
 		else if (resCode == '201') {
-		
-			var hostName = location.hostname;
-			var pathName = location.pathname;
-			var vendorNameSplit = pathName.split("/");
-			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
-
-			var newUrl = window.location.protocol + "//" + window.location.host
-						+ "/docbase/vendors/" + vendorName + "/" + resUrl;
-			
-			alert(newUrl);
 			window.location.href = newUrl;
 		}
 

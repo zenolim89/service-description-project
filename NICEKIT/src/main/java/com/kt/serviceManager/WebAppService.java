@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.kt.commonUtils.Constants;
 import com.kt.controller.model.ResReqService;
+import com.kt.data.model.HotelWordId;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataForms.HttpParam;
@@ -53,24 +54,16 @@ public class WebAppService {
 		} else if (_word.equals("부여국악")) {
 			word = "부여국악";
 			word_id = "1258353";
-		} else if (_word.equals("체중계")) {
-			word = "1";
-		} else if (_word.equals("이불")) {
-			word = "2";
-		} else if (_word.equals("공기청청기")) {
-			word = "3";
-		} else if (_word.equals("휴지")) {
-			word = "4";
-		} else if (_word.equals("슬리퍼")) {
-			word = "5";
-		} else if (_word.equals("가습기")) {
-			word = "6";
-		} else if (_word.equals("물컵")) {
-			word = "7";
+		}
+		else {
+			
+			HotelWordId hotelWordId = new HotelWordId();
+			word_id = hotelWordId.getWordId(_word);
+			
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();
-		JsonNode temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word, "발화 어휘");
+		JsonNode temp = svc.createReqFormat(desc.getStrReqStructure(), desc.getStrReqSpec(), word_id, "발화 어휘");
 		JsonNode param = svc.createReqFormat(temp.toString(), desc.getStrReqSpec(), word_id, "설정 값");
 
 		System.out.println("[ 변경된 Request Message ]");

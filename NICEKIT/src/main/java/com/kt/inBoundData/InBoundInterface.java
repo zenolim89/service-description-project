@@ -435,10 +435,18 @@ public class InBoundInterface {
 		
 		headerMap.put("Content-Type", "application/json");
 		
-		//bodyMap.put("userId", id);
-		//bodyMap.put("pwd",pwd);
-		bodyMap.put("userId", "B2B_0409016");
-		bodyMap.put("pwd","new1234!");
+		bodyMap.put("userId", id);
+		bodyMap.put("pwd",pwd);
+		
+		//나이스kit 관련 테스트
+		if( id.toUpperCase().equals("NICEKIT")) {
+			bodyMap.put("userId", "B2B_0409016");
+		}
+		
+		if( pwd.toUpperCase().equals("1234")) {
+			bodyMap.put("pwd","new1234!");
+		}
+		
 		bodyMap.put("serviceId","A7077233106");
 		
 		JSONObject jsonObject = restClient.doJSONBodyPost(" http://125.159.61.195:50014/api/v1/auth/login", headerMap, bodyMap);
@@ -470,7 +478,7 @@ public class InBoundInterface {
 		
 		System.out.println(String.format("testurl : [%s]", res.get("testurl")));
 		 
-		if (res.get("testurl") == null || res.get("testurl").toString().trim().length() == 0){
+		if (res.get("testurl") == null || res.get("testurl").toString().toUpperCase().equals("TEST") || res.get("testurl").toString().trim().length() == 0){
 				Map<String, String> map = new HashMap<String, String>();
 				//map.put("resCode", res.get("resCode").toString());
 				map.put("resCode", "201");

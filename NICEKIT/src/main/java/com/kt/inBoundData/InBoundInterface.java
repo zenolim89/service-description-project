@@ -453,7 +453,7 @@ public class InBoundInterface {
 
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
 	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
-			@RequestParam String name) {
+			@RequestParam String name, @RequestParam String token) {
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
 		ModelAndView mv = new ModelAndView("jsonView");
@@ -475,12 +475,19 @@ public class InBoundInterface {
 				mv.addObject("obj", map);
 		} else {
 			
-			ResReqService result = webAppSvc.executeService("", name, intentName, "", word);
+			ResReqService result = webAppSvc.executeService("", name, intentName, "", word, token);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			//map.put("resCode", res.get("resCode").toString());
 			map.put("resCode", "200");
-			map.put("resMsg", ((JSONObject)result.getData().get(0)).get("eventplace"));
+			if(intentName.equals("HotelTourInfo")) {
+				map.put("resMsg", ((JSONObject)result.getData()).get("eventplace"));
+			}else if(intentName.equals("HotelAmenityItem")) {
+				map.put("resMsg", ((JSONObject)result.getData()).get("ttsMsg"));
+			}else {
+				map.put("resMsg", "");
+			}
+			
 			map.put("resUrl", "none");
 			mv.addObject("obj", map);
 		}

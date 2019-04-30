@@ -1,33 +1,43 @@
 package com.kt.dataForms;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.json.simple.JSONArray;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DiscoveredServiceDESC {
 
-	String domainId;
+	private String domainId;
 
-	String interfaceType;
-	String serviceCode;
-	String dataType;
-	String protType;
-	String comURL;
-	String testURL;
-	String method;
-	String toUrl;
-	String serviceType;
+	private String interfaceType;
+	private String serviceCode;
+	private String dataType;
+	private String protType;
+	private String comURL;
+	private String testURL;
+	private String method;
+	private String toUrl;
+	private String serviceType;
 
-	String strHeaderInfo;
-	String strReqStructure;
-	String strReqSpec;
-	String strResStructure;
-	String strResSpec;
-	String strDicList;
+	private String strHeaderInfo;
+	private String strReqStructure;
+	private String strReqSpec;
+	private String strResStructure;
+	private String strResSpec;
+	private String strDicList;
 	
-	JSONArray headerInfo;
-	JSONArray reqStructure;
-	JSONArray reqSpec;
-	JSONArray resStructure;
-	JSONArray resSpec;
+	private List<HttpParam> header;
+	
+//	JSONArray headerInfo;
+//	JSONArray reqStructure;
+//	JSONArray reqSpec;
+//	JSONArray resStructure;
+//	JSONArray resSpec;
 	JSONArray dicList;
 
 	public void setToUrl(String url) {
@@ -118,50 +128,61 @@ public class DiscoveredServiceDESC {
 		this.method = method;
 	}
 
-	public JSONArray getHeaderInfo() {
-		return headerInfo;
+	public List<HttpParam> getHeader() {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			header = mapper.readValue(strHeaderInfo, new TypeReference<List<HttpParam>>() {});
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return header;
 	}
 
-	public void setHeaderInfo(JSONArray headerInfo) {
-		this.headerInfo = headerInfo;
-	}
 
-	public JSONArray getReqStructure() {
-		return reqStructure;
-	}
-
-	public void setReqStructure(JSONArray reqStructure) {
-		this.reqStructure = reqStructure;
-	}
-
-	public JSONArray getReqSpec() {
-		return reqSpec;
-	}
-
-	public void setReqSpec(JSONArray reqSpec) {
-		this.reqSpec = reqSpec;
-	}
-
-	public JSONArray getResStructure() {
-		return resStructure;
-	}
-
-	public void setResStructure(JSONArray resStructure) {
-		this.resStructure = resStructure;
-	}
-
-	public JSONArray getResSpec() {
-		return resSpec;
-	}
-
-	public void setResSpec(JSONArray resSpec) {
-		this.resSpec = resSpec;
-	}
-
+//	public JSONArray getReqStructure() {
+//		return reqStructure;
+//	}
+//
+//	public void setReqStructure(JSONArray reqStructure) {
+//		this.reqStructure = reqStructure;
+//	}
+//
+//	public JSONArray getReqSpec() {
+//		return reqSpec;
+//	}
+//
+//	public void setReqSpec(JSONArray reqSpec) {
+//		this.reqSpec = reqSpec;
+//	}
+//
+//	public JSONArray getResStructure() {
+//		return resStructure;
+//	}
+//
+//	public void setResStructure(JSONArray resStructure) {
+//		this.resStructure = resStructure;
+//	}
+//
+//	public JSONArray getResSpec() {
+//		return resSpec;
+//	}
+//
+//	public void setResSpec(JSONArray resSpec) {
+//		this.resSpec = resSpec;
+//	}
+//
 	
 	//++++++++++++++++++++++++++++++++
 	
 	
+
+
 	public String getStrHeaderInfo() {
 		return strHeaderInfo;
 	}

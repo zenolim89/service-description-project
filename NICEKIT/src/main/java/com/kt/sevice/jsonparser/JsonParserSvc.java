@@ -270,21 +270,14 @@ public class JsonParserSvc {
 	 * @param source      JSON
 	 * @param entityNames Json Key 리스트
 	 */
-	public List<Map<String, String>> searchForEntitys(String source, List<String> fieldNames) {
+	public Map<String, String> searchForEntitys(String source, List<String> fieldNames) {
 
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		Map<String, String> result = new HashMap<String, String>();
 
 		for (String fieldName : fieldNames) {
-			List<Map<String, String>> temp = this.searchForEntity(source, fieldName);
+			Map<String, String> temp = this.searchForEntity(source, fieldName);
 			if (!temp.isEmpty()) {
-				result.addAll(temp);
-			}
-		}
-
-		/* FOR TEST */
-		if (!result.isEmpty()) {
-			for (Map<String, String> map : result) {
-				System.out.println(map.toString());
+				result.putAll(temp);
 			}
 		}
 
@@ -297,17 +290,15 @@ public class JsonParserSvc {
 	 * @param source      JSON
 	 * @param entityNames Json Key 리스트
 	 */
-	public List<Map<String, String>> searchForEntity(String source, String fieldName) {
+	public Map<String, String> searchForEntity(String source, String fieldName) {
 
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		Map<String, String> result = new HashMap<String, String>();
 
 		List<JsonElementInfo> infos = this.getJsonElementList(source);
 
 		for (JsonElementInfo el : infos) {
 			if (el.getKey().equals(fieldName)) {
-				Map<String, String> temp = new HashMap<String, String>();
-				temp.put(el.getKey(), el.getValue());
-				result.add(temp);
+				result.put(el.getKey(), el.getValue());
 			}
 		}
 
@@ -354,18 +345,38 @@ public class JsonParserSvc {
 		return jsonArray;
 	}
 	
-//	public List<Map<String, String>> getListMapFromJsonArray(JSONArray jsonArray) {
-//
-//		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-//
-//		if(jsonArray != null) {
-//			int jsonSize = jsonArray.size();
-//			for(int i=0; i<jsonSize; i++) {
-//				Map<String, String> map = 
-//			}
-//		}
-//		return result;
-//	}
+	@SuppressWarnings("unchecked")
+    public Map<String, String> getMapFromJsonObject( JSONObject jsonObj )
+    {
+        Map<String, String> map = null;
+        
+        try {
+            
+            map = new ObjectMapper().readValue(jsonObj.toJSONString(), Map.class) ;
+            
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+ 
+        return map;
+    }
+    
+    
+	public List<Map<String, String>> getListMapFromJsonArray(JSONArray jsonArray) {
+
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+
+		if(jsonArray != null) {
+			int jsonSize = jsonArray.size();
+			for(int i=0; i<jsonSize; i++) {
+				Map<String, String> map = this.getMapFromJsonObject( ( JSONObject ) jsonArray.get(i));
+				result.add(map);
+			}
+		}
+		return result;
+	}
 
 	/***
 	 * ========= Start [ getJsonElementList(String str) ] ======================

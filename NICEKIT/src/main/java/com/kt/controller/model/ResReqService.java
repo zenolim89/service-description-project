@@ -1,18 +1,17 @@
 package com.kt.controller.model;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class ResReqService {
 	
-	private JSONArray data;
+	private JSONObject data;
 	private JSONObject source;
 	
 	
-	public JSONArray getData() {
+	public JSONObject getData() {
 		return data;
 	}
-	public void setData(JSONArray data) {
+	public void setData(JSONObject data) {
 		this.data = data;
 	}
 	public JSONObject getSource() {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.kt.commonUtils.Constants;
 import com.kt.controller.model.ResReqService;
+import com.kt.data.model.HotelWordId;
 import com.kt.dataDao.SelectDataTo;
 import com.kt.dataForms.DiscoveredServiceDESC;
 import com.kt.dataForms.HttpParam;
@@ -53,20 +54,13 @@ public class WebAppService {
 		} else if (_word.equals("부여국악")) {
 			word = "부여국악";
 			word_id = "1258353";
-		} else if (_word.equals("체중계")) {
-			word_id = "1";
-		} else if (_word.equals("이불")) {
-			word_id = "2";
-		} else if (_word.equals("공기청청기")) {
-			word_id = "3";
-		} else if (_word.equals("휴지")) {
-			word_id = "4";
-		} else if (_word.equals("슬리퍼")) {
-			word_id = "5";
-		} else if (_word.equals("가습기")) {
-			word_id = "6";
-		} else if (_word.equals("물컵")) {
-			word_id = "7";
+		}
+		else {
+			
+			HotelWordId hotelWordId = new HotelWordId();
+			word_id = hotelWordId.getWordId(_word);
+			word = _word;
+			
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();

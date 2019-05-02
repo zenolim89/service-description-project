@@ -38,6 +38,7 @@ import com.kt.dataManager.ExcelService;
 import com.kt.dataManager.JSONParsingFrom;
 import com.kt.dataManager.JSONSerializerTo;
 import com.kt.dataManager.UtilFile;
+import com.kt.service.httpclient.RestClient;
 import com.kt.serviceManager.WebAppService;
 
 
@@ -407,7 +408,11 @@ public class InBoundInterface {
 
 	/** set auth */
 	@RequestMapping(value = "/auth", method = RequestMethod.POST)
-	public JSONObject reqAuth(InputStream body) {
+	public JSONObject reqAuth(
+			//InputStream body
+			@RequestParam String id, @RequestParam String pwd
+			) {
+		/*
 		JSONParsingFrom parsingFrom = new JSONParsingFrom();
 		String bf = null;
 		String response = "";
@@ -421,7 +426,32 @@ public class InBoundInterface {
 		} catch (Exception e) {
 			response = e.getMessage().toString();
 		}
-		return res;
+		*/
+		
+		RestClient restClient = new RestClient();
+		
+		HashMap<String,String> headerMap = new HashMap<>();
+		HashMap<String,String> bodyMap = new HashMap<>();
+		
+		headerMap.put("Content-Type", "application/json");
+		
+		bodyMap.put("userId", id);
+		bodyMap.put("pwd",pwd);
+		
+		//나이스kit 관련 테스트
+		if( id.toUpperCase().equals("NICEKIT")) {
+			bodyMap.put("userId", "B2B_0409016");
+		}
+		
+		if( pwd.toUpperCase().equals("1234")) {
+			bodyMap.put("pwd","new1234!");
+		}
+		
+		bodyMap.put("serviceId","A7077233106");
+		
+		JSONObject jsonObject = restClient.doJSONBodyPost(" http://125.159.61.195:50014/api/v1/auth/login", headerMap, bodyMap);
+		
+		return jsonObject;
 	}
 
 	@RequestMapping(value = "/setSpec", method = RequestMethod.GET)
@@ -434,19 +464,21 @@ public class InBoundInterface {
 	@RequestMapping(value = "/reqService", method = RequestMethod.GET)
 	public ModelAndView reqService(@RequestParam String intentName, @RequestParam String word,
 			@RequestParam String name, @RequestParam String token) {
+		ModelAndView mv = new ModelAndView("jsonView");
 		SelectDataTo selectTo = new SelectDataTo();
 		JSONObject res = new JSONObject();
-		ModelAndView mv = new ModelAndView("jsonView");
 		String keySpace = "vendorsvcks";
 		System.out.println("[DEBUG] 수신된 인텐트명: " + intentName + " 요청된 어휘: " + word + " 서비스 사업장 구분자:" + name);
 		res = selectTo.selectMatchingService(intentName, word, name, keySpace);
-		
 		System.out.println(String.format("jsonObject : [%s]", res.toString()));
+		
 		
 		//if (res.containsKey("serviceType")) {
 		//리다이렉션
 		
-		if ((res.get("serviceType").toString()).equals("CheckSvcWithPage")) {
+		System.out.println(String.format("testurl : [%s]", res.get("testurl")));
+		 
+		if (res.get("testurl") == null || res.get("testurl").toString().toUpperCase().equals("TEST") || res.get("testurl").toString().trim().length() == 0){
 				Map<String, String> map = new HashMap<String, String>();
 				//map.put("resCode", res.get("resCode").toString());
 				map.put("resCode", "201");
@@ -454,7 +486,6 @@ public class InBoundInterface {
 				map.put("resUrl", res.get("toUrl").toString());
 				mv.addObject("obj", map);
 		} else {
-			
 			ResReqService result = webAppSvc.executeService("", name, intentName, "", word, token);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -465,10 +496,17 @@ public class InBoundInterface {
 			}else if(intentName.equals("HotelAmenityItem")) {
 				map.put("resMsg", ((JSONObject)result.getData()).get("ttsMsg"));
 			}else {
-				map.put("resMsg", "");
+				map.put("resMsg", "");    
 			}
 			
-			map.put("resUrl", "none");
+			
+			if(res.get("toUrl") == null) {
+				map.put("resUrl", "none");
+			}
+			else {
+				map.put("resUrl",res.get("toUrl").toString());
+			}
+			
 			mv.addObject("obj", map);
 		}
 		return mv;

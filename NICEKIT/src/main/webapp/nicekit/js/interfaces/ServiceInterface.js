@@ -33,6 +33,7 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
  */
 
 var Authorization = '';
+var specId = null;
 
 /**
  * @method init
@@ -58,12 +59,12 @@ var Authorization = '';
  * @example function init(keytype, apikey) { options = {}; options.keytype =
  *          keytype; options.apikey = apikey; gigagenie.init(options,
  *          function(result_cd, result_msg, extra) { if (result_cd == 200) {
- *          console.log('Initialize Success'); alert(&quot;init 실행 완료&quot;);
+ *          console.log('Initialize Success'); //alert(&quot;init 실행 완료&quot;);
  *          sendTTSAPI(&quot;음성인식 서비스를 실행합니다. &quot;); } }); }
  */
 function init() {
 
-	var specId;
+	//var specId;
 	var pathName = location.pathname;
 	var vendorNameSplit = pathName.split("/");
 	var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
@@ -71,16 +72,21 @@ function init() {
 	console.log('pathName : ' + pathName);
 	console.log('vendorNameSplit : ' + vendorNameSplit);
 	console.log('vendorName : ' + vendorName);
+	
+	//alert(' pathName : ' + pathName);
+	//alert( 'vendorName : ' + vendorName);
 
-	$.ajax({
-			url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
-			type : 'GET',
-			async : false,
-			success : function(data) {
-				console.log(data);
-				specId = data['specId'];
-			}
-	});
+	if( specId == null){
+		$.ajax({
+				url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
+				type : 'GET',
+				async : false,
+				success : function(data) {
+					console.log(data);
+					specId = data['specId'];
+				}
+		});
+	}
 
 	console.log('specId : ' + specId);
 
@@ -90,7 +96,7 @@ function init() {
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
 			console.log('Initialize Success');
-			alert("[DEBUG] init 실행 완료");
+			//alert("[DEBUG] init 실행 완료");
 
 			if (getPageName() == 'welcome_login.html')
 				delAuth();
@@ -121,18 +127,18 @@ function getAuth(vendorName) {
 	var options = {};
 	gigagenie.appinfo.getAuthKey(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			alert("[DEBUG] Key value is " + extra.authkey);
+			//alert("[DEBUG] Key value is " + extra.authkey);
 			Authorization = extra.authkey;
 		}
 		else if (result_cd === 404) {
-			alert("Key is not set.");
+			//alert("Key is not set.");
 			var newUrl = window.location.protocol + "//" + window.location.host
 						+ "/docbase/vendors/" + vendorName + "/welcome_login.html";
-			alert(newUrl);
+			//alert(newUrl);
 			window.location.href = newUrl;
 		}
 		else {
-			alert("[DEBUG] getAuthKey is fail.");
+			//alert("[DEBUG] getAuthKey is fail.");
 		}
 	});
 }
@@ -153,7 +159,7 @@ function setAuth(user_id, user_pw) {
 					pwd : user_pw
 			},
 			success : function(result) {
-				alert("[DEBUG] svcAccsToken 수신: "+ result['resltData']['svcAccsToken']);
+				//alert("[DEBUG] svcAccsToken 수신: "+ result['resltData']['svcAccsToken']);
 
 				var options = {};
 				//options.authkey = 'asdasldkjalskdasd';
@@ -162,14 +168,14 @@ function setAuth(user_id, user_pw) {
 
 				gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
 					if (result_cd === 200) {
-						alert("[DEBUG] AuthKey Set is Success");
+						//alert("[DEBUG] AuthKey Set is Success");
 						var newUrl = window.location.protocol + "//" + window.location.host
 									+ "/docbase/vendors/" + vendorName + "/main.html";
-						alert(newUrl);
+						//alert(newUrl);
 						window.location.href = newUrl;
 					}
 					else {
-						alert("[DEBUG] AuthKey Set is fail.");
+						//alert("[DEBUG] AuthKey Set is fail.");
 					}
 				});
 			}
@@ -182,10 +188,10 @@ function delAuth() {
 	var options = {};
 	gigagenie.appinfo.delAuthKey(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
-			alert("AuthKey Deleting is Success");
+			//alert("AuthKey Deleting is Success");
 		}
 		else {
-			alert("AuthKey Deleting is fail.");
+			//alert("AuthKey Deleting is fail.");
 		}
 	});
 }
@@ -206,10 +212,10 @@ function delAuth() {
  * 	504: mute 상태로 TTS 재생 불가
  * </pre>
  * 
- * @example function sendTTSAPI(ttstext) { var options = {}; alert("startTTS")
+ * @example function sendTTSAPI(ttstext) { var options = {}; //alert("startTTS")
  *          options.ttstext = ttstext; gigagenie.voice.sendTTS(options,
  *          function(result_cd, result_msg, extra) { if (result_cd == 200) { }
- *          else { } alert(result_cd); }); }
+ *          else { } //alert(result_cd); }); }
  */
 function sendTTS(ttstext, resCode, resUrl) {
 	var options = {};
@@ -236,7 +242,7 @@ function sendTTS(ttstext, resCode, resUrl) {
  * 	500 : 실행 오류
  * </pre>
  * 
- * @example function stopTTS() { var options = {}; alert("stopTTS");
+ * @example function stopTTS() { var options = {}; //alert("stopTTS");
  *          gigagenie.voice.stopTTS(options, function(result_cd, result_msg,
  *          extra) { if (result_cd == 200) { } else { } }); }
  */
@@ -278,7 +284,7 @@ function stopTTS() {
  *          result_msg, extra) { if (result_cd === 200) { } }); }
  */
 function startVoice(ttstext) {
-	alert(ttstext);
+	//alert(ttstext);
 	var options = {};
 	options.voicemsg = ttstext;
 	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
@@ -360,7 +366,7 @@ gigagenie.voice.onRequestClose = function() {
  * </pre>
  * 
  * @example function SpeechINTRC() { gigagenie.voice.onActionEvent =
- *          function(extra) { var word = extra.uword; alert(word); switch
+ *          function(extra) { var word = extra.uword; //alert(word); switch
  *          (extra.actioncode) { case 'HELLOGENIE':
  *          document.getElementById('test').innerText = "대표 어휘 : " +
  *          extra.parameter['NE-HELLO']; break; case 'GOODBYEGENIE':
@@ -371,19 +377,19 @@ gigagenie.voice.onRequestClose = function() {
 function SpeechINTRC(appId) {
 	gigagenie.voice.onActionEvent = function(extra) {
 		var sentence = extra.uword;
-		alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
+		//alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
 		switch (extra.actioncode) {
 			case 'HotelAmenityItem':
 				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-AMENITY']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelCheckout':
 				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-CHECKOUT']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelHelp':
 				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-QUESTIONS']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelViewPage':
 				var parameter;
@@ -406,11 +412,11 @@ function SpeechINTRC(appId) {
 				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
 					parameter = extra.parameter['NE-PARTNERSHIP'];
 				svcReqFunction(appId, extra.actioncode, parameter);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelWebCam':
 				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-WEBCAM']);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			case 'HotelTourInfo':
 				var parameter;
@@ -419,7 +425,7 @@ function SpeechINTRC(appId) {
 				else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
 					parameter = extra.parameter['NE-TOURSPOT'];
 				svcReqFunction(appId, extra.actioncode, parameter);
-				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
 				break;
 			default:
 				sendTTS("전송실패");

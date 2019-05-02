@@ -60,7 +60,6 @@ public class WebAppService {
 			HotelWordId hotelWordId = new HotelWordId();
 			word_id = hotelWordId.getWordId(_word);
 			word = _word;
-			
 		}
 
 		JsonSpecSvc svc = new JsonSpecSvc();

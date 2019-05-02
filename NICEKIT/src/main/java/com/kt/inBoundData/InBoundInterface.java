@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -488,9 +489,20 @@ public class InBoundInterface {
 		} else {
 			ResReqService result = webAppSvc.executeService("", name, intentName, "", word, token);
 			
+			JSONObject jsonObject = result.getData();
+			HashMap<String,String> jsonMap = new JSONObject(jsonObject);
+					
+			String resultMsg = null;
+			
+			for( String key : jsonMap.keySet()) {
+				resultMsg = jsonMap.get(key);
+			}
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			//map.put("resCode", res.get("resCode").toString());
 			map.put("resCode", "200");
+			
+			/*
 			if(intentName.equals("HotelTourInfo")) {
 				map.put("resMsg", ((JSONObject)result.getData()).get("eventplace"));
 			}else if(intentName.equals("HotelAmenityItem")) {
@@ -498,7 +510,9 @@ public class InBoundInterface {
 			}else {
 				map.put("resMsg", "");    
 			}
+			*/
 			
+			map.put("resMsg", resultMsg);
 			
 			if(res.get("toUrl") == null) {
 				map.put("resUrl", "none");

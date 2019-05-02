@@ -343,6 +343,9 @@ function addComponents(info) {
                 text = nl2br(text);
                 applyTextToPreview(info.id, null, text);
 
+                //현재active되어있는 제목도 변경
+                chagneTabTitle(text);
+                
                 // 편집됨
                 pageEdited = true;
             });
@@ -834,6 +837,10 @@ function getGeneratedHtml() {
 function save() {
     // 현재 iframe 의 url
     // $("#preview").contents().get(0).location.href
+	
+	//탭에 있는 제목도 변경 하도록 request수행
+	var titleText = $('#pages .active:button > em').text();
+	updateTitle(vendor, curPageInfo.path, titleText);
 
     // 업로드할 파일 업로드
     uploadFiles(function() {
@@ -878,4 +885,16 @@ function disablePage() {
         $(".cbtns .btn_ten").addClass("active");
     }
     // console.log(curPageInfo);
+}
+
+/**
+ * texarea에 변경된 제목 위 탭에도 반영
+ */
+function chagneTabTitle(_text){
+	
+	//1.active되어 있는 탭 객체 가져오기
+	//alert($('#pages button').attr('data-name'));
+
+	//2.해당 button에 값 입력
+	$('#pages .active:button > em').text(_text);
 }

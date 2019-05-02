@@ -257,3 +257,19 @@ function deployVendor(doamain, vendor, cb){
         dataType: 'json'
     });
 }
+
+//INFO DONGHUN
+function updateTitle(vendor, _htmlFileName, _title){
+    $.ajax({
+        type: 'GET',
+        url: server + "updateTitle?vendorName=" + vendor + "&htmlFileName=" + _htmlFileName + "&titleText="+_title,
+        //data: JSON.stringify(param), // or JSON.stringify ({name: 'jonas'}),
+        async: false,
+        success: function(data) {
+            console.log(data);
+            //cb(data);
+        },
+        contentType: "application/json",
+        dataType: 'json'
+    });
+}

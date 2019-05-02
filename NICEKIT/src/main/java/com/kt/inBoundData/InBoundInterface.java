@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.datastax.driver.core.Row;
 import com.kt.commonUtils.Constants;
 import com.kt.controller.model.ResReqService;
+import com.kt.dataConverter.TempConverter;
 import com.kt.dataConverter.TemplateConverter;
 import com.kt.dataDao.InsertDataTo;
 import com.kt.dataDao.SelectDataTo;
@@ -729,6 +730,20 @@ public class InBoundInterface {
 		res.put("code","200");
 		res.put("specId", selectDataTo2.getSpecID(selectDataTo.getSpecName(vendorName)));
 		
+		return res;
+	}
+	
+	@RequestMapping(value = "/updateTitle", method = RequestMethod.GET)
+	public JSONObject updateTitle(@RequestParam String vendorName, @RequestParam String htmlFileName, @RequestParam String titleText) {
+		
+		System.out.println(String.format("venderName : [%s] / htmlFileName : [%s] / titleText : [%s]",vendorName, htmlFileName, titleText));
+		
+		TempConverter tempConverter = new TempConverter();
+		tempConverter.updateMenuTitle(vendorName, htmlFileName, titleText);
+		
+		JSONObject res = new JSONObject();
+		res.put("code","200");
+
 		return res;
 	}
 }

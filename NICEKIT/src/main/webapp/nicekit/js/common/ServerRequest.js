@@ -313,7 +313,7 @@ function svcRegReqFunction() {
  */
 function svcRegRespProcess() {
 	if (serviceRegRequest.readyState == 4 && serviceRegRequest.status == 200) {
-		alert(serviceRegRequest.responseText);
+		//alert(serviceRegRequest.responseText);
 		console.log("[등록 성공] \n" + "Detail : " + serviceRegRequest.responseText);
 	}
 }
@@ -370,7 +370,7 @@ function intentRegReqFunction(json) {
  */
 function intentRegRespProcess() {
 	if (intentRegRequest.readyState == 4 && intentRegRequest.status == 200) {
-		alert(intentRegRequest.responseText);
+		//alert(intentRegRequest.responseText);
 		console.log("[등록 성공] \n" + "Detail : " + intentRegRequest.responseText);
 	}
 }
@@ -421,7 +421,7 @@ function svcReqFunction(appId, intent, parameter) {
 	var requestUrl = '/NICEKIT/reqService' + "?" + "intentName" + "=" + intent + "&" + "word"
 	+ "=" + parameter + "&" + "name" + "=" + appId + "&" + "token" + "=" +Authorization;
 	
-	alert(requestUrl);
+	//alert(requestUrl);
 	
 	SvcRequest.open('GET', requestUrl);
 	SvcRequest.setRequestHeader('Content-Type', 'application/json');
@@ -440,7 +440,7 @@ function svcReqFunction(appId, intent, parameter) {
  */
 function svcRespProcess() {
 	if (SvcRequest.readyState == 4 && SvcRequest.status == 200) {
-		alert("[DEBUG] 응답 메시지 : " + SvcRequest.responseText);
+		//alert("[DEBUG] 응답 메시지 : " + SvcRequest.responseText);
 		var svcObj = JSON.parse(SvcRequest.responseText);
 		var resCode = svcObj.obj['resCode'];
 		var resMsg = svcObj.obj['resMsg'];
@@ -454,7 +454,7 @@ function svcRespProcess() {
 		var newUrl = window.location.protocol + "//" + window.location.host
 					+ "/docbase/vendors/" + vendorName + resUrl;
 
-		alert(newUrl);
+		//alert(newUrl);
 		
 		//200일경우 tts
 		//전환 + a

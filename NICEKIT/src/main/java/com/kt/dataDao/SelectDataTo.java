@@ -39,7 +39,7 @@ public class SelectDataTo {
 	public JSONObject selectMatchingService(String intentName, String word, String name, String keySpace) {
 
 		JSONParser parser = new JSONParser();
-		JSONObject resObj = new JSONObject();
+		JSONObject resObj = null;
 		ServiceEnabler enabler = new ServiceEnabler();
 
 		Statement query = QueryBuilder.select().from(keySpace, name).where(QueryBuilder.eq("intentname", intentName))
@@ -79,11 +79,22 @@ public class SelectDataTo {
 			desc.setStrResStructure(r.getString("responseformat"));
 			desc.setStrDicList(r.getString("diclist"));
 
+			try {
+			
+			resObj = new JSONObject();
 			resObj = enabler.discoverMatchingWord(desc, word);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 			resObj.put("resCode", "200");
 			resObj.put("resMsg", "성공");
 			resObj.put("toUrl", r.getString("servicelink"));
 			resObj.put("serviceType", r.getString("servicetype"));
+			resObj.put("testurl", r.getString("testurl"));
+			
+			System.out.println(r.toString());
+			
 			if (resObj != null)
 				return resObj;
 		}

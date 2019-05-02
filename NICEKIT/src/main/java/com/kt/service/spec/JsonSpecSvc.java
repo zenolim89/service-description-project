@@ -2,11 +2,11 @@ package com.kt.service.spec;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,21 +17,6 @@ import com.kt.sevice.jsonparser.JsonParserSvc;
 
 public class JsonSpecSvc {
 
-//	public JSONObject createReqFormatForArrey(JSONArray reqFormat, JSONArray reqSpec, String word, String property) {
-//		
-//		JSONObject obj = new JSONObject();
-//
-//		for (int i = 0; i < reqFormat.size(); i++) {
-//			for (int j = 0; j < reqSpec.size(); j++) {
-//				
-//				JSONObject format = (JSONObject) reqFormat.get(i);
-//				JSONObject spec = (JSONObject) reqSpec.get(j);
-//				obj  = this.createReqFormat(format, spec, word, property);
-//			}
-//		}
-//		return obj;
-//	}
-
 	/**
 	 * 
 	 * @param _target
@@ -40,14 +25,17 @@ public class JsonSpecSvc {
 	 * @param property
 	 * @return
 	 */
-	public JSONObject createReqFormat(String _target, String _spec, String word, String property) {
+	public JsonNode createReqFormat(String _target, String _spec, String word, String property) {
 
+		if(_target == null || _target =="") return null;
+		
 		JsonParserSvc svc = new JsonParserSvc();
 
-		JSONObject target = svc.getJsonObject(_target);
+		JsonNode targetNode = svc.getJsonNode(_target);
+		
 		JSONArray spec = svc.getJsonArray(_spec);
 
-		return this.createReqFormat(target, spec, word, property, _spec);
+		return this.createReqFormat(targetNode, spec, word, property, _spec);
 	}
 
 	/**
@@ -58,29 +46,20 @@ public class JsonSpecSvc {
 	 * @param property
 	 * @return
 	 */
-	public JSONObject createReqFormat(JSONObject target, JSONArray spec, String word, String property, String _spec) {
+	public JsonNode createReqFormat(JsonNode targetNode, JSONArray spec, String word, String property, String _spec) {
 
 		JsonParserSvc svc = new JsonParserSvc();
 
-		JsonNode targetNode = svc.getJsonNode(target.toString());
+		//JsonNode targetNode = svc.getJsonNode(target.toString());
 		List<JsonElementInfo> targetEleInfos = svc.getJsonElementList(targetNode.toString());
 		List<JsonElementInfo> specEleInfos = svc.getJsonElementList(spec.toString());
 
 		/* [Step1] spec과 property(ex.발화 어휘)를 이용하여 변경할 FieldName 목록 추출 */
 		List<String> targetFieldNames = new ArrayList<String>();
-//		for (JsonElementInfo specEleInfo : specEleInfos) {
-//			if(specEleInfo.isValueNode()) {
-//				if(specEleInfo.getValue().equals(property)) {
-//					targetFieldNames.add(specEleInfo.getKey());
-//				}
-//			}
-//		}
-
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 
-			List<HttpParam> specList = mapper.readValue(_spec, new TypeReference<List<HttpParam>>() {
-			});
+			List<HttpParam> specList = mapper.readValue(_spec, new TypeReference<List<HttpParam>>() {});
 
 			for (HttpParam httpParam : specList) {
 				if (httpParam.getValue().equals(property)) {
@@ -106,7 +85,7 @@ public class JsonSpecSvc {
 			svc.putAt(targetNode, jsonPrtExpr, word);
 		}
 
-		return svc.getJsonObject(targetNode.toString());
+		return targetNode;
 	}
 
 	/**
@@ -117,7 +96,7 @@ public class JsonSpecSvc {
 	 * @param property
 	 * @return
 	 */
-	public List<Map<String, String>> selectResMsg(String resMsg, String spec, String property) {
+	public Map<String, String> selectResMsg(String resMsg, String spec, String property) {
 
 		JsonParserSvc svc = new JsonParserSvc();
 
@@ -139,12 +118,12 @@ public class JsonSpecSvc {
 		}
 
 		/* [Step2] target과 변경할 FieldName을 이용하여 Data 추출 */
-		List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
+		Map<String, String> filterData = new HashMap<String, String>();
 		if (!targetFieldNames.isEmpty()) {
-			mapList = svc.searchForEntitys(resMsg, targetFieldNames);
+			filterData = svc.searchForEntitys(resMsg, targetFieldNames);
 		}
 
-		return mapList;
+		return filterData;
 	}
 
 }

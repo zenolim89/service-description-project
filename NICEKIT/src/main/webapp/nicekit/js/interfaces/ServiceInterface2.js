@@ -6,6 +6,281 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
 	console.log('ServerRequst.js loading...');
 });
 
+$.getScript('common/js/jq-lastest.js', function() {
+	console.log('ServerRequst.js loading...');
+});
+
+$.getScript('common/js/swiper.js', function() {
+	console.log('ServerRequst.js loading...');
+});
+
+
+var item;
+var amount;
+
+$(window)
+			.load(
+						function() {
+							alert('load');
+							init();
+
+							$('#nicekitDay').text(getDay());
+							$('#nicekitDate').text(getDate());
+							$('#nicekitTime').text(getTime());
+							$('#nicekitTimeMeridiem').text(getMeridiem());
+							
+							/*
+							 * $('#popupOk').click(); $('#popupCancle').click();
+							 * $('#confirmOk').click();
+							 * $('#confirmCancle').click();
+							 */
+
+							function popupControl() {
+								var target = $('.layer-pop-control');
+								$.each(target, function() {
+									var _this = $(this);
+									_this.on('click', function(e) {
+										e.preventDefault();
+
+										// 수정 신동훈
+										var tempId = _this.attr('id');
+
+										if (tempId != null) {
+											var standard = tempId.toString().substr(0, 4);
+
+											console.log("standard : " + standard);
+
+											if (standard == 'link') {
+												var indexNumber = tempId.toString().charAt(
+															tempId.length - 1);
+												var popupImgId = '#img' + indexNumber + "_normal";
+												var tempText = _this.attr('target-name');
+												var imgUrl = $(popupImgId).attr('src');
+
+												console.log("tempId : " + tempId);
+												console.log("indexNumber : " + indexNumber);
+												console.log("popupImgId : " + popupImgId);
+												console.log("tempText : " + tempText);
+												console.log("imgUrl : " + imgUrl);
+
+												$('#popupImg').attr('src', imgUrl);
+												$('#popupText').text(tempText);
+											}
+										}
+										// 수정 신동훈
+
+										$(_this.attr('href')).show();
+										$(_this.attr('href')).find('.first-btn').focus();
+										$(_this.attr('href')).find('.confirm').on(
+													'click',
+													function(e) {
+														e.preventDefault();
+														$(this).closest($('.popup-fulltype'))
+																	.hide();
+													})
+										$(_this.attr('href')).find('.cancel').on(
+													'click',
+													function(e) {
+														e.preventDefault();
+														$(this).closest($('.popup-fulltype'))
+																	.hide();
+													})
+										var TabEl = $(_this.attr('href')).find('.x-btn');
+										TabEl.on('keydown',
+													function(event) {
+														event = event || window.event;
+														var keycode = event.keyCode || event.which;
+														switch (keycode) {
+															case 9:
+																if ($(this).is('.last-btn')
+																			&& !event.shiftKey) {
+																	event.preventDefault();
+																	$(_this.attr('href')).find(
+																				'.first-btn')
+																				.focus()
+																}
+																if ($(this).is('.first-btn')
+																			&& event.shiftKey) {
+																	event.preventDefault();
+																	$(_this.attr('href')).find(
+																				'.last-btn')
+																				.focus();
+																}
+																break;
+															default:
+																break;
+														}
+													})
+									})
+								})
+							}
+							popupControl();
+							function spinnerControl() {
+								var minus = $('.spinner .minus'), plus = $('.spinner .plus'), input = $('.spinner input[type="text"]');
+								plus.on('click', function() {
+									if (parseInt(input.val()) > 0) {
+										input.val(parseInt(input.val()) + 1);
+									}
+									;
+								})
+								minus.on('click', function() {
+									if (parseInt(input.val()) > 1) {
+										input.val(parseInt(input.val()) - 1);
+									}
+									;
+								})
+							}
+							spinnerControl();
+
+/* ▼▼▼ 20190320 수정 ▼▼▼ */
+							var ameSwiper;
+
+							function ameSlide() {
+								ameSwiper = new Swiper('.wrap-ame .swiper-container', {
+										slidesPerView : 1,
+										// slidesPerColumn: 2,
+										spaceBetween : 0,
+										loop : false,
+								});
+
+								if ($('.wrap-ame .swiper-container .swiper-slide').length <= 1) {
+									$('.wrap-ame .prev').addClass('disabled');
+									$('.wrap-ame .next').addClass('disabled');
+								}
+								$('.wrap-ame .prev').on('click', function() {
+									if (!$(this).is('.disabled')) {
+										ameSwiper.slidePrev();
+									}
+								})
+								$('.wrap-ame .next').on('click', function() {
+									if (!$(this).is('.disabled')) {
+										ameSwiper.slideNext();
+									}
+								})
+
+// 슬라이드 안의 버튼에 포커스 이동시 해당 영역의 슬라이드 로 넘김 처리 및 부모태그 스크롤 방지
+								$('.wrap-ame').find('.layer-pop-control').on('focusin', function() {
+									var _index = $(this).parents('.swiper-slide').index();
+									$(this).parents('.swiper-container').scrollLeft(0);
+									ameSwiper.slideTo(_index);
+
+								});
+
+							}
+/* ▲▲▲ 20190320 수정 끝 ▲▲▲ */
+							ameSlide();
+
+							function setSlide() {
+								var menuSwiper2 = new Swiper('.genie-voice .swiper-container', {
+										slidesPerView : 1,
+										spaceBetween : 0,
+										direction : 'vertical',
+										loop : true,
+										height : 69,
+										autoplay : {
+											delay : 1000,
+										}
+								});
+							}
+							function setSlide2() {
+								var menuSwiper3 = new Swiper('.genie-voice2 .swiper-container', {
+										slidesPerView : 1,
+										spaceBetween : 0,
+										direction : 'vertical',
+										loop : true,
+										height : 69,
+										autoplay : {
+											delay : 1000,
+										}
+								});
+							}
+							$(function() {
+								$('#count-v').on('focusin', function() {
+									$(this).blur().next().focus();
+								})
+							})
+							setTimeout(function() {
+								setSlide();
+								setSlide2();
+							}, 10);
+
+							var getUrlParameter = function getUrlParameter(sParam) {
+								var sPageURL = decodeURIComponent(window.location.search
+											.substring(1)), sURLVariables = sPageURL.split('&'), sParameterName, i;
+
+								for (i = 0; i < sURLVariables.length; i++) {
+									sParameterName = sURLVariables[i].split('=');
+
+									if (sParameterName[0] === sParam) {
+										return sParameterName[1] === undefined ? true
+													: sParameterName[1];
+									}
+								}
+							};
+							
+							item = getUrlParameter('item');
+							amount = getUrlParameter('amount');
+
+							if (item != 'undefined') {
+
+								//alert('1 : ' +amount);
+								
+								if (amount == 'undefined' || amount == null) {
+									//alert('2 : ' + item + " / " + amount);
+									amount = '한개';
+								}
+								//최대 5까지 가능.
+								else{
+									
+									var amountNumber = 1;
+									
+									switch(amount){
+									
+									case"1개":
+										
+										amountNumber = 1;
+										break;
+										
+									case"2개":
+										
+										amountNumber = 2;
+										break;
+										
+									case"3개":
+										
+										amountNumber = 3;
+										break;
+									
+									case"4개":
+										
+										amountNumber = 4;
+										break;
+										
+									case"5개":
+										
+										amountNumber = 5;
+										break;
+									
+									}
+									
+									$('#count-v').val(amountNumber);
+								}
+								
+								//alert('3 : '  + item + " / " + amount);
+
+								var selectorName = '[target-name="' + item + '"]';
+
+								var targetId = '#' + $(selectorName).attr('id');
+
+								$(targetId).click();
+
+							}
+							
+							
+						});
+
+// ////////////
+
 /**
  * @fileOverview ServiceInterface
  * @author zenolim <zenolim89@gmail.com>
@@ -34,7 +309,6 @@ $.getScript('/NICEKIT/nicekit/js/common/ServerRequest.js', function() {
 
 var Authorization = '';
 var specId = null;
-var checkOutItem = null;
 
 /**
  * @method init
@@ -64,17 +338,6 @@ var checkOutItem = null;
  *          sendTTSAPI(&quot;음성인식 서비스를 실행합니다. &quot;); } }); }
  */
 function init() {
-	
-	$('#nicekitDay').text(getDay());
-	$('#nicekitDate').text(getDate());
-	$('#nicekitTime').text(getTime());
-	$('#nicekitTimeMeridiem').text(getMeridiem());
-	
-	checkOutItem = $('#checkout-popup');
-	
-	//alert('init');
-	//alert(checkOutItem.toString());
-	//alert('init2');
 
 	// var specId;
 	var pathName = location.pathname;
@@ -90,7 +353,7 @@ function init() {
 
 	if (specId == null) {
 		$.ajax({
-				url : 'http://222.107.124.9:8080/NICEKIT/getSpecId?vendorName=' + vendorName,
+				url : '/NICEKIT/getSpecId?vendorName=' + vendorName,
 				type : 'GET',
 				async : false,
 				success : function(data) {
@@ -107,20 +370,25 @@ function init() {
 	options.apikey = 'VDUwMDI1ODZ8R0JPWERFVk18MTU0NTAxMzgxOTYwMw==';
 	gigagenie.init(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
+			//alert('시작');
 			// 확인, 취소 음성명령 수신 이벤트 등록
 			voice_cmd_settings();
+
 			if (getPageName() == 'welcome_login.html')
 				delAuth();
-			else{
+			else {
+				
+				if( item != 'undefined' && item != null){
+					voiceConfirm(item,amount);
+				}
 				getAuth(vendorName);
 			}
 			SpeechINTRC(specId);
 		}
 	});
-
 }
 
-
+// JJS REQ
 function voice_cmd_settings() {
 	/*
 	 * function setKwsVoiceRecv(options,callback) options 은 다음과 같이 설정한다.
@@ -130,10 +398,10 @@ function voice_cmd_settings() {
 	 */
 	var keyoptions = {};
 	keyoptions.flag = 1;
-	gigagenie.voice.setKwsVoiceRecv(keyoptions, function(result_cd, result_msg,
-			extra) {
+	gigagenie.voice.setKwsVoiceRecv(keyoptions, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
 			alert("[DEBUG] setKwsVoiceRecv : KWS Success");
+			initLoad = true;
 		}
 	});
 
@@ -156,22 +424,22 @@ function getPageName() {
 /** Get Auth Key */
 function getAuth(vendorName) {
 	var options = {};
-	gigagenie.appinfo.getAuthKey(options,
-			function(result_cd, result_msg, extra) {
-				if (result_cd === 200) {
-					//alert("[DEBUG] Key value is " + extra.authkey);
-					Authorization = extra.authkey;
-				} else if (result_cd === 404) {
-					//alert("Key is not set.");
-					var newUrl = window.location.protocol + "//"
-							+ window.location.host + "/docbase/vendors/"
-							+ vendorName + "/welcome_login.html";
-					//alert(newUrl);
-					window.location.href = newUrl;
-				} else {
-					//alert("[DEBUG] getAuthKey is fail.");
-				}
-			});
+	gigagenie.appinfo.getAuthKey(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			// alert("[DEBUG] Key value is " + extra.authkey);
+			Authorization = extra.authkey;
+		}
+		else if (result_cd === 404) {
+			// alert("Key is not set.");
+			var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + "/welcome_login.html";
+			// alert(newUrl);
+			window.location.href = newUrl;
+		}
+		else {
+			// alert("[DEBUG] getAuthKey is fail.");
+		}
+	});
 }
 
 /** Set Auth key */
@@ -183,49 +451,48 @@ function setAuth(user_id, user_pw) {
 
 	// ajax 호출 및 auth key 리턴
 	$.ajax({
-		url : '/NICEKIT/auth',
-		type : 'POST',
-		data : {
-			id : user_id,
-			pwd : user_pw
-		},
-		success : function(result) {
-			//alert("[DEBUG] svcAccsToken 수신: "+ result['resltData']['svcAccsToken']);
+			url : '/NICEKIT/auth',
+			type : 'POST',
+			data : {
+					id : user_id,
+					pwd : user_pw
+			},
+			success : function(result) {
+				// alert("[DEBUG] svcAccsToken 수신: "+
+				// result['resltData']['svcAccsToken']);
 
-			var options = {};
-			//options.authkey = 'asdasldkjalskdasd';
-			options.authkey = result['resltData']['svcAccsToken'];
-			options.duetime = '20190519184202';
+				var options = {};
+				// options.authkey = 'asdasldkjalskdasd';
+				options.authkey = result['resltData']['svcAccsToken'];
+				options.duetime = '20190519184202';
 
-			gigagenie.appinfo.setAuthKey(options, function(result_cd,
-					result_msg, extra) {
-				if (result_cd === 200) {
-					//alert("[DEBUG] AuthKey Set is Success");
-					var newUrl = window.location.protocol + "//"
-							+ window.location.host + "/docbase/vendors/"
-							+ vendorName + "/main.html";
-					//alert(newUrl);
-					window.location.href = newUrl;
-				} else {
-					//alert("[DEBUG] AuthKey Set is fail.");
-				}
-			});
-		}
+				gigagenie.appinfo.setAuthKey(options, function(result_cd, result_msg, extra) {
+					if (result_cd === 200) {
+						// alert("[DEBUG] AuthKey Set is Success");
+						var newUrl = window.location.protocol + "//" + window.location.host
+									+ "/docbase/vendors/" + vendorName + "/main.html";
+						// alert(newUrl);
+						window.location.href = newUrl;
+					}
+					else {
+						// alert("[DEBUG] AuthKey Set is fail.");
+					}
+				});
+			}
 	});
 }
 
 /** Delete Auth key */
-// callback 방식
 function delAuth() {
 	var options = {};
-	gigagenie.appinfo.delAuthKey(options,
-			function(result_cd, result_msg, extra) {
-				if (result_cd === 200) {
-					//alert("AuthKey Deleting is Success");
-				} else {
-					//alert("AuthKey Deleting is fail.");
-				}
-			});
+	gigagenie.appinfo.delAuthKey(options, function(result_cd, result_msg, extra) {
+		if (result_cd === 200) {
+			// alert("AuthKey Deleting is Success");
+		}
+		else {
+			// alert("AuthKey Deleting is fail.");
+		}
+	});
 }
 
 /**
@@ -255,7 +522,8 @@ function sendTTS(ttstext, resCode, resUrl) {
 	gigagenie.voice.sendTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200 || result_cd == 409) {
 			pageTrans(resCode, resUrl);
-		} else {
+		}
+		else {
 		}
 	});
 }
@@ -281,7 +549,8 @@ function stopTTS() {
 	var options = {};
 	gigagenie.voice.stopTTS(options, function(result_cd, result_msg, extra) {
 		if (result_cd == 200) {
-		} else {
+		}
+		else {
 			;
 		}
 	});
@@ -317,61 +586,12 @@ function stopTTS() {
 // JJS REQ
 function voiceConfirm(amenity, amount) {
 	options = {};
-	options.voicemsg = amenity + " " + amount + " "
-			+ "요청하시겠습니까?  확인 혹은 취소를 말씀해주세요";
+	options.voicemsg = amenity + " " + amount + " " + "요청하시겠습니까?  확인 혹은 취소를 말씀해주세요";
 	options.mode = 2;
-	gigagenie.voice.getVoiceText(options,
-			function(result_cd, result_msg, extra) {
-				//alert("[DEBUG] getVoiceText : " + result_cd + " "+ extra.voicetext);
-			});
+	gigagenie.voice.getVoiceText(options, function(result_cd, result_msg, extra) {
+		alert("[DEBUG] getVoiceText : " + result_cd + " " + extra.voicetext);
+	});
 };
-
-function checkOutConfirm(){
-	options = {};
-	options.voicemsg = "체크아웃요청하시겠습니까?  확인 혹은 취소를 말씀해주세요";
-	options.mode = 2;
-	gigagenie.voice.getVoiceText(options,
-			function(result_cd, result_msg, extra) {
-				//alert("[DEBUG] getVoiceText : " + result_cd + " "+ extra.voicetext);
-			});
-}
-
-/**
- * @method startVoice
- * @param {String} [ttstext=null] - 음성인식 전 사용자에게 음성으로 전달하고자 하는 Text를 입력.
- * @returns {undefined}
- * @description 사용자에게 음성 안내 후 음성 인식을 한다. TTS 출력 중에 stopTTS를 수신하면 TTS와 음성인식 모두
- *              종료된다. 음성인식이 진행되면 해당 음성인식을 종료할 수 없다. (Timeout으로 처리)
- * 
- * <pre>
- * result_cd 에 다음의 값이 전달된다.
- * 	200: 음성인식 성공, extra.voicetext에 인식된 결과가 전달된다.
- * 	500: Timeout 발생 등으로 음성 인식 실패, extra.voicetext에는 “ASRsession timeout” 가 전달된다
- * 	501: KWS(KeyWord Spotting)에 의해 정지됨
- * 	502: 재생 실패
- * 	503: stopTTS에 의한 TTS 종료
- * 	504: mute 상태로 TTS 재생 불가
- * 	505: 처리 용량 초과(다국어 음성인식 중 서버 용량 초과시 발생)
- * extra 값에 다음이 설정되어 전달된다.
- * 	extra.voicetext : String, Mandatory 로 음성인식된 Text 가 전달된다.
- * 	extra.accuracy : Number, Optional로 인식된 결과의 정확도이다. (options.text가 설정되어 있고
- * 	options.voicelanguage가 1인 경우에만 설정되어 리턴됨)
- * </pre>
- * 
- * @example function startVoice(ttstext) { var options = {}; options.voicemsg =
- *          ttstext; gigagenie.voice.getVoiceText(options, function(result_cd,
- *          result_msg, extra) { if (result_cd === 200) { } }); }
- */
-function startVoice(ttstext) {
-	//alert(ttstext);
-	var options = {};
-	options.voicemsg = ttstext;
-	gigagenie.voice.getVoiceText(options,
-			function(result_cd, result_msg, extra) {
-				if (result_cd === 200) {
-				}
-			});
-}
 
 /**
  * @method getContainerId
@@ -396,25 +616,25 @@ function startVoice(ttstext) {
 function getContainerId() {
 	var options = {};
 	var appId;
-	gigagenie.appinfo.getContainerId(options, function(result_cd, result_msg,
-			extra) {
+	gigagenie.appinfo.getContainerId(options, function(result_cd, result_msg, extra) {
 		if (result_cd === 200) {
 			console.log("The container id is " + extra.containerid);
 			appId = extra.containerid;
-		} else {
+		}
+		else {
 			console.log("getContainerId is fail.");
 			appId = null;
 		}
 	});
 	return appId;
 }
+
 // 서비스 종료 명령 수신 API
 // 음성명령(종료, 닫기 발화)과, 리모콘 나가기 버튼 클릭시 서비스 종료 이벤트 전달
 gigagenie.voice.onRequestClose = function() {
 	options = {};
-	gigagenie.voice.svcFinished(options,
-			function(result_cd, result_msg, extra) {
-			});
+	gigagenie.voice.svcFinished(options, function(result_cd, result_msg, extra) {
+	});
 };
 
 /**
@@ -456,8 +676,15 @@ gigagenie.voice.onRequestClose = function() {
  */
 
 function SpeechINTRC(appId) {
+	/**
+	 * 다음페이지, 이전페이지등 음성 명령 코드를 수신한다. event 는 다음의 음성명령에 대해서 Text 로 전달한다. 확인, 취소
+	 * 발화의 경우 getVoiceText 의 mode=2에 대한 응답을 전달한다. 다음페이지: nextPage 이전페이지:
+	 * prevPage 다음으로: naviNext 이전으로: naviPrev 확인:confirm 취소:cancel
+	 */
 
+	// JJS REQ
 	gigagenie.voice.onVoiceCommand = function(event) {
+		
 		var hostName = location.hostname;
 		var pathName = location.pathname;
 		var vendorNameSplit = pathName.split("/");
@@ -487,140 +714,125 @@ function SpeechINTRC(appId) {
 				alert(newUrl + '/main.html');
 				
 				window.location.href = newUrl + '/main.html';
-			
-			break;
-		case 'confirm':
-			alert("[DEBUG] onVoiceCommand :  confirm");
-			
-			if(checkOutItem.css('display')!='none'){
-				svcReqFunction(appId,'HotelCheckout','체크아웃');
-			}
-			
-			
-			break;
-		case 'cancel':
-			alert("[DEBUG] onVoiceCommand :  cancel");
-			// next action
-			
-			if(checkOutItem.css('display')!='none'){
-				checkOutItem.hide();
-			}
+				
+				break;
+			case 'confirm':
+				alert("[DEBUG] onVoiceCommand :  confirm");
+				// next action
+				//$('#popupOk').click();
+				svcReqFunction(appId, 'HotelAmenityItem', item);
+				break;
+			case 'cancel':
+				alert("[DEBUG] onVoiceCommand :  cancel");
+				// next action
+				$('#popupCancle').click();
 
-			break;
-		default:
-			break;
+				break;
+			default:
+				break;
 		}
 	};
 
 	gigagenie.voice.onActionEvent = function(extra) {
 		var sentence = extra.uword;
-		alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
-		//alert("[DEBUG] 코드 : " + extra.actioncode);
+		// alert("[DEBUG] 인식문장 : " + sentence); // 발화 문장
 		switch (extra.actioncode) {
-		case 'TrafficInfoPage':
-			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-TRAFFIC']);
-			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-		case 'HotelEventInfo':
-			svcReqFunction(appId, extra.actioncode, extra.parameter['NE-EVENTTYPE']);
-			alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-			
-		case 'HotelAmenityItem':
+			case 'TrafficInfoPage':
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-TRAFFIC']);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			case 'HotelEventInfo':
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-EVENTTYPE']);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
 
-			var hostName = location.hostname;
-			var pathName = location.pathname;
-			var vendorNameSplit = pathName.split("/");
-			var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
+			// JJS REQ
+			case 'HotelAmenityItem':
+				
+				var hostName = location.hostname;
+				var pathName = location.pathname;
+				var vendorNameSplit = pathName.split("/");
+				var vendorName = decodeURI(vendorNameSplit[vendorNameSplit.length - 2]);
 
-			var newUrl = window.location.protocol + "//" + window.location.host
-					+ "/docbase/vendors/" + vendorName + '/ame_detail.html';
+				var newUrl = window.location.protocol + "//" + window.location.host
+						+ "/docbase/vendors/" + vendorName + '/ame_detail.html';
+				
+				if (extra.parameter.hasOwnProperty('NE-AMOUNT')) {
+					alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+					// 1)페이지이동
+					// 2)팝업 노출
 
-			//
+					// do next action
+					// 3)getVoiceText API 호출
+					voiceConfirm(extra.parameter['NE-AMENITY'], extra.parameter['NE-AMOUNT']);
+					// 4)음성안내 TTS 후 확인 여부 발화
+					// 5)onVoiceCommand API 호 출
+				}
+				else {
+					alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+					// 1)페이지이동
+					// 2)팝업 노출
 
-			if (extra.parameter.hasOwnProperty('NE-AMOUNT')) {
-				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				// 1)페이지이동
-				// 2)팝업 노출
+					// do next action
+					// 3)getVoiceText API 호출
+					voiceConfirm(extra.parameter['NE-AMENITY'], "한개");
+					// 4)음성안내 TTS 후 확인 여부 발화
+					// 5)onVoiceCommand API 호 출
+				}
+				
+				newUrl = newUrl + "?item=" + extra.parameter['NE-AMENITY']
+				+ "&amount=" + extra.parameter['NE-AMOUNT'];
 
-				// do next action
-				// 3)getVoiceText API 호출
-				//voiceConfirm(extra.parameter['NE-AMENITY'], extra.parameter['NE-AMOUNT']);
-				// 4)음성안내 TTS 후 확인 여부 발화
-				// 5)onVoiceCommand API 호 출
-			} else {
-				//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-				// 1)페이지이동
-				// 2)팝업 노출
-
-				// do next action
-				// 3)getVoiceText API 호출
-				//voiceConfirm(extra.parameter['NE-AMENITY'], "한개");
-				// 4)음성안내 TTS 후 확인 여부 발화
-				// 5)onVoiceCommand API 호 출
-			}
-
-			newUrl = newUrl + "?item=" + extra.parameter['NE-AMENITY']
-					+ "&amount=" + extra.parameter['NE-AMOUNT'];
-
-			alert(newUrl);
-
-			window.location.href = newUrl;
-
-			break;
-		case 'HotelCheckout':
-			checkOutItem.show();
-			//alert( 'actioncode : ' + extra.actioncode + " / parameter" + extra.parameter['NE-CHECKOUT']);
-			checkOutConfirm();
-			//$('#checkout-popup').show();
-			//svcReqFunction(appId, extra.actioncode,extra.parameter['NE-CHECKOUT']);
-			//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-		case 'HotelHelp':
-			svcReqFunction(appId, extra.actioncode,extra.parameter['NE-QUESTIONS']);
-			//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-		case 'HotelViewPage':
-			var parameter;
-			if (extra.parameter.hasOwnProperty('NE-SERVICEMENU'))
-				parameter = extra.parameter['NE-SERVICEMENU'];
-			else if (extra.parameter.hasOwnProperty('NE-FACILITIES'))
-				parameter = extra.parameter['NE-FACILITIES'];
-			else if (extra.parameter.hasOwnProperty('NE-RESTAURANT'))
-				parameter = extra.parameter['NE-RESTAURANT'];
-			else if (extra.parameter.hasOwnProperty('NE-LEISURE'))
-				parameter = extra.parameter['NE-LEISURE'];
-			else if (extra.parameter.hasOwnProperty('NE-SHOPPING'))
-				parameter = extra.parameter['NE-SHOPPING'];
-			else if (extra.parameter.hasOwnProperty('NE-CULTURAL'))
-				parameter = extra.parameter['NE-CULTURAL'];
-			else if (extra.parameter.hasOwnProperty('NE-MEDICAL'))
-				parameter = extra.parameter['NE-MEDICAL'];
-			else if (extra.parameter.hasOwnProperty('NE-RELIGION'))
-				parameter = extra.parameter['NE-RELIGION'];
-			else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
-				parameter = extra.parameter['NE-PARTNERSHIP'];
-			svcReqFunction(appId, extra.actioncode, parameter);
-			//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-		case 'HotelWebCam':
-			svcReqFunction(appId, extra.actioncode,
-					extra.parameter['NE-WEBCAM']);
-			//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-		case 'HotelTourInfo':
-			var parameter;
-			if (extra.parameter.hasOwnProperty('NE-PERIPHERAL'))
-				parameter = extra.parameter['NE-PERIPHERAL'];
-			else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
-				parameter = extra.parameter['NE-TOURSPOT'];
-			svcReqFunction(appId, extra.actioncode, parameter);
-			//alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
-			break;
-			
-		default:
-			sendTTS("전송실패");
-			break;
+				window.location.href = newUrl;
+				
+				break;
+			case 'HotelCheckout':
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-CHECKOUT']);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			case 'HotelHelp':
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-QUESTIONS']);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			case 'HotelTourInfo':
+				var parameter;
+				if (extra.parameter.hasOwnProperty('NE-PERIPHERAL'))
+					parameter = extra.parameter['NE-PERIPHERAL'];
+				else if (extra.parameter.hasOwnProperty('NE-TOURSPOT'))
+					parameter = extra.parameter['NE-TOURSPOT'];
+				svcReqFunction(appId, extra.actioncode, parameter);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			case 'HotelViewPage':
+				var parameter;
+				if (extra.parameter.hasOwnProperty('NE-SERVICEMENU'))
+					parameter = extra.parameter['NE-SERVICEMENU']; //
+				else if (extra.parameter.hasOwnProperty('NE-FACILITIES'))
+					parameter = extra.parameter['NE-FACILITIES']; //
+				else if (extra.parameter.hasOwnProperty('NE-RESTAURANT'))
+					parameter = extra.parameter['NE-RESTAURANT']; //
+				else if (extra.parameter.hasOwnProperty('NE-LEISURE'))
+					parameter = extra.parameter['NE-LEISURE']; //
+				else if (extra.parameter.hasOwnProperty('NE-SHOPPING'))
+					parameter = extra.parameter['NE-SHOPPING']; //
+				else if (extra.parameter.hasOwnProperty('NE-CULTURAL'))
+					parameter = extra.parameter['NE-CULTURAL']; //
+				else if (extra.parameter.hasOwnProperty('NE-MEDICAL'))
+					parameter = extra.parameter['NE-MEDICAL']; //
+				else if (extra.parameter.hasOwnProperty('NE-RELIGION'))
+					parameter = extra.parameter['NE-RELIGION']; //
+				else if (extra.parameter.hasOwnProperty('NE-PARTNERSHIP'))
+					parameter = extra.parameter['NE-PARTNERSHIP']; //
+				svcReqFunction(appId, extra.actioncode, parameter);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			case 'HotelWebCam':
+				svcReqFunction(appId, extra.actioncode, extra.parameter['NE-WEBCAM']);
+				alert("[DEBUG] 구문 해석 : " + JSON.stringify(extra.parameter));
+				break;
+			default:
+				sendTTS("전송실패");
+				break;
 		}
 	}
 }
@@ -710,3 +922,4 @@ function getDay() {
 	return todayLabel;
 
 }
+

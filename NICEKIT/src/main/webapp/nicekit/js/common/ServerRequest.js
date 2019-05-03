@@ -473,7 +473,6 @@ function svcRespProcess() {
 		else if (resCode == '201') {
 			window.location.href = newUrl;
 		}
-
 	}
 }
 

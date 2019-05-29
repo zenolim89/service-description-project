@@ -3,6 +3,7 @@
  * @author zenolim <zenolim89@gmail.com>
  * @version 1.0.0
  */
+/*
 $.getScript('http://svcapi.gigagenie.ai/sdk/v1.0/js/gigagenie.js', function() {
 	console.log('gigagenie.js loading...');
 });
@@ -14,6 +15,7 @@ $.getScript('/NICEKIT/nicekit/js/common/RequestParam.js', function() {
 $.getScript('/NICEKIT/nicekit/js/common/ChangeView.js', function() {
 	console.log('ChangeView.js loading...');
 });
+*/
 
 var DomainRequest;
 var IntentRequest;

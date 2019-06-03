@@ -820,11 +820,27 @@ function getGeneratedHtml() {
     // console.log(bodyHtml);
     var beforeBody = curPageHtml.substr(0, curPageHtml.indexOf("<body"));
     var afterBody = curPageHtml.substr(curPageHtml.indexOf("</body>") + "</body>".length);
-
+    
+    var innerBody = curPageHtml.substr(curPageHtml.indexOf("<body"), curPageHtml.indexOf("</body>"));
+    var bodyScript = innerBody.toString().substring(innerBody.indexOf("<script"), innerBody.indexOf("</script")) + "</script>";
+    
+    console.log("innerBody");
+    console.log(innerBody);
+    console.log("tempBodyHtml");
+    console.log(bodyScript);
+    console.log('index');
+    console.log(innerBody.indexOf("</script"));
+    
+    /*
+    var bodyScript = 
+    	"<script>"
+    	+ tempBodyHtml.substr(tempBodyHtml.indexOf(">"), tempBodyHtml.length);
+    	+ '</script>';
+    */
     // console.log(beforeBody);
     // console.log(afterBody);
 
-    var generatedHtml = beforeBody + " <body onload='init()'> " + bodyHtml + "</body>" + afterBody;
+    var generatedHtml = beforeBody + " <body> " + bodyScript + bodyHtml + "</body>" + afterBody;
     return generatedHtml;
 }
 
